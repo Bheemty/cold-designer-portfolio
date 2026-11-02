@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -25,7 +25,7 @@ const PROJECTS: ProjectItem[] = [
     title: "MEDesy: Conversational patient triage & appointment referrals",
     desc: "Structured patient intake, symptom categorisation, and doctor appointment referrals designed within WhatsApp to reduce clinical triage friction.",
     tags: ["Product Design", "Conversational UX", "Healthcare Triage", "Figma"],
-    image: "/images/projects/medesy/whatsapp-mockup.png",
+    image: "/images/projects/medesy/whatsapp-mockup-opt.webp",
     href: "/work/medesy",
   },
   {
@@ -36,7 +36,7 @@ const PROJECTS: ProjectItem[] = [
     title: "9jaTrip: Intercity coach booking & verified terminal transit",
     desc: "A unified mobile booking system replacing informal interstate motor-park queues with verified routes, seat selection, and transparent terminal schedules.",
     tags: ["Mobile Product Design", "Transit Systems", "Route UX", "Design System"],
-    image: "/images/projects/9jatrip/booking-ride-mockup.png",
+    image: "/images/projects/9jatrip/booking-ride-mockup-opt.webp",
     href: "/work/9jatrip",
   },
   {
@@ -47,7 +47,7 @@ const PROJECTS: ProjectItem[] = [
     title: "Somewhere Hotel: Atmospheric spatial hospitality booking",
     desc: "An editorial reservation concept translating architectural daylight transitions, suite spatial layouts, and calm curation into digital hospitality.",
     tags: ["Spatial UI Concept", "Editorial Web", "Interaction Design"],
-    image: "/images/projects/somewhere/hotel-exterior-sunset.png",
+    image: "/images/projects/somewhere/hotel-exterior-sunset-opt.webp",
     href: "/work/somewhere-hotel",
   },
   {
@@ -58,7 +58,7 @@ const PROJECTS: ProjectItem[] = [
     title: "BuyBuddy: Social commerce storefronts & escrow purchasing",
     desc: "Streamlining informal merchant commerce with quick product links, catalog management, and protected buyer inquiries.",
     tags: ["Commerce UX", "Marketplace Platform", "Merchant Tools"],
-    image: "/images/projects/buybuddy/store-landing.png",
+    image: "/images/projects/buybuddy/store-landing-opt.webp",
     href: "/work/buybuddy",
   },
   {
@@ -69,30 +69,31 @@ const PROJECTS: ProjectItem[] = [
     title: "Stillwater Hall: Acoustic architectural concert walkthrough",
     desc: "A sequential media experience translating architectural arrival, auditorium acoustics, and seat perspectives into a paced digital walkthrough.",
     tags: ["Acoustic Architecture", "Sequential Media", "Concept Web"],
-    image: "/images/projects/stillwater/venue-exterior.png",
+    image: "/images/projects/stillwater/venue-exterior-opt.webp",
     href: "/work/stillwater",
   },
 ];
 
 export default function WorkAccordion() {
   const [activeId, setActiveId] = useState<string>("medesy");
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const router = useRouter();
 
-  function handleMouseEnter(id: string) {
-    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    hoverTimeoutRef.current = setTimeout(() => {
-      setActiveId(id);
-    }, 40); // 40ms debounce prevents jitter during fast vertical scrolling
-  }
+  // Instant hover response with zero artificial delay
+  const handlePointerEnter = useCallback((id: string) => {
+    setActiveId(id);
+  }, []);
 
   function handlePanelClick(p: ProjectItem, e: React.MouseEvent) {
+    const isTouch = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
     const isStacked = typeof window !== "undefined" && window.innerWidth <= 992;
-    if (!isStacked && activeId !== p.id) {
+
+    // On touch or stacked mobile: first tap opens, second tap / link click navigates
+    if ((isTouch || isStacked) && activeId !== p.id) {
       e.preventDefault();
       setActiveId(p.id);
       return;
     }
+
     const target = e.target as HTMLElement;
     if (target.closest(".work-go")) return;
     router.push(p.href);
@@ -111,23 +112,23 @@ export default function WorkAccordion() {
               tabIndex={0}
               style={{
                 ["--img" as string]: `url('${project.image}')`,
-                ["--d" as string]: `${idx * 0.08}s`,
+                ["--d" as string]: `${idx * 0.06}s`,
               }}
               aria-label={project.title}
-              onMouseEnter={() => handleMouseEnter(project.id)}
+              onPointerEnter={() => handlePointerEnter(project.id)}
               onFocus={() => setActiveId(project.id)}
               onClick={(e) => handlePanelClick(project, e)}
               onKeyDown={(e) => {
                 if (e.key === "Enter") router.push(project.href);
               }}
             >
-              {/* Collapsed Peek State */}
+              {/* Collapsed Peek State (hardware accelerated, dark contrast overlay) */}
               <div className="acc-peek" aria-hidden="true" />
               <span className="acc-peek-label" aria-hidden="true">
                 {project.shortLabel}
               </span>
 
-              {/* Expanded Card Body */}
+              {/* Expanded Card Body (rigid width prevents text wrapping reflow during flex animation) */}
               <div className="acc-body">
                 <div className="acc-media">
                   <div

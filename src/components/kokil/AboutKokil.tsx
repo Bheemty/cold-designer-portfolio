@@ -28,32 +28,44 @@ export default function AboutKokil() {
     const words = Array.from(textEl.querySelectorAll<HTMLSpanElement>(".word"));
     if (!words.length) return;
 
-    let isSectionVisible = false;
+    let cachedTop = 0;
+    let cachedHeight = 0;
     let lastRevealCount = -1;
     let ticking = false;
+    let isVisible = false;
+
+    // Cache layout bounds on resize to NEVER trigger layout thrashing during scroll
+    function measure() {
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      cachedTop = rect.top + window.scrollY;
+      cachedHeight = container.offsetHeight;
+    }
+
+    measure();
 
     const observer = new IntersectionObserver(
       (entries) => {
-        isSectionVisible = entries[0]?.isIntersecting ?? false;
-        if (isSectionVisible) update();
+        isVisible = entries[0]?.isIntersecting ?? false;
+        if (isVisible) update();
       },
-      { rootMargin: "100px 0px 100px 0px" }
+      { rootMargin: "150px 0px 150px 0px" }
     );
     observer.observe(container);
 
     function update() {
       ticking = false;
-      if (!textEl || !isSectionVisible) return;
+      if (!isVisible) return;
 
-      const rect = textEl.getBoundingClientRect();
+      const scrollY = window.scrollY;
       const vh = window.innerHeight;
-      const start = vh * 0.9;
-      const end = vh * 0.32;
-      let progress = (start - rect.top) / (start - end);
+      const start = cachedTop - vh * 0.85;
+      const end = cachedTop - vh * 0.25;
+
+      let progress = (scrollY - start) / (end - start);
       progress = Math.min(1, Math.max(0, progress));
       const revealCount = Math.round(progress * words.length);
 
-      // Only touch the DOM when the count actually changes
       if (revealCount !== lastRevealCount) {
         lastRevealCount = revealCount;
         words.forEach((w, i) => {
@@ -63,7 +75,7 @@ export default function AboutKokil() {
     }
 
     function onScroll() {
-      if (!isSectionVisible) return;
+      if (!isVisible) return;
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(update);
@@ -71,13 +83,12 @@ export default function AboutKokil() {
     }
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", update, { passive: true });
-    update();
+    window.addEventListener("resize", measure, { passive: true });
 
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", update);
+      window.removeEventListener("resize", measure);
     };
   }, []);
 

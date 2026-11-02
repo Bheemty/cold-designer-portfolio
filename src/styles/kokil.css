@@ -144,6 +144,8 @@
   justify-content: center;
   overflow: hidden;
   user-select: none;
+  contain: paint;
+  isolation: isolate;
 }
 .hero-paint {
   position: absolute;
@@ -463,6 +465,7 @@
   position: relative;
   padding: 40px 8vw 140px;
   z-index: 10;
+  contain: layout style;
 }
 #work .intro-label {
   margin-bottom: clamp(32px, 4vw, 56px);
@@ -479,14 +482,15 @@
   flex: 0 0 var(--closed);
   min-width: 0;
   border-radius: 24px;
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
   background: #11141b;
   overflow: hidden;
   cursor: pointer;
   color: #fff;
   text-decoration: none;
-  transition: flex-basis 0.7s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s ease;
+  transition: flex-basis 0.48s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
   transform: translateZ(0);
+  will-change: flex-basis;
   opacity: 1;
 }
 .acc-panel:hover {
@@ -503,17 +507,23 @@
   outline-offset: 4px;
 }
 
-/* Collapsed peek state */
+/* Collapsed peek state: zero multi-pass GPU filters */
 .acc-peek {
   position: absolute;
   inset: 0;
   background: var(--img) center / cover no-repeat;
-  filter: grayscale(1) brightness(0.25);
-  opacity: 1;
-  transition: opacity 0.4s ease, filter 0.4s ease;
+  opacity: 0.32;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.acc-peek::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(9, 11, 15, 0.72);
 }
 .acc-panel:hover .acc-peek {
-  filter: grayscale(0.5) brightness(0.35);
+  opacity: 0.52;
 }
 .acc-peek-label {
   position: absolute;
@@ -527,8 +537,9 @@
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.8);
   white-space: nowrap;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
   pointer-events: none;
+  z-index: 2;
 }
 .acc-panel.is-open .acc-peek,
 .acc-panel.is-open .acc-peek-label {
@@ -536,22 +547,23 @@
   pointer-events: none;
 }
 
-/* Open state card body */
+/* Open state card body: rigid width prevents text wrapping reflow during flex animation */
 .acc-body {
   position: absolute;
   inset: 0;
-  width: 100%;
+  width: max(560px, 100%);
+  min-width: 560px;
   padding: 36px;
   display: flex;
   flex-direction: column;
   opacity: 0;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease 0.12s;
   pointer-events: none;
   background: radial-gradient(circle at top right, rgba(22, 26, 35, 0.95), #0d1017 80%);
+  contain: layout paint;
 }
 .acc-panel.is-open .acc-body {
   opacity: 1;
-  transition: opacity 0.5s ease 0.25s;
   pointer-events: auto;
 }
 .acc-media {
@@ -564,6 +576,7 @@
   overflow: hidden;
   border-radius: 16px;
   background: rgba(0, 0, 0, 0.25);
+  contain: paint;
 }
 .acc-device {
   height: 100%;
@@ -571,7 +584,8 @@
   max-width: 680px;
   background: var(--img) center / cover no-repeat;
   border-radius: 12px;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  transform: translateZ(0);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .acc-panel.is-open:hover .acc-device {
   transform: scale(1.02);

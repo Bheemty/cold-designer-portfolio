@@ -30,6 +30,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     });
 
     lenisRef.current = lenis;
+    lenis.resize();
 
     let rafId: number;
     function raf(time: number) {
