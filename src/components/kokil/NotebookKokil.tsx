@@ -21,14 +21,14 @@ const PAGES: PageSheet[] = [
     tabLabel: "Index",
     title: "Index",
     pageNo: "00",
-    desc: "Directory of projects and design case studies.",
+    desc: "Directory of case studies and design notes.",
   },
   {
     id: "medesy",
     tabLabel: "MEDesy",
     title: "MEDesy Solution",
     pageNo: "01",
-    desc: "WhatsApp & conversational triage flow connecting patients with doctors.",
+    desc: "Conversational triage system balancing clinical safety with patient ease on messaging platforms.",
     image: "/images/projects/medesy/whatsapp-mockup.png",
     linkText: "Read Case Study",
     href: "/work/medesy",
@@ -38,7 +38,7 @@ const PAGES: PageSheet[] = [
     tabLabel: "9jaTrip",
     title: "9jaTrip Transit",
     pageNo: "02",
-    desc: "Intercity bus booking, seat selection, and verified terminal route hub.",
+    desc: "Structuring interstate bus travel across Nigerian terminals with seat reservation and park verification.",
     image: "/images/projects/9jatrip/booking-ride-mockup.png",
     linkText: "Read Case Study",
     href: "/work/9jatrip",
@@ -48,7 +48,7 @@ const PAGES: PageSheet[] = [
     tabLabel: "Somewhere",
     title: "Somewhere Hotel",
     pageNo: "03",
-    desc: "Atmospheric spatial booking concept featuring sunset lighting & curated suites.",
+    desc: "Translating hospitality architecture and ambient sunset lighting into an editorial booking flow.",
     image: "/images/projects/somewhere/hotel-exterior-sunset.png",
     linkText: "Read Case Study",
     href: "/work/somewhere-hotel",
@@ -58,7 +58,7 @@ const PAGES: PageSheet[] = [
     tabLabel: "Codex",
     title: "Design Codex",
     pageNo: "04",
-    desc: "Tactile micro-interactions, canvas shaders, and AI prototyping experiments.",
+    desc: "Upcoming explorations in tactile UI components, audio micro-interactions, and design systems.",
     isSoon: true,
   },
 ];
@@ -67,9 +67,16 @@ export default function NotebookKokil() {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [busy, setBusy] = useState<boolean>(false);
   const nbRef = useRef<HTMLDivElement>(null);
+  const timersRef = useRef<NodeJS.Timeout[]>([]);
 
   const TURN_DURATION = 850;
   const STAGGER = 180;
+
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach((t) => clearTimeout(t));
+    };
+  }, []);
 
   function goTo(targetIdx: number) {
     if (targetIdx < 0 || targetIdx >= PAGES.length || targetIdx === currentPage || busy) {
@@ -92,17 +99,19 @@ export default function NotebookKokil() {
     setCurrentPage(targetIdx);
 
     moving.forEach((s, k) => {
-      setTimeout(() => {
+      const t1 = setTimeout(() => {
         s.style.zIndex = String(100 + k);
         s.classList.add("is-turning");
         s.classList.toggle("is-flipped", forward);
       }, k * STAGGER);
+      timersRef.current.push(t1);
     });
 
-    setTimeout(() => {
+    const t2 = setTimeout(() => {
       moving.forEach((s) => s.classList.remove("is-turning"));
       setBusy(false);
     }, (moving.length - 1) * STAGGER + TURN_DURATION);
+    timersRef.current.push(t2);
   }
 
   return (
@@ -121,14 +130,14 @@ export default function NotebookKokil() {
             <i />
           </div>
 
-          {/* Dark Leather Cover */}
+          {/* Dark Cover */}
           <div className="nb-cover" aria-hidden="true" />
 
           {/* Left: Tilted Notes Sheets */}
           <div className="nb-note nb-note--back" aria-hidden="true" />
           <div className="nb-note">
             <h3>Notes</h3>
-            <p>A tactile notebook of design thinking, prototypes &amp; case studies. Flip the tabs &rarr;</p>
+            <p>A collection of design rationales, interaction experiments &amp; case studies. Flip the tabs &rarr;</p>
           </div>
 
           {/* Left: Stitched Pocket with vector doodle */}
@@ -399,7 +408,7 @@ export default function NotebookKokil() {
               </div>
             </div>
 
-            {/* Sheet 4: Design Codex (Coming Soon / Experiments) */}
+            {/* Sheet 4: Design Codex */}
             <div
               className={`nb-sheet ${currentPage > 4 ? "is-flipped" : ""}`}
               data-page="experiments"
@@ -418,7 +427,7 @@ export default function NotebookKokil() {
                 <div className="nb-soon-body">
                   <p className="nb-soon-title">Coming soon</p>
                   <p className="nb-soon-sub">
-                    The next design system experiment is currently brewing in Figma &amp; Next.js.
+                    Upcoming explorations in tactile UI components, audio micro-interactions, and design systems.
                   </p>
                   <svg
                     className="nb-soon-doodle"
@@ -475,4 +484,3 @@ export default function NotebookKokil() {
     </section>
   );
 }
-

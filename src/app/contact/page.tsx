@@ -74,11 +74,11 @@ export default function ContactPage() {
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-            Initiate Contact.
+            Start a Conversation.
           </h1>
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            Open to product design collaborations, design systems consultation, and high-impact digital experiences.
+            Available for select product design engagements, conversational UX architecture, and design systems consulting.
           </p>
         </div>
 

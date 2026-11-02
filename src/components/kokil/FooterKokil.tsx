@@ -13,7 +13,7 @@ interface ContactLinkItem {
 const CONTACTS: ContactLinkItem[] = [
   {
     name: "Email",
-    desc: "abolarintaye20@gmail.com — direct channel for projects & inquiries.",
+    desc: "abolarintaye20@gmail.com — direct channel for projects, contracts & consultations.",
     href: "mailto:abolarintaye20@gmail.com",
     icon: (
       <svg
@@ -31,25 +31,25 @@ const CONTACTS: ContactLinkItem[] = [
   },
   {
     name: "LinkedIn",
-    desc: "Professional background, recommendations & product work.",
+    desc: "Professional background, verified engagements & design case studies.",
     href: "https://linkedin.com/in/taye-abolarin",
     icon: "in",
   },
   {
     name: "X (Twitter)",
-    desc: "Product design thoughts, interface dissections & experiments.",
+    desc: "Interface dissections, design systems thoughts & rapid prototypes.",
     href: "https://x.com/taye_abolarin2",
     icon: "𝕏",
   },
   {
     name: "Behance",
-    desc: "High-fidelity mockups, UI concepts and design presentations.",
+    desc: "Curated design presentations and visual UI mockups.",
     href: "https://behance.net/colddesigner",
     icon: "Bē",
   },
   {
     name: "GitHub",
-    desc: "Frontend prototypes, Next.js experiments & design repositories.",
+    desc: "Frontend code repositories, Next.js prototypes & design tools.",
     href: "https://github.com/Bheemty",
     icon: (
       <svg viewBox="0 0 24 24" fill="currentColor">
@@ -66,36 +66,78 @@ export default function FooterKokil() {
     const footerEl = footerRef.current;
     if (!footerEl) return;
 
-    const eyes = footerEl.querySelectorAll<HTMLElement>(".eye");
+    let isFooterVisible = false;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isFooterVisible = entries[0]?.isIntersecting ?? false;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(footerEl);
+
+    // Cache eye centers to avoid layout thrashing during mouse movement
+    const eyeEls = Array.from(footerEl.querySelectorAll<HTMLElement>(".eye"));
+    const pupilEls = eyeEls.map((eye) => eye.querySelector<HTMLElement>(".pupil"));
     const maxMove = 24;
 
-    function handleMouseMove(e: MouseEvent) {
-      eyes.forEach((eye) => {
-        const pupil = eye.querySelector<HTMLElement>(".pupil");
-        if (!pupil) return;
+    let eyeCenters: Array<{ cx: number; cy: number }> = [];
+
+    function updateEyeCenters() {
+      eyeCenters = eyeEls.map((eye) => {
         const rect = eye.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
-        const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
-        const angle = Math.atan2(dy, dx);
-        const ox = Math.cos(angle) * dist;
-        const oy = Math.sin(angle) * dist;
-        pupil.style.transform = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px))`;
+        return {
+          cx: rect.left + rect.width / 2,
+          cy: rect.top + rect.height / 2,
+        };
       });
     }
 
+    updateEyeCenters();
+    window.addEventListener("resize", updateEyeCenters, { passive: true });
+
+    let pendingPointerX = -1000;
+    let pendingPointerY = -1000;
+    let eyeRaf = 0;
+
+    function renderFooterEyes() {
+      if (isFooterVisible && eyeCenters.length > 0) {
+        pupilEls.forEach((pupil, idx) => {
+          if (!pupil || !eyeCenters[idx]) return;
+          const { cx, cy } = eyeCenters[idx];
+          const dx = pendingPointerX - cx;
+          const dy = pendingPointerY - cy;
+          const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
+          const angle = Math.atan2(dy, dx);
+          const ox = Math.cos(angle) * dist;
+          const oy = Math.sin(angle) * dist;
+          pupil.style.transform = `translate3d(calc(-50% + ${ox.toFixed(1)}px), calc(-50% + ${oy.toFixed(1)}px), 0)`;
+        });
+      }
+      eyeRaf = requestAnimationFrame(renderFooterEyes);
+    }
+
+    eyeRaf = requestAnimationFrame(renderFooterEyes);
+
+    function handleMouseMove(e: MouseEvent) {
+      if (!isFooterVisible) return;
+      pendingPointerX = e.clientX;
+      pendingPointerY = e.clientY;
+    }
+
     const blinkInterval = setInterval(() => {
-      eyes.forEach((eye) => eye.classList.add("blink"));
+      if (!isFooterVisible) return;
+      eyeEls.forEach((eye) => eye.classList.add("blink"));
       setTimeout(() => {
-        eyes.forEach((eye) => eye.classList.remove("blink"));
+        eyeEls.forEach((eye) => eye.classList.remove("blink"));
       }, 150);
     }, 3200);
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
+      observer.disconnect();
+      cancelAnimationFrame(eyeRaf);
+      window.removeEventListener("resize", updateEyeCenters);
       window.removeEventListener("mousemove", handleMouseMove);
       clearInterval(blinkInterval);
     };
@@ -180,4 +222,3 @@ export default function FooterKokil() {
     </footer>
   );
 }
-

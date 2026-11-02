@@ -97,3 +97,36 @@
   -webkit-text-stroke: 1.5px rgba(242, 241, 236, 0.65);
   color: transparent;
 }
+
+/* Performant custom cursor follower */
+.cursor-ring {
+  width: 30px;
+  height: 30px;
+  pointer-events: none;
+  transition: width 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              height 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.2s ease,
+              background-color 0.2s ease;
+}
+.cursor-ring.is-hovered {
+  width: 44px;
+  height: 44px;
+  border-color: rgba(169, 221, 240, 0.9);
+  background-color: rgba(169, 221, 240, 0.08);
+}
+.cursor-ring.is-text {
+  width: auto;
+  height: auto;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background-color: #a9ddf0;
+  border-color: transparent;
+}
+.cursor-ring .cursor-text {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #090b0f;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}

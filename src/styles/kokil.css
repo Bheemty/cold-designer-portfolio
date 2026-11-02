@@ -389,12 +389,15 @@
 .intro-text .word {
   display: inline-block;
   color: rgba(255, 255, 255, 0.28);
-  filter: blur(4px);
-  transition: color 0.35s ease, filter 0.35s ease;
+  opacity: 0.35;
+  filter: blur(2px);
+  will-change: color, opacity;
+  transition: color 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
   margin-right: 0.24em;
 }
 .intro-text .word.revealed {
   color: #ffffff;
+  opacity: 1;
   filter: blur(0);
 }
 .intro-text .word.emphasis.revealed {
@@ -452,6 +455,7 @@
   #intro { padding: 110px 20px 90px; }
   .intro-skills li { font-size: 14px; padding: 10px 16px; }
   .intro-text { font-size: 26px; }
+  .intro-text .word { filter: none !important; }
 }
 
 /* ── SELECTED WORK: HORIZONTAL ACCORDION ── */
@@ -482,6 +486,7 @@
   color: #fff;
   text-decoration: none;
   transition: flex-basis 0.7s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.4s ease;
+  transform: translateZ(0);
   opacity: 1;
 }
 .acc-panel:hover {
@@ -1346,5 +1351,31 @@
   .contact-email { font-size: 20px; overflow-wrap: anywhere; }
   .site-footer { flex-direction: column; align-items: flex-start; gap: 16px; }
   .footer-links { gap: 20px; flex-wrap: wrap; }
+}
+
+/* ── PREFERS REDUCED MOTION (ACCESSIBILITY & SMOOTH FALLBACK) ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .eye,
+  .pupil,
+  .acc-panel,
+  .nb-sheet,
+  .cursor-hint,
+  .kokil-nav-logo {
+    transition: none !important;
+  }
+  .intro-text .word {
+    filter: none !important;
+    opacity: 1 !important;
+    color: #ffffff !important;
+    transition: none !important;
+  }
 }
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 
 export default function HeroKokil() {
   const heroRef = useRef<HTMLElement>(null);
@@ -13,43 +12,85 @@ export default function HeroKokil() {
     const dotsGroup = dotsGroupRef.current;
     if (!heroEl || !dotsGroup) return;
 
-    // ── Eye pupil tracking ──
-    const eyes = heroEl.querySelectorAll<HTMLElement>(".eye");
+    let isHeroVisible = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isHeroVisible = entries[0]?.isIntersecting ?? false;
+      },
+      { threshold: 0.05 }
+    );
+    observer.observe(heroEl);
+
+    // ── Eye pupil tracking with cached coordinates to avoid layout thrashing ──
+    const eyeEls = Array.from(heroEl.querySelectorAll<HTMLElement>(".eye"));
+    const pupilEls = eyeEls.map((eye) => eye.querySelector<HTMLElement>(".pupil"));
     const maxMove = 28;
 
-    function handleMouseMove(e: MouseEvent) {
-      eyes.forEach((eye) => {
-        const pupil = eye.querySelector<HTMLElement>(".pupil");
-        if (!pupil) return;
+    let eyeCenters: Array<{ cx: number; cy: number }> = [];
+
+    function updateEyeCenters() {
+      eyeCenters = eyeEls.map((eye) => {
         const rect = eye.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
+        return {
+          cx: rect.left + rect.width / 2,
+          cy: rect.top + rect.height / 2,
+        };
+      });
+    }
+
+    updateEyeCenters();
+    window.addEventListener("resize", updateEyeCenters, { passive: true });
+
+    let pendingPointerX = -1000;
+    let pendingPointerY = -1000;
+    let eyeRaf = 0;
+
+    function renderEyes() {
+      if (!isHeroVisible || eyeCenters.length === 0) {
+        eyeRaf = requestAnimationFrame(renderEyes);
+        return;
+      }
+
+      pupilEls.forEach((pupil, idx) => {
+        if (!pupil || !eyeCenters[idx]) return;
+        const { cx, cy } = eyeCenters[idx];
+        const dx = pendingPointerX - cx;
+        const dy = pendingPointerY - cy;
         const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
         const angle = Math.atan2(dy, dx);
         const ox = Math.cos(angle) * dist;
         const oy = Math.sin(angle) * dist;
-        pupil.style.transform = `translate(calc(-50% + ${ox}px), calc(-50% + ${oy}px))`;
+        pupil.style.transform = `translate3d(calc(-50% + ${ox.toFixed(1)}px), calc(-50% + ${oy.toFixed(1)}px), 0)`;
       });
+
+      eyeRaf = requestAnimationFrame(renderEyes);
+    }
+
+    eyeRaf = requestAnimationFrame(renderEyes);
+
+    function handleMouseMove(e: MouseEvent) {
+      if (!isHeroVisible) return;
+      pendingPointerX = e.clientX;
+      pendingPointerY = e.clientY;
     }
 
     const blinkInterval = setInterval(() => {
-      eyes.forEach((eye) => eye.classList.add("blink"));
+      if (!isHeroVisible) return;
+      eyeEls.forEach((eye) => eye.classList.add("blink"));
       setTimeout(() => {
-        eyes.forEach((eye) => eye.classList.remove("blink"));
+        eyeEls.forEach((eye) => eye.classList.remove("blink"));
       }, 150);
     }, 3200);
 
     // ── Rub to reveal dark paint ──
-    const MAX_DOTS = 900;
-    const MIN_DIST = 16;
+    const MAX_DOTS = 220; // Lightweight SVG tree that keeps scrolling silky smooth
+    const MIN_DIST = 22;
     const BRUSH_RADIUS = 280;
     let lastX: number | null = null;
     let lastY: number | null = null;
 
     function addDot(clientX: number, clientY: number) {
-      if (!heroEl || !dotsGroup) return;
+      if (!heroEl || !dotsGroup || !isHeroVisible) return;
       const rect = heroEl.getBoundingClientRect();
       const x = clientX - rect.left;
       const y = clientY - rect.top;
@@ -92,36 +133,39 @@ export default function HeroKokil() {
       lastY = null;
     }
 
-    // Gentle auto-sweep for touch screens or early teaser
+    // Auto-sweep for touch screens
     const isTouch = window.matchMedia("(hover: none)").matches;
     let sweepTimeout: NodeJS.Timeout;
     if (isTouch) {
       sweepTimeout = setTimeout(() => {
         const r = heroEl.getBoundingClientRect();
-        const rows = Math.max(3, Math.ceil(r.height / 260));
+        const rows = Math.max(3, Math.ceil(r.height / 280));
         let step = 0;
-        const totalSteps = rows * 6;
+        const totalSteps = rows * 5;
         const sweepTimer = setInterval(() => {
           if (step > totalSteps) {
             clearInterval(sweepTimer);
             return;
           }
-          const rowIdx = Math.floor(step / 6);
-          const colIdx = step % 6;
-          const x = (colIdx / 5) * r.width;
+          const rowIdx = Math.floor(step / 5);
+          const colIdx = step % 5;
+          const x = (colIdx / 4) * r.width;
           const y = (rowIdx / rows) * r.height;
           addDot(r.left + x, r.top + y);
           step++;
-        }, 40);
-      }, 800);
+        }, 50);
+      }, 700);
     }
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    heroEl.addEventListener("pointermove", onPointerMove);
+    heroEl.addEventListener("pointermove", onPointerMove, { passive: true });
     heroEl.addEventListener("touchmove", onTouchMove, { passive: true });
-    heroEl.addEventListener("pointerleave", onPointerLeave);
+    heroEl.addEventListener("pointerleave", onPointerLeave, { passive: true });
 
     return () => {
+      observer.disconnect();
+      cancelAnimationFrame(eyeRaf);
+      window.removeEventListener("resize", updateEyeCenters);
       window.removeEventListener("mousemove", handleMouseMove);
       heroEl.removeEventListener("pointermove", onPointerMove);
       heroEl.removeEventListener("touchmove", onTouchMove);
@@ -164,11 +208,11 @@ export default function HeroKokil() {
         </div>
         <div className="hero-bottom">
           <p className="hero-desc">
-            I turn complex systems into clear, intuitive products people actually understand &mdash; from conversational healthcare triage to intercity transit.
+            I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
           </p>
           <div className="hero-actions">
             <a href="#work" className="hero-btn primary">
-              See selected work <span aria-hidden="true">&darr;</span>
+              Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
             <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost">
               Get in touch
@@ -178,7 +222,7 @@ export default function HeroKokil() {
         <div className="hero-strip">
           <span>Portfolio &rsquo;26</span>
           <span className="skills">
-            UX<span className="dot">&middot;</span>UI<span className="dot">&middot;</span>Prototyping<span className="dot">&middot;</span>Design Systems
+            Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
           </span>
           <span>Scroll &darr;</span>
         </div>
@@ -201,11 +245,11 @@ export default function HeroKokil() {
         </div>
         <div className="hero-bottom">
           <p className="hero-desc">
-            I turn complex systems into clear, intuitive products people actually understand &mdash; from conversational healthcare triage to intercity transit.
+            I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
           </p>
           <div className="hero-actions">
             <a href="#work" className="hero-btn primary" tabIndex={-1}>
-              See selected work <span aria-hidden="true">&darr;</span>
+              Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
             <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost" tabIndex={-1}>
               Get in touch
@@ -215,7 +259,7 @@ export default function HeroKokil() {
         <div className="hero-strip">
           <span>Portfolio &rsquo;26</span>
           <span className="skills">
-            UX<span className="dot">&middot;</span>UI<span className="dot">&middot;</span>Prototyping<span className="dot">&middot;</span>Design Systems
+            Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
           </span>
           <span>Scroll &darr;</span>
         </div>
@@ -233,4 +277,3 @@ export default function HeroKokil() {
     </section>
   );
 }
-

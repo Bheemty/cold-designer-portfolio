@@ -19,15 +19,15 @@ interface CursorGridProps {
 }
 
 export default function CursorGrid({
-  cellSize = 60,
+  cellSize = 64,
   color = "#a9ddf0",
   radius = 160,
   falloff = "smooth",
   holdTime = 300,
   fadeDuration = 700,
   lineWidth = 1,
-  maxOpacity = 0.5,
-  fillOpacity = 0.05,
+  maxOpacity = 0.45,
+  fillOpacity = 0.04,
   gridOpacity = 0,
   cellRadius = 4,
   clickPulse = true,
@@ -37,11 +37,16 @@ export default function CursorGrid({
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
+    // Disable on touch screens and when reduced motion is preferred (major mobile performance win)
+    const isTouchOnly = window.matchMedia("(pointer: coarse) and (hover: none)").matches;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isTouchOnly || reducedMotion) return;
+
     const container = containerRef.current;
     const canvas = canvasRef.current;
     if (!container || !canvas) return;
 
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
     const FALLOFF_CURVES = {
@@ -57,7 +62,9 @@ export default function CursorGrid({
       return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
     }
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const [cr, cg, cb] = hexToRgb(color);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Cap DPR at 1.5 for crisp visuals without 4K GPU fillrate overhead
+
     let cols = 0;
     let rows = 0;
     let offX = 0;
@@ -126,7 +133,6 @@ export default function CursorGrid({
       const dt = Math.min(now - lastFrame, 50);
       lastFrame = now;
       ctx.clearRect(0, 0, w, h);
-      const [cr, cg, cb] = hexToRgb(color);
 
       if (gridOpacity > 0) {
         ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${gridOpacity})`;
@@ -175,6 +181,7 @@ export default function CursorGrid({
       let anyVisible = pulses.length > 0;
       const fadeStep = dt / Math.max(fadeDuration, 16);
       const half = cellSize / 2;
+      const s = cellSize - 1;
 
       for (let i = 0; i < alphas.length; i++) {
         let a = alphas[i];
@@ -187,25 +194,23 @@ export default function CursorGrid({
         anyVisible = true;
 
         const [cx, cy] = cellCenter(i);
-        const gradient = ctx.createRadialGradient(cx, cy, half * 0.1, cx, cy, cellSize);
-        gradient.addColorStop(0, `rgba(${cr}, ${cg}, ${cb}, ${a})`);
-        gradient.addColorStop(1, `rgba(${cr}, ${cg}, ${cb}, 0)`);
-
         const x = cx - half + 0.5;
         const y = cy - half + 0.5;
-        const s = cellSize - 1;
 
+        // Performant direct stroke without GC gradient allocations
         ctx.beginPath();
         if (cellRadius > 0 && typeof ctx.roundRect === "function") {
           ctx.roundRect(x, y, s, s, cellRadius);
         } else {
           ctx.rect(x, y, s, s);
         }
+
         if (fillOpacity > 0) {
           ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${a * fillOpacity})`;
           ctx.fill();
         }
-        ctx.strokeStyle = gradient;
+
+        ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${a})`;
         ctx.lineWidth = lineWidth;
         ctx.stroke();
       }
@@ -225,7 +230,13 @@ export default function CursorGrid({
       raf = requestAnimationFrame(draw);
     }
 
+    let lastMoveTime = 0;
     function handlePointerMove(e: PointerEvent) {
+      const now = performance.now();
+      // Throttle pointer energize to ~60fps to prevent event flooding during fast movement
+      if (now - lastMoveTime < 14) return;
+      lastMoveTime = now;
+
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -245,15 +256,23 @@ export default function CursorGrid({
     }
 
     rebuild();
-    window.addEventListener("resize", rebuild);
+
+    let resizeTimer: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(rebuild, 150);
+    };
+
+    window.addEventListener("resize", handleResize, { passive: true });
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("click", handleClick, { passive: true });
 
     return () => {
-      window.removeEventListener("resize", rebuild);
+      window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("click", handleClick);
       cancelAnimationFrame(raf);
+      clearTimeout(resizeTimer);
     };
   }, [
     cellSize,
@@ -277,4 +296,3 @@ export default function CursorGrid({
     </div>
   );
 }
-
