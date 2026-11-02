@@ -21,6 +21,7 @@ export interface Project {
   featuredOrder?: number;
   tags: string[];
   heroImage?: string;
+  videoSrc?: string;
   gallery?: ProjectGalleryItem[];
   overview: string;
   challenge: string;
@@ -47,17 +48,17 @@ export const PROJECTS: Project[] = [
     type: "Employment",
     category: "Healthcare & Conversational UI",
     year: "2024",
-    role: "Lead Product Designer",
-    timeline: "Ongoing Product Design",
+    role: "Product Designer",
+    timeline: "Employment Engagement",
     deliverables: [
-      "Conversational UX Architecture (WhatsApp Triage)",
-      "Web Service Gateway & Onboarding",
-      "Patient Consultation & Doctor Referral Flows",
-      "Design System & UI Components",
+      "Conversational UX Architecture (WhatsApp Triage Flow)",
+      "Web Service Gateway & Patient Entry Point",
+      "Doctor Referral Guidance & Structured Consultation Flows",
+      "Design System & Multi-Platform Component Library",
     ],
-    headline: "WhatsApp-First Telehealth Platform Connecting Patients to Licensed Doctors",
+    headline: "Structured WhatsApp-First Triage Gateway Connecting Patients to Licensed Physicians",
     summary:
-      "A conversational healthcare platform providing doctor consultations, digital prescriptions, and lab test referrals directly over WhatsApp — eliminating waiting room friction and app installation barriers.",
+      "A conversational healthcare platform providing patient triage and licensed doctor consultations directly over WhatsApp — eliminating waiting room friction and app installation barriers.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 1,
@@ -66,31 +67,31 @@ export const PROJECTS: Project[] = [
     gallery: [
       {
         src: "/images/projects/medesy/whatsapp-mockup.png",
-        caption: "MEDesy WhatsApp triage interface: immediate symptom prompts, licensed doctor matching, and structured referral actions.",
+        caption: "MEDesy WhatsApp triage interface: immediate symptom guidance, licensed doctor matching, and structured consultation actions.",
         alt: "MEDesy WhatsApp Triage Mockup",
       },
     ],
     overview:
-      "MEDesy addresses healthcare accessibility by meeting patients where they already communicate: WhatsApp. Rather than requiring patients to download an unfamiliar application for episodic medical questions, MEDesy provides a structured conversational gateway where patients describe symptoms, connect with licensed Nigerian doctors, and receive verifiable e-prescriptions or lab referrals securely.",
+      "MEDesy addresses healthcare accessibility by meeting patients where they already communicate: WhatsApp. Rather than requiring patients to download an unfamiliar application for episodic medical questions, MEDesy provides a structured conversational gateway where patients describe symptoms, connect with licensed Nigerian doctors, and receive verifiable consultation summaries securely.",
     challenge:
       "Creating immediate trust, clarity, and safety within a conversational interface and supporting web touchpoints. Patients in distress require clear triage without clinical jargon, while doctors need structured symptom summaries before commencing care.",
     solution:
-      "Engineered an intuitive 3-step triage pathway: instant chat engagement without forced accounts, smart symptom guidance to the appropriate specialist, and seamless handoff for consultation, e-prescriptions, and partner pharmacy directions. All public presentations maintain strict confidentiality regarding proprietary clinical tooling.",
+      "Engineered an intuitive 3-step triage pathway: instant chat engagement without forced accounts, smart symptom guidance to the appropriate specialist, and seamless handoff for consultation and partner pharmacy directions. All public presentations maintain strict confidentiality regarding proprietary clinical tooling.",
     systemHighlights: [
       {
-        title: "Conversational Triage Patterns",
+        title: "Conversational Triage Flow",
         description:
-          "Humane, structured decision guidance helping patients articulate symptoms clearly before connecting to a licensed physician.",
+          "Humane, structured decision prompts helping patients articulate symptoms clearly before connecting to a licensed physician.",
       },
       {
-        title: "Zero-Barrier WhatsApp Handoff",
+        title: "Zero-Barrier WhatsApp Gateway",
         description:
           "Immediate consultation initiation using standard WhatsApp chat channels, ensuring reliable access across varied mobile devices.",
       },
       {
         title: "Verified Service Architecture",
         description:
-          "Transparent web gateway displaying doctor credential standards, partner lab networks, and patient privacy commitments.",
+          "Transparent web gateway displaying doctor credential standards, partner networks, and patient privacy commitments.",
       },
     ],
     specifications: [
@@ -101,69 +102,79 @@ export const PROJECTS: Project[] = [
     ],
     prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
     wireframeSummary:
-      "Structured around frictionless chat-initiated triage, high-clarity doctor profile summaries, and unambiguous digital prescription cards.",
+      "Structured around frictionless chat-initiated triage, high-clarity doctor profile summaries, and unambiguous consultation steps.",
   },
   {
     slug: "9jatrip",
     title: "9jaTrip",
     client: "9jaTrip",
     type: "Client / Freelance",
-    category: "Mobility & Transit",
+    category: "Intercity Mobility & Transit",
     year: "2024",
     role: "Product Designer",
     timeline: "Freelance Engagement",
     deliverables: [
-      "Multi-Modal Ride Selection UX",
-      "Charter vs. Individual Booking Flows",
-      "Upfront Fare Transparency & Receipts",
-      "Mobile App UI & Interaction States",
+      "Intercity Route & Terminal UX",
+      "Scheduled Hub-to-Hub Seat Booking",
+      "Upfront Route Fare Transparency",
+      "Digital Boarding Pass & Terminal QR",
     ],
-    headline: "Multi-Modal Urban Transit and Ride-Hailing for Nigerian Commuters",
+    headline: "Intercity Transit Booking and Terminal Hub Logistics for Regional Commuters",
     summary:
-      "A pragmatic urban mobility platform tailored to local transit realities — accommodating cabs, green cabs, keke napep (tricycles), and okada (motorcycles) with transparent route fares and digital receipts.",
+      "A specialized intercity mobility platform designed for travelers moving between regional transport hubs and terminals — offering scheduled departures, seat selection, and digital boarding passes.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 2,
-    tags: ["Mobility", "Transit", "Mobile App", "Local UX"],
-    heroImage: "/images/projects/9jatrip/booking-screen.png",
+    tags: ["Mobility", "Intercity Transit", "Mobile App", "Terminal UX"],
+    heroImage: "/images/projects/9jatrip/home-screen-mockup.png",
     gallery: [
       {
-        src: "/images/projects/9jatrip/booking-screen.png",
-        caption: "9jaTrip multi-modal transit selector: comparing private charter vs individual seat pricing with upfront vehicle capacity.",
-        alt: "9jaTrip Booking Flow",
+        src: "/images/projects/9jatrip/home-screen-mockup.png",
+        caption: "9jaTrip terminal hub route selector: scheduled departures between intercity hubs with upfront pricing.",
+        alt: "9jaTrip Home Screen Mockup",
+      },
+      {
+        src: "/images/projects/9jatrip/booking-ride-mockup.png",
+        caption: "Intercity transit booking interface: vehicle capacity, seat tier options, and luggage allowances.",
+        alt: "9jaTrip Booking Ride Mockup",
+      },
+      {
+        src: "/images/projects/9jatrip/live-tracking-mockup.png",
+        caption: "Intercity coach and transit live departure tracking with terminal bay indicators.",
+        alt: "9jaTrip Live Tracking Mockup",
       },
       {
         src: "/images/projects/9jatrip/ride-receipt.png",
-        caption: "Digital boarding pass and itemized receipt with driver verification and QR security check.",
+        caption: "Digital boarding pass and itemized fare receipt with terminal check-in QR code.",
         alt: "9jaTrip Boarding Pass & Receipt",
       },
     ],
     overview:
-      "Commuting across Nigerian metropolitan areas involves navigating diverse, fragmented transportation modes. 9jaTrip was conceived to unify local transit choices into a single intuitive interface, giving riders flexible options between solo cab rides, affordable shared transit, and agile point-to-point bike or tricycle routes.",
+      "Commuting between major cities and regional hubs across Nigeria historically requires physical queues at dispersed bus parks with volatile pricing. 9jaTrip unifies intercity travel booking into a clean mobile experience, enabling travelers to reserve departures from established terminal hubs with guaranteed seat allocations.",
     challenge:
-      "Accommodating varying vehicle capacities, unpredictable traffic patterns, and intermittent mobile connectivity while maintaining complete fare transparency and driver verification.",
+      "Accommodating varied route schedules, departure hubs, and fluctuating passenger capacity while providing absolute fare transparency and legible digital boarding verification.",
     solution:
-      "Designed a responsive vehicle selection carousel highlighting real vehicle capacity, estimated pickup windows, and flexible ride modes (Charter private ride vs. Individual seat). Designed high-legibility digital receipts with clear itemized pricing.",
+      "Crafted an intuitive terminal-to-terminal journey planner: travelers pick their origin hub and destination corridor, compare vehicle amenities and departure times, select preferred seats, and receive high-contrast digital boarding passes ready for terminal gate scanning.",
     systemHighlights: [
       {
-        title: "Multi-Modal Vehicle Select",
+        title: "Intercity Terminal Hub Selector",
         description:
-          "Contextual cards allowing commuters to select cabs, tricycles, or motorcycles depending on city traffic and budget.",
+          "Clear hub-to-hub route search showing verified departure stations and scheduled transit intervals.",
       },
       {
-        title: "Charter vs Individual Ride Tiers",
+        title: "Seat Reservation & Capacity",
         description:
-          "Simple toggle allowing passengers to reserve an entire vehicle for personal travel or book a single seat on popular corridors.",
+          "Interactive seat map showing available window, aisle, and front seats with clear luggage allotment.",
       },
       {
-        title: "High-Contrast Commuter UI",
+        title: "Digital Boarding Verification",
         description:
-          "High-contrast color and typography hierarchy ensuring rapid legibility under harsh direct sunlight and on lower-end devices.",
+          "High-contrast boarding pass with terminal departure gate details, QR verification, and itemized fare breakdown.",
       },
     ],
     specifications: [
       { label: "Platform", value: "iOS & Android Mobile Application" },
-      { label: "Focus", value: "Urban Transit, Vehicle Tiers, Digital Receipts" },
+      { label: "Focus", value: "Intercity Transit, Hub Terminals, Digital Boarding" },
       { label: "Engagement", value: "Freelance Product Design" },
       { label: "Design Deliverable", value: "Figma UI/UX & Interactive Prototypes" },
     ],
@@ -178,45 +189,50 @@ export const PROJECTS: Project[] = [
     type: "Concept / Lab Exploration",
     category: "Hospitality & Spatial Web",
     year: "2024",
-    role: "Digital Art Director & Experience Designer",
+    role: "Experience Designer",
     timeline: "Concept Exploration",
     deliverables: [
-      "Editorial Brand Digital Presence",
+      "Editorial Brand Digital Experience",
       "Curated Room & Suite Showcase",
       "Interactive Reservation Demonstration",
       "Atmospheric Daylight Transitions (Day, Sunset, Night)",
     ],
-    headline: "Cinematic Coastal Hospitality Website and Reservation Demonstration",
+    headline: "Cinematic Coastal Hospitality Experience and Interactive Room Lookbook",
     summary:
       "An editorial digital experience for a fictional luxury coastal sanctuary, using photography-led spatial journeys across day, sunset, and night alongside a refined room reservation demonstration.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 3,
     tags: ["Hospitality", "Editorial Design", "Spatial Web", "Art Direction"],
-    heroImage: "/images/projects/somewhere/suite-sunset.png",
+    heroImage: "/images/projects/somewhere/suite-balcony-sunset.png",
     gallery: [
       {
-        src: "/images/projects/somewhere/suite-sunset.png",
-        caption: "Horizon Suite editorial lookbook displaying golden-hour ocean panoramic views with daylight atmosphere controls.",
+        src: "/images/projects/somewhere/suite-balcony-sunset.png",
+        caption: "Horizon Suite ocean terrace during golden-hour sunset with warm natural ambient light.",
         alt: "Somewhere Hotel Horizon Suite at Sunset",
       },
       {
-        src: "/images/projects/somewhere/hero-exterior.png",
-        caption: "Minimalist architectural facade entrance with subtle typography and sound design.",
-        alt: "Somewhere Hotel Facade",
+        src: "/images/projects/somewhere/suite-balcony-day.png",
+        caption: "Horizon Suite ocean terrace under midday daylight conditions.",
+        alt: "Somewhere Hotel Horizon Suite at Day",
       },
       {
-        src: "/images/projects/somewhere/penthouse-sunset.png",
-        caption: "Penthouse observation lounge view with spatial floor plan overlay.",
-        alt: "Somewhere Hotel Penthouse Terrace",
+        src: "/images/projects/somewhere/suite-balcony-night.png",
+        caption: "Horizon Suite ocean terrace under twilight and architectural night lighting.",
+        alt: "Somewhere Hotel Horizon Suite at Night",
+      },
+      {
+        src: "/images/projects/somewhere/hotel-exterior-sunset.png",
+        caption: "Minimalist architectural entrance facade with soft twilight landscape lighting.",
+        alt: "Somewhere Hotel Facade",
       },
     ],
     overview:
-      "Somewhere Hotel explores hospitality web design treated as an editorial publication rather than a transactional booking engine. The experience guides visitors through photographic architectural sequences capturing arrival courtyards, ocean suites, private terraces, and dining rooms across shifting daylight hours.",
+      "Somewhere Hotel is a fictional concept exploring hospitality web design treated as an editorial publication rather than a transactional booking engine. The experience guides visitors through photographic architectural sequences capturing arrival courtyards, ocean suites, private terraces, and dining rooms across shifting daylight hours.",
     challenge:
       "Balancing quiet, cinematic atmosphere with functional hospitality utility, ensuring room discovery feels evocative while keeping dates, rates, and guest parameters instantly accessible.",
     solution:
-      "Designed a dual-tempo layout: full-bleed photographic storytelling paired with a sticky reservation dock. Guests can inspect suites by floor and daylight conditions (day, sunset, night), review amenities, and interact with a streamlined booking demonstration.",
+      "Designed a dual-tempo layout: full-bleed photographic storytelling paired with a sticky reservation dock. Guests can inspect suites by floor and daylight conditions (day, sunset, night), review amenities, and interact with a streamlined booking demonstration (no real payment or backend claimed).",
     systemHighlights: [
       {
         title: "Atmospheric Light-Phase Shifter",
@@ -231,13 +247,13 @@ export const PROJECTS: Project[] = [
       {
         title: "Demonstration Reservation Drawer",
         description:
-          "Non-intrusive booking drawer facilitating date selection, suite comparisons, and guest count confirmation.",
+          "Non-intrusive booking demonstration facilitating date selection, suite comparisons, and guest count confirmation.",
       },
     ],
     specifications: [
       { label: "Platform", value: "Responsive Web Application" },
       { label: "Live Demo", value: "somewhere-hotel.vercel.app" },
-      { label: "Focus", value: "Art Direction, Spatial Discovery, Booking Flow" },
+      { label: "Focus", value: "Art Direction, Spatial Discovery, Booking Demonstration" },
       { label: "Engagement", value: "Personal Digital Concept" },
     ],
     liveUrl: "https://somewhere-hotel.vercel.app/",
@@ -247,85 +263,95 @@ export const PROJECTS: Project[] = [
   {
     slug: "buybuddy",
     title: "BuyBuddy",
-    client: "Self-Initiated Product",
+    client: "Self-Initiated Concept",
     type: "Concept / Lab Exploration",
-    category: "Social Commerce & Micro-Retail",
+    category: "Commerce & Marketplace",
     year: "2024",
     role: "Product Designer & Frontend Developer",
-    timeline: "MVP Design & Build",
+    timeline: "Concept & Prototype Exploration",
     deliverables: [
-      "Vendor Storefront & Catalog Builder",
+      "Vendor Storefront & Inventory Studio",
       "Mobile-First Buyer Ordering Flow",
-      "Zero-Friction WhatsApp Order Handoff",
+      "Order Management & Payment Ledger UI",
       "Responsive Web App (Next.js & TypeScript)",
     ],
-    headline: "Instant Social Commerce Storefronts with WhatsApp Order Handoff",
+    headline: "Modern Buyer–Seller Marketplace Platform for Independent Merchants",
     summary:
-      "A lightweight micro-retail platform empowering independent social vendors to publish clean product catalogs and receive structured order requests directly in WhatsApp without forced customer accounts.",
+      "A mobile-first commerce ecosystem connecting independent merchants with buyers, featuring an intuitive merchant inventory studio, multi-variant product catalog, and seamless shopper order workflows.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 4,
-    tags: ["Commerce", "Next.js", "WhatsApp", "Micro-SaaS"],
-    heroImage: "/images/projects/buybuddy/vendor-dashboard.png",
+    tags: ["Commerce", "Marketplace", "Next.js", "Design System"],
+    heroImage: "/images/projects/buybuddy/vendor-products.png",
     gallery: [
       {
-        src: "/images/projects/buybuddy/vendor-dashboard.png",
-        caption: "Vendor store management studio: catalog creation, active inventory status, and order notification logs.",
-        alt: "BuyBuddy Vendor Dashboard",
+        src: "/images/projects/buybuddy/vendor-products.png",
+        caption: "Vendor inventory studio: product listing, category organization, stock management, and pricing controls.",
+        alt: "BuyBuddy Vendor Inventory Studio",
+      },
+      {
+        src: "/images/projects/buybuddy/vendor-orders.png",
+        caption: "Merchant orders ledger: real-time order tracking, fulfillment status, and customer details.",
+        alt: "BuyBuddy Vendor Orders",
+      },
+      {
+        src: "/images/projects/buybuddy/vendor-wallet.png",
+        caption: "Vendor financial wallet: revenue summaries, pending settlements, and payout management.",
+        alt: "BuyBuddy Vendor Wallet",
       },
       {
         src: "/images/projects/buybuddy/store-landing.png",
-        caption: "Shopper-facing storefront view: clean mobile category navigation, product variant selectors, and 1-tap WhatsApp handoff.",
+        caption: "Shopper-facing storefront view: clean mobile category navigation and product variant selectors.",
         alt: "BuyBuddy Store Landing",
       },
     ],
     overview:
-      "Social commerce sellers on Instagram and TikTok frequently lose sales when buyers abandon complex checkout carts or haggle over stock across unstructured DMs. BuyBuddy enables vendors to set up an instant shareable store URL. Shoppers select item variants and submit an order request that instantly generates a pre-formatted, ready-to-send WhatsApp message containing the exact cart summary and reference number.",
+      "Independent merchants and creative sellers frequently struggle with cumbersome, fragmented ecommerce tools that demand complex setup. BuyBuddy was designed as a modern buyer–seller marketplace platform that streamlines shop creation for vendors while providing buyers with a clean, trustworthy browsing and ordering experience.",
     challenge:
-      "Eliminating checkout friction in social commerce environments where customers distrust unfamiliar payment forms and prefer finalizing orders in personal chats with vendors.",
+      "Designing a dual-sided marketplace interface that feels lightweight for mobile merchants managing physical stock while delivering frictionless product discovery for discerning consumers.",
     solution:
-      "Crafted a zero-account buyer experience where orders persist locally and hand off directly to WhatsApp with one tap, while vendors manage items, variants, and currencies from an uncluttered mobile-first dashboard.",
+      "Crafted an integrated merchant dashboard (catalog, orders, wallet) paired with a responsive storefront lookbook where shoppers can inspect product variants, compare options, and submit structured orders.",
     systemHighlights: [
       {
-        title: "One-Tap WhatsApp Handoff",
+        title: "Merchant Inventory Studio",
         description:
-          "Formats cart selections into clean, readable chat text with product names, sizes, quantities, and order references.",
+          "Mobile-first dashboard for publishing products, configuring size/color variants, and monitoring live stock levels.",
       },
       {
-        title: "Zero-Account Buyer Journey",
+        title: "Order & Settlement Ledger",
         description:
-          "Customers browse, configure items, and generate orders in seconds without account registration or password barriers.",
+          "Clear operational tracking for pending shipments, fulfilled transactions, and vendor revenue balance.",
       },
       {
-        title: "Vendor Catalog Studio",
+        title: "Frictionless Buyer Catalog",
         description:
-          "Mobile-first management dashboard for publishing inventory, setting local currency pricing, and updating store availability.",
+          "High-clarity product cards, instant variant filtering, and responsive basket drawer for rapid purchasing.",
       },
     ],
     specifications: [
       { label: "Stack", value: "Next.js App Router, TypeScript, Tailwind CSS" },
       { label: "Live Demo", value: "buybuddy-bheemty.netlify.app" },
-      { label: "Focus", value: "Social Commerce, Instant Stores, WhatsApp Handoff" },
-      { label: "Engagement", value: "Personal Product Project" },
+      { label: "Focus", value: "Buyer–Seller Marketplace, Merchant Studio, Catalog UX" },
+      { label: "Engagement", value: "Personal Product Concept" },
     ],
     liveUrl: "https://buybuddy-bheemty.netlify.app/",
     wireframeSummary:
-      "Modular product grid cards, interactive sticky bag drawer, and instant WhatsApp chat trigger with copy-text fallback.",
+      "Modular product grid cards, interactive sticky bag drawer, and vendor management navigation.",
   },
   {
     slug: "stillwater",
     title: "Stillwater Hall",
     client: "Self-Initiated Concept",
     type: "Concept / Lab Exploration",
-    category: "Interactive Web & Performing Arts",
+    category: "Cinematic Web & Performing Arts",
     year: "2024",
     role: "Experience Designer & Creative Developer",
     timeline: "Interactive Experiment",
     deliverables: [
-      "Sequential Spatial Venue Walkthrough",
-      "Chaptered Tour Controls (Arrival to Auditorium)",
-      "Interactive Seat Selection & Sightline Perspective",
-      "Demo Digital Admission Pass Generator",
+      "Cinematic Spatial Venue Walkthrough (Exterior to Stage)",
+      "5-Stage Walkthrough Progression (Arrival → Lobby → Stage → Seating → Rear)",
+      "Interactive Seat-Row Sightline Details & Booking Demonstration",
+      "Full Video Capture & Scrollytelling Choreography",
     ],
     headline: "Cinematic Spatial Walkthrough and Digital Ticketing for Stillwater Hall",
     summary:
@@ -333,23 +359,34 @@ export const PROJECTS: Project[] = [
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 5,
-    tags: ["Cinematic Web", "Motion Design", "Ticketing", "Creative Code"],
-    heroImage: "/images/projects/stillwater/venue-exterior.png",
+    tags: ["Cinematic Web", "Motion Design", "Video Walkthrough", "Creative Code"],
+    heroImage: "/images/projects/stillwater/05_Full_Stage.png",
+    videoSrc: "/videos/stillwater/01_approach.mp4",
     gallery: [
       {
-        src: "/images/projects/stillwater/venue-exterior.png",
-        caption: "Stillwater Hall night arrival sequence: architectural lighting and ambient atmospheric prologue.",
-        alt: "Stillwater Hall Exterior",
+        src: "/images/projects/stillwater/01_Exterior.png",
+        caption: "Stage 01: Evening exterior approach — twilight architectural illumination and atmospheric arrival.",
+        alt: "Stillwater Hall Exterior Approach",
       },
       {
-        src: "/images/projects/stillwater/full-stage.png",
-        caption: "Acoustic concert stage spatial perspective with orchestral lighting choreography.",
-        alt: "Stillwater Hall Concert Stage",
+        src: "/images/projects/stillwater/03_Lobby.png",
+        caption: "Stage 02: Grand foyer & lobby transition through glass threshold into the auditorium promenade.",
+        alt: "Stillwater Grand Foyer",
       },
       {
-        src: "/images/projects/stillwater/auditorium-seating.png",
-        caption: "Interactive tier-by-tier seat selection map with sightline perspective preview and demo pass generation.",
-        alt: "Stillwater Auditorium Seating Plan",
+        src: "/images/projects/stillwater/05_Full_Stage.png",
+        caption: "Stage 03: Acoustic auditorium stage perspective with warm stage illumination.",
+        alt: "Stillwater Full Stage",
+      },
+      {
+        src: "/images/projects/stillwater/06_Front_Seating.png",
+        caption: "Stage 04: Turn toward audience seating with interactive tier and sightline details.",
+        alt: "Stillwater Front & Mid Seating",
+      },
+      {
+        src: "/images/projects/stillwater/08_Rear_Seating.png",
+        caption: "Stage 05: Rear auditorium seating and elevation vantage point.",
+        alt: "Stillwater Rear Auditorium Seating",
       },
     ],
     overview:
@@ -357,20 +394,20 @@ export const PROJECTS: Project[] = [
     challenge:
       "Communicating physical venue presence, acoustic anticipation, and seating sightlines on desktop and mobile browsers without requiring heavy 3D rendering engines.",
     solution:
-      "Structured keyframed camera chapters (The Arrival, The Foyer, Threshold, Full Stage, Seating) tied to smooth scroll choreography, paired with an interactive seat map allowing attendees to inspect vantage points and issue a demo pass.",
+      "Structured keyframed camera chapters (Evening Exterior → Lobby/Hall → Stage/Praise → Seat-Row Details/Booking → Rear Seating) tied to smooth scroll choreography, paired with an interactive seat map allowing attendees to inspect vantage points and issue a demo pass.",
     systemHighlights: [
       {
-        title: "Chaptered Tour Navigation",
+        title: "Cinematic Video Chapter Walkthrough",
         description:
-          "Allows visitors to smoothly scroll through architectural milestones or skip directly to auditorium seating.",
+          "Sequential video progression from exterior arrival through grand lobby to full stage view.",
       },
       {
-        title: "Perspective Seat Map",
+        title: "Perspective Seat-Row Details",
         description:
           "Interactive seating interface mapping hall tiers, accessibility zones, and direct sightlines to the stage.",
       },
       {
-        title: "Demo Digital Admission Pass",
+        title: "Demonstration Digital Admission Pass",
         description:
           "Generates an editorial digital ticket badge displaying seat reservation, event date, and admission reference.",
       },
@@ -389,24 +426,24 @@ export const PROJECTS: Project[] = [
   {
     slug: "nova-wellness",
     title: "Nova Wellness",
-    client: "Self-Initiated Product",
+    client: "Self-Initiated Concept",
     type: "Concept / Lab Exploration",
-    category: "Mobile Health & AI Companion",
+    category: "Mobile Health & Supportive Companion",
     year: "2024",
     role: "Product Designer & React Native Developer",
     timeline: "Mobile Exploration",
     deliverables: [
       "Daily Wellness Check-In Companion",
       "Voice Reflection Journal (AssemblyAI)",
-      "Conversational AI Guidance (Gemini)",
+      "Conversational Reflection Guidance (Gemini)",
       "Private On-Device Data Architecture",
     ],
     headline: "Supportive Daily Wellness Companion with Voice Journaling and Gemini AI",
     summary:
-      "A React Native mobile application built with Expo SDK 57, offering mindful mood check-ins, AssemblyAI voice transcription, AI reflection via Gemini, and privacy-first on-device data persistence.",
+      "A React Native mobile application built with Expo SDK 57, offering mindful mood check-ins, AssemblyAI voice transcription, reflective AI conversation via Gemini, and privacy-first on-device data persistence.",
     accentColor: "#A9DDF0",
     featured: false,
-    tags: ["Mobile App", "React Native", "AI", "Mental Wellness"],
+    tags: ["Mobile App", "React Native", "AI Companion", "Mental Wellness"],
     overview:
       "Nova is a supportive mobile companion designed to facilitate daily mental check-ins, reflective voice journaling, and habit tracking without intrusive telemetry or unsolicited clinical diagnoses. The app operates with strict on-device data storage, ensuring personal entries remain confidential.",
     challenge:

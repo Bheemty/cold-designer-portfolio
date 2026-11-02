@@ -11,11 +11,11 @@ export const metadata: Metadata = {
 const VERIFIED_ENGAGEMENTS = [
   {
     period: "2024 — Present",
-    role: "Lead Product Designer",
+    role: "Product Designer",
     company: "Medesy Technologies",
     location: "Nigeria / Remote (Employment)",
     description:
-      "Directing product design for a WhatsApp-first telehealth platform connecting patients with licensed physicians. Designing frictionless conversational triage, patient onboarding, and web service architecture.",
+      "Designing product architecture for a WhatsApp-first telehealth platform connecting patients with licensed physicians. Designing frictionless conversational triage, patient onboarding, and web service architecture.",
     tags: ["Conversational UX", "Telehealth", "Design Systems", "Web Architecture"],
   },
   {
@@ -99,7 +99,7 @@ export default function AboutPage() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Focused on conversational interfaces, digital product architecture, and high-craft web experiences.
+            UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. With approximately two years of self-taught design experience across Figma, Photoshop, and modern digital interfaces, specializing in conversational systems, intercity mobility, and cinematic web experiences.
           </p>
         </div>
 

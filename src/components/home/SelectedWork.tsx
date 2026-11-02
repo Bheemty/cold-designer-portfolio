@@ -1,54 +1,201 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowUpRight, ExternalLink, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  ExternalLink,
+  Sparkles,
+  CheckCircle2,
+  ArrowRight,
+  Play,
+  Pause,
+  Volume2,
+  VolumeX,
+  Maximize2,
+  Clock,
+  Compass,
+  MapPin,
+  Calendar,
+  Layers,
+  ChevronRight,
+  MessageSquare,
+  ShieldCheck,
+  Building,
+} from "lucide-react";
 import { sound } from "@/lib/sounds";
-import { PROJECTS } from "@/data/projects";
+
+// ============================================================================
+// STILLWATER VIDEO CHAPTERS
+// ============================================================================
+const STILLWATER_CHAPTERS = [
+  {
+    id: "01",
+    title: "The Evening Approach",
+    duration: "0:07",
+    src: "/videos/stillwater/01_approach.mp4",
+    still: "/images/projects/stillwater/01_Exterior.png",
+    description: "Camera glides across the courtyard under twilight blue-hour illumination toward the illuminated glass facade.",
+    stage: "Stage 01 // Arrival",
+  },
+  {
+    id: "02",
+    title: "Foyer & Grand Doors",
+    duration: "0:05",
+    src: "/videos/stillwater/02_doors_lobby.mp4",
+    still: "/images/projects/stillwater/03_Lobby.png",
+    description: "Automatic doors part; the camera enters the terrazzo foyer promenade toward the auditorium threshold.",
+    stage: "Stage 02 // Threshold",
+  },
+  {
+    id: "03",
+    title: "Stage Reveal & Praise",
+    duration: "0:05",
+    src: "/videos/stillwater/03_stage_reveal.mp4",
+    still: "/images/projects/stillwater/05_Full_Stage.png",
+    description: "Moving down the center aisle reveals the warm acoustic auditorium stage and orchestral choir risers.",
+    stage: "Stage 03 // Stage",
+  },
+  {
+    id: "04",
+    title: "Turn to Audience Seating",
+    duration: "0:05",
+    src: "/videos/stillwater/04_turn_seating.mp4",
+    still: "/images/projects/stillwater/06_Front_Seating.png",
+    description: "Level camera turn near the front aisle surveying tier seating rows, sightlines, and acoustic baffles.",
+    stage: "Stage 04 // Seating",
+  },
+  {
+    id: "05",
+    title: "Rear Elevation & Settle",
+    duration: "0:05",
+    src: "/videos/stillwater/05_rear_seating.mp4",
+    still: "/images/projects/stillwater/08_Rear_Seating.png",
+    description: "Advancing toward the rear tier seating, framing the entire hall vantage before ticket confirmation.",
+    stage: "Stage 05 // Overview",
+  },
+];
+
+// ============================================================================
+// 9JATRIP INTERCITY ROUTES
+// ============================================================================
+const INTERCITY_ROUTES = [
+  {
+    id: "lagos-ibadan",
+    from: "Lagos (Ojota Hub)",
+    to: "Ibadan (Iwo Road Interchange)",
+    distance: "128 KM",
+    estTime: "1h 45m",
+    fare: "₦4,500",
+    departure: "08:30 AM",
+    bay: "Terminal Gate 03",
+    seatsLeft: 5,
+    vehicle: "Executive 14-Seater Coach",
+  },
+  {
+    id: "abuja-kaduna",
+    from: "Abuja (Utako Gateway)",
+    to: "Kaduna (Kawo Central Hub)",
+    distance: "186 KM",
+    estTime: "2h 15m",
+    fare: "₦7,200",
+    departure: "10:15 AM",
+    bay: "Terminal Gate 01",
+    seatsLeft: 8,
+    vehicle: "Express Intercity Shuttle",
+  },
+  {
+    id: "benin-ph",
+    from: "Benin City (Uselu Station)",
+    to: "Port Harcourt (Waterlines Hub)",
+    distance: "264 KM",
+    estTime: "3h 40m",
+    fare: "₦9,500",
+    departure: "01:00 PM",
+    bay: "Terminal Gate 06",
+    seatsLeft: 3,
+    vehicle: "Premium Intercity Coach",
+  },
+];
 
 export default function SelectedWork() {
-  // Daylight phase state for Somewhere Hotel
-  const [somewherePhase, setSomewherePhase] = useState<"suite" | "exterior" | "penthouse">("suite");
+  // --------------------------------------------------------------------------
+  // EXHIBIT 01: MEDesy State (Interactive Triage Simulation)
+  // --------------------------------------------------------------------------
+  const [triageStep, setTriageStep] = useState<0 | 1 | 2>(0);
 
-  // Chapter state for Stillwater Hall
-  const [stillwaterChapter, setStillwaterChapter] = useState<"exterior" | "stage" | "seating">("exterior");
+  // --------------------------------------------------------------------------
+  // EXHIBIT 02: 9jaTrip State (Intercity Terminal Route Selector)
+  // --------------------------------------------------------------------------
+  const [selectedRoute, setSelectedRoute] = useState(INTERCITY_ROUTES[0]);
+  const [tripViewMode, setTripViewMode] = useState<"screen" | "receipt">("screen");
 
-  const somewhereImages = {
-    suite: {
-      src: "/images/projects/somewhere/suite-sunset.png",
-      label: "Horizon Suite // Golden Hour Sunset",
-      desc: "Full-bleed ocean terrace perspective showcasing natural daylight illumination.",
-    },
-    exterior: {
-      src: "/images/projects/somewhere/hero-exterior.png",
-      label: "Architectural Facade // Minimalist Arrival",
-      desc: "Brutalist coastal entry pavilion with quiet ambient audio and typographic pacing.",
-    },
-    penthouse: {
-      src: "/images/projects/somewhere/penthouse-sunset.png",
-      label: "Penthouse Observation Lounge // Twilight",
-      desc: "Panoramic 180° maritime horizon view paired with spatial reservation drawer.",
-    },
+  // --------------------------------------------------------------------------
+  // EXHIBIT 03: Somewhere Hotel State (Daylight Atmosphere Phases)
+  // --------------------------------------------------------------------------
+  const [daylightPhase, setDaylightPhase] = useState<"sunset" | "day" | "night" | "exterior">("sunset");
+
+  // --------------------------------------------------------------------------
+  // EXHIBIT 04: BuyBuddy State (Dual Marketplace Switcher)
+  // --------------------------------------------------------------------------
+  const [buybuddyWorkspace, setBuybuddyWorkspace] = useState<"products" | "orders" | "wallet" | "storefront">("products");
+
+  // --------------------------------------------------------------------------
+  // EXHIBIT 05: Stillwater Hall State (Video Walkthrough Player)
+  // --------------------------------------------------------------------------
+  const [activeChapterIndex, setActiveChapterIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [isMuted, setIsMuted] = useState(true);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  const activeChapter = STILLWATER_CHAPTERS[activeChapterIndex];
+
+  // Handle Video Chapter Switch
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.src = activeChapter.src;
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    }
+  }, [activeChapterIndex, activeChapter.src]);
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current && videoRef.current.duration) {
+      const prog = (videoRef.current.currentTime / videoRef.current.duration) * 100;
+      setVideoProgress(prog);
+    }
   };
 
-  const stillwaterImages = {
-    exterior: {
-      src: "/images/projects/stillwater/venue-exterior.png",
-      label: "Chapter 01 // The Blue-Hour Arrival",
-      desc: "Keyframed exterior approach establishing physical acoustic presence.",
-    },
-    stage: {
-      src: "/images/projects/stillwater/full-stage.png",
-      label: "Chapter 02 // Full Acoustic Stage",
-      desc: "Orchestral stage vantage viewed from center orchestra stalls.",
-    },
-    seating: {
-      src: "/images/projects/stillwater/auditorium-seating.png",
-      label: "Chapter 03 // Interactive Tier Sightlines",
-      desc: "Real-time seat selection map with spatial line-of-sight acoustics.",
-    },
+  const handleVideoEnded = () => {
+    // Loop to next chapter sequentially or restart
+    const nextIdx = (activeChapterIndex + 1) % STILLWATER_CHAPTERS.length;
+    setActiveChapterIndex(nextIdx);
+  };
+
+  const togglePlay = () => {
+    sound.playClick();
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    }
+  };
+
+  const toggleMute = () => {
+    sound.playClick();
+    if (!videoRef.current) return;
+    videoRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  const selectChapter = (idx: number) => {
+    sound.playClick();
+    setActiveChapterIndex(idx);
   };
 
   return (
@@ -74,19 +221,20 @@ export default function SelectedWork() {
 
           <div className="max-w-md">
             <p className="text-base text-[#89919d] font-light leading-relaxed">
-              An art-directed showcase of production telehealth architecture, urban commuter mobility, and immersive spatial web experiences.
+              An art-directed monograph of production telehealth triage, intercity mobility platforms, and immersive spatial web experiences.
             </p>
           </div>
         </div>
 
         {/* =========================================================================
-            PROJECT 01: MEDESY SOLUTION (Telehealth & Conversational UX)
-            Composition: Asymmetric Vertical Device Showcase + Triage Pathway
+            EXHIBIT 01: MEDESY SOLUTION
+            Theme: Healthcare & Conversational UI
+            Architecture: Asymmetric vertical phone frame + Interactive Triage Stepper
            ========================================================================= */}
-        <div className="mb-32 sm:mb-44">
+        <div id="exhibit-medesy" className="mb-32 sm:mb-44 scroll-mt-28">
           <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
             {/* Ambient Background Gradient */}
-            <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-[#a9ddf0]/[0.02] blur-[140px]" />
+            <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-[#a9ddf0]/[0.025] blur-[140px]" />
 
             {/* Header Metadata */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
@@ -99,14 +247,14 @@ export default function SelectedWork() {
               <div className="flex items-center gap-6 text-[#89919d]">
                 <span>2024 — Present</span>
                 <span className="text-white/20">•</span>
-                <span className="text-[#f2f1ec]">Lead Product Designer</span>
+                <span className="text-[#f2f1ec]">Product Designer</span>
               </div>
             </div>
 
             {/* Asymmetric Showcase Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Column: Narrative & Product Thinking */}
-              <div className="lg:col-span-5 space-y-6">
+              {/* Left Column: Narrative & Interactive Triage Simulation */}
+              <div className="lg:col-span-6 space-y-6">
                 <div>
                   <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
                     Medesy Technologies
@@ -117,36 +265,113 @@ export default function SelectedWork() {
                 </div>
 
                 <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  WhatsApp-first telehealth platform connecting patients directly to licensed physicians without app installation barriers.
+                  WhatsApp-first telehealth triage gateway connecting patients directly to licensed physicians without app installation barriers.
                 </p>
 
                 <p className="text-sm text-[#89919d]/90 font-light leading-relaxed">
-                  Rather than forcing patients into an unfamiliar app during medical distress, MEDesy conducts structured conversational triage directly in WhatsApp — delivering verifiable digital prescriptions, lab referrals, and doctor consultations.
+                  Rather than forcing users through intimidating app registrations during medical distress, MEDesy conducts humane conversational triage directly in WhatsApp — delivering verified symptom guidance, specialist doctor referrals, and digital consultation summaries.
                 </p>
 
-                {/* Key Architectural Decisions */}
-                <div className="space-y-3 pt-2 font-mono-code text-xs">
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Frictionless conversational symptom triage (3-step quick handoff)</span>
+                {/* Interactive Triage Pathway Simulator */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-5 space-y-4">
+                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+                    <span className="font-mono-code text-[11px] uppercase tracking-wider text-[#a9ddf0] font-semibold flex items-center gap-2">
+                      <MessageSquare size={13} />
+                      Interactive Triage Flow Simulator
+                    </span>
+                    <span className="font-mono-code text-[10px] text-[#89919d]">Tap Step to Preview</span>
                   </div>
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Zero account barrier; immediate WhatsApp chat initiation</span>
+
+                  {/* Stepper Buttons */}
+                  <div className="grid grid-cols-3 gap-2 font-mono-code text-[11px]">
+                    {[
+                      { step: 0, label: "01. Symptom Query" },
+                      { step: 1, label: "02. Doctor Match" },
+                      { step: 2, label: "03. Referral Summary" },
+                    ].map((item) => (
+                      <button
+                        key={item.step}
+                        onClick={() => {
+                          sound.playClick();
+                          setTriageStep(item.step as 0 | 1 | 2);
+                        }}
+                        className={`rounded-lg py-2 px-2 text-center transition-all ${
+                          triageStep === item.step
+                            ? "bg-[#a9ddf0] text-[#090b0f] font-bold shadow-md shadow-[#a9ddf0]/20"
+                            : "bg-white/[0.03] text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.06]"
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
                   </div>
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Verified doctor referral cards &amp; digital pharmacy receipts</span>
+
+                  {/* Step Dynamic Content Box */}
+                  <div className="min-h-[100px] rounded-xl bg-[#11141b] border border-white/[0.06] p-4 text-xs font-mono-code">
+                    <AnimatePresence mode="wait">
+                      {triageStep === 0 && (
+                        <motion.div
+                          key="step0"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="space-y-2 text-[#89919d]"
+                        >
+                          <div className="text-[#a9ddf0] font-semibold">Stage 01: Conversational Entry</div>
+                          <p className="text-[#f2f1ec]">
+                            &ldquo;Hello, welcome to MEDesy. Please describe your primary symptom or medical concern.&rdquo;
+                          </p>
+                          <div className="text-[10px] text-[#89919d]/80 pt-1 border-t border-white/5">
+                            Outcome: Zero signup barrier. Immediate patient articulation in familiar WhatsApp chat UI.
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {triageStep === 1 && (
+                        <motion.div
+                          key="step1"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="space-y-2 text-[#89919d]"
+                        >
+                          <div className="text-[#a9ddf0] font-semibold">Stage 02: Specialty Matching &amp; Triage</div>
+                          <p className="text-[#f2f1ec]">
+                            Structured symptom prompts classify severity and route request to licensed on-duty physician.
+                          </p>
+                          <div className="text-[10px] text-[#89919d]/80 pt-1 border-t border-white/5">
+                            Outcome: Eliminates clinical misrouting while preparing structured intake note for the doctor.
+                          </div>
+                        </motion.div>
+                      )}
+
+                      {triageStep === 2 && (
+                        <motion.div
+                          key="step2"
+                          initial={{ opacity: 0, y: 5 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -5 }}
+                          className="space-y-2 text-[#89919d]"
+                        >
+                          <div className="text-[#a9ddf0] font-semibold">Stage 03: Verified Consultation Card</div>
+                          <p className="text-[#f2f1ec]">
+                            Patient receives verified session badge, consultation summary, and partner pharmacy instructions.
+                          </p>
+                          <div className="text-[10px] text-[#89919d]/80 pt-1 border-t border-white/5">
+                            Outcome: Transparent documentation that patient can retain and reference securely.
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </div>
                 </div>
 
                 {/* Action Links */}
-                <div className="pt-6 flex flex-wrap items-center gap-4">
+                <div className="pt-4 flex flex-wrap items-center gap-4">
                   <Link
                     href="/work/medesy"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    data-cursor-text="CASE STUDY"
                     className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                   >
                     <span>Inspect Case Study</span>
@@ -167,9 +392,9 @@ export default function SelectedWork() {
                 </div>
               </div>
 
-              {/* Right Column: High-Fidelity Mobile Mockup Container */}
-              <div className="lg:col-span-7 flex justify-center">
-                <div className="relative w-full max-w-md rounded-3xl bg-[#090b0f] border border-white/[0.1] p-4 sm:p-6 shadow-2xl group-hover:border-[#a9ddf0]/40 transition-all duration-500">
+              {/* Right Column: High-Fidelity Mobile Frame */}
+              <div className="lg:col-span-6 flex justify-center">
+                <div className="relative w-full max-w-sm rounded-3xl bg-[#090b0f] border border-white/[0.1] p-4 sm:p-5 shadow-2xl group-hover:border-[#a9ddf0]/40 transition-all duration-500">
                   <div className="relative aspect-[9/16] w-full rounded-2xl overflow-hidden bg-[#161a23] border border-white/5 shadow-inner">
                     <Image
                       src="/images/projects/medesy/whatsapp-mockup.png"
@@ -180,11 +405,10 @@ export default function SelectedWork() {
                     />
                   </div>
 
-                  {/* Tactile Device Badge */}
                   <div className="mt-4 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
                     <span className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-[#a9ddf0]" />
-                      Verified WhatsApp Triage Interface
+                      Authentic WhatsApp Triage UI
                     </span>
                     <span>Specimen 01</span>
                   </div>
@@ -195,16 +419,17 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            PROJECT 02: 9JATRIP (Urban Mobility & Commuter Transit)
-            Composition: Dual-Card Overlap (Booking Flow + Ride Receipt)
+            EXHIBIT 02: 9JATRIP
+            Theme: Intercity Transit & Terminal Hub Logistics (Freelance)
+            Architecture: Interactive Route Terminal Simulator + Real Transit Mockups
            ========================================================================= */}
-        <div className="mb-32 sm:mb-44">
+        <div id="exhibit-9jatrip" className="mb-32 sm:mb-44 scroll-mt-28">
           <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
             {/* Header Metadata */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 02 // MOBILITY &amp; TRANSIT
+                  EXHIBIT 02 // INTERCITY MOBILITY &amp; TRANSIT
                 </span>
                 <span className="text-[#89919d]">Client / Freelance</span>
               </div>
@@ -217,48 +442,93 @@ export default function SelectedWork() {
 
             {/* Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Dual Visual Presentation: Left Column (Span 7) */}
-              <div className="lg:col-span-7 relative">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                  {/* Primary: Multi-modal Booking Screen */}
-                  <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-3 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
-                    <div className="relative aspect-[9/16] w-full rounded-xl overflow-hidden bg-[#161a23]">
-                      <Image
-                        src="/images/projects/9jatrip/booking-screen.png"
-                        alt="9jaTrip Multi-Modal Booking Screen"
-                        fill
-                        sizes="(max-width: 768px) 90vw, 320px"
-                        className="object-contain sm:object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                      />
-                    </div>
-                    <div className="mt-3 text-center font-mono-code text-[10px] text-[#89919d]">
-                      Multi-Modal Vehicle Selection
-                    </div>
+              {/* Left Column: Visual Mockup Showcase with Toggle (Span 7) */}
+              <div className="lg:col-span-7 space-y-6">
+                <div className="flex items-center justify-between font-mono-code text-xs">
+                  <span className="text-[#89919d]">Visual Specimen:</span>
+                  <div className="flex items-center gap-2 rounded-full bg-[#090b0f] p-1 border border-white/[0.08]">
+                    <button
+                      onClick={() => {
+                        sound.playClick();
+                        setTripViewMode("screen");
+                      }}
+                      className={`rounded-full px-3 py-1 font-semibold transition-all ${
+                        tripViewMode === "screen"
+                          ? "bg-[#a9ddf0] text-[#090b0f]"
+                          : "text-[#89919d] hover:text-[#f2f1ec]"
+                      }`}
+                    >
+                      Terminal Route Booking
+                    </button>
+                    <button
+                      onClick={() => {
+                        sound.playClick();
+                        setTripViewMode("receipt");
+                      }}
+                      className={`rounded-full px-3 py-1 font-semibold transition-all ${
+                        tripViewMode === "receipt"
+                          ? "bg-[#a9ddf0] text-[#090b0f]"
+                          : "text-[#89919d] hover:text-[#f2f1ec]"
+                      }`}
+                    >
+                      Boarding Pass &amp; Receipt
+                    </button>
                   </div>
+                </div>
 
-                  {/* Secondary Overlapping: Ride Receipt & Fare Transparency */}
-                  <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-3 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500 sm:-translate-y-4">
-                    <div className="relative aspect-[9/16] w-full rounded-xl overflow-hidden bg-[#161a23]">
-                      <Image
-                        src="/images/projects/9jatrip/ride-receipt.png"
-                        alt="9jaTrip Verified Ride Receipt"
-                        fill
-                        sizes="(max-width: 768px) 90vw, 320px"
-                        className="object-contain sm:object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                      />
-                    </div>
-                    <div className="mt-3 text-center font-mono-code text-[10px] text-[#89919d]">
-                      Verified Trip Receipt &amp; QR
-                    </div>
+                {/* Mockup Display */}
+                <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-4 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#161a23]">
+                    <AnimatePresence mode="wait">
+                      {tripViewMode === "screen" ? (
+                        <motion.div
+                          key="screen"
+                          initial={{ opacity: 0, scale: 0.98 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 1.02 }}
+                          transition={{ duration: 0.4 }}
+                          className="relative w-full h-full"
+                        >
+                          <Image
+                            src="/images/projects/9jatrip/home-screen-mockup.png"
+                            alt="9jaTrip Terminal Hub Selection Screen"
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 1024px) 100vw, 700px"
+                          />
+                        </motion.div>
+                      ) : (
+                        <motion.div
+                          key="receipt"
+                          initial={{ opacity: 0, scale: 0.98 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 1.02 }}
+                          transition={{ duration: 0.4 }}
+                          className="relative w-full h-full"
+                        >
+                          <Image
+                            src="/images/projects/9jatrip/ride-receipt.png"
+                            alt="9jaTrip Digital Boarding Pass & Receipt"
+                            fill
+                            className="object-contain"
+                            sizes="(max-width: 1024px) 100vw, 700px"
+                          />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                  <div className="mt-3 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
+                    <span>{tripViewMode === "screen" ? "Intercity Terminal Route Selector" : "Itemized Boarding Pass with Gate QR"}</span>
+                    <span>Specimen 02</span>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Narrative (Span 5) */}
+              {/* Right Column: Narrative & Interactive Terminal Route Selector (Span 5) */}
               <div className="lg:col-span-5 space-y-6">
                 <div>
                   <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
-                    9jaTrip Mobility
+                    9jaTrip Mobility (Freelance)
                   </span>
                   <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06]">
                     9jaTrip.
@@ -266,34 +536,56 @@ export default function SelectedWork() {
                 </div>
 
                 <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  Pragmatic urban transit and ride-hailing app tailored to Nigerian commuter realities.
+                  Intercity transit booking and terminal hub logistics designed for regional Nigerian commuters.
                 </p>
 
                 <p className="text-sm text-[#89919d]/90 font-light leading-relaxed">
-                  Commuters in metropolitan Nigeria navigate diverse, fragmented transport choices. 9jaTrip unifies cabs, green cabs, keke napep (tricycles), and okada into a single high-legibility interface with upfront fare transparency and charter vs. individual seat tiers.
+                  Replaces chaotic bus park queues with scheduled departures between regional transport hubs. Commuters select departure terminals, choose reserved coach seats, and receive high-contrast digital boarding passes.
                 </p>
 
-                <div className="space-y-3 pt-2 font-mono-code text-xs">
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Charter entire vehicle vs. individual seat reservation modes</span>
+                {/* Interactive Route Inspector */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-4 space-y-3 font-mono-code text-xs">
+                  <div className="text-[11px] uppercase tracking-wider text-[#a9ddf0] font-semibold flex items-center gap-2">
+                    <MapPin size={13} />
+                    Select Intercity Hub Corridor:
                   </div>
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>High-contrast typography readable under direct harsh sunlight</span>
-                  </div>
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Itemized digital receipts with verified driver credentials</span>
+
+                  <div className="flex flex-col gap-2">
+                    {INTERCITY_ROUTES.map((route) => (
+                      <button
+                        key={route.id}
+                        onClick={() => {
+                          sound.playClick();
+                          setSelectedRoute(route);
+                        }}
+                        className={`text-left p-3 rounded-xl border transition-all ${
+                          selectedRoute.id === route.id
+                            ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec]"
+                            : "border-white/[0.06] bg-white/[0.02] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between font-semibold mb-1">
+                          <span>{route.from} → {route.to}</span>
+                          <span className="text-[#a9ddf0]">{route.fare}</span>
+                        </div>
+                        <div className="flex items-center gap-3 text-[10px] text-[#89919d]">
+                          <span>{route.departure}</span>
+                          <span>•</span>
+                          <span>{route.bay}</span>
+                          <span>•</span>
+                          <span className="text-[#a9ddf0]">{route.seatsLeft} seats left</span>
+                        </div>
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                <div className="pt-6 flex flex-wrap items-center gap-4">
+                {/* Action Links */}
+                <div className="pt-2 flex flex-wrap items-center gap-4">
                   <Link
                     href="/work/9jatrip"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    data-cursor-text="CASE STUDY"
                     className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                   >
                     <span>Inspect Case Study</span>
@@ -308,7 +600,7 @@ export default function SelectedWork() {
                     onMouseEnter={() => sound.playHover()}
                     className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-5 py-3 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                   >
-                    <span>Inspect in Figma</span>
+                    <span>View in Figma</span>
                     <ArrowUpRight size={13} />
                   </a>
                 </div>
@@ -318,10 +610,11 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            PROJECT 03: SOMEWHERE HOTEL (Hospitality & Spatial Web)
-            Composition: Full-Bleed Panorama + Interactive Daylight Phase Shifter
+            EXHIBIT 03: SOMEWHERE HOTEL
+            Theme: Hospitality & Spatial Web (Personal Concept)
+            Architecture: Full-Bleed Panorama + Interactive Daylight Phase Controller
            ========================================================================= */}
-        <div className="mb-32 sm:mb-44">
+        <div id="exhibit-somewhere" className="mb-32 sm:mb-44 scroll-mt-28">
           <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
             {/* Header Metadata */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-10 font-mono-code text-xs">
@@ -329,12 +622,12 @@ export default function SelectedWork() {
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
                   EXHIBIT 03 // SPATIAL &amp; HOSPITALITY
                 </span>
-                <span className="text-[#89919d]">Personal Digital Concept</span>
+                <span className="text-[#89919d]">Personal Digital Concept (Booking Demo Only)</span>
               </div>
               <div className="flex items-center gap-6 text-[#89919d]">
                 <span>2024</span>
                 <span className="text-white/20">•</span>
-                <span className="text-[#f2f1ec]">Art Director &amp; Experience Designer</span>
+                <span className="text-[#f2f1ec]">Experience Designer</span>
               </div>
             </div>
 
@@ -342,71 +635,84 @@ export default function SelectedWork() {
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
               <div className="max-w-2xl">
                 <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
-                  Editorial Sanctuary
+                  Editorial Sanctuary Lookbook
                 </span>
                 <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06] mb-3">
                   Somewhere Hotel.
                 </h3>
                 <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  Cinematic coastal hospitality website and reservation demonstration exploring daylight transitions.
+                  Cinematic coastal hospitality experience and reservation demonstration exploring atmospheric daylight shifts.
                 </p>
               </div>
 
-              {/* Interactive Daylight Phase Controls */}
+              {/* Interactive Daylight Controller */}
               <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-[#090b0f] p-1.5 border border-white/[0.08] font-mono-code text-xs">
                 <span className="text-[#89919d] text-[11px] px-3 uppercase tracking-wider hidden sm:inline">
-                  Atmosphere:
+                  Daylight:
                 </span>
-                {(["suite", "exterior", "penthouse"] as const).map((key) => (
+                {[
+                  { id: "sunset", label: "Sunset Dusk (06:45 PM)" },
+                  { id: "day", label: "Midday Sun (12:00 PM)" },
+                  { id: "night", label: "Twilight Nocturne (09:30 PM)" },
+                  { id: "exterior", label: "Arrival Facade" },
+                ].map((item) => (
                   <button
-                    key={key}
+                    key={item.id}
                     onClick={() => {
                       sound.playClick();
-                      setSomewherePhase(key);
+                      setDaylightPhase(item.id as typeof daylightPhase);
                     }}
-                    className={`rounded-xl px-4 py-2 transition-all font-semibold ${
-                      somewherePhase === key
+                    className={`rounded-xl px-3.5 py-2 transition-all font-semibold ${
+                      daylightPhase === item.id
                         ? "bg-[#a9ddf0] text-[#090b0f] shadow-md shadow-[#a9ddf0]/20"
                         : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.03]"
                     }`}
                   >
-                    {key === "suite" && "Sunset Suite"}
-                    {key === "exterior" && "Arrival Facade"}
-                    {key === "penthouse" && "Twilight Penthouse"}
+                    {item.label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Interactive Panoramic Showcase Canvas */}
+            {/* Interactive Panoramic Canvas */}
             <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-8">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={somewherePhase}
-                  initial={{ opacity: 0, scale: 1.03 }}
+                  key={daylightPhase}
+                  initial={{ opacity: 0, scale: 1.02 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
+                  exit={{ opacity: 0, scale: 0.99 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   className="relative w-full h-full"
                 >
                   <Image
-                    src={somewhereImages[somewherePhase].src}
-                    alt={somewhereImages[somewherePhase].label}
+                    src={
+                      daylightPhase === "sunset"
+                        ? "/images/projects/somewhere/suite-balcony-sunset.png"
+                        : daylightPhase === "day"
+                        ? "/images/projects/somewhere/suite-balcony-day.png"
+                        : daylightPhase === "night"
+                        ? "/images/projects/somewhere/suite-balcony-night.png"
+                        : "/images/projects/somewhere/hotel-exterior-sunset.png"
+                    }
+                    alt="Somewhere Hotel Atmosphere"
                     fill
                     priority
                     sizes="(max-width: 1200px) 100vw, 1200px"
                     className="object-cover"
                   />
-                  {/* Subtle Gradient Vignette */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090b0f]/80 via-transparent to-black/20" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090b0f]/85 via-transparent to-black/20" />
 
                   {/* Contextual Overlay Note */}
-                  <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono-code text-xs">
-                    <span className="text-[#f2f1ec] font-semibold bg-[#090b0f]/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
-                      {somewhereImages[somewherePhase].label}
+                  <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono-code text-xs">
+                    <span className="text-[#f2f1ec] font-semibold bg-[#090b0f]/85 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
+                      {daylightPhase === "sunset" && "Horizon Balcony Suite // Warm Golden Dusk (21°C)"}
+                      {daylightPhase === "day" && "Horizon Balcony Suite // Midday Maritime Sun (24°C)"}
+                      {daylightPhase === "night" && "Horizon Balcony Suite // Nocturne Architectural Glow (18°C)"}
+                      {daylightPhase === "exterior" && "Arrival Courtyard & Facade // Ambient Twilight"}
                     </span>
-                    <span className="text-[#89919d] text-[11px] bg-[#090b0f]/80 px-3 py-1 rounded-full border border-white/10 backdrop-blur-md hidden sm:inline">
-                      {somewhereImages[somewherePhase].desc}
+                    <span className="text-[#89919d] text-[11px] bg-[#090b0f]/85 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
+                      Fictional concept; booking demonstration only
                     </span>
                   </div>
                 </motion.div>
@@ -416,7 +722,7 @@ export default function SelectedWork() {
             {/* Footer Row */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 border-t border-white/[0.08]">
               <p className="font-mono-code text-xs text-[#89919d] max-w-xl">
-                Treats hospitality as an editorial monograph rather than a transactional booking engine, featuring responsive daylight ambiance shifts and demonstration reservation drawers.
+                Treats hospitality as an editorial publication rather than a transactional booking engine, featuring multi-light room explorations and demonstration reservation drawers.
               </p>
 
               <div className="flex items-center gap-4 shrink-0">
@@ -447,18 +753,19 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            PROJECT 04: BUYBUDDY (Social Micro-Commerce & WhatsApp Handoff)
-            Composition: Split-Screen Product Ecosystem (Merchant Studio + Shopper Store)
+            EXHIBIT 04: BUYBUDDY
+            Theme: Buyer–Seller Marketplace Platform (Personal Product Concept)
+            Architecture: Interactive Dual Workspace (Merchant Studio vs Shopper Catalog)
            ========================================================================= */}
-        <div className="mb-32 sm:mb-44">
+        <div id="exhibit-buybuddy" className="mb-32 sm:mb-44 scroll-mt-28">
           <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
             {/* Header Metadata */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 04 // COMMERCE &amp; WHATSAPP HANDOFF
+                  EXHIBIT 04 // COMMERCE &amp; MARKETPLACE
                 </span>
-                <span className="text-[#89919d]">Personal Product MVP</span>
+                <span className="text-[#89919d]">Personal Product Concept</span>
               </div>
               <div className="flex items-center gap-6 text-[#89919d]">
                 <span>2024</span>
@@ -473,7 +780,7 @@ export default function SelectedWork() {
               <div className="lg:col-span-5 space-y-6">
                 <div>
                   <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
-                    Social Commerce MVP
+                    Marketplace Architecture
                   </span>
                   <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06]">
                     BuyBuddy.
@@ -481,34 +788,47 @@ export default function SelectedWork() {
                 </div>
 
                 <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  Instant social commerce storefronts converting Instagram and TikTok traffic into structured WhatsApp orders.
+                  Modern buyer–seller marketplace platform empowering independent merchants with intuitive inventory and ordering workflows.
                 </p>
 
                 <p className="text-sm text-[#89919d]/90 font-light leading-relaxed">
-                  Social vendors lose critical sales when buyers abandon complex checkout accounts. BuyBuddy gives independent sellers an instant shareable store URL where customers pick variants and tap one button to dispatch a pre-formatted order summary directly to WhatsApp.
+                  Independent creative merchants struggle with fragmented, high-friction ecommerce tooling. BuyBuddy bridges merchant inventory control with a clean, responsive customer shopping experience.
                 </p>
 
-                <div className="space-y-3 pt-2 font-mono-code text-xs">
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Zero customer registration; eliminates drop-off friction</span>
-                  </div>
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>One-tap WhatsApp handoff with pre-structured cart text</span>
-                  </div>
-                  <div className="flex items-start gap-2.5 text-[#f2f1ec]">
-                    <CheckCircle2 size={14} className="text-[#a9ddf0] shrink-0 mt-0.5" />
-                    <span>Mobile-first merchant dashboard for real-time inventory management</span>
-                  </div>
+                {/* Interactive Workspace Controller */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-4 space-y-2 font-mono-code text-xs">
+                  <span className="text-[11px] text-[#a9ddf0] uppercase tracking-wider font-semibold block mb-2">
+                    Inspect Marketplace Workspaces:
+                  </span>
+                  {[
+                    { id: "products", label: "01. Merchant Inventory Studio", note: "Product publishing, multi-variants & pricing" },
+                    { id: "orders", label: "02. Orders & Fulfillment Ledger", note: "Live transaction tracking & fulfillment status" },
+                    { id: "wallet", label: "03. Merchant Wallet & Settlement", note: "Revenue balance & scheduled bank disbursements" },
+                    { id: "storefront", label: "04. Shopper Storefront Catalog", note: "Responsive buyer experience with variant selectors" },
+                  ].map((ws) => (
+                    <button
+                      key={ws.id}
+                      onClick={() => {
+                        sound.playClick();
+                        setBuybuddyWorkspace(ws.id as typeof buybuddyWorkspace);
+                      }}
+                      className={`w-full text-left p-2.5 rounded-xl border transition-all ${
+                        buybuddyWorkspace === ws.id
+                          ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec]"
+                          : "border-white/[0.04] bg-white/[0.01] text-[#89919d] hover:text-[#f2f1ec] hover:border-white/10"
+                      }`}
+                    >
+                      <div className="font-semibold text-[11px]">{ws.label}</div>
+                      <div className="text-[10px] text-[#89919d]">{ws.note}</div>
+                    </button>
+                  ))}
                 </div>
 
-                <div className="pt-6 flex flex-wrap items-center gap-4">
+                <div className="pt-4 flex flex-wrap items-center gap-4">
                   <Link
                     href="/work/buybuddy"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    data-cursor-text="CASE STUDY"
                     className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                   >
                     <span>Inspect Case Study</span>
@@ -529,39 +849,45 @@ export default function SelectedWork() {
                 </div>
               </div>
 
-              {/* Right Column: Split Dual Mockups (Span 7) */}
-              <div className="lg:col-span-7 space-y-6">
-                {/* Upper: Vendor Dashboard Preview */}
-                <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-3 sm:p-4 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
+              {/* Right Column: Dynamic Workspace Mockup (Span 7) */}
+              <div className="lg:col-span-7">
+                <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-4 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
                   <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#161a23]">
-                    <Image
-                      src="/images/projects/buybuddy/vendor-dashboard.png"
-                      alt="BuyBuddy Vendor Management Dashboard"
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 550px"
-                      className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                    />
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={buybuddyWorkspace}
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 1.02 }}
+                        transition={{ duration: 0.4 }}
+                        className="relative w-full h-full"
+                      >
+                        <Image
+                          src={
+                            buybuddyWorkspace === "products"
+                              ? "/images/projects/buybuddy/vendor-products.png"
+                              : buybuddyWorkspace === "orders"
+                              ? "/images/projects/buybuddy/vendor-orders.png"
+                              : buybuddyWorkspace === "wallet"
+                              ? "/images/projects/buybuddy/vendor-wallet.png"
+                              : "/images/projects/buybuddy/store-landing.png"
+                          }
+                          alt="BuyBuddy Marketplace Interface"
+                          fill
+                          className="object-contain"
+                          sizes="(max-width: 1024px) 100vw, 700px"
+                        />
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                   <div className="mt-3 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
-                    <span>Vendor Store Studio &amp; Inventory Management</span>
-                    <span>Specimen A</span>
-                  </div>
-                </div>
-
-                {/* Lower: Shopper Storefront Preview */}
-                <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-3 sm:p-4 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
-                  <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#161a23]">
-                    <Image
-                      src="/images/projects/buybuddy/store-landing.png"
-                      alt="BuyBuddy Customer Storefront Landing"
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 550px"
-                      className="object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                    />
-                  </div>
-                  <div className="mt-3 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
-                    <span>Customer Storefront &amp; Instant WhatsApp Checkout Handoff</span>
-                    <span>Specimen B</span>
+                    <span>
+                      {buybuddyWorkspace === "products" && "Merchant Inventory Studio — Variant Management"}
+                      {buybuddyWorkspace === "orders" && "Vendor Orders Ledger — Real-Time Status Tracking"}
+                      {buybuddyWorkspace === "wallet" && "Financial Wallet — Revenue & Settlement History"}
+                      {buybuddyWorkspace === "storefront" && "Customer Storefront — Modular Product Lookbook"}
+                    </span>
+                    <span>Specimen 04</span>
                   </div>
                 </div>
               </div>
@@ -570,103 +896,140 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            PROJECT 05: STILLWATER HALL (Cinematic Performing Arts & Ticketing)
-            Composition: Full-Stage Panorama + Interactive Spatial Chapters
+            EXHIBIT 05: STILLWATER HALL (Cinematic Video Walkthrough & Spatial Web)
+            Theme: Performing Arts, Acoustic Scrollytelling, Video Integration
+            Architecture: Cinema Video Player + Interactive 5-Stage Chapter Scrubber
            ========================================================================= */}
-        <div className="mb-24">
+        <div id="exhibit-stillwater" className="mb-24 scroll-mt-28">
           <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
             {/* Header Metadata */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-10 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 05 // CINEMATIC DIGITAL EXPERIENCE
+                  EXHIBIT 05 // CINEMATIC VIDEO WALKTHROUGH
                 </span>
                 <span className="text-[#89919d]">Personal Web Experience</span>
               </div>
               <div className="flex items-center gap-6 text-[#89919d]">
                 <span>2024</span>
                 <span className="text-white/20">•</span>
-                <span className="text-[#f2f1ec]">Experience Designer &amp; Creative Technologist</span>
+                <span className="text-[#f2f1ec]">Experience Designer &amp; Developer</span>
               </div>
             </div>
 
             {/* Narrative Header */}
-            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-10">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 mb-8">
               <div className="max-w-2xl">
                 <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
-                  Acoustic Scrollytelling
+                  5-Stage Spatial Walkthrough
                 </span>
                 <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06] mb-3">
                   Stillwater Hall.
                 </h3>
                 <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  Cinematic spatial venue walkthrough and interactive digital ticketing experience.
+                  Cinematic spatial venue walkthrough and interactive digital ticketing experience featuring authentic video chapters.
                 </p>
               </div>
 
-              {/* Spatial Chapter Switcher */}
-              <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-[#090b0f] p-1.5 border border-white/[0.08] font-mono-code text-xs">
-                <span className="text-[#89919d] text-[11px] px-3 uppercase tracking-wider hidden sm:inline">
-                  Chapter:
-                </span>
-                {(["exterior", "stage", "seating"] as const).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => {
-                      sound.playClick();
-                      setStillwaterChapter(key);
-                    }}
-                    className={`rounded-xl px-4 py-2 transition-all font-semibold ${
-                      stillwaterChapter === key
-                        ? "bg-[#a9ddf0] text-[#090b0f] shadow-md shadow-[#a9ddf0]/20"
-                        : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.03]"
-                    }`}
-                  >
-                    {key === "exterior" && "01 // Arrival"}
-                    {key === "stage" && "02 // Acoustic Stage"}
-                    {key === "seating" && "03 // Seating Map"}
-                  </button>
-                ))}
+              {/* Player Status Badge */}
+              <div className="flex items-center gap-3 font-mono-code text-xs text-[#a9ddf0] bg-[#090b0f] px-4 py-2 rounded-full border border-white/[0.08]">
+                <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
+                <span>{activeChapter.stage}</span>
               </div>
             </div>
 
-            {/* Chapter Display Canvas */}
-            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-8">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={stillwaterChapter}
-                  initial={{ opacity: 0, scale: 1.03 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className="relative w-full h-full"
-                >
-                  <Image
-                    src={stillwaterImages[stillwaterChapter].src}
-                    alt={stillwaterImages[stillwaterChapter].label}
-                    fill
-                    priority
-                    sizes="(max-width: 1200px) 100vw, 1200px"
-                    className="object-cover"
-                  />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090b0f]/80 via-transparent to-black/20" />
+            {/* CINEMA VIDEO PLAYER CONTAINER */}
+            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-6">
+              <video
+                ref={videoRef}
+                src={activeChapter.src}
+                poster={activeChapter.still}
+                playsInline
+                autoPlay
+                muted={isMuted}
+                loop={false}
+                onTimeUpdate={handleTimeUpdate}
+                onEnded={handleVideoEnded}
+                className="w-full h-full object-cover"
+              />
 
-                  <div className="absolute bottom-6 left-6 right-6 flex flex-col sm:flex-row sm:items-center justify-between gap-2 font-mono-code text-xs">
-                    <span className="text-[#f2f1ec] font-semibold bg-[#090b0f]/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
-                      {stillwaterImages[stillwaterChapter].label}
-                    </span>
-                    <span className="text-[#89919d] text-[11px] bg-[#090b0f]/80 px-3 py-1 rounded-full border border-white/10 backdrop-blur-md hidden sm:inline">
-                      {stillwaterImages[stillwaterChapter].desc}
-                    </span>
+              {/* Video Gradient Overlays */}
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090b0f]/90 via-transparent to-black/30" />
+
+              {/* Top Title Overlay */}
+              <div className="absolute top-6 left-6 right-6 flex items-center justify-between font-mono-code text-xs">
+                <span className="text-[#f2f1ec] font-semibold bg-[#090b0f]/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
+                  Chapter {activeChapter.id}: {activeChapter.title}
+                </span>
+                <span className="text-[#89919d] bg-[#090b0f]/80 px-3 py-1 rounded-full border border-white/10 backdrop-blur-md">
+                  {activeChapter.duration}
+                </span>
+              </div>
+
+              {/* Bottom Interactive Controls & Progress Bar */}
+              <div className="absolute bottom-6 left-6 right-6 space-y-3">
+                {/* Progress Bar */}
+                <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-[#a9ddf0] transition-all duration-200"
+                    style={{ width: `${videoProgress}%` }}
+                  />
+                </div>
+
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono-code text-xs">
+                  {/* Left: Play/Pause & Sound Toggle */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={togglePlay}
+                      className="flex items-center gap-2 rounded-full bg-[#f2f1ec] text-[#090b0f] font-semibold px-4 py-2 hover:bg-[#a9ddf0] transition-colors"
+                    >
+                      {isPlaying ? <Pause size={13} /> : <Play size={13} />}
+                      <span>{isPlaying ? "Pause" : "Play"}</span>
+                    </button>
+
+                    <button
+                      onClick={toggleMute}
+                      className="flex items-center gap-2 rounded-full border border-white/20 bg-[#090b0f]/80 text-[#f2f1ec] px-4 py-2 hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors backdrop-blur-md"
+                    >
+                      {isMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
+                      <span>{isMuted ? "Sound Off" : "Sound On"}</span>
+                    </button>
                   </div>
-                </motion.div>
-              </AnimatePresence>
+
+                  {/* Right: Caption Description */}
+                  <p className="text-[11px] text-[#f2f1ec]/85 max-w-lg bg-[#090b0f]/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md hidden md:block">
+                    {activeChapter.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CHAPTER TIMELINE SCRUBBER BUTTONS */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mb-8 font-mono-code text-xs">
+              {STILLWATER_CHAPTERS.map((ch, idx) => (
+                <button
+                  key={ch.id}
+                  onClick={() => selectChapter(idx)}
+                  className={`text-left p-3 rounded-xl border transition-all ${
+                    activeChapterIndex === idx
+                      ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec]"
+                      : "border-white/[0.06] bg-[#090b0f] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[#a9ddf0] font-semibold">{ch.id}</span>
+                    <span className="text-[10px] text-[#89919d]">{ch.duration}</span>
+                  </div>
+                  <div className="font-semibold truncate text-[11px]">{ch.title}</div>
+                  <div className="text-[9px] text-[#89919d] uppercase mt-1">{ch.stage}</div>
+                </button>
+              ))}
             </div>
 
             {/* Footer Row */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 border-t border-white/[0.08]">
               <p className="font-mono-code text-xs text-[#89919d] max-w-xl">
-                Guides concertgoers through keyframed camera chapters from exterior evening blue-hour through grand foyer and stage sightlines to an interactive demo pass generator.
+                Guides concertgoers through a continuous architectural sequence: evening exterior → grand lobby → acoustic stage → seat-row hover details &amp; demo pass generation.
               </p>
 
               <div className="flex items-center gap-4 shrink-0">
