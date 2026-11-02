@@ -85,7 +85,7 @@ export default function WorkAccordion() {
 
   function handlePanelClick(p: ProjectItem, e: React.MouseEvent) {
     const isTouch = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
-    const isStacked = typeof window !== "undefined" && window.innerWidth <= 992;
+    const isStacked = typeof window !== "undefined" && window.innerWidth <= 1024;
 
     // On touch or stacked mobile: first tap opens, second tap / link click navigates
     if ((isTouch || isStacked) && activeId !== p.id) {
@@ -112,7 +112,7 @@ export default function WorkAccordion() {
               tabIndex={0}
               style={{
                 ["--img" as string]: `url('${project.image}')`,
-                ["--d" as string]: `${idx * 0.06}s`,
+                ["--d" as string]: `${idx * 0.05}s`,
               }}
               aria-label={project.title}
               onPointerEnter={() => handlePointerEnter(project.id)}
@@ -122,13 +122,13 @@ export default function WorkAccordion() {
                 if (e.key === "Enter") router.push(project.href);
               }}
             >
-              {/* Collapsed Peek State (hardware accelerated, dark contrast overlay) */}
+              {/* Collapsed Peek State (hardware accelerated, centered label, dark contrast overlay) */}
               <div className="acc-peek" aria-hidden="true" />
               <span className="acc-peek-label" aria-hidden="true">
                 {project.shortLabel}
               </span>
 
-              {/* Expanded Card Body (rigid width prevents text wrapping reflow during flex animation) */}
+              {/* Expanded Card Body: structured tiers prevent any clipping or overflow */}
               <div className="acc-body">
                 <div className="acc-media">
                   <div
@@ -137,20 +137,27 @@ export default function WorkAccordion() {
                     aria-label={`${project.title} preview mockup`}
                   />
                 </div>
-                <span className="work-eyebrow">{project.eyebrow}</span>
-                <h3 className="work-title">{project.title}</h3>
-                <p className="work-desc">{project.desc}</p>
-                <div className="work-tags">
-                  {project.tags.map((t) => (
-                    <span key={t}>{t}</span>
-                  ))}
+
+                <div className="acc-info">
+                  <span className="work-eyebrow">{project.eyebrow}</span>
+                  <h3 className="work-title">{project.title}</h3>
+                  <p className="work-desc">{project.desc}</p>
+                </div>
+
+                <div className="acc-action-row">
+                  <div className="work-tags">
+                    {project.tags.map((t) => (
+                      <span key={t}>{t}</span>
+                    ))}
+                  </div>
+
                   <Link
                     href={project.href}
                     className="work-go"
                     aria-label={`Read ${project.title} case study`}
                     onClick={(e) => e.stopPropagation()}
                   >
-                    View Case Study
+                    <span>View Case Study</span>
                     <svg
                       viewBox="0 0 24 24"
                       width="14"
