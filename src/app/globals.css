@@ -47,12 +47,12 @@
 }
 
 .font-editorial {
-  font-family: "Newsreader", "Playfair Display", "Didot", "Bodoni MT", "Baskerville", "Georgia", serif;
+  font-family: var(--font-newsreader), "Newsreader", "Playfair Display", "Didot", "Bodoni MT", "Baskerville", "Georgia", serif;
   letter-spacing: -0.015em;
 }
 
 .font-editorial-italic {
-  font-family: "Newsreader", "Playfair Display", "Didot", "Bodoni MT", "Baskerville", "Georgia", serif;
+  font-family: var(--font-newsreader), "Newsreader", "Playfair Display", "Didot", "Bodoni MT", "Baskerville", "Georgia", serif;
   font-style: italic;
 }
 

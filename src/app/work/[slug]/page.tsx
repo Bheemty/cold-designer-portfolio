@@ -137,8 +137,27 @@ export default async function CaseStudyPage({
           </div>
         </header>
 
-        {/* Hero Visual Mockup / Interface Showcase */}
-        {project.heroImage && (
+        {/* Hero Visual Mockup or Video Showcase */}
+        {project.videoSrc ? (
+          <div className="mb-20 overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-6 shadow-2xl">
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#090b0f]">
+              <video
+                src={project.videoSrc}
+                poster={project.heroImage}
+                controls
+                playsInline
+                autoPlay
+                muted
+                loop
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="mt-4 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
+              <span>Cinematic Video Walkthrough Specimen</span>
+              <span>{project.title} — Verified Spatial Recording</span>
+            </div>
+          </div>
+        ) : project.heroImage ? (
           <div className="mb-20 overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-6 shadow-2xl">
             <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#090b0f]">
               <Image
@@ -155,7 +174,7 @@ export default async function CaseStudyPage({
               <span>{project.title} — Verified Visual Specimen</span>
             </div>
           </div>
-        )}
+        ) : null}
 
         {/* Deliverables Pills */}
         <section className="mb-20">

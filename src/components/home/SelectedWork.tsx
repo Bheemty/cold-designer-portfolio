@@ -14,16 +14,16 @@ import {
   Pause,
   Volume2,
   VolumeX,
-  Maximize2,
+  MapPin,
   Clock,
   Compass,
-  MapPin,
-  Calendar,
-  Layers,
-  ChevronRight,
   MessageSquare,
   ShieldCheck,
   Building,
+  Layers,
+  ChevronRight,
+  Check,
+  Radio,
 } from "lucide-react";
 import { sound } from "@/lib/sounds";
 
@@ -92,7 +92,7 @@ const INTERCITY_ROUTES = [
     departure: "08:30 AM",
     bay: "Terminal Gate 03",
     seatsLeft: 5,
-    vehicle: "Executive 14-Seater Coach",
+    vehicle: "Executive 14-Seater HiAce Coach",
   },
   {
     id: "abuja-kaduna",
@@ -130,7 +130,7 @@ export default function SelectedWork() {
   // EXHIBIT 02: 9jaTrip State (Intercity Terminal Route Selector)
   // --------------------------------------------------------------------------
   const [selectedRoute, setSelectedRoute] = useState(INTERCITY_ROUTES[0]);
-  const [tripViewMode, setTripViewMode] = useState<"screen" | "receipt">("screen");
+  const [tripViewMode, setTripViewMode] = useState<"screen" | "seat" | "receipt">("screen");
 
   // --------------------------------------------------------------------------
   // EXHIBIT 03: Somewhere Hotel State (Daylight Atmosphere Phases)
@@ -149,6 +149,7 @@ export default function SelectedWork() {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [videoProgress, setVideoProgress] = useState(0);
+  const [selectedTier, setSelectedTier] = useState<"stalls" | "circle" | "balcony">("stalls");
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const activeChapter = STILLWATER_CHAPTERS[activeChapterIndex];
@@ -170,7 +171,6 @@ export default function SelectedWork() {
   };
 
   const handleVideoEnded = () => {
-    // Loop to next chapter sequentially or restart
     const nextIdx = (activeChapterIndex + 1) % STILLWATER_CHAPTERS.length;
     setActiveChapterIndex(nextIdx);
   };
@@ -229,18 +229,15 @@ export default function SelectedWork() {
         {/* =========================================================================
             EXHIBIT 01: MEDESY SOLUTION
             Theme: Healthcare & Conversational UI
-            Architecture: Asymmetric vertical phone frame + Interactive Triage Stepper
+            Layout: Asymmetric Editorial Column + Floating Device Crucible
            ========================================================================= */}
-        <div id="exhibit-medesy" className="mb-32 sm:mb-44 scroll-mt-28">
-          <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
-            {/* Ambient Background Gradient */}
-            <div className="pointer-events-none absolute top-0 right-0 h-96 w-96 rounded-full bg-[#a9ddf0]/[0.025] blur-[140px]" />
-
-            {/* Header Metadata */}
+        <div id="exhibit-medesy" className="mb-36 sm:mb-48 scroll-mt-28">
+          <div className="relative">
+            {/* Contextual Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 01 // TELEHEALTH PLATFORM
+                  01 // TELEHEALTH PLATFORM
                 </span>
                 <span className="text-[#89919d]">Current Employment</span>
               </div>
@@ -251,43 +248,43 @@ export default function SelectedWork() {
               </div>
             </div>
 
-            {/* Asymmetric Showcase Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Column: Narrative & Interactive Triage Simulation */}
-              <div className="lg:col-span-6 space-y-6">
+            {/* Asymmetric Spread */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+              {/* Narrative & Interactive Simulation (Span 6) */}
+              <div className="lg:col-span-6 space-y-8">
                 <div>
                   <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
                     Medesy Technologies
                   </span>
-                  <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06]">
+                  <h3 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.04]">
                     MEDesy Solution.
                   </h3>
                 </div>
 
-                <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  WhatsApp-first telehealth triage gateway connecting patients directly to licensed physicians without app installation barriers.
+                <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed">
+                  Structured WhatsApp-first triage gateway connecting patients directly to licensed physicians without app installation barriers.
                 </p>
 
-                <p className="text-sm text-[#89919d]/90 font-light leading-relaxed">
-                  Rather than forcing users through intimidating app registrations during medical distress, MEDesy conducts humane conversational triage directly in WhatsApp — delivering verified symptom guidance, specialist doctor referrals, and digital consultation summaries.
+                <p className="text-base text-[#89919d]/90 font-light leading-relaxed">
+                  Rather than forcing patients into unfamiliar applications during medical distress, MEDesy conducts humane conversational triage directly in WhatsApp — delivering verified symptom guidance, specialist doctor referrals, and digital consultation summaries.
                 </p>
 
-                {/* Interactive Triage Pathway Simulator */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-5 space-y-4">
+                {/* Interactive Triage Simulator */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 space-y-4">
                   <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-                    <span className="font-mono-code text-[11px] uppercase tracking-wider text-[#a9ddf0] font-semibold flex items-center gap-2">
-                      <MessageSquare size={13} />
-                      Interactive Triage Flow Simulator
+                    <span className="font-mono-code text-xs uppercase tracking-wider text-[#a9ddf0] font-semibold flex items-center gap-2">
+                      <MessageSquare size={14} />
+                      Interactive Triage Simulator
                     </span>
-                    <span className="font-mono-code text-[10px] text-[#89919d]">Tap Step to Preview</span>
+                    <span className="font-mono-code text-[11px] text-[#89919d]">Tap Step to Test</span>
                   </div>
 
-                  {/* Stepper Buttons */}
-                  <div className="grid grid-cols-3 gap-2 font-mono-code text-[11px]">
+                  {/* Step Buttons */}
+                  <div className="grid grid-cols-3 gap-2 font-mono-code text-xs">
                     {[
-                      { step: 0, label: "01. Symptom Query" },
+                      { step: 0, label: "01. Intake" },
                       { step: 1, label: "02. Doctor Match" },
-                      { step: 2, label: "03. Referral Summary" },
+                      { step: 2, label: "03. Referral Card" },
                     ].map((item) => (
                       <button
                         key={item.step}
@@ -295,7 +292,7 @@ export default function SelectedWork() {
                           sound.playClick();
                           setTriageStep(item.step as 0 | 1 | 2);
                         }}
-                        className={`rounded-lg py-2 px-2 text-center transition-all ${
+                        className={`rounded-xl py-2.5 px-3 text-center transition-all ${
                           triageStep === item.step
                             ? "bg-[#a9ddf0] text-[#090b0f] font-bold shadow-md shadow-[#a9ddf0]/20"
                             : "bg-white/[0.03] text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.06]"
@@ -306,23 +303,31 @@ export default function SelectedWork() {
                     ))}
                   </div>
 
-                  {/* Step Dynamic Content Box */}
-                  <div className="min-h-[100px] rounded-xl bg-[#11141b] border border-white/[0.06] p-4 text-xs font-mono-code">
+                  {/* Simulated Conversation Screen */}
+                  <div className="min-h-[140px] rounded-xl bg-[#090b0f] border border-white/[0.06] p-4 text-xs font-mono-code space-y-3">
                     <AnimatePresence mode="wait">
                       {triageStep === 0 && (
                         <motion.div
                           key="step0"
-                          initial={{ opacity: 0, y: 5 }}
+                          initial={{ opacity: 0, y: 6 }}
                           animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          className="space-y-2 text-[#89919d]"
+                          exit={{ opacity: 0, y: -6 }}
+                          className="space-y-2.5"
                         >
-                          <div className="text-[#a9ddf0] font-semibold">Stage 01: Conversational Entry</div>
-                          <p className="text-[#f2f1ec]">
-                            &ldquo;Hello, welcome to MEDesy. Please describe your primary symptom or medical concern.&rdquo;
-                          </p>
-                          <div className="text-[10px] text-[#89919d]/80 pt-1 border-t border-white/5">
-                            Outcome: Zero signup barrier. Immediate patient articulation in familiar WhatsApp chat UI.
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#a9ddf0] shrink-0 font-bold">MEDesy Bot:</span>
+                            <span className="text-[#f2f1ec]">
+                              &ldquo;Welcome to MEDesy. Please describe your main symptom and how many days you have experienced it.&rdquo;
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#89919d] shrink-0 font-bold">Patient:</span>
+                            <span className="text-[#89919d]">
+                              &ldquo;I have had an intense throbbing headache for 2 days with light sensitivity.&rdquo;
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-[#a9ddf0] pt-1 border-t border-white/5">
+                            Outcome: Zero signup friction. Immediate conversational triage within standard WhatsApp.
                           </div>
                         </motion.div>
                       )}
@@ -330,17 +335,25 @@ export default function SelectedWork() {
                       {triageStep === 1 && (
                         <motion.div
                           key="step1"
-                          initial={{ opacity: 0, y: 5 }}
+                          initial={{ opacity: 0, y: 6 }}
                           animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          className="space-y-2 text-[#89919d]"
+                          exit={{ opacity: 0, y: -6 }}
+                          className="space-y-2.5"
                         >
-                          <div className="text-[#a9ddf0] font-semibold">Stage 02: Specialty Matching &amp; Triage</div>
-                          <p className="text-[#f2f1ec]">
-                            Structured symptom prompts classify severity and route request to licensed on-duty physician.
-                          </p>
-                          <div className="text-[10px] text-[#89919d]/80 pt-1 border-t border-white/5">
-                            Outcome: Eliminates clinical misrouting while preparing structured intake note for the doctor.
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#a9ddf0] shrink-0 font-bold">Clinical Rule:</span>
+                            <span className="text-[#f2f1ec]">
+                              Matched to Neurological &amp; General Consultation.
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#89919d] shrink-0 font-bold">Assigned Doctor:</span>
+                            <span className="text-[#89919d]">
+                              Dr. Adebayo O. (Consultant Physician, MBBS, FMCP) — Active On-Call.
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-[#a9ddf0] pt-1 border-t border-white/5">
+                            Outcome: Automated triage routing ensures patients reach qualified clinicians without waiting room delay.
                           </div>
                         </motion.div>
                       )}
@@ -348,17 +361,25 @@ export default function SelectedWork() {
                       {triageStep === 2 && (
                         <motion.div
                           key="step2"
-                          initial={{ opacity: 0, y: 5 }}
+                          initial={{ opacity: 0, y: 6 }}
                           animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -5 }}
-                          className="space-y-2 text-[#89919d]"
+                          exit={{ opacity: 0, y: -6 }}
+                          className="space-y-2.5"
                         >
-                          <div className="text-[#a9ddf0] font-semibold">Stage 03: Verified Consultation Card</div>
-                          <p className="text-[#f2f1ec]">
-                            Patient receives verified session badge, consultation summary, and partner pharmacy instructions.
-                          </p>
-                          <div className="text-[10px] text-[#89919d]/80 pt-1 border-t border-white/5">
-                            Outcome: Transparent documentation that patient can retain and reference securely.
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#a9ddf0] shrink-0 font-bold">Referral Badge:</span>
+                            <span className="text-[#f2f1ec]">
+                              Session #MDS-84920 Verified &amp; Signed.
+                            </span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#89919d] shrink-0 font-bold">Prescription:</span>
+                            <span className="text-[#89919d]">
+                              Digital pickup token dispatched to nearest accredited partner pharmacy.
+                            </span>
+                          </div>
+                          <div className="text-[10px] text-[#a9ddf0] pt-1 border-t border-white/5">
+                            Outcome: Clean, portable documentation that patients can reference directly on their phone.
                           </div>
                         </motion.div>
                       )}
@@ -366,16 +387,16 @@ export default function SelectedWork() {
                   </div>
                 </div>
 
-                {/* Action Links */}
-                <div className="pt-4 flex flex-wrap items-center gap-4">
+                {/* CTAs */}
+                <div className="pt-2 flex flex-wrap items-center gap-4">
                   <Link
                     href="/work/medesy"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                   >
-                    <span>Inspect Case Study</span>
-                    <ArrowRight size={13} />
+                    <span>Examine Case Study</span>
+                    <ArrowRight size={14} />
                   </Link>
 
                   <a
@@ -384,31 +405,35 @@ export default function SelectedWork() {
                     rel="noopener noreferrer"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-5 py-3 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                   >
-                    <span>View in Figma</span>
+                    <span>Verified Figma Spec</span>
                     <ArrowUpRight size={13} />
                   </a>
                 </div>
               </div>
 
-              {/* Right Column: High-Fidelity Mobile Frame */}
+              {/* Floating Mobile Crucible (Span 6) */}
               <div className="lg:col-span-6 flex justify-center">
-                <div className="relative w-full max-w-sm rounded-3xl bg-[#090b0f] border border-white/[0.1] p-4 sm:p-5 shadow-2xl group-hover:border-[#a9ddf0]/40 transition-all duration-500">
-                  <div className="relative aspect-[9/16] w-full rounded-2xl overflow-hidden bg-[#161a23] border border-white/5 shadow-inner">
+                <div className="relative w-full max-w-sm rounded-[2.5rem] bg-[#090b0f] border border-white/[0.12] p-4 sm:p-5 shadow-2xl">
+                  {/* Subtle Glow */}
+                  <div className="pointer-events-none absolute -inset-1 rounded-[2.5rem] bg-[#a9ddf0]/10 blur-xl opacity-40" />
+
+                  <div className="relative aspect-[9/16] w-full rounded-[2rem] overflow-hidden bg-[#161a23] border border-white/5 shadow-inner">
                     <Image
                       src="/images/projects/medesy/whatsapp-mockup.png"
                       alt="MEDesy WhatsApp Conversational Triage Interface"
                       fill
+                      priority
                       sizes="(max-width: 1024px) 90vw, 420px"
-                      className="object-contain sm:object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+                      className="object-contain sm:object-cover"
                     />
                   </div>
 
                   <div className="mt-4 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
                     <span className="flex items-center gap-2">
                       <span className="h-2 w-2 rounded-full bg-[#a9ddf0]" />
-                      Authentic WhatsApp Triage UI
+                      Authentic WhatsApp Triage Interface
                     </span>
                     <span>Specimen 01</span>
                   </div>
@@ -420,16 +445,16 @@ export default function SelectedWork() {
 
         {/* =========================================================================
             EXHIBIT 02: 9JATRIP
-            Theme: Intercity Transit & Terminal Hub Logistics (Freelance)
-            Architecture: Interactive Route Terminal Simulator + Real Transit Mockups
+            Theme: Intercity Mobility & Transit (Freelance)
+            Layout: Split Transit Terminal Board + Interactive Corridor Dispatcher
            ========================================================================= */}
-        <div id="exhibit-9jatrip" className="mb-32 sm:mb-44 scroll-mt-28">
-          <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
-            {/* Header Metadata */}
+        <div id="exhibit-9jatrip" className="mb-36 sm:mb-48 scroll-mt-28">
+          <div className="relative">
+            {/* Contextual Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 02 // INTERCITY MOBILITY &amp; TRANSIT
+                  02 // INTERCITY MOBILITY
                 </span>
                 <span className="text-[#89919d]">Client / Freelance</span>
               </div>
@@ -440,45 +465,38 @@ export default function SelectedWork() {
               </div>
             </div>
 
-            {/* Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Column: Visual Mockup Showcase with Toggle (Span 7) */}
+            {/* Split Terminal Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+              {/* Visual Showcase (Span 7) */}
               <div className="lg:col-span-7 space-y-6">
                 <div className="flex items-center justify-between font-mono-code text-xs">
-                  <span className="text-[#89919d]">Visual Specimen:</span>
-                  <div className="flex items-center gap-2 rounded-full bg-[#090b0f] p-1 border border-white/[0.08]">
-                    <button
-                      onClick={() => {
-                        sound.playClick();
-                        setTripViewMode("screen");
-                      }}
-                      className={`rounded-full px-3 py-1 font-semibold transition-all ${
-                        tripViewMode === "screen"
-                          ? "bg-[#a9ddf0] text-[#090b0f]"
-                          : "text-[#89919d] hover:text-[#f2f1ec]"
-                      }`}
-                    >
-                      Terminal Route Booking
-                    </button>
-                    <button
-                      onClick={() => {
-                        sound.playClick();
-                        setTripViewMode("receipt");
-                      }}
-                      className={`rounded-full px-3 py-1 font-semibold transition-all ${
-                        tripViewMode === "receipt"
-                          ? "bg-[#a9ddf0] text-[#090b0f]"
-                          : "text-[#89919d] hover:text-[#f2f1ec]"
-                      }`}
-                    >
-                      Boarding Pass &amp; Receipt
-                    </button>
+                  <span className="text-[#89919d]">Terminal Interface Specimen:</span>
+                  <div className="flex items-center gap-2 rounded-full bg-[#11141b] p-1 border border-white/[0.08]">
+                    {[
+                      { id: "screen", label: "Hub Terminal View" },
+                      { id: "receipt", label: "Digital Boarding Pass" },
+                    ].map((btn) => (
+                      <button
+                        key={btn.id}
+                        onClick={() => {
+                          sound.playClick();
+                          setTripViewMode(btn.id as typeof tripViewMode);
+                        }}
+                        className={`rounded-full px-3.5 py-1.5 font-semibold transition-all ${
+                          tripViewMode === btn.id
+                            ? "bg-[#a9ddf0] text-[#090b0f]"
+                            : "text-[#89919d] hover:text-[#f2f1ec]"
+                        }`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                {/* Mockup Display */}
-                <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-4 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
-                  <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#161a23]">
+                {/* Display Frame */}
+                <div className="rounded-3xl bg-[#11141b] border border-white/[0.1] p-5 shadow-2xl">
+                  <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#090b0f]">
                     <AnimatePresence mode="wait">
                       {tripViewMode === "screen" ? (
                         <motion.div
@@ -494,7 +512,7 @@ export default function SelectedWork() {
                             alt="9jaTrip Terminal Hub Selection Screen"
                             fill
                             className="object-contain"
-                            sizes="(max-width: 1024px) 100vw, 700px"
+                            sizes="(max-width: 1024px) 100vw, 750px"
                           />
                         </motion.div>
                       ) : (
@@ -511,46 +529,50 @@ export default function SelectedWork() {
                             alt="9jaTrip Digital Boarding Pass & Receipt"
                             fill
                             className="object-contain"
-                            sizes="(max-width: 1024px) 100vw, 700px"
+                            sizes="(max-width: 1024px) 100vw, 750px"
                           />
                         </motion.div>
                       )}
                     </AnimatePresence>
                   </div>
-                  <div className="mt-3 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
-                    <span>{tripViewMode === "screen" ? "Intercity Terminal Route Selector" : "Itemized Boarding Pass with Gate QR"}</span>
+                  <div className="mt-4 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
+                    <span>
+                      {tripViewMode === "screen"
+                        ? "Intercity Hub Departure Timetable & Route Selector"
+                        : "High-Contrast Boarding Pass with Gate QR Code"}
+                    </span>
                     <span>Specimen 02</span>
                   </div>
                 </div>
               </div>
 
-              {/* Right Column: Narrative & Interactive Terminal Route Selector (Span 5) */}
-              <div className="lg:col-span-5 space-y-6">
+              {/* Narrative & Interactive Corridor Dispatcher (Span 5) */}
+              <div className="lg:col-span-5 space-y-8">
                 <div>
                   <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
                     9jaTrip Mobility (Freelance)
                   </span>
-                  <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06]">
+                  <h3 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.04]">
                     9jaTrip.
                   </h3>
                 </div>
 
-                <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                  Intercity transit booking and terminal hub logistics designed for regional Nigerian commuters.
+                <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed">
+                  Intercity transit booking and terminal hub logistics designed for regional Nigerian travelers.
                 </p>
 
-                <p className="text-sm text-[#89919d]/90 font-light leading-relaxed">
-                  Replaces chaotic bus park queues with scheduled departures between regional transport hubs. Commuters select departure terminals, choose reserved coach seats, and receive high-contrast digital boarding passes.
+                <p className="text-base text-[#89919d]/90 font-light leading-relaxed">
+                  Replaces chaotic bus park queues with scheduled departures between established regional transport hubs. Commuters select terminal hubs, reserve specific coach seats, and receive high-contrast digital boarding passes.
                 </p>
 
-                {/* Interactive Route Inspector */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-4 space-y-3 font-mono-code text-xs">
-                  <div className="text-[11px] uppercase tracking-wider text-[#a9ddf0] font-semibold flex items-center gap-2">
-                    <MapPin size={13} />
-                    Select Intercity Hub Corridor:
+                {/* Corridor Selector Console */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-5 space-y-3 font-mono-code text-xs">
+                  <div className="text-xs uppercase tracking-wider text-[#a9ddf0] font-semibold flex items-center gap-2">
+                    <MapPin size={14} />
+                    Live Regional Hub Corridors:
                   </div>
 
-                  <div className="flex flex-col gap-2">
+                  <div className="flex flex-col gap-2.5">
                     {INTERCITY_ROUTES.map((route) => (
                       <button
                         key={route.id}
@@ -558,17 +580,17 @@ export default function SelectedWork() {
                           sound.playClick();
                           setSelectedRoute(route);
                         }}
-                        className={`text-left p-3 rounded-xl border transition-all ${
+                        className={`text-left p-3.5 rounded-xl border transition-all ${
                           selectedRoute.id === route.id
                             ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec]"
-                            : "border-white/[0.06] bg-white/[0.02] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
+                            : "border-white/[0.06] bg-[#090b0f] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
                         }`}
                       >
-                        <div className="flex items-center justify-between font-semibold mb-1">
+                        <div className="flex items-center justify-between font-semibold mb-1 text-sm">
                           <span>{route.from} → {route.to}</span>
                           <span className="text-[#a9ddf0]">{route.fare}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-[10px] text-[#89919d]">
+                        <div className="flex items-center gap-3 text-[11px] text-[#89919d]">
                           <span>{route.departure}</span>
                           <span>•</span>
                           <span>{route.bay}</span>
@@ -580,16 +602,16 @@ export default function SelectedWork() {
                   </div>
                 </div>
 
-                {/* Action Links */}
+                {/* CTAs */}
                 <div className="pt-2 flex flex-wrap items-center gap-4">
                   <Link
                     href="/work/9jatrip"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                   >
-                    <span>Inspect Case Study</span>
-                    <ArrowRight size={13} />
+                    <span>Examine Case Study</span>
+                    <ArrowRight size={14} />
                   </Link>
 
                   <a
@@ -598,9 +620,9 @@ export default function SelectedWork() {
                     rel="noopener noreferrer"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-5 py-3 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                   >
-                    <span>View in Figma</span>
+                    <span>Verified Figma Spec</span>
                     <ArrowUpRight size={13} />
                   </a>
                 </div>
@@ -611,16 +633,16 @@ export default function SelectedWork() {
 
         {/* =========================================================================
             EXHIBIT 03: SOMEWHERE HOTEL
-            Theme: Hospitality & Spatial Web (Personal Concept)
-            Architecture: Full-Bleed Panorama + Interactive Daylight Phase Controller
+            Theme: Hospitality & Spatial Web Experience (Personal Concept)
+            Layout: Full-Bleed Architectural Lookbook + Daylight Phase Shifter
            ========================================================================= */}
-        <div id="exhibit-somewhere" className="mb-32 sm:mb-44 scroll-mt-28">
-          <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
-            {/* Header Metadata */}
+        <div id="exhibit-somewhere" className="mb-36 sm:mb-48 scroll-mt-28">
+          <div className="relative">
+            {/* Contextual Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-10 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 03 // SPATIAL &amp; HOSPITALITY
+                  03 // SPATIAL LOOKBOOK
                 </span>
                 <span className="text-[#89919d]">Personal Digital Concept (Booking Demo Only)</span>
               </div>
@@ -637,16 +659,16 @@ export default function SelectedWork() {
                 <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
                   Editorial Sanctuary Lookbook
                 </span>
-                <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06] mb-3">
+                <h3 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.04] mb-3">
                   Somewhere Hotel.
                 </h3>
-                <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
+                <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed">
                   Cinematic coastal hospitality experience and reservation demonstration exploring atmospheric daylight shifts.
                 </p>
               </div>
 
-              {/* Interactive Daylight Controller */}
-              <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-[#090b0f] p-1.5 border border-white/[0.08] font-mono-code text-xs">
+              {/* Daylight Atmosphere Controls */}
+              <div className="flex flex-wrap items-center gap-2 rounded-2xl bg-[#11141b] p-1.5 border border-white/[0.08] font-mono-code text-xs">
                 <span className="text-[#89919d] text-[11px] px-3 uppercase tracking-wider hidden sm:inline">
                   Daylight:
                 </span>
@@ -662,7 +684,7 @@ export default function SelectedWork() {
                       sound.playClick();
                       setDaylightPhase(item.id as typeof daylightPhase);
                     }}
-                    className={`rounded-xl px-3.5 py-2 transition-all font-semibold ${
+                    className={`rounded-xl px-4 py-2 transition-all font-semibold ${
                       daylightPhase === item.id
                         ? "bg-[#a9ddf0] text-[#090b0f] shadow-md shadow-[#a9ddf0]/20"
                         : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.03]"
@@ -674,8 +696,8 @@ export default function SelectedWork() {
               </div>
             </div>
 
-            {/* Interactive Panoramic Canvas */}
-            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-8">
+            {/* Full-Bleed Panoramic Lookbook Canvas */}
+            <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-8">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={daylightPhase}
@@ -698,7 +720,7 @@ export default function SelectedWork() {
                     alt="Somewhere Hotel Atmosphere"
                     fill
                     priority
-                    sizes="(max-width: 1200px) 100vw, 1200px"
+                    sizes="(max-width: 1400px) 100vw, 1400px"
                     className="object-cover"
                   />
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090b0f]/85 via-transparent to-black/20" />
@@ -719,10 +741,10 @@ export default function SelectedWork() {
               </AnimatePresence>
             </div>
 
-            {/* Footer Row */}
+            {/* Bottom Row */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 border-t border-white/[0.08]">
               <p className="font-mono-code text-xs text-[#89919d] max-w-xl">
-                Treats hospitality as an editorial publication rather than a transactional booking engine, featuring multi-light room explorations and demonstration reservation drawers.
+                Treats hospitality as an editorial monograph rather than a transactional booking engine, featuring multi-light room explorations and demonstration reservation drawers.
               </p>
 
               <div className="flex items-center gap-4 shrink-0">
@@ -730,10 +752,10 @@ export default function SelectedWork() {
                   href="/work/somewhere-hotel"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                 >
-                  <span>Case Study</span>
-                  <ArrowRight size={13} />
+                  <span>Examine Case Study</span>
+                  <ArrowRight size={14} />
                 </Link>
 
                 <a
@@ -742,7 +764,7 @@ export default function SelectedWork() {
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-5 py-3 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                 >
                   <span>Visit Live Experience</span>
                   <ExternalLink size={13} />
@@ -755,15 +777,15 @@ export default function SelectedWork() {
         {/* =========================================================================
             EXHIBIT 04: BUYBUDDY
             Theme: Buyer–Seller Marketplace Platform (Personal Product Concept)
-            Architecture: Interactive Dual Workspace (Merchant Studio vs Shopper Catalog)
+            Layout: Dual Marketplace Workbench (Merchant Studio vs Shopper Catalog)
            ========================================================================= */}
-        <div id="exhibit-buybuddy" className="mb-32 sm:mb-44 scroll-mt-28">
-          <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
-            {/* Header Metadata */}
+        <div id="exhibit-buybuddy" className="mb-36 sm:mb-48 scroll-mt-28">
+          <div className="relative">
+            {/* Contextual Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 04 // COMMERCE &amp; MARKETPLACE
+                  04 // COMMERCE &amp; MARKETPLACE
                 </span>
                 <span className="text-[#89919d]">Personal Product Concept</span>
               </div>
@@ -774,31 +796,31 @@ export default function SelectedWork() {
               </div>
             </div>
 
-            {/* Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-              {/* Left Column: Narrative (Span 5) */}
-              <div className="lg:col-span-5 space-y-6">
+            {/* Dual Workbench Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+              {/* Narrative & Workspace Switcher (Span 5) */}
+              <div className="lg:col-span-5 space-y-8">
                 <div>
                   <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
                     Marketplace Architecture
                   </span>
-                  <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06]">
+                  <h3 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.04]">
                     BuyBuddy.
                   </h3>
                 </div>
 
-                <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
+                <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed">
                   Modern buyer–seller marketplace platform empowering independent merchants with intuitive inventory and ordering workflows.
                 </p>
 
-                <p className="text-sm text-[#89919d]/90 font-light leading-relaxed">
+                <p className="text-base text-[#89919d]/90 font-light leading-relaxed">
                   Independent creative merchants struggle with fragmented, high-friction ecommerce tooling. BuyBuddy bridges merchant inventory control with a clean, responsive customer shopping experience.
                 </p>
 
-                {/* Interactive Workspace Controller */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-4 space-y-2 font-mono-code text-xs">
+                {/* Workspace Switcher Selector */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-4 space-y-2 font-mono-code text-xs">
                   <span className="text-[11px] text-[#a9ddf0] uppercase tracking-wider font-semibold block mb-2">
-                    Inspect Marketplace Workspaces:
+                    Select Marketplace Workflow:
                   </span>
                   {[
                     { id: "products", label: "01. Merchant Inventory Studio", note: "Product publishing, multi-variants & pricing" },
@@ -812,27 +834,28 @@ export default function SelectedWork() {
                         sound.playClick();
                         setBuybuddyWorkspace(ws.id as typeof buybuddyWorkspace);
                       }}
-                      className={`w-full text-left p-2.5 rounded-xl border transition-all ${
+                      className={`w-full text-left p-3 rounded-xl border transition-all ${
                         buybuddyWorkspace === ws.id
                           ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec]"
-                          : "border-white/[0.04] bg-white/[0.01] text-[#89919d] hover:text-[#f2f1ec] hover:border-white/10"
+                          : "border-white/[0.04] bg-[#090b0f] text-[#89919d] hover:text-[#f2f1ec] hover:border-white/10"
                       }`}
                     >
-                      <div className="font-semibold text-[11px]">{ws.label}</div>
+                      <div className="font-semibold text-xs">{ws.label}</div>
                       <div className="text-[10px] text-[#89919d]">{ws.note}</div>
                     </button>
                   ))}
                 </div>
 
-                <div className="pt-4 flex flex-wrap items-center gap-4">
+                {/* CTAs */}
+                <div className="pt-2 flex flex-wrap items-center gap-4">
                   <Link
                     href="/work/buybuddy"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
+                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                   >
-                    <span>Inspect Case Study</span>
-                    <ArrowRight size={13} />
+                    <span>Examine Case Study</span>
+                    <ArrowRight size={14} />
                   </Link>
 
                   <a
@@ -841,7 +864,7 @@ export default function SelectedWork() {
                     rel="noopener noreferrer"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-5 py-3 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
+                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                   >
                     <span>Test Live Demo</span>
                     <ExternalLink size={13} />
@@ -849,10 +872,10 @@ export default function SelectedWork() {
                 </div>
               </div>
 
-              {/* Right Column: Dynamic Workspace Mockup (Span 7) */}
+              {/* Dynamic Workbench Showcase (Span 7) */}
               <div className="lg:col-span-7">
-                <div className="rounded-2xl bg-[#090b0f] border border-white/[0.1] p-4 shadow-2xl group-hover:border-[#a9ddf0]/30 transition-all duration-500">
-                  <div className="relative aspect-[16/10] w-full rounded-xl overflow-hidden bg-[#161a23]">
+                <div className="rounded-3xl bg-[#11141b] border border-white/[0.1] p-5 shadow-2xl">
+                  <div className="relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#090b0f]">
                     <AnimatePresence mode="wait">
                       <motion.div
                         key={buybuddyWorkspace}
@@ -875,12 +898,12 @@ export default function SelectedWork() {
                           alt="BuyBuddy Marketplace Interface"
                           fill
                           className="object-contain"
-                          sizes="(max-width: 1024px) 100vw, 700px"
+                          sizes="(max-width: 1024px) 100vw, 750px"
                         />
                       </motion.div>
                     </AnimatePresence>
                   </div>
-                  <div className="mt-3 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
+                  <div className="mt-4 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
                     <span>
                       {buybuddyWorkspace === "products" && "Merchant Inventory Studio — Variant Management"}
                       {buybuddyWorkspace === "orders" && "Vendor Orders Ledger — Real-Time Status Tracking"}
@@ -896,17 +919,17 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            EXHIBIT 05: STILLWATER HALL (Cinematic Video Walkthrough & Spatial Web)
+            EXHIBIT 05: STILLWATER HALL
             Theme: Performing Arts, Acoustic Scrollytelling, Video Integration
-            Architecture: Cinema Video Player + Interactive 5-Stage Chapter Scrubber
+            Layout: Full Cinema Screening Stage + 5-Stage Spatial Chapter Scrubber
            ========================================================================= */}
         <div id="exhibit-stillwater" className="mb-24 scroll-mt-28">
-          <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-12 lg:p-16 relative overflow-hidden group hover:border-[#a9ddf0]/30 transition-all duration-500 shadow-2xl">
-            {/* Header Metadata */}
+          <div className="relative">
+            {/* Contextual Bar */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-10 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  EXHIBIT 05 // CINEMATIC VIDEO WALKTHROUGH
+                  05 // CINEMATIC VIDEO WALKTHROUGH
                 </span>
                 <span className="text-[#89919d]">Personal Web Experience</span>
               </div>
@@ -923,23 +946,23 @@ export default function SelectedWork() {
                 <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
                   5-Stage Spatial Walkthrough
                 </span>
-                <h3 className="font-display text-3xl sm:text-5xl font-bold tracking-tight text-[#f2f1ec] leading-[1.06] mb-3">
+                <h3 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.04] mb-3">
                   Stillwater Hall.
                 </h3>
-                <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
+                <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed">
                   Cinematic spatial venue walkthrough and interactive digital ticketing experience featuring authentic video chapters.
                 </p>
               </div>
 
-              {/* Player Status Badge */}
-              <div className="flex items-center gap-3 font-mono-code text-xs text-[#a9ddf0] bg-[#090b0f] px-4 py-2 rounded-full border border-white/[0.08]">
+              {/* Status Indicator */}
+              <div className="flex items-center gap-3 font-mono-code text-xs text-[#a9ddf0] bg-[#11141b] px-4 py-2 rounded-full border border-white/[0.08]">
                 <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
                 <span>{activeChapter.stage}</span>
               </div>
             </div>
 
-            {/* CINEMA VIDEO PLAYER CONTAINER */}
-            <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-6">
+            {/* CINEMA VIDEO SCREEN CONTAINER */}
+            <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden bg-[#090b0f] border border-white/[0.1] shadow-2xl mb-6">
               <video
                 ref={videoRef}
                 src={activeChapter.src}
@@ -953,22 +976,22 @@ export default function SelectedWork() {
                 className="w-full h-full object-cover"
               />
 
-              {/* Video Gradient Overlays */}
+              {/* Video Gradient Vignette */}
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#090b0f]/90 via-transparent to-black/30" />
 
               {/* Top Title Overlay */}
               <div className="absolute top-6 left-6 right-6 flex items-center justify-between font-mono-code text-xs">
-                <span className="text-[#f2f1ec] font-semibold bg-[#090b0f]/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
+                <span className="text-[#f2f1ec] font-semibold bg-[#090b0f]/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md">
                   Chapter {activeChapter.id}: {activeChapter.title}
                 </span>
-                <span className="text-[#89919d] bg-[#090b0f]/80 px-3 py-1 rounded-full border border-white/10 backdrop-blur-md">
+                <span className="text-[#89919d] bg-[#090b0f]/80 px-3 py-1.5 rounded-full border border-white/10 backdrop-blur-md">
                   {activeChapter.duration}
                 </span>
               </div>
 
-              {/* Bottom Interactive Controls & Progress Bar */}
+              {/* Bottom Interactive Controls */}
               <div className="absolute bottom-6 left-6 right-6 space-y-3">
-                {/* Progress Bar */}
+                {/* Progress Line */}
                 <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-[#a9ddf0] transition-all duration-200"
@@ -977,7 +1000,7 @@ export default function SelectedWork() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono-code text-xs">
-                  {/* Left: Play/Pause & Sound Toggle */}
+                  {/* Left: Play/Pause & Sound */}
                   <div className="flex items-center gap-3">
                     <button
                       onClick={togglePlay}
@@ -997,7 +1020,7 @@ export default function SelectedWork() {
                   </div>
 
                   {/* Right: Caption Description */}
-                  <p className="text-[11px] text-[#f2f1ec]/85 max-w-lg bg-[#090b0f]/80 px-3.5 py-1.5 rounded-full border border-white/10 backdrop-blur-md hidden md:block">
+                  <p className="text-[11px] text-[#f2f1ec]/85 max-w-lg bg-[#090b0f]/80 px-4 py-2 rounded-full border border-white/10 backdrop-blur-md hidden md:block">
                     {activeChapter.description}
                   </p>
                 </div>
@@ -1010,26 +1033,26 @@ export default function SelectedWork() {
                 <button
                   key={ch.id}
                   onClick={() => selectChapter(idx)}
-                  className={`text-left p-3 rounded-xl border transition-all ${
+                  className={`text-left p-3.5 rounded-2xl border transition-all ${
                     activeChapterIndex === idx
                       ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec]"
-                      : "border-white/[0.06] bg-[#090b0f] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
+                      : "border-white/[0.06] bg-[#11141b] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[#a9ddf0] font-semibold">{ch.id}</span>
                     <span className="text-[10px] text-[#89919d]">{ch.duration}</span>
                   </div>
-                  <div className="font-semibold truncate text-[11px]">{ch.title}</div>
-                  <div className="text-[9px] text-[#89919d] uppercase mt-1">{ch.stage}</div>
+                  <div className="font-semibold truncate text-xs">{ch.title}</div>
+                  <div className="text-[10px] text-[#89919d] uppercase mt-1">{ch.stage}</div>
                 </button>
               ))}
             </div>
 
-            {/* Footer Row */}
+            {/* Bottom Row */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-4 border-t border-white/[0.08]">
               <p className="font-mono-code text-xs text-[#89919d] max-w-xl">
-                Guides concertgoers through a continuous architectural sequence: evening exterior → grand lobby → acoustic stage → seat-row hover details &amp; demo pass generation.
+                Guides concertgoers through a continuous architectural sequence: evening exterior → grand foyer → acoustic stage → seat-row hover details &amp; demo pass generation.
               </p>
 
               <div className="flex items-center gap-4 shrink-0">
@@ -1037,10 +1060,10 @@ export default function SelectedWork() {
                   href="/work/stillwater"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-6 py-3 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
+                  className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] hover:bg-[#a9ddf0] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] transition-all"
                 >
-                  <span>Case Study</span>
-                  <ArrowRight size={13} />
+                  <span>Examine Case Study</span>
+                  <ArrowRight size={14} />
                 </Link>
 
                 <a
@@ -1049,7 +1072,7 @@ export default function SelectedWork() {
                   rel="noopener noreferrer"
                   onClick={() => sound.playClick()}
                   onMouseEnter={() => sound.playHover()}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-5 py-3 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                 >
                   <span>Visit Live Experience</span>
                   <ExternalLink size={13} />
