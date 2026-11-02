@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
+import "@/styles/kokil.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import CustomCursor from "@/components/layout/CustomCursor";
 import Navbar from "@/components/layout/Navbar";
@@ -53,7 +54,7 @@ export const metadata: Metadata = {
     creator: "@taye_abolarin2",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/images/cold-designer-avatar.svg",
   },
 };
 
@@ -67,6 +68,14 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased dark`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter+Tight:wght@700;800&family=JetBrains+Mono:wght@400;500;600&family=Patrick+Hand&family=Poppins:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-[#090b0f] text-[#f2f1ec] selection:bg-[#a9ddf0] selection:text-[#090b0f]">
         <SmoothScroll>
           <CustomCursor />
