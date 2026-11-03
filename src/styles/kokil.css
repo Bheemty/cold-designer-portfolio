@@ -1945,19 +1945,6 @@ html[data-theme="light"] .kokil-nav-links a.active {
   background: rgba(18, 22, 30, 0.1);
   color: #11141b;
 }
-html[data-theme="light"] .kokil-nav-theme {
-  background: rgba(18, 22, 30, 0.06);
-  border: 1px solid rgba(18, 22, 30, 0.12);
-  color: #11141b;
-}
-html[data-theme="light"] .kokil-nav-theme:hover {
-  background: rgba(18, 22, 30, 0.12);
-  border-color: rgba(18, 22, 30, 0.22);
-  color: #11141b;
-}
-html[data-theme="light"] .kokil-nav-theme:focus-visible {
-  outline: 2px solid #027a9e;
-}
 html[data-theme="light"] .kokil-nav-resume {
   background: #11141b;
   color: #FDFDFD;
@@ -1979,17 +1966,24 @@ html[data-theme="light"] .kokil-nav-email:hover {
 
 /* ── HERO (LIGHT) ── */
 html[data-theme="light"] #hero {
-  background: #12151c;
+  background: #FDFDFD !important;
 }
 html[data-theme="light"] .hero-paint {
-  background: #f8f7f4;
+  background: #090b0f;
 }
-html[data-theme="light"] .hero-invert {
+html[data-theme="light"] .hero-base {
   --ink: #11141b;
   --ink-dim: #4d5462;
   --ink-line: rgba(18, 22, 30, 0.14);
   --btn-bg: #11141b;
   --btn-fg: #FDFDFD;
+}
+html[data-theme="light"] .hero-invert {
+  --ink: #FDFDFD;
+  --ink-dim: #89919d;
+  --ink-line: rgba(255, 255, 255, 0.14);
+  --btn-bg: #FDFDFD;
+  --btn-fg: #090b0f;
 }
 html[data-theme="light"] .hero-btn.primary {
   background: #11141b;
@@ -2015,10 +2009,10 @@ html[data-theme="light"] .hero-strip {
   color: #4d5462;
 }
 html[data-theme="light"] .cursor-hint {
-  background: #FDFDFD;
-  color: #11141b;
+  background: #11141b;
+  color: #FDFDFD;
   border: 1px solid rgba(18, 22, 30, 0.12);
-  box-shadow: 0 6px 20px rgba(18, 22, 30, 0.12);
+  box-shadow: 0 6px 20px rgba(18, 22, 30, 0.16);
 }
 
 /* ── INTRO / ABOUT (LIGHT) ── */
@@ -2125,6 +2119,9 @@ html[data-theme="light"] .work-explore-btn:hover .work-explore-arrow {
 }
 
 /* ── NOTEBOOK & CREATIVE JOURNAL (LIGHT) ── */
+html[data-theme="light"] .mp-title {
+  color: #11141b !important;
+}
 html[data-theme="light"] .nb-cover {
   background: #252830;
   box-shadow: 0 2.4cqw 5cqw rgba(18, 22, 30, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.12);

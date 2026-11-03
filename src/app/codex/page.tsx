@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useId } from "react";
 import Link from "next/link";
 import { ArrowLeft, Volume2, VolumeX, Sparkles, Check, AlertCircle, RefreshCw } from "lucide-react";
 import { sound } from "@/lib/sounds";
+import { useTheme } from "@/context/ThemeContext";
 
 export default function CodexPage() {
   // Global Audio Feedback Toggle (Never autoplays; user must interact)
@@ -85,9 +86,21 @@ export default function CodexPage() {
   // ─────────────────────────────────────────────────────────────
   // EXPERIMENT 2: THE INTERFACE SWITCHER STATE
   // ─────────────────────────────────────────────────────────────
-  const [activeTheme, setActiveTheme] = useState<"obsidian" | "paper" | "midnight">("obsidian");
+  const { theme: globalTheme, setTheme: setGlobalTheme } = useTheme();
+  const [activeTheme, setActiveTheme] = useState<"obsidian" | "paper" | "midnight">(
+    globalTheme === "light" ? "paper" : "obsidian"
+  );
   const [densityMode, setDensityMode] = useState<"spacious" | "compact">("spacious");
   const [highlightAction, setHighlightAction] = useState(false);
+
+  // Synchronize local preview theme with the active global theme
+  useEffect(() => {
+    if (globalTheme === "light" && activeTheme !== "paper") {
+      setActiveTheme("paper");
+    } else if (globalTheme === "dark" && activeTheme === "paper") {
+      setActiveTheme("obsidian");
+    }
+  }, [globalTheme, activeTheme]);
 
   // ─────────────────────────────────────────────────────────────
   // EXPERIMENT 3: TYPE & VISUAL HIERARCHY STATE
@@ -122,8 +135,8 @@ export default function CodexPage() {
       tagBorder: "rgba(255, 255, 255, 0.08)",
     },
     paper: {
-      bg: "#f8f7f4",
-      cardBg: "#FDFDFD",
+      bg: "#FDFDFD",
+      cardBg: "#FFFFFF",
       border: "rgba(18, 22, 30, 0.1)",
       textPrimary: "#11141b",
       textMuted: "#4d5462",
@@ -545,35 +558,60 @@ export default function CodexPage() {
           <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12">
             {/* Control Bar */}
             <div className="flex flex-wrap items-center justify-between gap-6 pb-8 mb-8 border-b border-white/[0.08]">
-              {/* Theme Selector */}
+              {/* Theme Selector — Global Portfolio Controller */}
               <div>
-                <span className="font-mono-code text-xs text-[#89919d] block mb-2 uppercase">
-                  Appearance Theme
-                </span>
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-mono-code text-xs text-[#89919d] uppercase">
+                    Portfolio Theme Switch
+                  </span>
+                  <span className="font-mono-code text-[10px] px-2 py-0.5 rounded-full bg-[#a9ddf0]/15 text-[#a9ddf0] border border-[#a9ddf0]/30 font-semibold">
+                    Global
+                  </span>
+                </div>
                 <div className="flex items-center gap-2 font-mono-code text-xs">
-                  {(
-                    [
-                      { id: "obsidian", label: "Obsidian Dark" },
-                      { id: "paper", label: "Studio Light" },
-                      { id: "midnight", label: "Midnight Slate" },
-                    ] as const
-                  ).map((t) => (
-                    <button
-                      key={t.id}
-                      type="button"
-                      onClick={() => {
-                        setActiveTheme(t.id);
-                        if (soundEnabled) sound.playClick();
-                      }}
-                      className={`px-4 py-2 rounded-full border transition-all cursor-pointer ${
-                        activeTheme === t.id
-                          ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
-                          : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTheme("obsidian");
+                      setGlobalTheme("dark");
+                      if (soundEnabled) sound.playClick();
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                      globalTheme === "dark"
+                        ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
+                        : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
+                    }`}
+                    aria-pressed={globalTheme === "dark"}
+                  >
+                    <span
+                      className={`inline-block w-2 h-2 rounded-full ${
+                        globalTheme === "dark" ? "bg-[#a9ddf0] animate-pulse" : "bg-[#89919d]/40"
                       }`}
-                    >
-                      {t.label}
-                    </button>
-                  ))}
+                    />
+                    <span>Dark Theme (Obsidian)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveTheme("paper");
+                      setGlobalTheme("light");
+                      if (soundEnabled) sound.playClick();
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                      globalTheme === "light"
+                        ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
+                        : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
+                    }`}
+                    aria-pressed={globalTheme === "light"}
+                  >
+                    <span
+                      className={`inline-block w-2 h-2 rounded-full ${
+                        globalTheme === "light" ? "bg-[#027a9e] animate-pulse" : "bg-[#89919d]/40"
+                      }`}
+                    />
+                    <span>Light Theme (#FDFDFD)</span>
+                  </button>
                 </div>
               </div>
 
@@ -634,6 +672,25 @@ export default function CodexPage() {
                   {highlightAction ? "Primary Path Highlighted" : "Highlight Primary Action"}
                 </button>
               </div>
+            </div>
+
+            {/* Global Theme Sync Notice */}
+            <div className="mb-8 px-4 sm:px-5 py-3.5 rounded-2xl border border-white/[0.08] bg-white/[0.02] flex flex-wrap items-center justify-between gap-4 font-mono-code text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#a9ddf0] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#a9ddf0]" />
+                </span>
+                <span className="text-[#89919d]">
+                  Active Global Website Theme:{" "}
+                  <strong className="text-[#f2f1ec] font-semibold">
+                    {globalTheme === "light" ? "Studio Light Canvas (#FDFDFD)" : "Obsidian Dark Brand"}
+                  </strong>
+                </span>
+              </div>
+              <span className="text-[11px] text-[#89919d]">
+                Selection updates the entire website immediately &bull; Persists across all page navigation &amp; reload
+              </span>
             </div>
 
             {/* Live Interactive Component Preview Canvas */}

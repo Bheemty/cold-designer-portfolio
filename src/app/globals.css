@@ -43,12 +43,12 @@
   html[data-theme="light"],
   .theme-light {
     color-scheme: light;
-    --bg-primary: #f8f7f4;
-    --bg-dark: #f8f7f4;
-    --bg-surface: #eeece5;
-    --bg-card: #FDFDFD;
-    --bg-card-hover: #fcfbf9;
-    --bg-elevated: #FDFDFD;
+    --bg-primary: #FDFDFD;
+    --bg-dark: #FDFDFD;
+    --bg-surface: #f3f2ee;
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #FDFDFD;
+    --bg-elevated: #FFFFFF;
     --accent: #027a9e;
     --accent-rgb: 2, 122, 158;
     --accent-glow: rgba(2, 122, 158, 0.14);
@@ -69,13 +69,13 @@
     --btn-secondary-bg: rgba(18, 22, 30, 0.035);
     --btn-secondary-border: rgba(18, 22, 30, 0.14);
     --btn-secondary-fg: #11141b;
-    --hero-bg: #12151c;
-    --hero-paint-bg: #f8f7f4;
-    --hero-invert-ink: #11141b;
-    --hero-invert-ink-dim: #4d5462;
-    --hero-invert-ink-line: rgba(18, 22, 30, 0.14);
-    --hero-invert-btn-bg: #11141b;
-    --hero-invert-btn-fg: #FDFDFD;
+    --hero-bg: #FDFDFD;
+    --hero-paint-bg: #090b0f;
+    --hero-invert-ink: #FDFDFD;
+    --hero-invert-ink-dim: #a3a3a3;
+    --hero-invert-ink-line: rgba(255, 255, 255, 0.14);
+    --hero-invert-btn-bg: #FDFDFD;
+    --hero-invert-btn-fg: #090b0f;
   }
 
   * {
@@ -212,23 +212,24 @@
    ───────────────────────────────────────────────────────────── */
 
 html[data-theme="light"] body {
-  background-color: #f8f7f4 !important;
+  background-color: #FDFDFD !important;
   color: #11141b !important;
 }
 
 html[data-theme="light"] main {
-  background-color: #f8f7f4 !important;
+  background-color: #FDFDFD !important;
   color: #11141b !important;
 }
 
 /* Canvas background override */
 html[data-theme="light"] .bg-\[\#090b0f\] {
-  background-color: #f8f7f4 !important;
+  background-color: #FDFDFD !important;
 }
 
 /* Primary surface & cards */
 html[data-theme="light"] .bg-\[\#11141b\] {
-  background-color: #FDFDFD !important;
+  background-color: #FFFFFF !important;
+  border-color: rgba(18, 22, 30, 0.08) !important;
   box-shadow: 0 10px 32px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.03);
 }
 
@@ -236,7 +237,8 @@ html[data-theme="light"] .bg-\[\#11141b\] {
 html[data-theme="light"] .bg-\[\#161a23\],
 html[data-theme="light"] .bg-\[\#151922\],
 html[data-theme="light"] .bg-\[\#0d1016\] {
-  background-color: #f4f2ea !important;
+  background-color: #f6f5f1 !important;
+  border-color: rgba(18, 22, 30, 0.08) !important;
 }
 
 /* Primary & secondary text */
