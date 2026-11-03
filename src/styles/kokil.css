@@ -463,25 +463,23 @@
   font-family: 'Poppins', sans-serif;
   font-size: clamp(28px, 3.8vw, 62px);
   font-weight: 500;
-  line-height: 1.24;
+  line-height: 1.28;
   letter-spacing: -0.015em;
-}
-.intro-text .word {
-  display: inline-block;
-  color: rgba(255, 255, 255, 0.28);
-  opacity: 0.35;
-  filter: blur(2px);
-  will-change: color, opacity;
-  transition: color 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
-  margin-right: 0.24em;
-}
-.intro-text .word.revealed {
   color: #FDFDFD;
-  opacity: 1;
-  filter: blur(0);
 }
-.intro-text .word.emphasis.revealed {
+.intro-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.intro-line-inner {
+  display: block;
+  will-change: transform, opacity;
+}
+.intro-text .emphasis {
   color: #a9ddf0;
+  font-style: normal;
+  display: inline;
 }
 .intro-footer {
   display: flex;
@@ -2143,13 +2141,10 @@ html[data-theme="light"] .hero-invert .hero-strip {
 html[data-theme="light"] .intro-label {
   color: #788090;
 }
-html[data-theme="light"] .intro-text .word {
-  color: rgba(18, 22, 30, 0.22);
-}
-html[data-theme="light"] .intro-text .word.revealed {
+html[data-theme="light"] .intro-text {
   color: #11141b;
 }
-html[data-theme="light"] .intro-text .word.emphasis.revealed {
+html[data-theme="light"] .intro-text .emphasis {
   color: #027a9e;
 }
 html[data-theme="light"] .intro-skills li {
@@ -2166,7 +2161,6 @@ html[data-theme="light"] .intro-more:hover {
   color: #015e7a;
   border-bottom-color: #015e7a;
 }
-
 /* ── SELECTED WORK ACCORDION (LIGHT) ── */
 html[data-theme="light"] .acc-panel {
   border: 1.5px solid rgba(18, 22, 30, 0.12);
@@ -2346,4 +2340,14 @@ html[data-theme="light"] .footer-top {
 }
 html[data-theme="light"] .footer-top:hover {
   color: #027a9e;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-label,
+  .intro-line-inner,
+  .intro-skills li,
+  .intro-more {
+    transform: none !important;
+    opacity: 1 !important;
+  }
 }
