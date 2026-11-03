@@ -26,7 +26,7 @@ function setHeroRevealedState(revealed: boolean) {
     if (revealed) {
       window.sessionStorage.setItem(HERO_REVEALED_KEY, "true");
       // Note: We deliberately do NOT set data-hero-revealed on documentElement here
-      // to avoid triggering any CSS mask removal while the visitor is actively on the page!
+      // while actively on the page to avoid abruptly removing the mask while visitor is viewing/scratching!
     } else {
       window.sessionStorage.removeItem(HERO_REVEALED_KEY);
       document.documentElement.removeAttribute("data-hero-revealed");
@@ -58,11 +58,22 @@ export default function HeroKokil() {
   // Erased cells tracker for measuring genuine physical surface coverage
   const erasedCellsRef = useRef<Set<number>>(new Set());
 
+  // Refs for managing auto-sweep lifecycle and restart on mobile
+  const autoSweepCancelRef = useRef<(() => void) | null>(null);
+  const triggerAutoScratchRef = useRef<(() => void) | null>(null);
+
   const resetScratch = useCallback((e?: React.MouseEvent) => {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
     }
+
+    // Cancel running auto-sweep animation if active
+    if (autoSweepCancelRef.current) {
+      autoSweepCancelRef.current();
+      autoSweepCancelRef.current = null;
+    }
+
     hasCompletedRef.current = false;
     erasedCellsRef.current.clear();
     setHeroRevealedState(false);
@@ -83,12 +94,20 @@ export default function HeroKokil() {
     try {
       sound.playClick();
     } catch {}
+
+    // On mobile / touch devices, restart the progressive automatic scratch animation
+    if (triggerAutoScratchRef.current) {
+      triggerAutoScratchRef.current();
+    }
   }, []);
 
   useEffect(() => {
     const heroEl = heroRef.current;
     const dotsGroup = dotsGroupRef.current;
     if (!heroEl || !dotsGroup) return;
+
+    // Detect device capabilities: mouse/fine pointer desktop vs mobile/tablet touch
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     // Check saved session state on mount: if visitor completed reveal on a prior visit in this session, show revealed
     const savedRevealed = getHeroRevealedState();
@@ -170,19 +189,15 @@ export default function HeroKokil() {
       }, 150);
     }, 3200);
 
-    // ── 100% Pure Manual Progressive Rub-to-Reveal ──
-    const MAX_DOTS = 900; // Capacity from original reference implementation
-    const MIN_DIST = 18; // Distance between strokes from original reference
-    const BRUSH_RADIUS = 280; // Radius from original reference
+    // ── Progressive Mask Erasure & Spatial Coverage Engine ──
+    const MAX_DOTS = 900;
+    const MIN_DIST = 18;
+    const BRUSH_RADIUS = 280;
     let lastX: number | null = null;
     let lastY: number | null = null;
-    let isScratching = false;
 
-    function addDot(clientX: number, clientY: number) {
-      if (!heroEl || !dotsGroup || !isHeroVisible) return;
-      const rect = heroEl.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
+    function addLocalDot(x: number, y: number, heroW: number, heroH: number) {
+      if (!heroEl || !dotsGroup) return;
 
       if (lastX !== null && lastY !== null) {
         const dist = Math.hypot(x - lastX, y - lastY);
@@ -207,8 +222,8 @@ export default function HeroKokil() {
       }
 
       // Calculate genuine surface area erased (without artificially inflating on repeat strokes)
-      const cellW = rect.width / GRID_COLS;
-      const cellH = rect.height / GRID_ROWS;
+      const cellW = heroW / GRID_COLS;
+      const cellH = heroH / GRID_ROWS;
       const minCol = Math.max(0, Math.floor((x - BRUSH_RADIUS) / cellW));
       const maxCol = Math.min(GRID_COLS - 1, Math.floor((x + BRUSH_RADIUS) / cellW));
       const minRow = Math.max(0, Math.floor((y - BRUSH_RADIUS) / cellH));
@@ -227,63 +242,164 @@ export default function HeroKokil() {
       const coverageRatio = erasedCellsRef.current.size / TOTAL_CELLS;
 
       // Completion occurs ONLY after visitor genuinely scratches the required 70% proportion of surface
-      // NOTE: This NEVER automatically unveils unscratched areas or alters the mask while on the page!
-      // The visitor continues manual scratching uninterrupted.
+      // On desktop: never snaps DOM mask while visitor is actively scratching on the page.
       if (!hasCompletedRef.current && coverageRatio >= COMPLETION_THRESHOLD) {
         hasCompletedRef.current = true;
         setHeroRevealedState(true);
       }
     }
 
-    function onPointerDown(e: PointerEvent) {
-      if ((e.target as HTMLElement)?.closest("button, a")) return;
-      isScratching = true;
-      lastX = null;
-      lastY = null;
-      addDot(e.clientX, e.clientY);
+    function addDotFromClientCoords(clientX: number, clientY: number) {
+      if (!heroEl || !dotsGroup || !isHeroVisible) return;
+      const rect = heroEl.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      addLocalDot(x, y, rect.width, rect.height);
     }
 
-    function onPointerMove(e: PointerEvent) {
-      pendingPointerX = e.clientX;
-      pendingPointerY = e.clientY;
-      // Erase only when visitor physically presses and moves, or touches the screen
-      const isMouseDown = (e.buttons & 1) === 1;
-      const isTouch = e.pointerType === "touch";
-      if (isScratching && (isMouseDown || isTouch)) {
-        addDot(e.clientX, e.clientY);
-      }
+    // ── DESKTOP: MANUAL MOUSE-MOVEMENT SCRATCHING ──
+    let onDesktopPointerMove: ((e: PointerEvent) => void) | null = null;
+    let onDesktopPointerDown: ((e: PointerEvent) => void) | null = null;
+    let onDesktopPointerLeave: (() => void) | null = null;
+
+    if (isDesktop) {
+      // Desktop visitors manually reveal the Hero using ordinary mouse movement.
+      // No clicking, holding or click-and-dragging is required.
+      // Erasing stops immediately when the mouse stops moving.
+      onDesktopPointerMove = (e: PointerEvent) => {
+        if (!isHeroVisible) return;
+        pendingPointerX = e.clientX;
+        pendingPointerY = e.clientY;
+
+        // Keep HIDE button click target clean
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+
+        addDotFromClientCoords(e.clientX, e.clientY);
+      };
+
+      onDesktopPointerDown = (e: PointerEvent) => {
+        if (!isHeroVisible) return;
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+        addDotFromClientCoords(e.clientX, e.clientY);
+      };
+
+      onDesktopPointerLeave = () => {
+        lastX = null;
+        lastY = null;
+      };
+
+      heroEl.addEventListener("pointermove", onDesktopPointerMove, { passive: true });
+      heroEl.addEventListener("pointerdown", onDesktopPointerDown, { passive: true });
+      heroEl.addEventListener("pointerleave", onDesktopPointerLeave, { passive: true });
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+      // No auto-scratch on desktop
+      triggerAutoScratchRef.current = null;
     }
 
-    function onPointerUp() {
-      isScratching = false;
-      lastX = null;
-      lastY = null;
-    }
+    // ── MOBILE & TABLET: PROGRESSIVE AUTOMATIC SCRATCH ANIMATION ──
+    if (!isDesktop) {
+      // Mobile and tablet visitors are NOT required to tap, click, drag or swipe.
+      // The website automatically begins a smooth, progressive serpentine / zig-zag scratch animation.
+      function startAutoScratch() {
+        if (!heroEl || !dotsGroup) return;
+        if (hasCompletedRef.current) return;
 
-    function onTouchStart(e: TouchEvent) {
-      if ((e.target as HTMLElement)?.closest("button, a")) return;
-      isScratching = true;
-      lastX = null;
-      lastY = null;
-      if (e.touches[0]) {
-        addDot(e.touches[0].clientX, e.touches[0].clientY);
-      }
-    }
-
-    function onTouchMove(e: TouchEvent) {
-      if (e.touches[0]) {
-        pendingPointerX = e.touches[0].clientX;
-        pendingPointerY = e.touches[0].clientY;
-        if (isScratching) {
-          addDot(e.touches[0].clientX, e.touches[0].clientY);
+        const rect = heroEl.getBoundingClientRect();
+        if (rect.height <= 0 || rect.width <= 0) {
+          const retryTimer = window.setTimeout(startAutoScratch, 100);
+          autoSweepCancelRef.current = () => window.clearTimeout(retryTimer);
+          return;
         }
-      }
-    }
 
-    function onTouchEnd() {
-      isScratching = false;
-      lastX = null;
-      lastY = null;
+        const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const numRows = Math.max(4, Math.ceil(rect.height / 180));
+        const stepsInRow = Math.max(12, Math.round(rect.width / 32));
+        const pts: Array<{ x: number; y: number }> = [];
+
+        for (let i = 0; i < numRows; i++) {
+          const rowY = (rect.height * (i + 0.5)) / numRows;
+          const isEven = i % 2 === 0;
+          const fromX = isEven ? -40 : rect.width + 40;
+          const toX = isEven ? rect.width + 40 : -40;
+
+          for (let k = 0; k <= stepsInRow; k++) {
+            const t = k / stepsInRow;
+            const x = fromX + (toX - fromX) * t;
+            const y = rowY + Math.sin(t * Math.PI) * 12;
+            pts.push({ x, y });
+          }
+        }
+
+        if (isReduced) {
+          pts.forEach((pt) => addLocalDot(pt.x, pt.y, rect.width, rect.height));
+          hasCompletedRef.current = true;
+          setHeroRevealedState(true);
+          setIsRevealed(true);
+          heroEl.classList.add("is-revealed");
+          return;
+        }
+
+        let ptIndex = 0;
+        let rafId = 0;
+        let lastTime = 0;
+        const STEP_INTERVAL_MS = 25; // ~25ms per point -> ~1.5s total smooth sweep
+
+        function sweepStep(timestamp: number) {
+          if (!lastTime) lastTime = timestamp;
+          const delta = timestamp - lastTime;
+
+          if (delta >= STEP_INTERVAL_MS) {
+            lastTime = timestamp;
+            const pt = pts[ptIndex++];
+            if (pt) {
+              addLocalDot(pt.x, pt.y, rect.width, rect.height);
+              // Googly eyes follow the sweep coordinates across the surface
+              pendingPointerX = rect.left + pt.x;
+              pendingPointerY = rect.top + pt.y;
+            }
+          }
+
+          if (ptIndex < pts.length) {
+            rafId = requestAnimationFrame(sweepStep);
+          } else {
+            // Sweep complete: Hero is fully revealed
+            hasCompletedRef.current = true;
+            setHeroRevealedState(true);
+            setIsRevealed(true);
+            if (heroEl) {
+              heroEl.classList.add("is-revealed");
+            }
+            autoSweepCancelRef.current = null;
+            lastX = null;
+            lastY = null;
+          }
+        }
+
+        rafId = requestAnimationFrame(sweepStep);
+        autoSweepCancelRef.current = () => {
+          cancelAnimationFrame(rafId);
+        };
+      }
+
+      function scheduleAutoScratch() {
+        if (autoSweepCancelRef.current) {
+          autoSweepCancelRef.current();
+          autoSweepCancelRef.current = null;
+        }
+        // Brief 500ms discovery window showing concealed surface & eyes before progressive animation begins
+        const delayTimer = window.setTimeout(startAutoScratch, 500);
+        autoSweepCancelRef.current = () => {
+          window.clearTimeout(delayTimer);
+        };
+      }
+
+      triggerAutoScratchRef.current = scheduleAutoScratch;
+
+      // If not previously revealed, initiate automatic scratch after brief reveal delay
+      if (!savedRevealed) {
+        scheduleAutoScratch();
+      }
     }
 
     const handleThemeChange = () => {
@@ -300,39 +416,33 @@ export default function HeroKokil() {
       setHintHidden(false);
       lastX = null;
       lastY = null;
+
+      if (!isDesktop && triggerAutoScratchRef.current) {
+        triggerAutoScratchRef.current();
+      }
     };
 
     window.addEventListener("cold-designer-theme-change", handleThemeChange);
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    window.addEventListener("pointerup", onPointerUp);
-    window.addEventListener("pointercancel", onPointerUp);
-
-    heroEl.addEventListener("pointerdown", onPointerDown);
-    heroEl.addEventListener("pointermove", onPointerMove, { passive: true });
-
-    heroEl.addEventListener("touchstart", onTouchStart, { passive: true });
-    heroEl.addEventListener("touchmove", onTouchMove, { passive: true });
-    heroEl.addEventListener("touchend", onTouchEnd, { passive: true });
-    heroEl.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
     return () => {
       observer.disconnect();
       cancelAnimationFrame(eyeRaf);
       window.removeEventListener("resize", updateEyeCenters);
       window.removeEventListener("cold-designer-theme-change", handleThemeChange);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("pointerup", onPointerUp);
-      window.removeEventListener("pointercancel", onPointerUp);
-
-      heroEl.removeEventListener("pointerdown", onPointerDown);
-      heroEl.removeEventListener("pointermove", onPointerMove);
-
-      heroEl.removeEventListener("touchstart", onTouchStart);
-      heroEl.removeEventListener("touchmove", onTouchMove);
-      heroEl.removeEventListener("touchend", onTouchEnd);
-      heroEl.removeEventListener("touchcancel", onTouchEnd);
-
       clearInterval(blinkInterval);
+
+      if (autoSweepCancelRef.current) {
+        autoSweepCancelRef.current();
+        autoSweepCancelRef.current = null;
+      }
+      triggerAutoScratchRef.current = null;
+
+      if (isDesktop) {
+        if (onDesktopPointerMove) heroEl.removeEventListener("pointermove", onDesktopPointerMove);
+        if (onDesktopPointerDown) heroEl.removeEventListener("pointerdown", onDesktopPointerDown);
+        if (onDesktopPointerLeave) heroEl.removeEventListener("pointerleave", onDesktopPointerLeave);
+        window.removeEventListener("mousemove", handleMouseMove);
+      }
     };
   }, []);
 
