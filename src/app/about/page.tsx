@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { BookOpen } from "lucide-react";
 import { sound } from "@/lib/sounds";
+import ScrollReveal from "@/components/motion/ScrollReveal";
 
 const VERIFIED_ENGAGEMENTS = [
   {
@@ -112,7 +113,7 @@ export default function AboutPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24">
           {/* Left Column: Art-Directed Exhibition Portrait Frame (5 cols) */}
           <div className="lg:col-span-5">
-            <div className="sticky top-28 space-y-6">
+            <ScrollReveal start="top 85%" y={20} duration={0.5} className="sticky top-28 space-y-6">
               {/* Exhibition Mount Card */}
               <div
                 style={{
@@ -228,216 +229,228 @@ export default function AboutPage() {
                   </svg>
                 </span>
               </a>
-            </div>
+            </ScrollReveal>
           </div>
 
           {/* Right Column: Editorial Narrative & Essays (7 cols) */}
           <div className="lg:col-span-7 space-y-16">
             {/* Lead Editorial Creed Callout */}
-            <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 shadow-2xl space-y-4">
-              <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block font-semibold">
-                DESIGN ETHOS &bull; CLARITY AS A DISCIPLINE
-              </span>
-              <blockquote className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] leading-snug tracking-tight">
-                &ldquo;An interface should feel obvious, not because it is trivial to design, but because every layer of confusion has been stripped away.&rdquo;
-              </blockquote>
-              <p className="text-base text-[#89919d] font-light leading-relaxed">
-                Operating at the intersection of user research, conversational product architecture, and production frontend code. Based in Lagos, designing for real-world usability across mobile and web platforms.
-              </p>
-            </div>
+            <ScrollReveal start="top 85%" y={20} duration={0.45}>
+              <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 shadow-2xl space-y-4">
+                <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block font-semibold">
+                  DESIGN ETHOS &bull; CLARITY AS A DISCIPLINE
+                </span>
+                <blockquote className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] leading-snug tracking-tight">
+                  &ldquo;An interface should feel obvious, not because it is trivial to design, but because every layer of confusion has been stripped away.&rdquo;
+                </blockquote>
+                <p className="text-base text-[#89919d] font-light leading-relaxed">
+                  Operating at the intersection of user research, conversational product architecture, and production frontend code. Based in Lagos, designing for real-world usability across mobile and web platforms.
+                </p>
+              </div>
+            </ScrollReveal>
 
             {/* The Meaning of "Cold" */}
-            <section className="space-y-6">
-              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
-                <span>01 // THE DOCTRINE</span>
-              </div>
+            <ScrollReveal start="top 85%" y={20} duration={0.45}>
+              <section className="space-y-6">
+                <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
+                  <span>01 // THE DOCTRINE</span>
+                </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f2f1ec]">
-                Why &ldquo;Cold&rdquo;?
-              </h2>
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f2f1ec]">
+                  Why &ldquo;Cold&rdquo;?
+                </h2>
 
-              <div className="space-y-5 text-lg text-[#89919d] font-light leading-relaxed">
-                <p>
-                  In a digital landscape filled with over-stimulating decoration, intrusive banners, and generic templates, <strong className="text-[#f2f1ec] font-normal">&ldquo;Cold&rdquo;</strong> represents an intentional commitment to clarity.
-                </p>
-                <p>
-                  Cold is not emotional detachment. Cold is the temperature of clear thinking. It is the disciplined elimination of non-essential noise until an interface feels effortless, functional, and grounded in human reality.
-                </p>
-                <p>
-                  Whether designing a conversational healthcare triage system connecting patients to licensed physicians over WhatsApp, or structuring the arrival sequence of an architectural concert hall, the goal remains identical: build products that respect the user&apos;s time, attention, and cognitive focus.
-                </p>
-              </div>
-            </section>
+                <div className="space-y-5 text-lg text-[#89919d] font-light leading-relaxed">
+                  <p>
+                    In a digital landscape filled with over-stimulating decoration, intrusive banners, and generic templates, <strong className="text-[#f2f1ec] font-normal">&ldquo;Cold&rdquo;</strong> represents an intentional commitment to clarity.
+                  </p>
+                  <p>
+                    Cold is not emotional detachment. Cold is the temperature of clear thinking. It is the disciplined elimination of non-essential noise until an interface feels effortless, functional, and grounded in human reality.
+                  </p>
+                  <p>
+                    Whether designing a conversational healthcare triage system connecting patients to licensed physicians over WhatsApp, or structuring the arrival sequence of an architectural concert hall, the goal remains identical: build products that respect the user&apos;s time, attention, and cognitive focus.
+                  </p>
+                </div>
+              </section>
+            </ScrollReveal>
 
             {/* Experience Timeline */}
-            <section className="border-t border-white/[0.08] pt-14 space-y-8">
-              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
-                <span>02 // PROFESSIONAL EXPERIENCE</span>
-              </div>
+            <ScrollReveal start="top 85%" y={24} duration={0.45}>
+              <section className="border-t border-white/[0.08] pt-14 space-y-8">
+                <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
+                  <span>02 // PROFESSIONAL EXPERIENCE</span>
+                </div>
 
-              <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
-                Verified Experience
-              </h2>
+                <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
+                  Verified Experience
+                </h2>
 
-              <div className="space-y-6">
-                {VERIFIED_ENGAGEMENTS.map((item) => (
-                  <div
-                    key={item.company}
-                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 hover:border-[#a9ddf0]/30 transition-colors shadow-lg"
-                  >
-                    <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/[0.08] pb-4 mb-4 font-mono-code text-xs">
-                      <span className="text-[#a9ddf0] font-semibold">{item.period}</span>
-                      <span className="text-[#89919d]">{item.location}</span>
+                <div className="space-y-6">
+                  {VERIFIED_ENGAGEMENTS.map((item) => (
+                    <div
+                      key={item.company}
+                      className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 hover:border-[#a9ddf0]/30 transition-colors shadow-lg"
+                    >
+                      <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/[0.08] pb-4 mb-4 font-mono-code text-xs">
+                        <span className="text-[#a9ddf0] font-semibold">{item.period}</span>
+                        <span className="text-[#89919d]">{item.location}</span>
+                      </div>
+
+                      <h3 className="font-display text-2xl font-bold text-[#f2f1ec] mb-1">
+                        {item.role}
+                      </h3>
+                      <span className="font-mono-code text-xs text-[#89919d] block mb-4">
+                        {item.company}
+                      </span>
+
+                      <p className="text-base text-[#89919d] font-light leading-relaxed mb-6">
+                        {item.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 font-mono-code text-xs">
+                        {item.tags.map((t) => (
+                          <span
+                            key={t}
+                            className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]"
+                          >
+                            {t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-
-                    <h3 className="font-display text-2xl font-bold text-[#f2f1ec] mb-1">
-                      {item.role}
-                    </h3>
-                    <span className="font-mono-code text-xs text-[#89919d] block mb-4">
-                      {item.company}
-                    </span>
-
-                    <p className="text-base text-[#89919d] font-light leading-relaxed mb-6">
-                      {item.description}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2 font-mono-code text-xs">
-                      {item.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
+                  ))}
+                </div>
+              </section>
+            </ScrollReveal>
 
             {/* Toolkit */}
-            <section className="border-t border-white/[0.08] pt-14 space-y-8">
-              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
-                <span>03 // CAPABILITIES</span>
-              </div>
+            <ScrollReveal start="top 85%" y={24} duration={0.45}>
+              <section className="border-t border-white/[0.08] pt-14 space-y-8">
+                <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
+                  <span>03 // CAPABILITIES</span>
+                </div>
 
-              <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
-                Disciplinary Toolkit
-              </h2>
+                <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
+                  Disciplinary Toolkit
+                </h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                {TOOLKIT.map((t) => (
-                  <div
-                    key={t.category}
-                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 shadow-md"
-                  >
-                    <h3 className="font-mono-code text-xs font-semibold text-[#a9ddf0] uppercase tracking-wider mb-4">
-                      {t.category}
-                    </h3>
-                    <ul className="space-y-2.5 font-mono-code text-xs text-[#89919d]">
-                      {t.items.map((it) => (
-                        <li key={it} className="flex items-center gap-2">
-                          <span className="h-1 w-1 rounded-full bg-[#a9ddf0]" />
-                          <span>{it}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </section>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {TOOLKIT.map((t) => (
+                    <div
+                      key={t.category}
+                      className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 shadow-md"
+                    >
+                      <h3 className="font-mono-code text-xs font-semibold text-[#a9ddf0] uppercase tracking-wider mb-4">
+                        {t.category}
+                      </h3>
+                      <ul className="space-y-2.5 font-mono-code text-xs text-[#89919d]">
+                        {t.items.map((it) => (
+                          <li key={it} className="flex items-center gap-2">
+                            <span className="h-1 w-1 rounded-full bg-[#a9ddf0]" />
+                            <span>{it}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            </ScrollReveal>
 
             {/* Creative Standards & Influences */}
-            <section className="border-t border-white/[0.08] pt-14 space-y-8">
-              <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 font-mono-code text-xs shadow-md">
-                <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
-                  <BookOpen size={16} className="text-[#a9ddf0]" />
-                  <span className="uppercase text-[#f2f1ec] font-semibold tracking-wider">
-                    Creative Influences &amp; Standards
-                  </span>
-                </div>
+            <ScrollReveal start="top 85%" y={20} duration={0.45}>
+              <section className="border-t border-white/[0.08] pt-14 space-y-8">
+                <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 font-mono-code text-xs shadow-md">
+                  <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
+                    <BookOpen size={16} className="text-[#a9ddf0]" />
+                    <span className="uppercase text-[#f2f1ec] font-semibold tracking-wider">
+                      Creative Influences &amp; Standards
+                    </span>
+                  </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                  <div>
-                    <span className="text-[#89919d] uppercase block mb-1">Architecture</span>
-                    <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
-                      Tadao Ando concrete geometry, Dieter Rams reductionism, quiet structural honesty.
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-[#89919d] uppercase block mb-1">Typography</span>
-                    <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
-                      Swiss International Style, Josef Müller-Brockmann grid discipline, neo-grotesque hierarchy.
-                    </p>
-                  </div>
-                  <div>
-                    <span className="text-[#89919d] uppercase block mb-1">Digital Craft</span>
-                    <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
-                      Zero layout shift, responsive performance, tactile micro-feedback, and production design-to-code fidelity.
-                    </p>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div>
+                      <span className="text-[#89919d] uppercase block mb-1">Architecture</span>
+                      <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
+                        Tadao Ando concrete geometry, Dieter Rams reductionism, quiet structural honesty.
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-[#89919d] uppercase block mb-1">Typography</span>
+                      <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
+                        Swiss International Style, Josef Müller-Brockmann grid discipline, neo-grotesque hierarchy.
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-[#89919d] uppercase block mb-1">Digital Craft</span>
+                      <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
+                        Zero layout shift, responsive performance, tactile micro-feedback, and production design-to-code fidelity.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </ScrollReveal>
           </div>
         </div>
 
         {/* Direct Dialogue Invitation Banner */}
-        <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs shadow-2xl">
-          <div className="max-w-2xl">
-            <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
-              Direct Dialogue &amp; Inquiries
-            </span>
-            <p className="text-base text-[#89919d] font-sans font-light leading-relaxed">
-              Open for thoughtful product discussions, design systems architecture, and professional inquiries. Direct messages receive personal responses.
-            </p>
-          </div>
+        <ScrollReveal start="top 88%" y={20} duration={0.45}>
+          <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs shadow-2xl">
+            <div className="max-w-2xl">
+              <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
+                Direct Dialogue &amp; Inquiries
+              </span>
+              <p className="text-base text-[#89919d] font-sans font-light leading-relaxed">
+                Open for thoughtful product discussions, design systems architecture, and professional inquiries. Direct messages receive personal responses.
+              </p>
+            </div>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto shrink-0">
-            <a
-              href="mailto:abolarintaye20@gmail.com"
-              onClick={() => sound.playClick()}
-              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
-            >
-              <span>abolarintaye20@gmail.com</span>
-              <svg
-                viewBox="0 0 24 24"
-                width="14"
-                height="14"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto shrink-0">
+              <a
+                href="mailto:abolarintaye20@gmail.com"
+                onClick={() => sound.playClick()}
+                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
               >
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </a>
+                <span>abolarintaye20@gmail.com</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
 
-            <Link
-              href="/contact"
-              onClick={() => sound.playClick()}
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-3.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors whitespace-nowrap"
-            >
-              <span>Structured Brief</span>
-              <svg
-                viewBox="0 0 24 24"
-                width="13"
-                height="13"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+              <Link
+                href="/contact"
+                onClick={() => sound.playClick()}
+                className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-3.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors whitespace-nowrap"
               >
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </Link>
-          </div>
-        </section>
+                <span>Structured Brief</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="13"
+                  height="13"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </Link>
+            </div>
+          </section>
+        </ScrollReveal>
       </div>
     </main>
   );

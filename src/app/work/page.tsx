@@ -1,11 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search, Grid, List, Filter } from "lucide-react";
 import { sound } from "@/lib/sounds";
 import { PROJECTS, Project } from "@/data/projects";
+import ScrollReveal from "@/components/motion/ScrollReveal";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const CATEGORIES = [
   "All",
@@ -113,6 +115,13 @@ export default function WorkArchivePage() {
       ["greall-website", "will", "nova-wellness", "agrivillage"].includes(p.slug)
     );
   }, [filteredProjects]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [selectedCategory, searchQuery, viewMode]);
 
   return (
     <main className="min-h-screen pt-32 sm:pt-40 pb-28 px-6 sm:px-10 lg:px-16 bg-[#090b0f] text-[#f2f1ec]">
@@ -255,10 +264,10 @@ export default function WorkArchivePage() {
                     const orderNumber = String(idx + 1).padStart(2, "0");
 
                     return (
-                      <article
-                        key={p.slug}
-                        className="group rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 lg:p-12 hover:border-[#a9ddf0]/40 hover:shadow-2xl active:scale-[0.995] transition-all duration-300"
-                      >
+                      <ScrollReveal key={p.slug} start="top 85%" y={24} duration={0.45}>
+                        <article
+                          className="group rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 lg:p-12 hover:border-[#a9ddf0]/40 hover:shadow-2xl active:scale-[0.995] transition-all duration-300"
+                        >
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
                           {/* Media Preview Column */}
                           <div
@@ -439,7 +448,8 @@ export default function WorkArchivePage() {
                           </div>
                         </div>
                       </article>
-                    );
+                    </ScrollReveal>
+                  );
                   })}
                 </div>
               </section>
@@ -462,10 +472,10 @@ export default function WorkArchivePage() {
                     const orderNumber = String(idx + 6).padStart(2, "0");
 
                     return (
-                      <article
-                        key={p.slug}
-                        className="group rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 flex flex-col justify-between hover:border-[#a9ddf0]/30 transition-all duration-300"
-                      >
+                      <ScrollReveal key={p.slug} start="top 85%" y={24} duration={0.45}>
+                        <article
+                          className="group rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 flex flex-col justify-between hover:border-[#a9ddf0]/30 transition-all duration-300"
+                        >
                         <div>
                           {/* Eyebrow */}
                           <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 mb-5 font-mono-code text-xs">
@@ -552,7 +562,8 @@ export default function WorkArchivePage() {
                           )}
                         </div>
                       </article>
-                    );
+                    </ScrollReveal>
+                  );
                   })}
                 </div>
               </section>
@@ -623,35 +634,37 @@ export default function WorkArchivePage() {
         )}
 
         {/* Section Footer: Inquiry Prompt */}
-        <div className="mt-24 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono-code text-xs">
-          <div>
-            <span className="text-[#a9ddf0] uppercase font-semibold block mb-1">
-              Product Design &amp; Systems Architecture
-            </span>
-            <p className="text-[#89919d] max-w-xl">
-              Open for professional dialogue, design systems collaboration, and technical consultations. Direct messages receive personal responses.
-            </p>
-          </div>
-          <a
-            href="mailto:abolarintaye20@gmail.com"
-            className="inline-flex items-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
-          >
-            <span>Start a Direct Conversation</span>
-            <svg
-              viewBox="0 0 24 24"
-              width="14"
-              height="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+        <ScrollReveal start="top 88%" y={20} duration={0.45}>
+          <div className="mt-24 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono-code text-xs">
+            <div>
+              <span className="text-[#a9ddf0] uppercase font-semibold block mb-1">
+                Product Design &amp; Systems Architecture
+              </span>
+              <p className="text-[#89919d] max-w-xl">
+                Open for professional dialogue, design systems collaboration, and technical consultations. Direct messages receive personal responses.
+              </p>
+            </div>
+            <a
+              href="mailto:abolarintaye20@gmail.com"
+              className="inline-flex items-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
             >
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </a>
-        </div>
+              <span>Start a Direct Conversation</span>
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </div>
+        </ScrollReveal>
       </div>
     </main>
   );

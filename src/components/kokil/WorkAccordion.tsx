@@ -103,21 +103,22 @@ export default function WorkAccordion() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top 82%",
-        toggleActions: "play reverse play reverse",
+        start: "top 85%",
+        toggleActions: "play none none reverse",
+        fastScrollEnd: true,
       },
     });
 
     tl.fromTo(
       header,
       { y: 22, opacity: 0.25 },
-      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }
+      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out", clearProps: "transform" }
     );
 
     tl.fromTo(
       panels,
       { y: 28, opacity: 0.2, scale: 0.99 },
-      { y: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.05, ease: "power2.out" },
+      { y: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.05, ease: "power2.out", clearProps: "transform" },
       "-=0.25"
     );
 
@@ -125,7 +126,7 @@ export default function WorkAccordion() {
       tl.fromTo(
         cta,
         { y: 18, opacity: 0.2 },
-        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out", clearProps: "transform" },
         "-=0.2"
       );
     }

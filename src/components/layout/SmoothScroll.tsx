@@ -71,6 +71,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       window.scrollTo(0, 0);
     }
     ScrollTrigger.refresh();
+
+    // Re-calculate after 0.32s page transition completes to ensure pinpoint accuracy
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 360);
+
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   return <>{children}</>;

@@ -85,28 +85,29 @@ export default function FooterKokil() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: footer,
-        start: "top 80%",
-        toggleActions: "play reverse play reverse",
+        start: "top 88%",
+        toggleActions: "play none none reverse",
+        fastScrollEnd: true,
       },
     });
 
     tl.fromTo(
       header,
       { y: 24, opacity: 0.25 },
-      { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+      { y: 0, opacity: 1, duration: 0.5, ease: "power2.out", clearProps: "transform" }
     );
 
     tl.fromTo(
       action,
       { y: 24, opacity: 0.2 },
-      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
+      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out", clearProps: "transform" },
       "-=0.25"
     );
 
     tl.fromTo(
       listItems,
       { y: 20, opacity: 0.2 },
-      { y: 0, opacity: 1, duration: 0.45, stagger: 0.06, ease: "power2.out" },
+      { y: 0, opacity: 1, duration: 0.45, stagger: 0.06, ease: "power2.out", clearProps: "transform" },
       "-=0.2"
     );
 

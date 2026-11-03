@@ -119,21 +119,22 @@ export default function NotebookKokil() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top 80%",
-        toggleActions: "play reverse play reverse",
+        start: "top 82%",
+        toggleActions: "play none none reverse",
+        fastScrollEnd: true,
       },
     });
 
     tl.fromTo(
       title,
       { y: 22, opacity: 0.25 },
-      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }
+      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out", clearProps: "transform" }
     );
 
     tl.fromTo(
       wrap,
       { y: 32, opacity: 0.2 },
-      { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+      { y: 0, opacity: 1, duration: 0.6, ease: "power2.out", clearProps: "transform" },
       "-=0.25"
     );
 

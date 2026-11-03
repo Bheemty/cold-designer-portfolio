@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, Volume2, VolumeX, Sparkles, Check, AlertCircle, RefreshCw } from "lucide-react";
 import { sound } from "@/lib/sounds";
 import { useTheme } from "@/context/ThemeContext";
+import ScrollReveal from "@/components/motion/ScrollReveal";
 
 export default function CodexPage() {
   // Global Audio Feedback Toggle (Never autoplays; user must interact)
@@ -232,7 +233,8 @@ export default function CodexPage() {
         {/* ─────────────────────────────────────────────────────────────
             EXPERIMENT 01: THE INTERACTION STUDIO
            ───────────────────────────────────────────────────────────── */}
-        <section aria-labelledby="exp1-title" className="mb-24">
+        <ScrollReveal start="top 85%" y={24} duration={0.5}>
+          <section aria-labelledby="exp1-title" className="mb-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 mb-10 gap-4">
             <div>
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
@@ -536,10 +538,12 @@ export default function CodexPage() {
             </div>
           </div>
         </section>
+      </ScrollReveal>
 
-        {/* ─────────────────────────────────────────────────────────────
-            EXPERIMENT 02: THE INTERFACE SWITCHER
-           ───────────────────────────────────────────────────────────── */}
+      {/* ─────────────────────────────────────────────────────────────
+          EXPERIMENT 02: THE INTERFACE SWITCHER
+         ───────────────────────────────────────────────────────────── */}
+      <ScrollReveal start="top 85%" y={24} duration={0.5}>
         <section aria-labelledby="exp2-title" className="mb-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 mb-10 gap-4">
             <div>
@@ -898,10 +902,12 @@ export default function CodexPage() {
             </div>
           </div>
         </section>
+      </ScrollReveal>
 
-        {/* ─────────────────────────────────────────────────────────────
-            EXPERIMENT 03: TYPE & VISUAL HIERARCHY STUDIO
-           ───────────────────────────────────────────────────────────── */}
+      {/* ─────────────────────────────────────────────────────────────
+          EXPERIMENT 03: TYPE & VISUAL HIERARCHY STUDIO
+         ───────────────────────────────────────────────────────────── */}
+      <ScrollReveal start="top 85%" y={24} duration={0.5}>
         <section aria-labelledby="exp3-title" className="mb-24">
           <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 mb-10 gap-4">
             <div>
@@ -1111,10 +1117,12 @@ export default function CodexPage() {
             </div>
           </div>
         </section>
+      </ScrollReveal>
 
-        {/* ─────────────────────────────────────────────────────────────
-            COHERENT CLOSING SECTION
-           ───────────────────────────────────────────────────────────── */}
+      {/* ─────────────────────────────────────────────────────────────
+          COHERENT CLOSING SECTION
+         ───────────────────────────────────────────────────────────── */}
+      <ScrollReveal start="top 88%" y={20} duration={0.45}>
         <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs">
           <div className="max-w-2xl">
             <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
@@ -1169,7 +1177,8 @@ export default function CodexPage() {
             </a>
           </div>
         </section>
-      </div>
+      </ScrollReveal>
+    </div>
     </main>
   );
 }
