@@ -69,101 +69,89 @@ export default function AboutKokil() {
 
     const skillsItems = Array.from(skillsList.children) as HTMLElement[];
 
-    // Build the entrance animation timeline
+    // Build the scroll-connected scrubbed animation timeline
+    // Exactly matches Kokil Tamta reference: progressive illumination and subtle vertical rise
+    // linked directly to scroll velocity, naturally reversing on upward scroll and replaying on re-entry.
     const tl = gsap.timeline({
-      paused: true,
+      scrollTrigger: {
+        trigger: container,
+        start: "top 82%",
+        end: "top 30%",
+        scrub: 0.65, // Responsive, silky smooth catch-up with Lenis
+        invalidateOnRefresh: true,
+      },
       defaults: {
-        ease: "power3.out",
+        ease: "power2.out",
       },
     });
 
-    // 1. (01) — About section label reveals
+    // 1. (01) — About label glides in
     tl.fromTo(
       label,
-      { y: 18, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.55 },
+      { y: 14, opacity: 0.25 },
+      { y: 0, opacity: 1, duration: 0.25 },
       0
     );
 
-    // 2. Line-by-line editorial reveal with subtle vertical glide and opacity transition
+    // 2. Line 1: Mission statement
     tl.fromTo(
-      lines,
-      { y: 34, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.82,
-        stagger: 0.12,
-      },
-      0.08
+      lines[0],
+      { y: 24, opacity: 0.22 },
+      { y: 0, opacity: 1, duration: 0.38 },
+      0.04
     );
 
-    // 3. Skills pills stagger in smoothly
+    // 3. Line 2: Philosophy
+    tl.fromTo(
+      lines[1],
+      { y: 24, opacity: 0.22 },
+      { y: 0, opacity: 1, duration: 0.38 },
+      0.22
+    );
+
+    // 4. Line 3: Execution
+    tl.fromTo(
+      lines[2],
+      { y: 24, opacity: 0.22 },
+      { y: 0, opacity: 1, duration: 0.38 },
+      0.42
+    );
+
+    // 5. Line 4: Output
+    tl.fromTo(
+      lines[3],
+      { y: 24, opacity: 0.22 },
+      { y: 0, opacity: 1, duration: 0.38 },
+      0.62
+    );
+
+    // 6. Skills pills cascade
     tl.fromTo(
       skillsItems,
-      { y: 16, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.55,
-        stagger: 0.035,
-        ease: "power2.out",
-      },
-      0.45
+      { y: 16, opacity: 0.2 },
+      { y: 0, opacity: 1, duration: 0.3, stagger: 0.025 },
+      0.75
     );
 
-    // 4. "Read Design Monograph" link glides into position
+    // 7. "Read Design Monograph" link
     tl.fromTo(
       moreLink,
-      { y: 16, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.55, ease: "power2.out" },
-      0.55
+      { y: 16, opacity: 0.2 },
+      { y: 0, opacity: 1, duration: 0.3 },
+      0.82
     );
 
-    // Check initial position on mount (handles page refresh while already scrolled down)
-    const checkInitialPosition = () => {
-      const rect = container.getBoundingClientRect();
-      const triggerThreshold = window.innerHeight * 0.78;
-      if (rect.top <= triggerThreshold && rect.bottom > 0) {
-        tl.progress(1);
-      } else {
-        tl.pause(0);
-      }
-    };
-
-    checkInitialPosition();
-
-    // ScrollTrigger to handle entering from Hero, reversing towards Hero, and replaying
-    const st = ScrollTrigger.create({
-      trigger: container,
-      start: "top 78%",
-      end: "bottom 15%",
-      onEnter: () => {
-        // Scrolling down from Hero into About: replay entrance animation from initial state
-        tl.restart();
-      },
-      onLeaveBack: () => {
-        // Scrolling upwards towards Hero: reverse reveal naturally back to concealed state
-        tl.reverse();
-      },
-      onEnterBack: () => {
-        // Scrolling up from Selected Work into About: ensure content stays fully visible
-        tl.play();
-      },
-    });
-
-    // Reset when visitor is back at the top of Hero (handles rapid scroll-to-top)
-    const handleScrollTopCheck = () => {
-      if (window.scrollY < 40) {
-        if (tl.progress() > 0 && !tl.reversed()) {
-          tl.pause(0);
+    // Ensure clean reset when at top of Hero
+    const handleScrollZeroCheck = () => {
+      if (window.scrollY < 30) {
+        if (tl.progress() > 0) {
+          tl.progress(0);
         }
       }
     };
+    window.addEventListener("scroll", handleScrollZeroCheck, { passive: true });
 
-    window.addEventListener("scroll", handleScrollTopCheck, { passive: true });
-
-    // Connect Lenis smooth scrolling updates to ScrollTrigger if active
+    // Connect Lenis smooth scrolling updates to ScrollTrigger
     const lenis = (window as unknown as { __lenis?: { on: (event: string, cb: () => void) => void; off: (event: string, cb: () => void) => void } }).__lenis;
     const onLenisScroll = () => {
       ScrollTrigger.update();
@@ -178,9 +166,9 @@ export default function AboutKokil() {
     window.addEventListener("resize", handleResize, { passive: true });
 
     return () => {
-      st.kill();
+      tl.scrollTrigger?.kill();
       tl.kill();
-      window.removeEventListener("scroll", handleScrollTopCheck);
+      window.removeEventListener("scroll", handleScrollZeroCheck);
       window.removeEventListener("resize", handleResize);
       if (lenis?.off) {
         lenis.off("scroll", onLenisScroll);
