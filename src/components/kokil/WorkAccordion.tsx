@@ -101,7 +101,28 @@ export default function WorkAccordion() {
 
   return (
     <section id="work">
-      <p className="intro-label">(02) &mdash; Selected work</p>
+      {/* Header row with inline View All Work link */}
+      <div className="work-header-row">
+        <p className="intro-label">(02) &mdash; Selected work</p>
+        <Link href="/work" className="work-view-all-header-link" aria-label="View all projects in full directory">
+          <span>View All Work Archive</span>
+          <svg
+            viewBox="0 0 24 24"
+            width="14"
+            height="14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M7 17L17 7M17 7H7M17 7V17" />
+          </svg>
+        </Link>
+      </div>
+
+      {/* Horizontal Accordion Gallery */}
       <div className="acc" id="workAcc">
         {PROJECTS.map((project, idx) => {
           const isOpen = activeId === project.id;
@@ -177,6 +198,35 @@ export default function WorkAccordion() {
             </article>
           );
         })}
+      </div>
+
+      {/* Prominent Section Conclusion CTA */}
+      <div className="work-conclusion">
+        <div className="work-conclusion-meta">
+          <span className="work-conclusion-badge">Comprehensive Directory // 2023 &mdash; 2026</span>
+          <h3 className="work-conclusion-heading">
+            Looking for more case studies, design systems, and mobile architectures?
+          </h3>
+          <p className="work-conclusion-sub">
+            Explore 9+ verified production projects across conversational healthcare triage, intercity coach transit, digital legacy, and corporate fintech platforms.
+          </p>
+        </div>
+        <Link href="/work" className="work-conclusion-btn" aria-label="Explore the complete work archive">
+          <span>Explore All Work</span>
+          <svg
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </Link>
       </div>
     </section>
   );

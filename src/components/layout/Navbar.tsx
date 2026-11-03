@@ -34,16 +34,17 @@ export default function Navbar() {
         <Link href="/about" className={pathname === "/about" ? "active" : ""}>
           About
         </Link>
-        <Link href="/#playground">
+        <Link href="/codex" className={pathname === "/codex" ? "active" : ""}>
           Codex
         </Link>
       </div>
 
-      {/* Résumé Request Button */}
+      {/* Résumé Direct Download Action */}
       <a
-        href="mailto:abolarintaye20@gmail.com?subject=Cold%20Designer%20Resume%20Request"
+        href="/Damilare-Product-Designer-Resume.pdf"
+        download="Damilare-Product-Designer-Resume.pdf"
         className="kokil-nav-resume"
-        aria-label="Request résumé via email"
+        aria-label="Download Damilare Product Designer Resume (PDF)"
       >
         <span>R&eacute;sum&eacute;</span>
         <svg

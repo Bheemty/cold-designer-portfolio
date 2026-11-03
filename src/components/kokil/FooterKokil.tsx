@@ -3,57 +3,57 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 
-interface ContactLinkItem {
+interface ContactLink {
   name: string;
   desc: string;
   href: string;
-  icon: string | React.ReactNode;
+  icon: React.ReactNode;
 }
 
-const CONTACTS: ContactLinkItem[] = [
+const CONTACTS: ContactLink[] = [
   {
-    name: "Email",
-    desc: "abolarintaye20@gmail.com — direct channel for projects, contracts & consultations.",
-    href: "mailto:abolarintaye20@gmail.com",
+    name: "LinkedIn",
+    desc: "Professional trajectory & verified client recommendations",
+    href: "https://linkedin.com/in/taye-abolarin",
     icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <rect x="3" y="5" width="18" height="14" rx="2" />
-        <path d="M3 7l9 6 9-6" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+        <rect x="2" y="9" width="4" height="12" />
+        <circle cx="4" cy="4" r="2" />
       </svg>
     ),
   },
   {
-    name: "LinkedIn",
-    desc: "Professional background, verified engagements & design case studies.",
-    href: "https://linkedin.com/in/taye-abolarin",
-    icon: "in",
-  },
-  {
-    name: "X (Twitter)",
-    desc: "Interface dissections, design systems thoughts & rapid prototypes.",
-    href: "https://x.com/taye_abolarin2",
-    icon: "𝕏",
-  },
-  {
     name: "Behance",
-    desc: "Curated design presentations and visual UI mockups.",
-    href: "https://behance.net/colddesigner",
-    icon: "Bē",
+    desc: "Complete visual archive & interaction design portfolio",
+    href: "https://behance.net/abolarintaye",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 6h7a3 3 0 0 1 0 6H4V6z" />
+        <path d="M4 12h8a3.5 3.5 0 0 1 0 7H4v-7z" />
+        <path d="M16 8h5" />
+        <path d="M16 15a3 3 0 1 1 6 0 3 3 0 0 1-6 0c0-1.7 1.3-3 3-3" />
+      </svg>
+    ),
   },
   {
     name: "GitHub",
-    desc: "Frontend code repositories, Next.js prototypes & design tools.",
+    desc: "Open source prototypes, Next.js codebases & design tokens",
     href: "https://github.com/Bheemty",
     icon: (
-      <svg viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+      </svg>
+    ),
+  },
+  {
+    name: "X (Twitter)",
+    desc: "Interface thoughts, Figma token experiments & design notes",
+    href: "https://x.com/taye_abolarin2",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 4l11.733 16h4.267l-11.733 -16z" />
+        <path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772" />
       </svg>
     ),
   },
@@ -71,15 +71,13 @@ export default function FooterKokil() {
       (entries) => {
         isFooterVisible = entries[0]?.isIntersecting ?? false;
       },
-      { threshold: 0.05 }
+      { threshold: 0.1 }
     );
     observer.observe(footerEl);
 
-    // Cache eye centers to avoid layout thrashing during mouse movement
     const eyeEls = Array.from(footerEl.querySelectorAll<HTMLElement>(".eye"));
     const pupilEls = eyeEls.map((eye) => eye.querySelector<HTMLElement>(".pupil"));
-    const maxMove = 24;
-
+    const maxMove = 22;
     let eyeCenters: Array<{ cx: number; cy: number }> = [];
 
     function updateEyeCenters() {
@@ -99,24 +97,28 @@ export default function FooterKokil() {
     let pendingPointerY = -1000;
     let eyeRaf = 0;
 
-    function renderFooterEyes() {
-      if (isFooterVisible && eyeCenters.length > 0) {
-        pupilEls.forEach((pupil, idx) => {
-          if (!pupil || !eyeCenters[idx]) return;
-          const { cx, cy } = eyeCenters[idx];
-          const dx = pendingPointerX - cx;
-          const dy = pendingPointerY - cy;
-          const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
-          const angle = Math.atan2(dy, dx);
-          const ox = Math.cos(angle) * dist;
-          const oy = Math.sin(angle) * dist;
-          pupil.style.transform = `translate3d(calc(-50% + ${ox.toFixed(1)}px), calc(-50% + ${oy.toFixed(1)}px), 0)`;
-        });
+    function renderEyes() {
+      if (!isFooterVisible || eyeCenters.length === 0) {
+        eyeRaf = requestAnimationFrame(renderEyes);
+        return;
       }
-      eyeRaf = requestAnimationFrame(renderFooterEyes);
+
+      pupilEls.forEach((pupil, idx) => {
+        if (!pupil || !eyeCenters[idx]) return;
+        const { cx, cy } = eyeCenters[idx];
+        const dx = pendingPointerX - cx;
+        const dy = pendingPointerY - cy;
+        const dist = Math.min(maxMove, Math.hypot(dx, dy) / 10);
+        const angle = Math.atan2(dy, dx);
+        const ox = Math.cos(angle) * dist;
+        const oy = Math.sin(angle) * dist;
+        pupil.style.transform = `translate3d(calc(-50% + ${ox.toFixed(1)}px), calc(-50% + ${oy.toFixed(1)}px), 0)`;
+      });
+
+      eyeRaf = requestAnimationFrame(renderEyes);
     }
 
-    eyeRaf = requestAnimationFrame(renderFooterEyes);
+    eyeRaf = requestAnimationFrame(renderEyes);
 
     function handleMouseMove(e: MouseEvent) {
       if (!isFooterVisible) return;
@@ -124,15 +126,15 @@ export default function FooterKokil() {
       pendingPointerY = e.clientY;
     }
 
+    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
     const blinkInterval = setInterval(() => {
       if (!isFooterVisible) return;
       eyeEls.forEach((eye) => eye.classList.add("blink"));
       setTimeout(() => {
         eyeEls.forEach((eye) => eye.classList.remove("blink"));
       }, 150);
-    }, 3200);
-
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    }, 4000);
 
     return () => {
       observer.disconnect();
@@ -145,7 +147,12 @@ export default function FooterKokil() {
 
   function scrollToTop(e: React.MouseEvent) {
     e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+    if (lenis) {
+      lenis.scrollTo(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }
 
   return (
@@ -158,21 +165,38 @@ export default function FooterKokil() {
             Let&rsquo;s build something <span>people understand.</span>
           </h2>
 
-          <div className="contact-row">
+          {/* Prominent, Intentional Contact Action */}
+          <div className="contact-action-zone">
             <a
               href="mailto:abolarintaye20@gmail.com"
-              className="contact-email"
+              className="contact-direct-btn"
+              aria-label="Direct email to abolarintaye20@gmail.com"
             >
-              abolarintaye20@gmail.com
+              <div className="contact-direct-content">
+                <span className="contact-direct-label">Direct Communication</span>
+                <span className="contact-direct-address">abolarintaye20@gmail.com</span>
+              </div>
+              <span className="contact-arrow-badge" aria-hidden="true">
+                <svg
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
             </a>
-            <span className="eyes-scene footer-eyes" aria-hidden="true">
-              <span className="eye">
-                <span className="pupil" />
-              </span>
-              <span className="eye">
-                <span className="pupil" />
-              </span>
-            </span>
+
+            <div className="contact-sub-actions">
+              <Link href="/contact" className="contact-form-link">
+                <span>Start Structured Project Brief &rarr;</span>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -206,6 +230,7 @@ export default function FooterKokil() {
         <div className="footer-links">
           <Link href="/work">Work</Link>
           <Link href="/about">About</Link>
+          <Link href="/codex">Codex</Link>
           <a
             href="https://linkedin.com/in/taye-abolarin"
             target="_blank"
