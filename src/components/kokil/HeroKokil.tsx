@@ -44,20 +44,11 @@ function setHeroRevealedState(revealed: boolean) {
 export default function HeroKokil() {
   const heroRef = useRef<HTMLElement>(null);
   const dotsGroupRef = useRef<SVGGElement>(null);
+
+  // Initialize revealed state strictly from saved session (returns true only if already completed in an earlier visit)
   const [isRevealed, setIsRevealed] = useState(() => getHeroRevealedState());
   const [hintHidden, setHintHidden] = useState(() => getHeroRevealedState());
   const hasCompletedRef = useRef(false);
-
-  const markRevealed = useCallback(() => {
-    hasCompletedRef.current = true;
-    setHeroRevealedState(true);
-    setIsRevealed(true);
-    setHintHidden(true);
-    const heroEl = heroRef.current;
-    if (heroEl) {
-      heroEl.classList.add("is-revealed");
-    }
-  }, []);
 
   const resetScratch = useCallback((e?: React.MouseEvent) => {
     if (e) {
@@ -90,7 +81,7 @@ export default function HeroKokil() {
     const dotsGroup = dotsGroupRef.current;
     if (!heroEl || !dotsGroup) return;
 
-    // Check saved session state on mount
+    // Check saved session state on mount: if visitor previously completed reveal in this session, show revealed
     const savedRevealed = getHeroRevealedState();
     if (savedRevealed) {
       hasCompletedRef.current = true;
@@ -169,22 +160,20 @@ export default function HeroKokil() {
       }, 150);
     }, 3200);
 
-    // ── Rub to reveal painted canvas ──
+    // ── Original Progressive Rub-to-Reveal ──
     const MAX_DOTS = 220; // Lightweight SVG tree that keeps scrolling silky smooth
     const MIN_DIST = 22;
     const BRUSH_RADIUS = 280;
     let lastX: number | null = null;
     let lastY: number | null = null;
 
+    // Track scratching extent to verify genuine completion of the interaction
     let dotCount = 0;
     let minX = Infinity;
     let maxX = -Infinity;
-    const touchedZones = new Set<string>();
 
     function addDot(clientX: number, clientY: number) {
       if (!heroEl || !dotsGroup || !isHeroVisible) return;
-      if (hasCompletedRef.current) return;
-
       const rect = heroEl.getBoundingClientRect();
       const x = clientX - rect.left;
       const y = clientY - rect.top;
@@ -211,26 +200,23 @@ export default function HeroKokil() {
         }
       }
 
-      // Track coverage to verify genuine completion of the reveal interaction
+      // Track extent of progressive scratching
       dotCount++;
       minX = Math.min(minX, x);
       maxX = Math.max(maxX, x);
 
-      // Divide hero into 6 broad grid zones (3 columns x 2 rows)
-      const col = Math.min(2, Math.floor((x / Math.max(1, rect.width)) * 3));
-      const row = Math.min(1, Math.floor((y / Math.max(1, rect.height)) * 2));
-      touchedZones.add(`${col}-${row}`);
-
-      // Substantial coverage requirements:
-      // 1. Scratched across >= 4 zones with >= 24 dots, OR
-      // 2. Sustained scratching producing >= 36 dots spanning across > 35% of the hero width
+      // Record completion state ONLY when the visitor has scratched a substantial proportion of the surface
+      // (at least 60 dots spanning >= 50% of the Hero width)
+      // NOTE: This does NOT automatically unveil the hero or alter the active scratch mask!
+      // The visitor continues scratching naturally with the original progressive reveal.
       const horizontalSpread = maxX - minX;
-      const isSubstantialCoverage =
-        (touchedZones.size >= 4 && dotCount >= 24) ||
-        (dotCount >= 36 && horizontalSpread > rect.width * 0.35);
-
-      if (isSubstantialCoverage && !hasCompletedRef.current) {
-        markRevealed();
+      if (
+        !hasCompletedRef.current &&
+        dotCount >= 60 &&
+        horizontalSpread >= rect.width * 0.5
+      ) {
+        hasCompletedRef.current = true;
+        setHeroRevealedState(true);
       }
     }
 
@@ -249,13 +235,11 @@ export default function HeroKokil() {
     }
 
     function onPointerMove(e: PointerEvent) {
-      if (hasCompletedRef.current) return;
       cancelAutoSweep();
       addDot(e.clientX, e.clientY);
     }
 
     function onTouchMove(e: TouchEvent) {
-      if (hasCompletedRef.current) return;
       cancelAutoSweep();
       if (e.touches[0]) {
         addDot(e.touches[0].clientX, e.touches[0].clientY);
@@ -271,7 +255,6 @@ export default function HeroKokil() {
     const isTouch = window.matchMedia("(hover: none)").matches;
     if (isTouch && !savedRevealed) {
       sweepTimeout = setTimeout(() => {
-        if (hasCompletedRef.current) return;
         const r = heroEl.getBoundingClientRect();
         const rows = Math.max(3, Math.ceil(r.height / 280));
         let step = 0;
@@ -280,7 +263,8 @@ export default function HeroKokil() {
           if (step > totalSteps) {
             if (sweepInterval) clearInterval(sweepInterval);
             if (!hasCompletedRef.current) {
-              markRevealed();
+              hasCompletedRef.current = true;
+              setHeroRevealedState(true);
             }
             return;
           }
@@ -296,7 +280,7 @@ export default function HeroKokil() {
 
     const handleThemeChange = () => {
       if (getHeroRevealedState()) {
-        // Maintain revealed state across theme changes
+        // Maintain revealed state across theme switches
         return;
       }
       cancelAutoSweep();
@@ -311,7 +295,6 @@ export default function HeroKokil() {
       dotCount = 0;
       minX = Infinity;
       maxX = -Infinity;
-      touchedZones.clear();
     };
 
     window.addEventListener("cold-designer-theme-change", handleThemeChange);
@@ -332,7 +315,7 @@ export default function HeroKokil() {
       heroEl.removeEventListener("pointerleave", onPointerLeave);
       clearInterval(blinkInterval);
     };
-  }, [markRevealed]);
+  }, []);
 
   return (
     <section ref={heroRef} id="hero" className={isRevealed ? "is-revealed" : ""}>
