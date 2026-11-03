@@ -38,6 +38,14 @@
     --hero-invert-ink-line: rgba(255, 255, 255, 0.14);
     --hero-invert-btn-bg: #FDFDFD;
     --hero-invert-btn-fg: #090b0f;
+    --hero-eye-bg: #FDFDFD;
+    --hero-eye-border: #111111;
+    --hero-eye-pupil: #090b0f;
+    --hero-eye-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    --hero-label-bg: #FDFDFD;
+    --hero-label-fg: #090b0f;
+    --hero-label-border: rgba(0, 0, 0, 0.14);
+    --hero-label-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   }
 
   html[data-theme="light"],
@@ -76,6 +84,14 @@
     --hero-invert-ink-line: rgba(18, 22, 30, 0.14);
     --hero-invert-btn-bg: #11141b;
     --hero-invert-btn-fg: #FDFDFD;
+    --hero-eye-bg: #FDFDFD;
+    --hero-eye-border: #FDFDFD;
+    --hero-eye-pupil: #090b0f;
+    --hero-eye-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9), 0 8px 24px rgba(0, 0, 0, 0.6);
+    --hero-label-bg: #11141b;
+    --hero-label-fg: #FDFDFD;
+    --hero-label-border: rgba(255, 255, 255, 0.3);
+    --hero-label-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   }
 
   * {
