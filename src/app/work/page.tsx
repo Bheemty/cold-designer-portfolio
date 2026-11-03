@@ -626,10 +626,10 @@ export default function WorkArchivePage() {
         <div className="mt-24 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono-code text-xs">
           <div>
             <span className="text-[#a9ddf0] uppercase font-semibold block mb-1">
-              Design Systems &amp; Product Architecture
+              Product Design &amp; Systems Architecture
             </span>
             <p className="text-[#89919d] max-w-xl">
-              Available for select contract product design engagements, conversational triage architectures, and multi-platform design systems governance.
+              Open for professional dialogue, design systems collaboration, and technical consultations. Direct messages receive personal responses.
             </p>
           </div>
           <a

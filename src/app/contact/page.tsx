@@ -78,7 +78,7 @@ export default function ContactPage() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            Available for select product design engagements, conversational UX architecture, and design systems consulting.
+            Open for thoughtful product discussions, design systems architecture, and professional dialogue.
           </p>
         </div>
 

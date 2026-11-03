@@ -104,7 +104,7 @@ export default function AboutPage() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
-            UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Specialized in conversational healthcare gateways, intercity mobility platforms, and high-fidelity interactive web systems.
+            UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Focused on creating structured, intuitive digital products across conversational healthcare gateways, regional transit platforms, and interactive web systems.
           </p>
         </header>
 
@@ -129,7 +129,7 @@ export default function AboutPage() {
                 {/* Frame Header */}
                 <div className="flex items-center justify-between border-b border-white/[0.08] pb-3.5 font-mono-code text-[11px] text-[#89919d]">
                   <span className="text-[#a9ddf0] uppercase tracking-wider font-semibold">
-                    ARCHIVAL PORTRAIT // VERIFIED IDENTITY
+                    IDENTITY MONOGRAPH // PORTRAIT
                   </span>
                   <span>REF. CD-01</span>
                 </div>
@@ -165,32 +165,32 @@ export default function AboutPage() {
                 <div className="space-y-4 pt-1">
                   <div>
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="h-2 w-2 rounded-full bg-[#10b981] animate-pulse" />
-                      <span className="font-mono-code text-[11px] text-[#10b981] tracking-wider uppercase font-semibold">
-                        Available for Select Commissions
+                      <span className="h-2 w-2 rounded-full bg-[#a9ddf0]" />
+                      <span className="font-mono-code text-[11px] text-[#a9ddf0] tracking-wider uppercase font-semibold">
+                        Product Designer &bull; Cold Designer
                       </span>
                     </div>
                     <h3 className="font-display text-2xl font-bold text-[#f2f1ec] tracking-tight">
                       Taye Abolarin
                     </h3>
                     <p className="font-mono-code text-xs text-[#89919d] mt-0.5">
-                      Product Designer &bull; Cold Designer Studio
+                      Independent Digital Product Practice
                     </p>
                   </div>
 
                   {/* Frame Specifications Ledger */}
                   <div className="border-t border-white/[0.08] pt-3.5 font-mono-code text-[11px] text-[#89919d] space-y-1.5">
                     <div className="flex justify-between">
-                      <span>SPECIALIZATION:</span>
-                      <span className="text-[#f2f1ec]">Conversational UX &bull; Mobility</span>
+                      <span>DISCIPLINE:</span>
+                      <span className="text-[#f2f1ec]">Product / UI/UX Systems</span>
                     </div>
                     <div className="flex justify-between">
                       <span>LOCATION:</span>
                       <span className="text-[#f2f1ec]">Lagos, NG (Global Remote)</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>BENCHMARK:</span>
-                      <span className="text-[#a9ddf0]">kokiltamta.in standard</span>
+                      <span>FOCUS:</span>
+                      <span className="text-[#f2f1ec]">Digital Ergonomics &amp; Web Systems</span>
                     </div>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ export default function AboutPage() {
                 &ldquo;An interface should feel obvious, not because it is trivial to design, but because every layer of confusion has been stripped away.&rdquo;
               </blockquote>
               <p className="text-base text-[#89919d] font-light leading-relaxed">
-                Operating at the intersection of product systems, conversational flows, and production frontend code. Based in Lagos, designing for global users across mobile, web, and spatial platforms.
+                Operating at the intersection of user research, conversational product architecture, and production frontend code. Based in Lagos, designing for real-world usability across mobile and web platforms.
               </p>
             </div>
 
@@ -258,13 +258,13 @@ export default function AboutPage() {
 
               <div className="space-y-5 text-lg text-[#89919d] font-light leading-relaxed">
                 <p>
-                  In a digital landscape saturated with decorative fluff, unnecessary modal popups, and aggressive animations that distract from core intent, <strong className="text-[#f2f1ec] font-normal">&ldquo;Cold&rdquo;</strong> represents an intentional commitment to clarity.
+                  In a digital landscape filled with over-stimulating decoration, intrusive banners, and generic templates, <strong className="text-[#f2f1ec] font-normal">&ldquo;Cold&rdquo;</strong> represents an intentional commitment to clarity.
                 </p>
                 <p>
-                  Cold is not emotional detachment. Cold is the temperature of clear thinking. It is the disciplined elimination of non-essential ornamentation until an interface feels effortless, functional, and grounded in human reality.
+                  Cold is not emotional detachment. Cold is the temperature of clear thinking. It is the disciplined elimination of non-essential noise until an interface feels effortless, functional, and grounded in human reality.
                 </p>
                 <p>
-                  Whether architecting a conversational healthcare triage system connecting rural patients to licensed doctors over WhatsApp, or structuring the arrival sequence of an architectural concert hall, the doctrine remains identical: build systems that respect human attention, perform reliably under stress, and withstand real-world conditions.
+                  Whether designing a conversational healthcare triage system connecting patients to licensed physicians over WhatsApp, or structuring the arrival sequence of an architectural concert hall, the goal remains identical: build products that respect the user&apos;s time, attention, and cognitive focus.
                 </p>
               </div>
             </section>
@@ -272,11 +272,11 @@ export default function AboutPage() {
             {/* Experience Timeline */}
             <section className="border-t border-white/[0.08] pt-14 space-y-8">
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
-                <span>02 // VERIFIED ENGAGEMENTS</span>
+                <span>02 // PROFESSIONAL EXPERIENCE</span>
               </div>
 
               <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
-                Production &amp; Employment History
+                Verified Experience
               </h2>
 
               <div className="space-y-6">
@@ -387,10 +387,10 @@ export default function AboutPage() {
         <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs shadow-2xl">
           <div className="max-w-2xl">
             <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
-              Dialogue &amp; Commission Inquiries
+              Direct Dialogue &amp; Inquiries
             </span>
             <p className="text-base text-[#89919d] font-sans font-light leading-relaxed">
-              Open for select contract product design engagements, conversational triage architectures, and design systems leadership. Direct inquiries receive personal responses.
+              Open for thoughtful product discussions, design systems architecture, and professional inquiries. Direct messages receive personal responses.
             </p>
           </div>
 

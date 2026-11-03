@@ -90,7 +90,7 @@ export default function Hero() {
           <span className="text-white/20 hidden sm:inline">•</span>
           <div className="flex items-center gap-2 text-[#a9ddf0] font-medium">
             <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
-            <span>Available for Select Commissions</span>
+            <span>Product Design • Cold Designer</span>
           </div>
         </div>
       </motion.div>
