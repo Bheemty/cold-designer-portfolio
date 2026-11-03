@@ -201,7 +201,7 @@ export default function AboutPage() {
                 href="/Taye Abolarin-Product Designer-Resume.pdf"
                 download="Taye Abolarin-Product Designer-Resume.pdf"
                 onClick={() => sound.playClick()}
-                className="w-full flex items-center justify-between rounded-2xl border border-white/[0.1] bg-[#11141b] p-5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:bg-[#151922] transition-all cursor-pointer group shadow-xl"
+                className="w-full flex items-center justify-between rounded-2xl border border-white/[0.1] bg-[#11141b] p-5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:bg-[#151922] active:scale-[0.985] transition-all cursor-pointer group shadow-xl"
                 aria-label="Download Taye Abolarin Product Designer Resume PDF"
               >
                 <div className="flex flex-col text-left">

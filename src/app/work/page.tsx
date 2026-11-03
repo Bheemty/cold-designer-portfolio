@@ -257,7 +257,7 @@ export default function WorkArchivePage() {
                     return (
                       <article
                         key={p.slug}
-                        className="group rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 lg:p-12 hover:border-[#a9ddf0]/30 transition-all duration-300"
+                        className="group rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 lg:p-12 hover:border-[#a9ddf0]/40 hover:shadow-2xl active:scale-[0.995] transition-all duration-300"
                       >
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
                           {/* Media Preview Column */}

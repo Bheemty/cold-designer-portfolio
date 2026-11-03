@@ -371,7 +371,7 @@ export default async function CaseStudyPage({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <Link
               href={`/work/${prevProject.slug}`}
-              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 hover:border-[#a9ddf0]/30 transition-colors"
+              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 hover:border-[#a9ddf0]/40 hover:shadow-xl active:scale-[0.99] transition-all"
             >
               <span className="font-mono-code text-xs text-[#89919d] block mb-2">
                 ← PREVIOUS PROJECT
@@ -384,7 +384,7 @@ export default async function CaseStudyPage({
 
             <Link
               href={`/work/${nextProject.slug}`}
-              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 text-right hover:border-[#a9ddf0]/30 transition-colors"
+              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 text-right hover:border-[#a9ddf0]/40 hover:shadow-xl active:scale-[0.99] transition-all"
             >
               <span className="font-mono-code text-xs text-[#89919d] block mb-2">
                 NEXT PROJECT →

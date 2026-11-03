@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { sound } from "@/lib/sounds";
 
 interface JournalSheet {
@@ -98,6 +100,49 @@ export default function NotebookKokil() {
   const TURN_DURATION = 850;
   const STAGGER = 180;
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const section = sectionRef.current;
+    const title = titleRef.current;
+    const wrap = wrapRef.current;
+    if (!section || !title || !wrap) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top 80%",
+        toggleActions: "play reverse play reverse",
+      },
+    });
+
+    tl.fromTo(
+      title,
+      { y: 22, opacity: 0.25 },
+      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }
+    );
+
+    tl.fromTo(
+      wrap,
+      { y: 32, opacity: 0.2 },
+      { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" },
+      "-=0.25"
+    );
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
+  }, []);
+
   useEffect(() => {
     return () => {
       timersRef.current.forEach((t) => clearTimeout(t));
@@ -141,15 +186,15 @@ export default function NotebookKokil() {
   }
 
   return (
-    <section id="playground" className="journal-codex-section" aria-labelledby="playgroundTitle">
+    <section ref={sectionRef} id="playground" className="journal-codex-section" aria-labelledby="playgroundTitle">
       {/* Invisible anchor for #codex backward compatibility */}
       <span id="codex" className="sr-only" tabIndex={-1} aria-hidden="true" />
 
-      <h2 className="mp-title" id="playgroundTitle">
+      <h2 ref={titleRef} className="mp-title" id="playgroundTitle">
         Creative Journal &amp; Codex
       </h2>
 
-      <div className="nb-wrap">
+      <div ref={wrapRef} className="nb-wrap">
         <div ref={nbRef} className="nb" id="notebook">
           {/* Hanging Bookmark Ribbons */}
           <div className="nb-ribbons" aria-hidden="true">

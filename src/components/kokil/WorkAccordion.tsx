@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface ProjectItem {
   id: string;
@@ -78,6 +80,62 @@ export default function WorkAccordion() {
   const [activeId, setActiveId] = useState<string>("medesy");
   const router = useRouter();
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const accRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const section = sectionRef.current;
+    const header = headerRef.current;
+    const acc = accRef.current;
+    const cta = ctaRef.current;
+    if (!section || !header || !acc) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const panels = Array.from(acc.children) as HTMLElement[];
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: section,
+        start: "top 82%",
+        toggleActions: "play reverse play reverse",
+      },
+    });
+
+    tl.fromTo(
+      header,
+      { y: 22, opacity: 0.25 },
+      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }
+    );
+
+    tl.fromTo(
+      panels,
+      { y: 28, opacity: 0.2, scale: 0.99 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.05, ease: "power2.out" },
+      "-=0.25"
+    );
+
+    if (cta) {
+      tl.fromTo(
+        cta,
+        { y: 18, opacity: 0.2 },
+        { y: 0, opacity: 1, duration: 0.4, ease: "power2.out" },
+        "-=0.2"
+      );
+    }
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
+  }, []);
+
   // Instant hover response with zero artificial delay
   const handlePointerEnter = useCallback((id: string) => {
     setActiveId(id);
@@ -100,14 +158,14 @@ export default function WorkAccordion() {
   }
 
   return (
-    <section id="work">
+    <section ref={sectionRef} id="work">
       {/* Section Header */}
-      <div className="work-header-row">
+      <div ref={headerRef} className="work-header-row">
         <p className="intro-label">(02) &mdash; Selected work</p>
       </div>
 
       {/* Horizontal Accordion Gallery */}
-      <div className="acc" id="workAcc">
+      <div ref={accRef} className="acc" id="workAcc">
         {PROJECTS.map((project, idx) => {
           const isOpen = activeId === project.id;
           return (
@@ -127,13 +185,13 @@ export default function WorkAccordion() {
                 if (e.key === "Enter") router.push(project.href);
               }}
             >
-              {/* Collapsed Peek State (hardware accelerated, centered label, dark contrast overlay) */}
+              {/* Collapsed Peek State */}
               <div className="acc-peek" aria-hidden="true" />
               <span className="acc-peek-label" aria-hidden="true">
                 {project.shortLabel}
               </span>
 
-              {/* Expanded Card Body: structured tiers prevent any clipping or overflow */}
+              {/* Expanded Card Body */}
               <div className="acc-body">
                 <div className="acc-media">
                   <div
@@ -184,8 +242,8 @@ export default function WorkAccordion() {
         })}
       </div>
 
-      {/* Prominent, Clearly Visible "Explore All Work" CTA */}
-      <div className="work-closing-cta">
+      {/* Prominent "Explore All Work" CTA */}
+      <div ref={ctaRef} className="work-closing-cta">
         <Link href="/work" className="work-explore-btn" aria-label="Explore All Work in full directory">
           <span>Explore All Work</span>
           <span className="work-explore-arrow" aria-hidden="true">

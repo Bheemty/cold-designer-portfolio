@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 interface ContactLink {
   name: string;
@@ -61,6 +63,58 @@ const CONTACTS: ContactLink[] = [
 
 export default function FooterKokil() {
   const footerRef = useRef<HTMLElement>(null);
+  const headerRef = useRef<HTMLDivElement>(null);
+  const actionRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    gsap.registerPlugin(ScrollTrigger);
+
+    const footer = footerRef.current;
+    const header = headerRef.current;
+    const action = actionRef.current;
+    const list = listRef.current;
+    if (!footer || !header || !action || !list) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
+    const listItems = Array.from(list.children) as HTMLElement[];
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: footer,
+        start: "top 80%",
+        toggleActions: "play reverse play reverse",
+      },
+    });
+
+    tl.fromTo(
+      header,
+      { y: 24, opacity: 0.25 },
+      { y: 0, opacity: 1, duration: 0.5, ease: "power2.out" }
+    );
+
+    tl.fromTo(
+      action,
+      { y: 24, opacity: 0.2 },
+      { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" },
+      "-=0.25"
+    );
+
+    tl.fromTo(
+      listItems,
+      { y: 20, opacity: 0.2 },
+      { y: 0, opacity: 1, duration: 0.45, stagger: 0.06, ease: "power2.out" },
+      "-=0.2"
+    );
+
+    return () => {
+      tl.scrollTrigger?.kill();
+      tl.kill();
+    };
+  }, []);
 
   useEffect(() => {
     const footerEl = footerRef.current;
@@ -157,16 +211,17 @@ export default function FooterKokil() {
 
   return (
     <footer ref={footerRef} id="contact">
-      <p className="intro-label">(03) &mdash; Contact</p>
-
       <div className="contact-grid">
         <div>
-          <h2 className="contact-title">
-            Let&rsquo;s build something <span>people understand.</span>
-          </h2>
+          <div ref={headerRef}>
+            <p className="intro-label">(03) &mdash; Contact</p>
+            <h2 className="contact-title">
+              Let&rsquo;s build something <span>people understand.</span>
+            </h2>
+          </div>
 
           {/* Prominent, Intentional Contact Action */}
-          <div className="contact-action-zone">
+          <div ref={actionRef} className="contact-action-zone">
             <a
               href="mailto:abolarintaye20@gmail.com"
               className="contact-direct-btn"
@@ -213,7 +268,7 @@ export default function FooterKokil() {
           </div>
         </div>
 
-        <ul className="contact-list">
+        <ul ref={listRef} className="contact-list">
           {CONTACTS.map((c) => (
             <li key={c.name}>
               <a

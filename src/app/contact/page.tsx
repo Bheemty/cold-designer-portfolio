@@ -93,7 +93,7 @@ export default function ContactPage() {
               </div>
               <button
                 onClick={handleCopyEmail}
-                className="w-full flex items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.03] py-2.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
+                className="w-full flex items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.03] py-2.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] active:scale-[0.98] transition-all"
               >
                 {copiedEmail ? (
                   <>

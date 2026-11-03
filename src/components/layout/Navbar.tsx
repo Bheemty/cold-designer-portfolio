@@ -23,6 +23,17 @@ const NAV_ITEMS: NavItem[] = [
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // Track scroll position to enhance frosted glass density when content moves behind
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 15);
+    };
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   // Close menu automatically whenever route changes (covers forward/back browser navigation)
   useEffect(() => {
@@ -90,7 +101,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="kokil-nav" aria-label="Main Navigation">
+      <nav className={`kokil-nav ${isScrolled ? "is-scrolled" : ""}`} aria-label="Main Navigation">
         {/* Cold Designer Avatar Logo */}
         <Link
           href="/"
