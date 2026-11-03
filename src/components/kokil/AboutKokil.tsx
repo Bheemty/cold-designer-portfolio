@@ -2,31 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const ABOUT_LINES = [
-  {
-    prefix: "I design digital products that make complex systems feel ",
-    emphasis: "obvious",
-    suffix: ".",
-  },
-  {
-    prefix: "Less decorative clutter, more functional ",
-    emphasis: "clarity",
-    suffix: " \u2014",
-  },
-  {
-    prefix: "translating messy workflows into structured interfaces,",
-    emphasis: null,
-    suffix: "",
-  },
-  {
-    prefix: "disciplined design systems, and rapid working prototypes.",
-    emphasis: null,
-    suffix: "",
-  },
-];
+const ABOUT_TEXT =
+  "I design digital products that make complex systems feel obvious. Less decorative clutter, more functional clarity — translating messy workflows into structured interfaces, disciplined design systems, and rapid working prototypes.";
 
 const SKILLS = [
   "Figma",
@@ -40,172 +18,128 @@ const SKILLS = [
 
 export default function AboutKokil() {
   const containerRef = useRef<HTMLElement>(null);
-  const labelRef = useRef<HTMLParagraphElement>(null);
-  const linesRef = useRef<Array<HTMLSpanElement | null>>([]);
-  const skillsListRef = useRef<HTMLUListElement>(null);
-  const moreRef = useRef<HTMLAnchorElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    const textEl = textRef.current;
+    if (!textEl) return;
 
-    const container = containerRef.current;
-    const label = labelRef.current;
-    const skillsList = skillsListRef.current;
-    const moreLink = moreRef.current;
-    const lines = linesRef.current.filter((el): el is HTMLSpanElement => el !== null);
+    const words = Array.from(textEl.querySelectorAll<HTMLSpanElement>(".word"));
+    if (words.length === 0) return;
 
-    if (!container || !label || !skillsList || !moreLink || lines.length === 0) return;
-
-    // Respect reduced-motion preferences
+    // Accessibility check: instantly reveal all words if user prefers reduced motion
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
-      gsap.set([label, ...lines, ...Array.from(skillsList.children), moreLink], {
-        opacity: 1,
-        y: 0,
-        clearProps: "all",
-      });
+      words.forEach((w) => w.classList.add("revealed"));
       return;
     }
 
-    const skillsItems = Array.from(skillsList.children) as HTMLElement[];
+    let lastRevealCount = -1;
+    let ticking = false;
 
-    // Build the scroll-connected scrubbed animation timeline
-    // Exactly matches Kokil Tamta reference: progressive illumination and subtle vertical rise
-    // linked directly to scroll velocity, naturally reversing on upward scroll and replaying on re-entry.
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: container,
-        start: "top 82%",
-        end: "top 30%",
-        scrub: 0.65, // Responsive, silky smooth catch-up with Lenis
-        invalidateOnRefresh: true,
-      },
-      defaults: {
-        ease: "power2.out",
-      },
-    });
+    // Kokil Tamta exact scroll reveal formula:
+    // When the top of the text enters from the bottom of viewport (start = vh * 0.9),
+    // words progressively unblur and illuminate as scroll continues towards upper-center (end = vh * 0.35).
+    // Scrolling upwards naturally reverses the unblur wave back into blurred state.
+    const update = () => {
+      ticking = false;
+      if (!textEl) return;
 
-    // 1. (01) — About label glides in
-    tl.fromTo(
-      label,
-      { y: 14, opacity: 0.25 },
-      { y: 0, opacity: 1, duration: 0.25 },
-      0
-    );
-
-    // 2. Line 1: Mission statement
-    tl.fromTo(
-      lines[0],
-      { y: 24, opacity: 0.22 },
-      { y: 0, opacity: 1, duration: 0.38 },
-      0.04
-    );
-
-    // 3. Line 2: Philosophy
-    tl.fromTo(
-      lines[1],
-      { y: 24, opacity: 0.22 },
-      { y: 0, opacity: 1, duration: 0.38 },
-      0.22
-    );
-
-    // 4. Line 3: Execution
-    tl.fromTo(
-      lines[2],
-      { y: 24, opacity: 0.22 },
-      { y: 0, opacity: 1, duration: 0.38 },
-      0.42
-    );
-
-    // 5. Line 4: Output
-    tl.fromTo(
-      lines[3],
-      { y: 24, opacity: 0.22 },
-      { y: 0, opacity: 1, duration: 0.38 },
-      0.62
-    );
-
-    // 6. Skills pills cascade
-    tl.fromTo(
-      skillsItems,
-      { y: 16, opacity: 0.2 },
-      { y: 0, opacity: 1, duration: 0.3, stagger: 0.025 },
-      0.75
-    );
-
-    // 7. "Read Design Monograph" link
-    tl.fromTo(
-      moreLink,
-      { y: 16, opacity: 0.2 },
-      { y: 0, opacity: 1, duration: 0.3 },
-      0.82
-    );
-
-    // Ensure clean reset when at top of Hero
-    const handleScrollZeroCheck = () => {
+      // Clean 0-reset guarantee whenever at the top of Hero
       if (window.scrollY < 30) {
-        if (tl.progress() > 0) {
-          tl.progress(0);
+        if (lastRevealCount !== 0) {
+          lastRevealCount = 0;
+          words.forEach((w) => w.classList.remove("revealed"));
+        }
+        return;
+      }
+
+      const rect = textEl.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.9;
+      const end = vh * 0.35;
+      let progress = (start - rect.top) / (start - end);
+      progress = Math.min(1, Math.max(0, progress));
+      const revealCount = Math.round(progress * words.length);
+
+      if (revealCount !== lastRevealCount) {
+        lastRevealCount = revealCount;
+        for (let i = 0; i < words.length; i++) {
+          if (i < revealCount) {
+            words[i].classList.add("revealed");
+          } else {
+            words[i].classList.remove("revealed");
+          }
         }
       }
     };
-    window.addEventListener("scroll", handleScrollZeroCheck, { passive: true });
 
-    // Connect Lenis smooth scrolling updates to ScrollTrigger
-    const lenis = (window as unknown as { __lenis?: { on: (event: string, cb: () => void) => void; off: (event: string, cb: () => void) => void } }).__lenis;
-    const onLenisScroll = () => {
-      ScrollTrigger.update();
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(update);
+      }
     };
+
+    // Run initial update on mount (handles page refresh when already scrolled down)
+    update();
+
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+
+    // Synchronize with Lenis smooth scrolling for frame-perfect momentum sync
+    const lenis = (window as unknown as {
+      __lenis?: {
+        on: (event: string, cb: () => void) => void;
+        off: (event: string, cb: () => void) => void;
+      };
+    }).__lenis;
+
     if (lenis?.on) {
-      lenis.on("scroll", onLenisScroll);
+      lenis.on("scroll", update);
     }
 
-    const handleResize = () => {
-      ScrollTrigger.refresh();
-    };
-    window.addEventListener("resize", handleResize, { passive: true });
-
     return () => {
-      tl.scrollTrigger?.kill();
-      tl.kill();
-      window.removeEventListener("scroll", handleScrollZeroCheck);
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", update);
       if (lenis?.off) {
-        lenis.off("scroll", onLenisScroll);
+        lenis.off("scroll", update);
       }
     };
   }, []);
 
+  const tokens = ABOUT_TEXT.split(/(\s+)/);
+
   return (
     <section ref={containerRef} id="intro">
-      <p ref={labelRef} className="intro-label">
-        (01) &mdash; About
-      </p>
-      <p className="intro-text">
-        {ABOUT_LINES.map((line, idx) => (
-          <span key={idx} className="intro-line">
+      <p className="intro-label">(01) &mdash; About</p>
+      <p ref={textRef} className="intro-text">
+        {tokens.map((token, idx) => {
+          if (/^\s+$/.test(token)) {
+            return token;
+          }
+          const isEmphasis =
+            token.toLowerCase().includes("obvious") ||
+            token.toLowerCase().includes("clarity");
+          return (
             <span
-              ref={(el) => {
-                linesRef.current[idx] = el;
-              }}
-              className="intro-line-inner"
+              key={idx}
+              className={`word ${isEmphasis ? "emphasis" : ""}`}
             >
-              {line.prefix}
-              {line.emphasis && <span className="emphasis">{line.emphasis}</span>}
-              {line.suffix}
+              {token}
             </span>
-          </span>
-        ))}
+          );
+        })}
       </p>
 
       <div className="intro-footer">
-        <ul ref={skillsListRef} className="intro-skills">
+        <ul className="intro-skills">
           {SKILLS.map((skill) => (
             <li key={skill}>{skill}</li>
           ))}
         </ul>
 
-        <Link ref={moreRef} href="/about" className="intro-more">
+        <Link href="/about" className="intro-more">
           <span>Read Design Monograph</span>
           <svg
             viewBox="0 0 24 24"

@@ -467,19 +467,25 @@
   letter-spacing: -0.015em;
   color: #FDFDFD;
 }
-.intro-line {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em;
+.intro-text .word {
+  display: inline-block;
+  color: rgba(253, 253, 253, 0.25);
+  filter: blur(4px);
+  transform: translateZ(0);
+  will-change: filter, color;
+  transition: color 0.35s ease, filter 0.35s ease;
 }
-.intro-line-inner {
-  display: block;
-  will-change: transform, opacity;
+.intro-text .word.revealed {
+  color: #FDFDFD;
+  filter: blur(0);
 }
-.intro-text .emphasis {
-  color: #a9ddf0;
+.intro-text .word.emphasis {
+  color: rgba(169, 221, 240, 0.32);
   font-style: normal;
-  display: inline;
+}
+.intro-text .word.emphasis.revealed {
+  color: #a9ddf0;
+  filter: blur(0);
 }
 .intro-footer {
   display: flex;
@@ -533,7 +539,8 @@
   #intro { padding: 90px clamp(20px, 4vw, 32px) 70px; }
   .intro-skills li { font-size: 14px; padding: 10px 16px; }
   .intro-text { font-size: 26px; }
-  .intro-text .word { filter: none !important; }
+  .intro-text .word { filter: blur(3px); }
+  .intro-text .word.revealed { filter: blur(0); }
 }
 
 /* ── SELECTED WORK: HORIZONTAL ACCORDION ── */
@@ -2144,8 +2151,20 @@ html[data-theme="light"] .intro-label {
 html[data-theme="light"] .intro-text {
   color: #11141b;
 }
-html[data-theme="light"] .intro-text .emphasis {
+html[data-theme="light"] .intro-text .word {
+  color: rgba(17, 20, 27, 0.22);
+  filter: blur(4px);
+}
+html[data-theme="light"] .intro-text .word.revealed {
+  color: #11141b;
+  filter: blur(0);
+}
+html[data-theme="light"] .intro-text .word.emphasis {
+  color: rgba(2, 122, 158, 0.32);
+}
+html[data-theme="light"] .intro-text .word.emphasis.revealed {
   color: #027a9e;
+  filter: blur(0);
 }
 html[data-theme="light"] .intro-skills li {
   background: #FDFDFD;
@@ -2344,10 +2363,24 @@ html[data-theme="light"] .footer-top:hover {
 
 @media (prefers-reduced-motion: reduce) {
   .intro-label,
-  .intro-line-inner,
   .intro-skills li,
   .intro-more {
     transform: none !important;
     opacity: 1 !important;
+  }
+  .intro-text .word {
+    filter: none !important;
+    opacity: 1 !important;
+    color: #FDFDFD !important;
+    transition: none !important;
+  }
+  html[data-theme="light"] .intro-text .word {
+    color: #11141b !important;
+  }
+  .intro-text .word.emphasis {
+    color: #a9ddf0 !important;
+  }
+  html[data-theme="light"] .intro-text .word.emphasis {
+    color: #027a9e !important;
   }
 }
