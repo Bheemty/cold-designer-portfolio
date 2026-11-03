@@ -1,18 +1,81 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
+  :root,
+  html[data-theme="dark"],
+  .dark {
+    color-scheme: dark;
+    --bg-primary: #090b0f;
     --bg-dark: #090b0f;
     --bg-surface: #11141b;
     --bg-card: #161a23;
     --bg-card-hover: #1d222e;
+    --bg-elevated: #1f2533;
     --accent: #a9ddf0;
+    --accent-rgb: 169, 221, 240;
     --accent-glow: rgba(169, 221, 240, 0.22);
+    --accent-dim: rgba(169, 221, 240, 0.12);
+    --accent-text: #a9ddf0;
     --text-primary: #f2f1ec;
     --text-secondary: #89919d;
     --text-muted: #565d6b;
     --border-subtle: rgba(242, 241, 236, 0.08);
+    --border-medium: rgba(242, 241, 236, 0.14);
+    --border-strong: rgba(242, 241, 236, 0.24);
     --border-bright: rgba(169, 221, 240, 0.3);
+    --border-accent: rgba(169, 221, 240, 0.3);
+    --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35);
+    --shadow-elevated: 0 20px 48px rgba(0, 0, 0, 0.5);
+    --btn-primary-bg: #ffffff;
+    --btn-primary-fg: #090b0f;
+    --btn-secondary-bg: rgba(255, 255, 255, 0.03);
+    --btn-secondary-border: rgba(255, 255, 255, 0.12);
+    --btn-secondary-fg: #f2f1ec;
+    --hero-bg: #f7f7f5;
+    --hero-paint-bg: #090b0f;
+    --hero-invert-ink: #ffffff;
+    --hero-invert-ink-dim: #a3a3a3;
+    --hero-invert-ink-line: rgba(255, 255, 255, 0.14);
+    --hero-invert-btn-bg: #ffffff;
+    --hero-invert-btn-fg: #090b0f;
+  }
+
+  html[data-theme="light"],
+  .theme-light {
+    color-scheme: light;
+    --bg-primary: #f8f7f4;
+    --bg-dark: #f8f7f4;
+    --bg-surface: #eeece5;
+    --bg-card: #ffffff;
+    --bg-card-hover: #fcfbf9;
+    --bg-elevated: #ffffff;
+    --accent: #027a9e;
+    --accent-rgb: 2, 122, 158;
+    --accent-glow: rgba(2, 122, 158, 0.14);
+    --accent-dim: rgba(2, 122, 158, 0.08);
+    --accent-text: #027a9e;
+    --text-primary: #11141b;
+    --text-secondary: #4d5462;
+    --text-muted: #788090;
+    --border-subtle: rgba(18, 22, 30, 0.08);
+    --border-medium: rgba(18, 22, 30, 0.14);
+    --border-strong: rgba(18, 22, 30, 0.22);
+    --border-bright: rgba(2, 122, 158, 0.35);
+    --border-accent: rgba(2, 122, 158, 0.3);
+    --shadow-card: 0 8px 30px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.04);
+    --shadow-elevated: 0 20px 48px rgba(18, 22, 30, 0.10), 0 4px 12px rgba(18, 22, 30, 0.05);
+    --btn-primary-bg: #11141b;
+    --btn-primary-fg: #ffffff;
+    --btn-secondary-bg: rgba(18, 22, 30, 0.035);
+    --btn-secondary-border: rgba(18, 22, 30, 0.14);
+    --btn-secondary-fg: #11141b;
+    --hero-bg: #12151c;
+    --hero-paint-bg: #f8f7f4;
+    --hero-invert-ink: #11141b;
+    --hero-invert-ink-dim: #4d5462;
+    --hero-invert-ink-line: rgba(18, 22, 30, 0.14);
+    --hero-invert-btn-bg: #11141b;
+    --hero-invert-btn-fg: #ffffff;
   }
 
   * {
@@ -20,13 +83,13 @@
   }
 
   html {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     scroll-behavior: auto; /* Managed by Lenis */
   }
 
   body {
-    background-color: var(--bg-dark);
+    background-color: var(--bg-primary);
     color: var(--text-primary);
     overflow-x: hidden;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
@@ -36,7 +99,20 @@
 
   ::selection {
     background-color: var(--accent);
-    color: #090b0f;
+    color: #ffffff;
+  }
+}
+
+/* Smooth, restrained theme switching transition */
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transitioning,
+  html.theme-transitioning *,
+  html.theme-transitioning *::before,
+  html.theme-transitioning *::after {
+    transition: background-color 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                border-color 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                color 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1) !important;
   }
 }
 
@@ -84,7 +160,7 @@
 
 /* Text stroke for dramatic editorial typography */
 .text-stroke-accent {
-  -webkit-text-stroke: 1.5px rgba(169, 221, 240, 0.7);
+  -webkit-text-stroke: 1.5px var(--accent);
   color: transparent;
 }
 
@@ -119,7 +195,7 @@
   height: auto;
   padding: 4px 12px;
   border-radius: 999px;
-  background-color: #a9ddf0;
+  background-color: var(--accent);
   border-color: transparent;
 }
 .cursor-ring .cursor-text {
@@ -129,4 +205,197 @@
   color: #090b0f;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   GLOBAL LIGHT THEME SYSTEM (SCOPED TO html[data-theme="light"])
+   ───────────────────────────────────────────────────────────── */
+
+html[data-theme="light"] body {
+  background-color: #f8f7f4 !important;
+  color: #11141b !important;
+}
+
+html[data-theme="light"] main {
+  background-color: #f8f7f4 !important;
+  color: #11141b !important;
+}
+
+/* Canvas background override */
+html[data-theme="light"] .bg-\[\#090b0f\] {
+  background-color: #f8f7f4 !important;
+}
+
+/* Primary surface & cards */
+html[data-theme="light"] .bg-\[\#11141b\] {
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 32px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.03);
+}
+
+/* Secondary & elevated cards */
+html[data-theme="light"] .bg-\[\#161a23\],
+html[data-theme="light"] .bg-\[\#151922\],
+html[data-theme="light"] .bg-\[\#0d1016\] {
+  background-color: #f4f2ea !important;
+}
+
+/* Primary & secondary text */
+html[data-theme="light"] .text-\[\#f2f1ec\],
+html[data-theme="light"] .text-\[\#ffffff\] {
+  color: #11141b !important;
+}
+
+html[data-theme="light"] .text-\[\#89919d\] {
+  color: #4d5462 !important;
+}
+
+/* Accents */
+html[data-theme="light"] .text-\[\#a9ddf0\] {
+  color: #027a9e !important;
+}
+
+html[data-theme="light"] .border-\[\#a9ddf0\] {
+  border-color: #027a9e !important;
+}
+
+html[data-theme="light"] .bg-\[\#a9ddf0\]\/10,
+html[data-theme="light"] .bg-\[\#a9ddf0\]\/12,
+html[data-theme="light"] .bg-\[\#a9ddf0\]\/15,
+html[data-theme="light"] .bg-\[\#a9ddf0\]\/20 {
+  background-color: rgba(2, 122, 158, 0.08) !important;
+}
+
+html[data-theme="light"] .border-\[\#a9ddf0\]\/20,
+html[data-theme="light"] .border-\[\#a9ddf0\]\/25,
+html[data-theme="light"] .border-\[\#a9ddf0\]\/30,
+html[data-theme="light"] .border-\[\#a9ddf0\]\/40 {
+  border-color: rgba(2, 122, 158, 0.28) !important;
+}
+
+/* Hairline borders */
+html[data-theme="light"] .border-white\/\[0\.04\],
+html[data-theme="light"] .border-white\/\[0\.05\],
+html[data-theme="light"] .border-white\/\[0\.06\],
+html[data-theme="light"] .border-white\/\[0\.08\],
+html[data-theme="light"] .border-white\/\[0\.1\],
+html[data-theme="light"] .border-white\/\[0\.12\],
+html[data-theme="light"] .border-white\/\[0\.14\],
+html[data-theme="light"] .border-white\/\[0\.2\],
+html[data-theme="light"] .border-white\/5,
+html[data-theme="light"] .border-white\/10 {
+  border-color: rgba(18, 22, 30, 0.09) !important;
+}
+
+/* Background tints */
+html[data-theme="light"] .bg-white\/\[0\.02\],
+html[data-theme="light"] .bg-white\/\[0\.03\],
+html[data-theme="light"] .bg-white\/\[0\.04\],
+html[data-theme="light"] .bg-white\/\[0\.05\],
+html[data-theme="light"] .bg-white\/\[0\.06\],
+html[data-theme="light"] .bg-white\/\[0\.08\],
+html[data-theme="light"] .bg-white\/5 {
+  background-color: rgba(18, 22, 30, 0.035) !important;
+}
+
+html[data-theme="light"] .bg-white\/10 {
+  background-color: rgba(18, 22, 30, 0.06) !important;
+}
+
+/* Subtle & muted text */
+html[data-theme="light"] .text-white\/20,
+html[data-theme="light"] .text-white\/30,
+html[data-theme="light"] .text-white\/40 {
+  color: rgba(18, 22, 30, 0.35) !important;
+}
+
+html[data-theme="light"] .text-white\/60,
+html[data-theme="light"] .text-white\/70,
+html[data-theme="light"] .text-white\/80 {
+  color: #4d5462 !important;
+}
+
+/* Action CTA Buttons in light mode: deep carbon black with white text */
+html[data-theme="light"] a.bg-\[\#ffffff\],
+html[data-theme="light"] button.bg-\[\#ffffff\],
+html[data-theme="light"] a.bg-\[\#f2f1ec\],
+html[data-theme="light"] button.bg-\[\#f2f1ec\] {
+  background-color: #11141b !important;
+  color: #ffffff !important;
+  border-color: #11141b !important;
+  box-shadow: 0 4px 16px rgba(18, 22, 30, 0.12) !important;
+}
+
+html[data-theme="light"] a.bg-\[\#ffffff\]:hover,
+html[data-theme="light"] button.bg-\[\#ffffff\]:hover,
+html[data-theme="light"] a.bg-\[\#f2f1ec\]:hover,
+html[data-theme="light"] button.bg-\[\#f2f1ec\]:hover {
+  background-color: #027a9e !important;
+  color: #ffffff !important;
+  border-color: #027a9e !important;
+}
+
+/* Secondary outline buttons */
+html[data-theme="light"] a.border-white\/\[0\.12\],
+html[data-theme="light"] button.border-white\/\[0\.12\] {
+  background-color: #ffffff !important;
+  border-color: rgba(18, 22, 30, 0.15) !important;
+  color: #11141b !important;
+}
+
+html[data-theme="light"] a.border-white\/\[0\.12\]:hover,
+html[data-theme="light"] button.border-white\/\[0\.12\]:hover {
+  border-color: #027a9e !important;
+  color: #027a9e !important;
+}
+
+/* Input fields & form controls */
+html[data-theme="light"] input[type="text"],
+html[data-theme="light"] input[type="email"],
+html[data-theme="light"] textarea,
+html[data-theme="light"] select {
+  background-color: #ffffff !important;
+  border-color: rgba(18, 22, 30, 0.14) !important;
+  color: #11141b !important;
+}
+
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder {
+  color: #788090 !important;
+}
+
+html[data-theme="light"] input:focus,
+html[data-theme="light"] textarea:focus,
+html[data-theme="light"] select:focus {
+  border-color: #027a9e !important;
+  box-shadow: 0 0 0 3px rgba(2, 122, 158, 0.14) !important;
+}
+
+/* Text stroke adjustments in light mode */
+html[data-theme="light"] .text-stroke-subtle {
+  -webkit-text-stroke: 1px rgba(18, 22, 30, 0.2);
+}
+
+html[data-theme="light"] .text-stroke-strong {
+  -webkit-text-stroke: 1.5px rgba(18, 22, 30, 0.65);
+}
+
+/* Cursor follower adaptation */
+html[data-theme="light"] .cursor-ring.is-hovered {
+  border-color: rgba(2, 122, 158, 0.85);
+  background-color: rgba(2, 122, 158, 0.08);
+}
+
+html[data-theme="light"] .cursor-ring.is-text {
+  background-color: #027a9e;
+}
+
+html[data-theme="light"] .cursor-ring .cursor-text {
+  color: #ffffff;
+}
+
+/* Grid lines overlay in light mode */
+html[data-theme="light"] .bg-grid-lines {
+  background-image: 
+    linear-gradient(to right, rgba(18, 22, 30, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(18, 22, 30, 0.035) 1px, transparent 1px);
 }

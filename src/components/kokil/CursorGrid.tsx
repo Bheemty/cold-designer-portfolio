@@ -62,7 +62,31 @@ export default function CursorGrid({
       return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
     }
 
-    const [cr, cg, cb] = hexToRgb(color);
+    // Dynamic dual-theme accent & opacity handling
+    let isLight = document.documentElement.getAttribute("data-theme") === "light";
+    let activeColor = isLight ? "#027a9e" : color;
+    let [cr, cg, cb] = hexToRgb(activeColor);
+    let activeMaxOpacity = isLight ? 0.32 : maxOpacity;
+    let activeFillOpacity = isLight ? 0.035 : fillOpacity;
+
+    function handleThemeChange(e: Event) {
+      const customEvent = e as CustomEvent<{ theme: string }>;
+      const themeVal =
+        customEvent?.detail?.theme ||
+        document.documentElement.getAttribute("data-theme") ||
+        "dark";
+      isLight = themeVal === "light";
+      activeColor = isLight ? "#027a9e" : color;
+      const rgb = hexToRgb(activeColor);
+      cr = rgb[0];
+      cg = rgb[1];
+      cb = rgb[2];
+      activeMaxOpacity = isLight ? 0.32 : maxOpacity;
+      activeFillOpacity = isLight ? 0.035 : fillOpacity;
+    }
+
+    window.addEventListener("cold-designer-theme-change", handleThemeChange);
+
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5); // Cap DPR at 1.5 for crisp visuals without 4K GPU fillrate overhead
 
     let cols = 0;
@@ -102,49 +126,57 @@ export default function CursorGrid({
       return [cx, cy];
     }
 
-    function energize(x: number, y: number, boost?: number) {
-      const r = Math.max(radius, 1);
-      const ease = FALLOFF_CURVES[falloff] || FALLOFF_CURVES.linear;
+    function applyInfluence(px: number, py: number) {
+      if (cols === 0 || rows === 0) return;
+      const r = radius;
+      const minCol = Math.max(0, Math.floor((px - r - offX) / cellSize));
+      const maxCol = Math.min(cols - 1, Math.floor((px + r - offX) / cellSize));
+      const minRow = Math.max(0, Math.floor((py - r - offY) / cellSize));
+      const maxRow = Math.min(rows - 1, Math.floor((py + r - offY) / cellSize));
       const now = performance.now();
-      const minCol = Math.max(0, Math.floor((x - r - offX) / cellSize));
-      const maxCol = Math.min(cols - 1, Math.floor((x + r - offX) / cellSize));
-      const minRow = Math.max(0, Math.floor((y - r - offY) / cellSize));
-      const maxRow = Math.min(rows - 1, Math.floor((y + r - offY) / cellSize));
+      const fn = FALLOFF_CURVES[falloff] || FALLOFF_CURVES.smooth;
 
       for (let cRow = minRow; cRow <= maxRow; cRow++) {
         for (let cCol = minCol; cCol <= maxCol; cCol++) {
           const i = cRow * cols + cCol;
           const [cx, cy] = cellCenter(i);
-          const dist = Math.hypot(cx - x, cy - y);
-          if (dist > r) continue;
-          const level = ease(1 - dist / r) * maxOpacity * (boost != null ? boost : 1);
-          if (level > alphas[i]) {
-            alphas[i] = level;
-            touched[i] = now;
-          } else if (level > 0) {
+          const d = Math.hypot(cx - px, cy - py);
+          if (d > r) continue;
+          const target = fn(1 - d / r) * activeMaxOpacity;
+          if (target > alphas[i]) {
+            alphas[i] = target;
             touched[i] = now;
           }
         }
       }
+      startLoop();
+    }
+
+    function startLoop() {
+      if (running) return;
+      running = true;
+      lastFrame = performance.now();
+      raf = requestAnimationFrame(draw);
     }
 
     function draw(now: number) {
       if (!ctx) return;
-      const dt = Math.min(now - lastFrame, 50);
+      const dt = Math.min(now - lastFrame, 64);
       lastFrame = now;
+
       ctx.clearRect(0, 0, w, h);
 
       if (gridOpacity > 0) {
         ctx.strokeStyle = `rgba(${cr}, ${cg}, ${cb}, ${gridOpacity})`;
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 0.5;
         ctx.beginPath();
-        for (let cCol = 0; cCol <= cols; cCol++) {
-          const x = Math.round(offX + cCol * cellSize) + 0.5;
+        for (let c = 0; c <= cols; c++) {
+          const x = offX + c * cellSize;
           ctx.moveTo(x, 0);
           ctx.lineTo(x, h);
         }
-        for (let cRow = 0; cRow <= rows; cRow++) {
-          const y = Math.round(offY + cRow * cellSize) + 0.5;
+        for (let r = 0; r <= rows; r++) {
+          const y = offY + r * cellSize;
           ctx.moveTo(0, y);
           ctx.lineTo(w, y);
         }
@@ -170,8 +202,8 @@ export default function CursorGrid({
             const i = cRow * cols + cCol;
             const [cx, cy] = cellCenter(i);
             const dist = Math.hypot(cx - pulse.x, cy - pulse.y);
-            if (Math.abs(dist - ringR) < band / 2 && maxOpacity > alphas[i]) {
-              alphas[i] = maxOpacity;
+            if (Math.abs(dist - ringR) < band / 2 && activeMaxOpacity > alphas[i]) {
+              alphas[i] = activeMaxOpacity;
               touched[i] = now;
             }
           }
@@ -205,8 +237,8 @@ export default function CursorGrid({
           ctx.rect(x, y, s, s);
         }
 
-        if (fillOpacity > 0) {
-          ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${a * fillOpacity})`;
+        if (activeFillOpacity > 0) {
+          ctx.fillStyle = `rgba(${cr}, ${cg}, ${cb}, ${a * activeFillOpacity})`;
           ctx.fill();
         }
 
@@ -219,43 +251,33 @@ export default function CursorGrid({
         raf = requestAnimationFrame(draw);
       } else {
         running = false;
-        if (gridOpacity <= 0) ctx.clearRect(0, 0, w, h);
+        ctx.clearRect(0, 0, w, h);
       }
     }
 
-    function wake() {
-      if (running) return;
-      running = true;
-      lastFrame = performance.now();
-      raf = requestAnimationFrame(draw);
-    }
+    rebuild();
 
     let lastMoveTime = 0;
-    function handlePointerMove(e: PointerEvent) {
+    const handlePointerMove = (e: PointerEvent) => {
       const now = performance.now();
-      // Throttle pointer energize to ~60fps to prevent event flooding during fast movement
-      if (now - lastMoveTime < 14) return;
+      if (now - lastMoveTime < 16) return;
       lastMoveTime = now;
-
-      if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
       const x = e.clientX - rect.left;
       const y = e.clientY - rect.top;
-      energize(x, y);
-      wake();
-    }
+      applyInfluence(x, y);
+    };
 
-    function handleClick(e: MouseEvent) {
-      if (!clickPulse || !canvas) return;
+    const handleClick = (e: MouseEvent) => {
+      if (!clickPulse) return;
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      pulses.push({ x, y, t0: performance.now() });
-      energize(x, y, 1.3);
-      wake();
-    }
-
-    rebuild();
+      pulses.push({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+        t0: performance.now(),
+      });
+      startLoop();
+    };
 
     let resizeTimer: NodeJS.Timeout;
     const handleResize = () => {
@@ -268,6 +290,7 @@ export default function CursorGrid({
     window.addEventListener("click", handleClick, { passive: true });
 
     return () => {
+      window.removeEventListener("cold-designer-theme-change", handleThemeChange);
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("click", handleClick);
