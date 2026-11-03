@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useId } from "react";
 import Link from "next/link";
-import { ArrowLeft, Volume2, VolumeX, Sparkles, Sliders, RefreshCw, Layers } from "lucide-react";
+import { ArrowLeft, Volume2, VolumeX, Sliders, Layers } from "lucide-react";
 import { sound } from "@/lib/sounds";
 
 export default function CodexPage() {
@@ -89,7 +89,9 @@ export default function CodexPage() {
   const handleCustomSynthPlay = (freq: number) => {
     if (!soundEnabled) return;
     try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       const ctx = new AudioCtx();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
@@ -115,11 +117,12 @@ export default function CodexPage() {
 
   return (
     <main className="min-h-screen pt-32 sm:pt-40 pb-28 px-6 sm:px-10 lg:px-16 bg-[#090b0f] text-[#f2f1ec]">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1440px]">
         {/* Navigation Breadcrumb */}
         <div className="mb-10">
           <Link
             href="/"
+            onClick={() => sound.playClick()}
             className="inline-flex items-center gap-2 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
           >
             <ArrowLeft size={13} />
@@ -133,18 +136,19 @@ export default function CodexPage() {
             <div className="flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
               <span className="uppercase tracking-widest text-[#a9ddf0]">
-                Interactive Codex // Lab Environment
+                (01) &mdash; Creative Journal &amp; Codex // Interactive Laboratory
               </span>
             </div>
 
             {/* Global Audio Toggle */}
             <button
+              type="button"
               onClick={() => {
                 const next = !soundEnabled;
                 setSoundEnabled(next);
                 if (next) sound.playChime(660, 0.2);
               }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-1.5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] transition-colors"
+              className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-1.5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] transition-colors cursor-pointer"
               aria-label={soundEnabled ? "Mute interactive audio feedback" : "Enable interactive audio feedback"}
             >
               {soundEnabled ? (
@@ -162,11 +166,11 @@ export default function CodexPage() {
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-            The Codex.
+            Creative Journal &amp; Codex.
           </h1>
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            A real-time laboratory of tactile micro-interactions, spring mechanics, web audio feedback, and design system token governance.
+            A real-time laboratory of tactile micro-interactions, spring mechanics, Web Audio synthesizers, and design system token governance by Taye Abolarin.
           </p>
         </header>
 
@@ -192,216 +196,201 @@ export default function CodexPage() {
                     Mechanical Plunger
                   </span>
                   <button
+                    type="button"
                     onClick={() => {
                       setClickCount((c) => c + 1);
                       if (soundEnabled) sound.playClick();
                     }}
                     className="relative px-6 py-3.5 rounded-xl bg-gradient-to-b from-white to-[#d4d4d4] text-[#090b0f] font-mono-code text-xs font-bold shadow-[0_6px_0_#8e8e8e,0_12px_16px_rgba(0,0,0,0.4)] active:translate-y-1.5 active:shadow-[0_0px_0_#8e8e8e,0_4px_8px_rgba(0,0,0,0.4)] transition-all cursor-pointer"
                   >
-                    PRESS TACTILE
+                    PRESS DOWN ({clickCount})
                   </button>
-                  <span className="font-mono-code text-[11px] text-[#a9ddf0] mt-4">
-                    Actuations: {clickCount}
+                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
+                    6px spring offset + low pop
                   </span>
                 </div>
 
-                {/* 2. Soft Haptic Pill */}
+                {/* 2. Magnetic Toggle */}
                 <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
                   <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
-                    Haptic Cushion Pill
+                    Magnetic Snap State
                   </span>
                   <button
+                    type="button"
                     onClick={() => {
-                      setHapticActive(!hapticActive);
-                      if (soundEnabled) sound.playPop();
+                      setMagneticToggled((m) => !m);
+                      if (soundEnabled) sound.playChime(magneticToggled ? 520 : 680, 0.15);
                     }}
-                    className={`px-6 py-3.5 rounded-full font-mono-code text-xs font-semibold transition-all duration-200 cursor-pointer ${
-                      hapticActive
-                        ? "bg-[#a9ddf0] text-[#090b0f] scale-105 shadow-[0_0_24px_rgba(169,221,240,0.5)]"
-                        : "bg-white/[0.06] text-[#f2f1ec] border border-white/[0.12] hover:bg-white/[0.1] active:scale-95"
+                    className={`relative w-20 h-10 rounded-full p-1 transition-colors duration-300 cursor-pointer ${
+                      magneticToggled ? "bg-[#a9ddf0]" : "bg-white/10"
                     }`}
-                  >
-                    {hapticActive ? "STATE: EXPANDED" : "STATE: RESTING"}
-                  </button>
-                  <span className="font-mono-code text-[11px] text-[#89919d] mt-4">
-                    Toggle spring expansion
-                  </span>
-                </div>
-
-                {/* 3. Magnetic Toggle Snap */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
-                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
-                    Magnetic Snap Switch
-                  </span>
-                  <button
-                    onClick={() => {
-                      setMagneticToggled(!magneticToggled);
-                      if (soundEnabled) sound.playChime(magneticToggled ? 520 : 780, 0.2);
-                    }}
-                    className={`w-16 h-9 rounded-full p-1 transition-colors duration-300 cursor-pointer flex items-center ${
-                      magneticToggled ? "bg-[#a9ddf0]" : "bg-white/[0.15]"
-                    }`}
-                    aria-label="Toggle magnetic snap switch"
+                    aria-label="Toggle magnetic state"
                   >
                     <div
-                      className={`w-7 h-7 rounded-full bg-[#090b0f] transition-transform duration-300 shadow-md ${
-                        magneticToggled ? "translate-x-7 bg-[#090b0f]" : "translate-x-0"
+                      className={`w-8 h-8 rounded-full bg-[#090b0f] shadow-md transition-transform duration-300 ease-out flex items-center justify-center ${
+                        magneticToggled ? "translate-x-10 bg-[#090b0f]" : "translate-x-0 bg-white"
                       }`}
-                    />
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
+                    </div>
                   </button>
-                  <span className="font-mono-code text-[11px] text-[#89919d] mt-4">
-                    {magneticToggled ? "LATCHED (TRUE)" : "OPEN (FALSE)"}
+                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
+                    Status: {magneticToggled ? "ENGAGED" : "DORMANT"}
                   </span>
                 </div>
 
-                {/* 4. Elastic Resistance Drag Puck */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px] relative overflow-hidden select-none">
-                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-2">
-                    Elastic Resistance Puck
+                {/* 3. Soft Haptic Cushion */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
+                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
+                    Haptic Cushion
                   </span>
-                  <div className="relative w-28 h-20 flex items-center justify-center">
-                    <div className="absolute inset-0 border border-dashed border-white/[0.15] rounded-full pointer-events-none" />
-                    <div
-                      ref={puckRef}
-                      onMouseDown={handlePuckStart}
-                      onTouchStart={handlePuckStart}
-                      style={{
-                        transform: `translate3d(${puckPos.x}px, ${puckPos.y}px, 0)`,
-                        transition: isDragging ? "none" : "transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-                      }}
-                      className="w-12 h-12 rounded-full bg-[#a9ddf0] text-[#090b0f] flex items-center justify-center font-bold text-[10px] cursor-grab active:cursor-grabbing shadow-[0_4px_16px_rgba(169,221,240,0.4)]"
-                    >
-                      PULL
-                    </div>
-                  </div>
-                  <span className="font-mono-code text-[10px] text-[#89919d] mt-2">
-                    {isDragging ? "Elastic tension active" : "Drag & release to snap"}
+                  <button
+                    type="button"
+                    onMouseDown={() => {
+                      setHapticActive(true);
+                      if (soundEnabled) sound.playPop(340);
+                    }}
+                    onMouseUp={() => setHapticActive(false)}
+                    onTouchStart={() => {
+                      setHapticActive(true);
+                      if (soundEnabled) sound.playPop(340);
+                    }}
+                    onTouchEnd={() => setHapticActive(false)}
+                    className={`px-7 py-3 rounded-full border border-[#a9ddf0]/30 font-mono-code text-xs text-[#a9ddf0] transition-all duration-200 cursor-pointer ${
+                      hapticActive
+                        ? "scale-90 bg-[#a9ddf0]/20 shadow-[inset_0_4px_12px_rgba(0,0,0,0.6)]"
+                        : "scale-100 bg-[#a9ddf0]/5 shadow-none"
+                    }`}
+                  >
+                    {hapticActive ? "COMPRESSED" : "PRESS & HOLD"}
+                  </button>
+                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
+                    Sub-harmonic pitch shift
+                  </span>
+                </div>
+
+                {/* 4. Pulse Generator */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
+                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
+                    Harmonic Resonator
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPulseCount((p) => p + 1);
+                      if (soundEnabled) sound.playChime(440 + (pulseCount % 5) * 80, 0.25);
+                    }}
+                    className="relative w-12 h-12 rounded-full border border-white/20 bg-white/5 flex items-center justify-center hover:border-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-all cursor-pointer group"
+                    aria-label="Trigger harmonic chime"
+                  >
+                    <span className="h-3 w-3 rounded-full bg-[#a9ddf0] group-hover:scale-125 transition-transform" />
+                  </button>
+                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
+                    Pentatonic harmonic ladder
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 font-mono-code text-xs text-[#89919d] flex items-center justify-between">
-              <span>All tactile controls support pointer, touch &amp; keyboard access.</span>
-              <span className="text-[#a9ddf0]">Spring Physics Active</span>
+            <div className="font-mono-code text-xs text-[#89919d] pt-4 border-t border-white/[0.08] flex items-center justify-between">
+              <span>PHYSICS ENGINE:</span>
+              <span className="text-[#a9ddf0]">Cubic-Bezier Spring + Web Audio</span>
             </div>
           </section>
 
-          {/* SECTION 2: SYNTHESIZER & AUDIO LAB (5 Cols) */}
+          {/* SECTION 2: ELASTIC DRAG PUCK (5 Cols) */}
           <section className="lg:col-span-5 rounded-3xl border border-white/[0.1] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-8">
-                <div className="flex items-center gap-2">
-                  <Volume2 size={16} className="text-[#a9ddf0]" />
-                  <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
-                    02 // Web Audio Synthesizer
-                  </span>
-                </div>
-                <span className="font-mono-code text-xs text-[#89919d]">Zero Audio Assets</span>
+                <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
+                  02 // Elastic Inertia Anchor
+                </span>
+                <span className="font-mono-code text-xs text-[#89919d]">Kinetic Tension</span>
               </div>
 
-              <p className="text-sm text-[#89919d] font-light leading-relaxed mb-6">
-                Real-time harmonic sound synthesis powered directly by the Web Audio API without external MP3/WAV files.
-              </p>
-
-              {/* Sound Palette Buttons */}
-              <div className="grid grid-cols-2 gap-3 mb-6 font-mono-code text-xs">
-                <button
-                  onClick={() => soundEnabled && sound.playClick()}
-                  className="rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-left hover:border-[#a9ddf0]/40 transition-colors"
-                >
-                  <span className="text-[#f2f1ec] font-semibold block">Click Pulse</span>
-                  <span className="text-[#89919d] text-[11px]">800Hz damped</span>
-                </button>
-                <button
-                  onClick={() => soundEnabled && sound.playPop()}
-                  className="rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-left hover:border-[#a9ddf0]/40 transition-colors"
-                >
-                  <span className="text-[#f2f1ec] font-semibold block">Bubble Pop</span>
-                  <span className="text-[#89919d] text-[11px]">420Hz exp drop</span>
-                </button>
-                <button
-                  onClick={() => soundEnabled && sound.playChime(660, 0.3)}
-                  className="rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-left hover:border-[#a9ddf0]/40 transition-colors"
-                >
-                  <span className="text-[#f2f1ec] font-semibold block">Harmonic Bell</span>
-                  <span className="text-[#89919d] text-[11px]">660Hz dual sine</span>
-                </button>
-                <button
-                  onClick={() => soundEnabled && sound.playChime(880, 0.15)}
-                  className="rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-left hover:border-[#a9ddf0]/40 transition-colors"
-                >
-                  <span className="text-[#f2f1ec] font-semibold block">Crystal Ping</span>
-                  <span className="text-[#89919d] text-[11px]">880Hz crisp</span>
-                </button>
-              </div>
-
-              {/* Frequency Pitch Slider */}
-              <div className="rounded-xl bg-[#090b0f] border border-white/[0.08] p-5 space-y-3 mb-6">
-                <div className="flex justify-between items-center font-mono-code text-xs">
-                  <label htmlFor={pitchInputId} className="text-[#89919d]">SYNTHESIZER PITCH</label>
-                  <span className="text-[#a9ddf0] font-semibold">{customPitch} Hz</span>
+              {/* Elastic Playground Arena */}
+              <div className="relative w-full aspect-square rounded-2xl bg-[#090b0f] border border-white/[0.08] flex items-center justify-center overflow-hidden mb-6">
+                {/* Tension Center Reticle */}
+                <div className="absolute w-24 h-24 rounded-full border border-white/[0.06] flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full border border-white/[0.08]" />
                 </div>
-                <input
-                  id={pitchInputId}
-                  type="range"
-                  min="220"
-                  max="1100"
-                  step="20"
-                  value={customPitch}
-                  onChange={(e) => {
-                    const val = Number(e.target.value);
-                    setCustomPitch(val);
-                    handleCustomSynthPlay(val);
+                <div className="absolute font-mono-code text-[9px] text-[#89919d]/40 select-none">
+                  RESTING ANCHOR (0, 0)
+                </div>
+
+                {/* Elastic String Line (SVG) */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                  <line
+                    x1="50%"
+                    y1="50%"
+                    x2={`calc(50% + ${puckPos.x}px)`}
+                    y2={`calc(50% + ${puckPos.y}px)`}
+                    stroke={isDragging ? "#a9ddf0" : "rgba(255,255,255,0.15)"}
+                    strokeWidth={isDragging ? 2.5 : 1}
+                    strokeDasharray={isDragging ? "none" : "3 3"}
+                  />
+                </svg>
+
+                {/* Draggable Puck */}
+                <div
+                  ref={puckRef}
+                  onMouseDown={handlePuckStart}
+                  onTouchStart={handlePuckStart}
+                  style={{
+                    transform: `translate(${puckPos.x}px, ${puckPos.y}px)`,
+                    transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
                   }}
-                  className="w-full accent-[#a9ddf0] cursor-pointer"
-                  aria-label="Synthesizer Pitch Frequency"
-                />
-                <button
-                  onClick={() => handleCustomSynthPlay(customPitch)}
-                  className="w-full rounded-lg bg-white/[0.06] hover:bg-[#a9ddf0] hover:text-[#090b0f] text-[#f2f1ec] py-2 font-mono-code text-xs transition-colors"
+                  className={`w-16 h-16 rounded-full border flex items-center justify-center font-mono-code text-xs select-none cursor-grab active:cursor-grabbing shadow-xl ${
+                    isDragging
+                      ? "border-[#a9ddf0] bg-[#a9ddf0] text-[#090b0f] font-bold scale-110 shadow-[0_0_24px_rgba(169,221,240,0.5)]"
+                      : "border-white/20 bg-white/10 text-[#f2f1ec] scale-100"
+                  }`}
                 >
-                  Trigger Custom Sine Tone ({customPitch} Hz)
-                </button>
+                  <span>{isDragging ? "DRAG" : "PULL"}</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d]">
+                <span>TENSION DELTA:</span>
+                <span className="text-[#a9ddf0]">
+                  ΔX: {Math.round(puckPos.x)}px | ΔY: {Math.round(puckPos.y)}px
+                </span>
               </div>
             </div>
 
-            <div className="rounded-xl bg-white/[0.02] border border-white/[0.06] p-4 font-mono-code text-xs text-[#89919d]">
-              Complies with browser autoplay policy; zero sounds play without explicit user interaction.
+            <div className="font-mono-code text-[11px] text-[#89919d] pt-4 border-t border-white/[0.08] mt-6">
+              Release cursor anywhere to observe inverse spring velocity.
             </div>
           </section>
 
-          {/* SECTION 3: TYPOGRAPHY TENSION & VARIABLE SLIDER (6 Cols) */}
+          {/* SECTION 3: TYPOGRAPHIC TENSION SLIDER (6 Cols) */}
           <section className="lg:col-span-6 rounded-3xl border border-white/[0.1] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-8">
-                <div className="flex items-center gap-2">
-                  <Sparkles size={16} className="text-[#a9ddf0]" />
-                  <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
-                    03 // Variable Typography Tension
-                  </span>
-                </div>
-                <span className="font-mono-code text-xs text-[#89919d]">Fluid Optical Matrix</span>
+                <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
+                  03 // Variable Typographic Tension
+                </span>
+                <span className="font-mono-code text-xs text-[#89919d]">Variable Axes</span>
               </div>
 
-              {/* Live Preview Box */}
-              <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-8 min-h-[160px] flex items-center justify-center text-center mb-6 overflow-hidden">
+              {/* Dynamic Sample Display */}
+              <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-8 min-h-[140px] flex items-center justify-center text-center overflow-hidden mb-8">
                 <span
                   style={{
-                    fontWeight,
+                    fontWeight: fontWeight,
                     letterSpacing: `${letterSpacing}em`,
                   }}
-                  className="font-display text-2xl sm:text-4xl text-[#f2f1ec] transition-all duration-100"
+                  className="font-display text-2xl sm:text-3xl text-[#f2f1ec] transition-all duration-75 block max-w-full truncate"
                 >
                   {fontSample}
                 </span>
               </div>
 
-              {/* Controls */}
-              <div className="space-y-4 mb-6">
+              {/* Sliders */}
+              <div className="space-y-6">
                 <div>
-                  <div className="flex justify-between font-mono-code text-xs text-[#89919d] mb-1">
-                    <label htmlFor={weightInputId}>WEIGHT AXIS (300 &mdash; 900)</label>
+                  <div className="flex justify-between font-mono-code text-xs mb-2">
+                    <label htmlFor={weightInputId} className="text-[#89919d]">FONT WEIGHT (wght)</label>
                     <span className="text-[#a9ddf0] font-semibold">{fontWeight}</span>
                   </div>
                   <input
@@ -415,43 +404,43 @@ export default function CodexPage() {
                       setFontWeight(Number(e.target.value));
                       if (soundEnabled) sound.playClick();
                     }}
-                    className="w-full accent-[#a9ddf0] cursor-pointer"
-                    aria-label="Font Weight Axis"
+                    className="w-full accent-[#a9ddf0] bg-white/10 rounded-lg cursor-pointer"
                   />
                 </div>
 
                 <div>
-                  <div className="flex justify-between font-mono-code text-xs text-[#89919d] mb-1">
-                    <label htmlFor={spacingInputId}>LETTER TRACKING (-0.05em &mdash; 0.20em)</label>
-                    <span className="text-[#a9ddf0] font-semibold">{letterSpacing.toFixed(2)}em</span>
+                  <div className="flex justify-between font-mono-code text-xs mb-2">
+                    <label htmlFor={spacingInputId} className="text-[#89919d]">TRACKING / KERNING (em)</label>
+                    <span className="text-[#a9ddf0] font-semibold">{letterSpacing.toFixed(3)}em</span>
                   </div>
                   <input
                     id={spacingInputId}
                     type="range"
-                    min="-0.05"
-                    max="0.20"
+                    min="-0.08"
+                    max="0.25"
                     step="0.01"
                     value={letterSpacing}
                     onChange={(e) => {
                       setLetterSpacing(Number(e.target.value));
                       if (soundEnabled) sound.playClick();
                     }}
-                    className="w-full accent-[#a9ddf0] cursor-pointer"
-                    aria-label="Letter Tracking Axis"
+                    className="w-full accent-[#a9ddf0] bg-white/10 rounded-lg cursor-pointer"
                   />
                 </div>
               </div>
             </div>
 
-            <div className="flex gap-2">
-              {["Cold Design", "Spatial UI", "Telemetry", "Zero Drift"].map((sample) => (
+            {/* Quick Word Preset Pills */}
+            <div className="flex flex-wrap gap-2 pt-6 border-t border-white/[0.08] mt-6">
+              {["Cold Design Engineering", "WhatsApp Triage Architecture", "Spatial Luxury Lookbook"].map((sample) => (
                 <button
                   key={sample}
+                  type="button"
                   onClick={() => {
                     setFontSample(sample);
                     if (soundEnabled) sound.playPop();
                   }}
-                  className={`rounded-full px-3 py-1 font-mono-code text-[11px] border transition-colors ${
+                  className={`rounded-full px-3 py-1 font-mono-code text-[11px] border transition-colors cursor-pointer ${
                     fontSample === sample
                       ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#a9ddf0]"
                       : "border-white/[0.08] text-[#89919d] hover:text-[#f2f1ec]"
@@ -481,11 +470,12 @@ export default function CodexPage() {
                 {(["obsidian", "studio", "slate", "midnight"] as const).map((t) => (
                   <button
                     key={t}
+                    type="button"
                     onClick={() => {
                       setActiveTheme(t);
                       if (soundEnabled) sound.playClick();
                     }}
-                    className={`rounded-xl p-3 border font-mono-code text-xs text-left capitalize transition-all ${
+                    className={`rounded-xl p-3 border font-mono-code text-xs text-left capitalize transition-all cursor-pointer ${
                       activeTheme === t
                         ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#a9ddf0] font-semibold scale-[1.02]"
                         : "border-white/[0.08] bg-[#090b0f] text-[#89919d] hover:border-white/20"
@@ -523,11 +513,12 @@ export default function CodexPage() {
                     Tokenized Interface Card
                   </span>
                   <button
+                    type="button"
                     style={{
                       backgroundColor: themes[activeTheme].accent,
                       color: themes[activeTheme].bg,
                     }}
-                    className="rounded-full px-3.5 py-1 text-xs font-bold font-mono-code transition-transform active:scale-95"
+                    className="rounded-full px-3.5 py-1 text-xs font-bold font-mono-code transition-transform active:scale-95 cursor-pointer"
                   >
                     Action
                   </button>
@@ -543,20 +534,34 @@ export default function CodexPage() {
         </div>
 
         {/* Bottom Dialogue Box */}
-        <div className="mt-16 rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono-code text-xs">
+        <div className="mt-20 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono-code text-xs">
           <div>
             <span className="text-[#a9ddf0] uppercase font-semibold block mb-1">
               Craft &amp; Technical Execution
             </span>
-            <p className="text-[#89919d]">
+            <p className="text-[#89919d] max-w-xl">
               Every interaction above is engineered with zero bloat, pure vanilla React/CSS transforms, and accessible pointer mechanics.
             </p>
           </div>
           <Link
             href="/work"
-            className="rounded-full bg-[#f2f1ec] px-6 py-3 font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors whitespace-nowrap"
+            onClick={() => sound.playClick()}
+            className="inline-flex items-center gap-2 rounded-full bg-[#ffffff] px-6 py-3.5 font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
           >
-            Explore Flagship Projects &rarr;
+            <span>Explore All Work</span>
+            <svg
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
           </Link>
         </div>
       </div>

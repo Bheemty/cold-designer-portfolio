@@ -890,17 +890,68 @@
   }
 }
 
-/* ── 3D SPIRAL NOTEBOOK (DESIGN CODEX / PROMPT BOOK) ── */
-#playground {
+/* ── PROMINENT EXPLORE ALL WORK CTA (SELECTED WORK) ── */
+.work-closing-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: clamp(48px, 6vh, 72px);
+  padding: 0 clamp(16px, 3vw, 32px);
+  position: relative;
+  z-index: 10;
+}
+.work-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 36px;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #090b0f;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease, color 0.25s ease, box-shadow 0.3s ease;
+}
+.work-explore-btn:hover {
+  transform: translateY(-3px);
+  background: #a9ddf0;
+  color: #090b0f;
+  box-shadow: 0 16px 36px rgba(169, 221, 240, 0.3), 0 0 0 1px rgba(169, 221, 240, 0.5);
+}
+.work-explore-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(9, 11, 15, 0.08);
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.25s ease;
+}
+.work-explore-btn:hover .work-explore-arrow {
+  transform: translate(3px, -3px);
+  background: rgba(9, 11, 15, 0.15);
+}
+
+/* ── 3D SPIRAL NOTEBOOK (CREATIVE JOURNAL & CODEX) ── */
+#playground,
+#codex.journal-codex-section,
+.journal-codex-section {
   position: relative;
   width: 100%;
   max-width: 1440px;
   margin: 0 auto;
-  padding: clamp(80px, 10vh, 120px) clamp(24px, 5vw, 64px);
+  padding: clamp(100px, 12vh, 160px) clamp(24px, 5vw, 64px);
   display: flex;
   align-items: center;
-  gap: clamp(40px, 5vw, 96px);
+  justify-content: space-between;
+  gap: clamp(48px, 6vw, 96px);
   z-index: 10;
+  box-sizing: border-box;
 }
 .mp-title {
   flex: none;
@@ -1390,7 +1441,7 @@
 .nb-ribbons i:nth-child(4) { --r: #8f8f8f; }
 
 @media (max-width: 900px) {
-  #playground { flex-direction: column; align-items: stretch; padding: 70px clamp(20px, 4vw, 32px); gap: 32px; }
+  #playground, #codex.journal-codex-section, .journal-codex-section { flex-direction: column; align-items: stretch; padding: 70px clamp(20px, 4vw, 32px); gap: 32px; }
   .mp-title { writing-mode: horizontal-tb; transform: none; font-size: clamp(32px, 10vw, 44px); }
   .nb { aspect-ratio: 520 / 540; }
   .nb-cover, .nb-note, .nb-pocket, .nb-spine, .nb-ribbons { display: none; }
@@ -1554,7 +1605,9 @@
 .contact-arrow {
   margin-left: auto;
   color: rgba(255, 255, 255, 0.4);
-  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 .contact-link:hover .contact-arrow {
@@ -1772,7 +1825,7 @@
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), background 0.2s, color 0.2s;
 }
 .contact-direct-btn:hover .contact-arrow-badge {
-  transform: translateX(4px);
+  transform: translate(3px, -3px);
   background: #090b0f;
   color: #a9ddf0;
 }
@@ -1783,6 +1836,9 @@
   padding-left: 12px;
 }
 .contact-form-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -1793,6 +1849,12 @@
 }
 .contact-form-link:hover {
   color: #a9ddf0;
+}
+.contact-form-link svg {
+  transition: transform 0.2s ease;
+}
+.contact-form-link:hover svg {
+  transform: translate(2px, -2px);
 }
 
 @media (max-width: 640px) {

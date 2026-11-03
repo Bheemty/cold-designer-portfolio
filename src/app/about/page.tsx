@@ -1,12 +1,10 @@
-import Link from "next/link";
-import type { Metadata } from "next";
-import { ArrowUpRight, BookOpen } from "lucide-react";
+"use client";
 
-export const metadata: Metadata = {
-  title: "About — Cold Designer | Taye Abolarin",
-  description:
-    "Design philosophy, verified practice, and product methodology of Taye Abolarin (Cold Designer).",
-};
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { BookOpen } from "lucide-react";
+import { sound } from "@/lib/sounds";
 
 const VERIFIED_ENGAGEMENTS = [
   {
@@ -42,8 +40,8 @@ const TOOLKIT = [
   {
     category: "Product & Systems Design",
     items: [
-      "End-to-End Product Discovery",
-      "Conversational UX (WhatsApp Flows)",
+      "End-to-End Product Discovery & Flow Mapping",
+      "Conversational UX (WhatsApp Decision Trees)",
       "Information Architecture & User Journeys",
       "Figma Design Systems & Token Governance",
       "Responsive Web & Mobile App Ergonomics",
@@ -52,45 +50,52 @@ const TOOLKIT = [
   {
     category: "Interaction & Motion Craft",
     items: [
-      "Lenis Smooth Inertia",
-      "Framer Motion Physics & Springs",
+      "Lenis Smooth Inertia & Scroll Pacing",
+      "Framer Motion Physics & Spring Tuning",
       "Web Audio API Sound Integration",
-      "Sequential Scrollytelling",
-      "Tactile Micro-Interactions",
+      "Sequential Scrollytelling Choreography",
+      "Tactile Micro-Interactions & Haptic States",
     ],
   },
   {
     category: "Engineering Fluency",
     items: [
       "React Native & Expo SDK",
-      "Next.js App Router",
-      "TypeScript",
-      "Tailwind CSS",
-      "Git & Component Workflows",
+      "Next.js App Router & Server Components",
+      "TypeScript & Strict Type Safety",
+      "Tailwind CSS & Component Architecture",
+      "Git & Collaborative Production Workflows",
     ],
   },
   {
     category: "Domains & Specializations",
     items: [
       "Telehealth & Triage Gateways",
-      "Urban Mobility & Commuter UX",
+      "Urban Mobility & Commuter Terminal UX",
       "Social Commerce & Instant Stores",
       "Spatial & Editorial Web Experiences",
-      "Privacy-First Local Storage Apps",
+      "Privacy-First Local Storage Mobile Apps",
     ],
   },
 ];
 
 export default function AboutPage() {
+  const [photoFailed, setPhotoFailed] = useState(false);
+
   return (
-    <main className="min-h-screen pt-32 sm:pt-40 pb-24 px-6 sm:px-10 bg-[#090b0f] text-[#f2f1ec]">
-      <div className="mx-auto max-w-5xl">
+    <main className="min-h-screen pt-32 sm:pt-40 pb-28 px-6 sm:px-10 lg:px-16 bg-[#090b0f] text-[#f2f1ec]">
+      <div className="mx-auto max-w-[1440px]">
         {/* Page Header */}
-        <div className="border-b border-white/[0.08] pb-12 mb-16">
-          <div className="flex items-center gap-3 mb-4">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
-            <span className="font-mono-code text-xs uppercase tracking-widest text-[#a9ddf0]">
-              Monograph // Identity &amp; Practice
+        <header className="border-b border-white/[0.08] pb-12 mb-16">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-4 font-mono-code text-xs">
+            <div className="flex items-center gap-3">
+              <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
+              <span className="uppercase tracking-widest text-[#a9ddf0]">
+                (01) &mdash; Identity &amp; Practice // Taye Abolarin
+              </span>
+            </div>
+            <span className="text-[#89919d]">
+              Cold Designer Studio &bull; Lagos, Nigeria
             </span>
           </div>
 
@@ -98,155 +103,314 @@ export default function AboutPage() {
             Taye Abolarin.
           </h1>
 
-          <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. With approximately two years of self-taught design experience across Figma, Photoshop, and modern digital interfaces, specializing in conversational systems, intercity mobility, and cinematic web experiences.
+          <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
+            UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Specialized in conversational healthcare gateways, intercity mobility platforms, and high-fidelity interactive web systems.
           </p>
-        </div>
+        </header>
 
-        {/* The Meaning of "Cold" */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24">
-          <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
-            <span>01 // THE DOCTRINE</span>
-          </div>
-          <div className="md:col-span-8 space-y-6">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec]">
-              Why &ldquo;Cold&rdquo;?
-            </h2>
+        {/* 2-COLUMN EXHIBITION & ESSAY SPREAD */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24">
+          {/* Left Column: Art-Directed Exhibition Portrait Frame (5 cols) */}
+          <div className="lg:col-span-5">
+            <div className="sticky top-28 space-y-6">
+              <div className="relative aspect-[4/5] w-full rounded-3xl border border-white/[0.1] bg-[#11141b] overflow-hidden p-8 flex flex-col justify-between shadow-2xl">
+                {/* Architectural Corner Crosshairs */}
+                <div className="absolute top-4 left-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
+                <div className="absolute top-4 right-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
+                <div className="absolute bottom-4 left-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
+                <div className="absolute bottom-4 right-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
 
-            <div className="space-y-4 text-base sm:text-lg text-[#89919d] font-light leading-relaxed">
-              <p>
-                In a digital landscape filled with over-stimulating decoration, intrusive banners, and generic templates, &ldquo;Cold&rdquo; represents an intentional commitment to clarity.
-              </p>
-              <p>
-                Cold is not emotional detachment. Cold is the temperature of clear thinking. It is the disciplined elimination of clutter until an interface feels effortless, functional, and grounded in human need.
-              </p>
-              <p>
-                Whether designing a conversational health triage system for WhatsApp or a cinematic spatial web showcase, the goal remains identical: building products that respect the user&apos;s time and focus.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Experience Timeline */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24 border-t border-white/[0.08] pt-16">
-          <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
-            <span>02 // EXPERIENCE</span>
-          </div>
-          <div className="md:col-span-8">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] mb-10">
-              Verified Engagements
-            </h2>
-
-            <div className="space-y-8">
-              {VERIFIED_ENGAGEMENTS.map((item) => (
-                <div
-                  key={item.company}
-                  className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 hover:border-[#a9ddf0]/30 transition-colors"
-                >
-                  <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/[0.08] pb-4 mb-4 font-mono-code text-xs">
-                    <span className="text-[#a9ddf0] font-semibold">{item.period}</span>
-                    <span className="text-[#89919d]">{item.location}</span>
-                  </div>
-
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-[#f2f1ec] mb-1">
-                    {item.role}
-                  </h3>
-                  <span className="font-mono-code text-xs text-[#89919d] block mb-4">
-                    {item.company}
+                {/* Frame Header */}
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 font-mono-code text-[11px] text-[#89919d]">
+                  <span className="text-[#a9ddf0] uppercase tracking-wider font-semibold">
+                    EXHIBITION IDENTITY
                   </span>
+                  <span>REF. CD-01</span>
+                </div>
 
-                  <p className="text-base text-[#89919d] font-light leading-relaxed mb-6">
-                    {item.description}
-                  </p>
+                {/* Center Exhibition Subject: Photo or Monogram */}
+                <div className="relative my-auto flex flex-col items-center justify-center text-center py-8">
+                  {!photoFailed ? (
+                    <div className="relative w-44 h-44 rounded-2xl overflow-hidden border border-white/[0.15] shadow-2xl mb-4 group">
+                      <Image
+                        src="/images/taye-abolarin-portrait.jpg"
+                        alt="Taye Abolarin portrait"
+                        fill
+                        sizes="176px"
+                        className="object-cover"
+                        onError={() => setPhotoFailed(true)}
+                      />
+                    </div>
+                  ) : null}
 
-                  <div className="flex flex-wrap gap-2 font-mono-code text-xs">
-                    {item.tags.map((t) => (
-                      <span key={t} className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]">
-                        {t}
+                  {photoFailed && (
+                    <div className="relative flex flex-col items-center justify-center">
+                      <div className="relative w-36 h-36 rounded-full border border-white/[0.12] bg-[#090b0f] p-5 flex items-center justify-center shadow-2xl mb-4">
+                        <Image
+                          src="/images/cold-designer-avatar.svg"
+                          alt="Cold Designer Monogram Avatar"
+                          width={96}
+                          height={96}
+                          className="object-contain"
+                        />
+                        <div className="absolute inset-0 rounded-full border border-[#a9ddf0]/30 animate-pulse pointer-events-none" />
+                      </div>
+                      <span className="font-display font-semibold text-lg text-[#f2f1ec] tracking-wide">
+                        Cold Designer
                       </span>
-                    ))}
+                      <span className="font-mono-code text-xs text-[#89919d] mt-1">
+                        Authentic Studio Monogram
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Frame Specifications Footer */}
+                <div className="border-t border-white/[0.08] pt-4 font-mono-code text-[11px] text-[#89919d] space-y-1">
+                  <div className="flex justify-between">
+                    <span>DESIGNER:</span>
+                    <span className="text-[#f2f1ec]">Taye Abolarin</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>DISCIPLINE:</span>
+                    <span className="text-[#f2f1ec]">Product / UI/UX</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>LOCATION:</span>
+                    <span className="text-[#f2f1ec]">Lagos, NG (Remote)</span>
                   </div>
                 </div>
-              ))}
-            </div>
-          </div>
-        </section>
+              </div>
 
-        {/* Toolkit */}
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24 border-t border-white/[0.08] pt-16">
-          <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
-            <span>03 // CAPABILITIES</span>
-          </div>
-          <div className="md:col-span-8">
-            <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] mb-10">
-              Disciplinary Toolkit
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {TOOLKIT.map((t) => (
-                <div key={t.category} className="rounded-xl border border-white/[0.08] bg-[#11141b] p-6">
-                  <h3 className="font-mono-code text-xs font-semibold text-[#a9ddf0] uppercase tracking-wider mb-4">
-                    {t.category}
-                  </h3>
-                  <ul className="space-y-2 font-mono-code text-xs text-[#89919d]">
-                    {t.items.map((it) => (
-                      <li key={it} className="flex items-center gap-2">
-                        <span className="h-1 w-1 rounded-full bg-[#a9ddf0]/60" />
-                        <span>{it}</span>
-                      </li>
-                    ))}
-                  </ul>
+              {/* Direct Resume Download Action */}
+              <a
+                href="/Taye Abolarin-Product Designer-Resume.pdf"
+                download="Taye Abolarin-Product Designer-Resume.pdf"
+                onClick={() => sound.playClick()}
+                className="w-full flex items-center justify-between rounded-2xl border border-white/[0.1] bg-[#11141b] p-5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:bg-[#151922] transition-all cursor-pointer group"
+                aria-label="Download Taye Abolarin Product Designer Resume PDF"
+              >
+                <div className="flex flex-col text-left">
+                  <span className="text-[#a9ddf0] font-semibold uppercase text-[10px] tracking-wider mb-0.5">
+                    Curriculum Vitae
+                  </span>
+                  <span className="font-display font-medium text-sm text-[#f2f1ec] group-hover:text-[#a9ddf0] transition-colors">
+                    Download Resume (PDF)
+                  </span>
                 </div>
-              ))}
+                <span className="w-9 h-9 rounded-full bg-white/[0.06] flex items-center justify-center text-[#f2f1ec] group-hover:bg-[#a9ddf0] group-hover:text-[#090b0f] transition-all">
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="15"
+                    height="15"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 4v12m0 0l-5-5m5 5l5-5M4 20h16" />
+                  </svg>
+                </span>
+              </a>
             </div>
           </div>
-        </section>
 
-        {/* Creative Influences */}
-        <section className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 font-mono-code text-xs">
-          <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
-            <BookOpen size={15} className="text-[#a9ddf0]" />
-            <span className="uppercase text-[#f2f1ec] font-semibold tracking-wider">
-              Creative Influences &amp; Standards
-            </span>
-          </div>
+          {/* Right Column: Editorial Narrative & Essays (7 cols) */}
+          <div className="lg:col-span-7 space-y-16">
+            {/* The Meaning of "Cold" */}
+            <section className="space-y-6">
+              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
+                <span>01 // THE DOCTRINE</span>
+              </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div>
-              <span className="text-[#89919d] uppercase block mb-1">Architecture</span>
-              <p className="text-[#f2f1ec]/80 leading-relaxed">
-                Tadao Ando concrete geometry, Dieter Rams reductionism, quiet structural honesty.
-              </p>
-            </div>
-            <div>
-              <span className="text-[#89919d] uppercase block mb-1">Typography</span>
-              <p className="text-[#f2f1ec]/80 leading-relaxed">
-                Swiss International Style, Josef Müller-Brockmann grid discipline, neo-grotesque hierarchy.
-              </p>
-            </div>
-            <div>
-              <span className="text-[#89919d] uppercase block mb-1">Digital Craft</span>
-              <p className="text-[#f2f1ec]/80 leading-relaxed">
-                Zero layout shift, responsive performance, tactile micro-feedback, and production design-to-code fidelity.
-              </p>
-            </div>
-          </div>
-        </section>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f2f1ec]">
+                Why &ldquo;Cold&rdquo;?
+              </h2>
 
-        {/* CTA Banner */}
-        <div className="mt-20 flex flex-col sm:flex-row items-center justify-between gap-6 rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 font-mono-code text-xs">
-          <div>
-            <span className="text-[#a9ddf0] uppercase font-semibold block mb-1">Dialogue &amp; Collaboration</span>
-            <p className="text-[#89919d]">Available for select product design commissions, design systems architecture, and consulting.</p>
+              <div className="space-y-5 text-lg text-[#89919d] font-light leading-relaxed">
+                <p>
+                  In a digital landscape saturated with decorative fluff, unnecessary modal popups, and aggressive animations that distract from core intent, <strong className="text-[#f2f1ec] font-normal">&ldquo;Cold&rdquo;</strong> represents an intentional commitment to clarity.
+                </p>
+                <p>
+                  Cold is not emotional detachment. Cold is the temperature of clear thinking. It is the disciplined elimination of non-essential ornamentation until an interface feels effortless, functional, and grounded in human reality.
+                </p>
+                <p>
+                  Whether architecting a conversational healthcare triage system connecting rural patients to licensed doctors over WhatsApp, or structuring the arrival sequence of an architectural concert hall, the doctrine remains identical: build systems that respect human attention, perform reliably under stress, and withstand real-world conditions.
+                </p>
+              </div>
+            </section>
+
+            {/* Experience Timeline */}
+            <section className="border-t border-white/[0.08] pt-14 space-y-8">
+              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
+                <span>02 // VERIFIED ENGAGEMENTS</span>
+              </div>
+
+              <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
+                Production &amp; Employment History
+              </h2>
+
+              <div className="space-y-6">
+                {VERIFIED_ENGAGEMENTS.map((item) => (
+                  <div
+                    key={item.company}
+                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 hover:border-[#a9ddf0]/30 transition-colors"
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/[0.08] pb-4 mb-4 font-mono-code text-xs">
+                      <span className="text-[#a9ddf0] font-semibold">{item.period}</span>
+                      <span className="text-[#89919d]">{item.location}</span>
+                    </div>
+
+                    <h3 className="font-display text-2xl font-bold text-[#f2f1ec] mb-1">
+                      {item.role}
+                    </h3>
+                    <span className="font-mono-code text-xs text-[#89919d] block mb-4">
+                      {item.company}
+                    </span>
+
+                    <p className="text-base text-[#89919d] font-light leading-relaxed mb-6">
+                      {item.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2 font-mono-code text-xs">
+                      {item.tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Toolkit */}
+            <section className="border-t border-white/[0.08] pt-14 space-y-8">
+              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
+                <span>03 // CAPABILITIES</span>
+              </div>
+
+              <h2 className="font-display text-3xl font-bold text-[#f2f1ec]">
+                Disciplinary Toolkit
+              </h2>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                {TOOLKIT.map((t) => (
+                  <div
+                    key={t.category}
+                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6"
+                  >
+                    <h3 className="font-mono-code text-xs font-semibold text-[#a9ddf0] uppercase tracking-wider mb-4">
+                      {t.category}
+                    </h3>
+                    <ul className="space-y-2.5 font-mono-code text-xs text-[#89919d]">
+                      {t.items.map((it) => (
+                        <li key={it} className="flex items-center gap-2">
+                          <span className="h-1 w-1 rounded-full bg-[#a9ddf0]" />
+                          <span>{it}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Creative Standards & Influences */}
+            <section className="border-t border-white/[0.08] pt-14 space-y-8">
+              <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 font-mono-code text-xs">
+                <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
+                  <BookOpen size={16} className="text-[#a9ddf0]" />
+                  <span className="uppercase text-[#f2f1ec] font-semibold tracking-wider">
+                    Creative Influences &amp; Standards
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                  <div>
+                    <span className="text-[#89919d] uppercase block mb-1">Architecture</span>
+                    <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
+                      Tadao Ando concrete geometry, Dieter Rams reductionism, quiet structural honesty.
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-[#89919d] uppercase block mb-1">Typography</span>
+                    <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
+                      Swiss International Style, Josef Müller-Brockmann grid discipline, neo-grotesque hierarchy.
+                    </p>
+                  </div>
+                  <div>
+                    <span className="text-[#89919d] uppercase block mb-1">Digital Craft</span>
+                    <p className="text-[#f2f1ec]/85 leading-relaxed font-sans text-sm">
+                      Zero layout shift, responsive performance, tactile micro-feedback, and production design-to-code fidelity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
-          <Link
-            href="/contact"
-            className="flex items-center gap-2 rounded-full bg-[#f2f1ec] px-6 py-3 font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors whitespace-nowrap"
-          >
-            <span>Get in Touch</span>
-            <ArrowUpRight size={14} />
-          </Link>
         </div>
+
+        {/* Direct Dialogue Invitation Banner */}
+        <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs">
+          <div className="max-w-2xl">
+            <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
+              Dialogue &amp; Commission Inquiries
+            </span>
+            <p className="text-base text-[#89919d] font-sans font-light leading-relaxed">
+              Open for select contract product design engagements, conversational triage architectures, and design systems leadership. Direct inquiries receive personal responses.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto shrink-0">
+            <a
+              href="mailto:abolarintaye20@gmail.com"
+              onClick={() => sound.playClick()}
+              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ffffff] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
+            >
+              <span>abolarintaye20@gmail.com</span>
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+
+            <Link
+              href="/contact"
+              onClick={() => sound.playClick()}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-3.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors whitespace-nowrap"
+            >
+              <span>Structured Brief</span>
+              <svg
+                viewBox="0 0 24 24"
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </Link>
+          </div>
+        </section>
       </div>
     </main>
   );

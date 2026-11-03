@@ -41,10 +41,10 @@ export default function Navbar() {
 
       {/* Résumé Direct Download Action */}
       <a
-        href="/Damilare-Product-Designer-Resume.pdf"
-        download="Damilare-Product-Designer-Resume.pdf"
+        href="/Taye%20Abolarin-Product%20Designer-Resume.pdf"
+        download="Taye Abolarin-Product Designer-Resume.pdf"
         className="kokil-nav-resume"
-        aria-label="Download Damilare Product Designer Resume (PDF)"
+        aria-label="Download Taye Abolarin Product Designer Resume (PDF)"
       >
         <span>R&eacute;sum&eacute;</span>
         <svg

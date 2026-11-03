@@ -128,9 +128,9 @@ export default function NotebookKokil() {
   }
 
   return (
-    <section id="codex" className="notebook-section" aria-labelledby="playgroundTitle">
-      {/* Invisible anchor for backward compatibility */}
-      <span id="playground" className="sr-only" aria-hidden="true" />
+    <section id="playground" className="journal-codex-section" aria-labelledby="playgroundTitle">
+      {/* Invisible anchor for #codex backward compatibility */}
+      <span id="codex" className="sr-only" tabIndex={-1} aria-hidden="true" />
 
       <h2 className="mp-title" id="playgroundTitle">
         Creative Journal &amp; Codex

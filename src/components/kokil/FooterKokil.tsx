@@ -187,14 +187,27 @@ export default function FooterKokil() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </span>
             </a>
 
             <div className="contact-sub-actions">
               <Link href="/contact" className="contact-form-link">
-                <span>Start Structured Project Brief &rarr;</span>
+                <span>Start Structured Project Brief</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="13"
+                  height="13"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
               </Link>
             </div>
           </div>
@@ -217,7 +230,18 @@ export default function FooterKokil() {
                   <span className="contact-desc">{c.desc}</span>
                 </span>
                 <span className="contact-arrow" aria-hidden="true">
-                  &nearr;
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="15"
+                    height="15"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
                 </span>
               </a>
             </li>
