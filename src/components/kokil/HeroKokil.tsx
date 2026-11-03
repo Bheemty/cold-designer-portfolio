@@ -1,11 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { sound } from "@/lib/sounds";
 
 export default function HeroKokil() {
   const heroRef = useRef<HTMLElement>(null);
   const dotsGroupRef = useRef<SVGGElement>(null);
   const [hintHidden, setHintHidden] = useState(false);
+
+  const resetScratch = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+    const dotsGroup = dotsGroupRef.current;
+    if (dotsGroup) {
+      while (dotsGroup.firstChild) {
+        dotsGroup.removeChild(dotsGroup.firstChild);
+      }
+    }
+    setHintHidden(false);
+    try {
+      sound.playClick();
+    } catch {}
+  }, []);
 
   useEffect(() => {
     const heroEl = heroRef.current;
@@ -82,7 +100,7 @@ export default function HeroKokil() {
       }, 150);
     }, 3200);
 
-    // ── Rub to reveal dark paint ──
+    // ── Rub to reveal painted canvas ──
     const MAX_DOTS = 220; // Lightweight SVG tree that keeps scrolling silky smooth
     const MIN_DIST = 22;
     const BRUSH_RADIUS = 280;
@@ -118,11 +136,27 @@ export default function HeroKokil() {
       }
     }
 
+    let sweepTimeout: NodeJS.Timeout | null = null;
+    let sweepInterval: NodeJS.Timeout | null = null;
+
+    function cancelAutoSweep() {
+      if (sweepTimeout) {
+        clearTimeout(sweepTimeout);
+        sweepTimeout = null;
+      }
+      if (sweepInterval) {
+        clearInterval(sweepInterval);
+        sweepInterval = null;
+      }
+    }
+
     function onPointerMove(e: PointerEvent) {
+      cancelAutoSweep();
       addDot(e.clientX, e.clientY);
     }
 
     function onTouchMove(e: TouchEvent) {
+      cancelAutoSweep();
       if (e.touches[0]) {
         addDot(e.touches[0].clientX, e.touches[0].clientY);
       }
@@ -133,18 +167,17 @@ export default function HeroKokil() {
       lastY = null;
     }
 
-    // Auto-sweep for touch screens
+    // Auto-sweep for touch screens after idle time if user hasn't scratched
     const isTouch = window.matchMedia("(hover: none)").matches;
-    let sweepTimeout: NodeJS.Timeout;
     if (isTouch) {
       sweepTimeout = setTimeout(() => {
         const r = heroEl.getBoundingClientRect();
         const rows = Math.max(3, Math.ceil(r.height / 280));
         let step = 0;
         const totalSteps = rows * 5;
-        const sweepTimer = setInterval(() => {
+        sweepInterval = setInterval(() => {
           if (step > totalSteps) {
-            clearInterval(sweepTimer);
+            if (sweepInterval) clearInterval(sweepInterval);
             return;
           }
           const rowIdx = Math.floor(step / 5);
@@ -154,9 +187,22 @@ export default function HeroKokil() {
           addDot(r.left + x, r.top + y);
           step++;
         }, 50);
-      }, 700);
+      }, 4000);
     }
 
+    const handleThemeChange = () => {
+      cancelAutoSweep();
+      if (dotsGroup) {
+        while (dotsGroup.firstChild) {
+          dotsGroup.removeChild(dotsGroup.firstChild);
+        }
+      }
+      setHintHidden(false);
+      lastX = null;
+      lastY = null;
+    };
+
+    window.addEventListener("cold-designer-theme-change", handleThemeChange);
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     heroEl.addEventListener("pointermove", onPointerMove, { passive: true });
     heroEl.addEventListener("touchmove", onTouchMove, { passive: true });
@@ -165,22 +211,23 @@ export default function HeroKokil() {
     return () => {
       observer.disconnect();
       cancelAnimationFrame(eyeRaf);
+      cancelAutoSweep();
       window.removeEventListener("resize", updateEyeCenters);
+      window.removeEventListener("cold-designer-theme-change", handleThemeChange);
       window.removeEventListener("mousemove", handleMouseMove);
       heroEl.removeEventListener("pointermove", onPointerMove);
       heroEl.removeEventListener("touchmove", onTouchMove);
       heroEl.removeEventListener("pointerleave", onPointerLeave);
       clearInterval(blinkInterval);
-      if (sweepTimeout) clearTimeout(sweepTimeout);
     };
   }, []);
 
   return (
     <section ref={heroRef} id="hero">
-      {/* Dark Obsidian Invert Canvas Paint */}
+      {/* Revealed Canvas Paint (Obsidian dark in dark mode, pristine #FDFDFD in light mode) */}
       <div className="hero-paint" id="heroPaint" />
 
-      {/* Base Light Layer (Text & Buttons are transparent until rubbed) */}
+      {/* Base Layer: completely concealed initial state in both themes */}
       <div className="hero-base">
         <div className="hero-main">
           <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
@@ -194,13 +241,24 @@ export default function HeroKokil() {
                 <span className="eye">
                   <span className="pupil" />
                 </span>
-                <span
-                  className={`cursor-hint ${hintHidden ? "hide" : ""}`}
-                  id="cursorHint"
-                  aria-hidden="true"
-                >
-                  colour me
-                </span>
+                <div className="eyes-labels" aria-hidden="false">
+                  <button
+                    type="button"
+                    className="hero-hide-btn"
+                    onClick={resetScratch}
+                    title="Re-hide hero"
+                    aria-label="Re-hide hero"
+                  >
+                    HIDE
+                  </button>
+                  <span
+                    className={`cursor-hint ${hintHidden ? "hide" : ""}`}
+                    id="cursorHint"
+                    aria-hidden={hintHidden}
+                  >
+                    COLOR ME
+                  </span>
+                </div>
               </span>
             </span>
             <span className="line line-2">Designer</span>
@@ -211,15 +269,15 @@ export default function HeroKokil() {
             I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
           </p>
           <div className="hero-actions">
-            <a href="#work" className="hero-btn primary">
+            <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true">
               Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
-            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost">
+            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost" tabIndex={-1} aria-hidden="true">
               Get in touch
             </a>
           </div>
         </div>
-        <div className="hero-strip">
+        <div className="hero-strip" aria-hidden="true">
           <span>Portfolio &rsquo;26</span>
           <span className="skills">
             Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
@@ -228,7 +286,7 @@ export default function HeroKokil() {
         </div>
       </div>
 
-      {/* Invert Dark Obsidian Layer (revealed where pointer rubs over the SVG mask) */}
+      {/* Invert Layer: progressively revealed only within scratched areas */}
       <div className="hero-invert" id="heroInvert" aria-hidden="true">
         <div className="hero-main">
           <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
@@ -248,10 +306,10 @@ export default function HeroKokil() {
             I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
           </p>
           <div className="hero-actions">
-            <a href="#work" className="hero-btn primary" tabIndex={-1}>
+            <a href="#work" className="hero-btn primary">
               Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
-            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost" tabIndex={-1}>
+            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost">
               Get in touch
             </a>
           </div>

@@ -69,7 +69,7 @@
     --btn-secondary-bg: rgba(18, 22, 30, 0.035);
     --btn-secondary-border: rgba(18, 22, 30, 0.14);
     --btn-secondary-fg: #11141b;
-    --hero-bg: #FDFDFD;
+    --hero-bg: #090b0f;
     --hero-paint-bg: #FDFDFD;
     --hero-invert-ink: #11141b;
     --hero-invert-ink-dim: #4d5462;
@@ -101,6 +101,14 @@
     background-color: var(--accent);
     color: #FDFDFD;
   }
+}
+
+/* Prevent flash/ghosting during theme change on hero */
+html.theme-transitioning #hero,
+html.theme-transitioning .hero-paint,
+html.theme-transitioning .hero-base,
+html.theme-transitioning .hero-invert {
+  transition: none !important;
 }
 
 /* Smooth, restrained theme switching transition */

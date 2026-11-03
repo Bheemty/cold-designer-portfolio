@@ -150,7 +150,7 @@
 .hero-paint {
   position: absolute;
   inset: 0;
-  background: #090b0f;
+  background: var(--hero-paint-bg, #090b0f);
   pointer-events: none;
   -webkit-mask-image: url(#rubMask);
   mask-image: url(#rubMask);
@@ -173,21 +173,50 @@
 }
 .hero-base {
   z-index: 2;
-  --ink: transparent;
-  --ink-dim: transparent;
-  --ink-line: transparent;
-  --btn-bg: transparent;
-  --btn-fg: transparent;
+  --ink: transparent !important;
+  --ink-dim: transparent !important;
+  --ink-line: transparent !important;
+  --btn-bg: transparent !important;
+  --btn-fg: transparent !important;
+}
+.hero-base .hero-hello,
+.hero-base .hero-title,
+.hero-base .hero-desc {
+  color: transparent !important;
+}
+.hero-base .hero-btn {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  color: transparent !important;
+  box-shadow: none !important;
+}
+.hero-base .hero-strip {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  border-top-color: transparent !important;
+  color: transparent !important;
 }
 .hero-invert {
   z-index: 3;
   -webkit-mask-image: url(#rubMask);
   mask-image: url(#rubMask);
-  --ink: #FDFDFD;
-  --ink-dim: #a3a3a3;
-  --ink-line: rgba(255, 255, 255, 0.14);
-  --btn-bg: #FDFDFD;
-  --btn-fg: #090b0f;
+  --ink: var(--hero-invert-ink, #FDFDFD);
+  --ink-dim: var(--hero-invert-ink-dim, #a3a3a3);
+  --ink-line: var(--hero-invert-ink-line, rgba(255, 255, 255, 0.14));
+  --btn-bg: var(--hero-invert-btn-bg, #FDFDFD);
+  --btn-fg: var(--hero-invert-btn-fg, #090b0f);
+}
+.hero-invert .hero-bottom {
+  pointer-events: auto;
+}
+.hero-invert .hero-actions {
+  pointer-events: auto;
+}
+.hero-invert .hero-btn {
+  pointer-events: auto;
 }
 .hero-main {
   flex: 1;
@@ -267,27 +296,64 @@
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
-.cursor-hint {
+.eyes-labels {
   position: absolute;
-  top: calc(100% + 28px);
+  top: calc(100% + 24px);
   left: 50%;
   transform: translateX(-50%);
-  pointer-events: none;
   display: inline-flex;
   align-items: center;
-  padding: 12px 22px;
+  gap: 10px;
+  pointer-events: auto;
+  z-index: 10;
+  white-space: nowrap;
+}
+.hero-hide-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
   border-radius: 999px;
   background: #FDFDFD;
   color: #090b0f;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
   font-family: 'Poppins', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: 0;
-  text-transform: none;
-  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+.hero-hide-btn:hover {
+  transform: translateY(-2px);
+  background: #090b0f;
+  color: #FDFDFD;
+  border-color: #090b0f;
+}
+.hero-hide-btn:active {
+  transform: translateY(0);
+}
+.cursor-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: #FDFDFD;
+  color: #090b0f;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  font-family: 'Poppins', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+  pointer-events: none;
   opacity: 1;
   transition: opacity 0.5s ease;
 }
@@ -361,10 +427,14 @@
 @media (max-width: 1100px) {
   .hero-base, .hero-invert { --eye-scale: 0.75; }
   .eyes-scene, .eyes-spacer { margin: -12px -56px -12px 0; }
+  .eyes-labels { top: calc(100% + 18px); gap: 8px; }
+  .hero-hide-btn, .cursor-hint { padding: 8px 14px; font-size: 11px; }
 }
 @media (max-width: 760px) {
   .hero-base, .hero-invert { padding: 100px 20px 20px; --eye-scale: 0.42; }
   .eyes-scene, .eyes-spacer { margin: -29px -130px -29px 0; }
+  .eyes-labels { top: calc(100% + 12px); gap: 6px; }
+  .hero-hide-btn, .cursor-hint { padding: 6px 12px; font-size: 10px; }
   .hero-title .line { gap: 0.15em; }
   .hero-bottom { flex-direction: column; align-items: flex-start; }
   .hero-desc { font-size: 15px; }
@@ -1966,18 +2036,69 @@ html[data-theme="light"] .kokil-nav-email:hover {
 
 /* ── HERO (LIGHT) ── */
 html[data-theme="light"] #hero {
-  background: #FDFDFD !important;
+  background: #090b0f !important;
 }
 html[data-theme="light"] .hero-paint {
   background: #FDFDFD !important;
 }
 html[data-theme="light"] .hero-base {
-  --ink: rgba(18, 22, 30, 0.22);
-  --ink-dim: rgba(18, 22, 30, 0.15);
-  --ink-line: rgba(18, 22, 30, 0.10);
-  --btn-bg: rgba(18, 22, 30, 0.05);
-  --btn-fg: rgba(18, 22, 30, 0.6);
+  --ink: transparent !important;
+  --ink-dim: transparent !important;
+  --ink-line: transparent !important;
+  --btn-bg: transparent !important;
+  --btn-fg: transparent !important;
 }
+html[data-theme="light"] .hero-base .hero-hello,
+html[data-theme="light"] .hero-base .hero-title,
+html[data-theme="light"] .hero-base .hero-desc {
+  color: transparent !important;
+}
+html[data-theme="light"] .hero-base .hero-btn {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  color: transparent !important;
+  box-shadow: none !important;
+}
+html[data-theme="light"] .hero-base .hero-strip {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  border-top-color: transparent !important;
+  color: transparent !important;
+}
+
+/* Eyes on dark hiding surface in light theme */
+html[data-theme="light"] .eyes-scene .eye {
+  background: #FDFDFD !important;
+  border: 2px solid rgba(255, 255, 255, 0.45) !important;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.6) !important;
+}
+html[data-theme="light"] .eyes-scene .pupil {
+  background: #090b0f !important;
+}
+
+/* Light-coloured HIDE / COLOR ME labels on the dark hiding surface */
+html[data-theme="light"] .hero-hide-btn {
+  background: #FDFDFD !important;
+  color: #090b0f !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45) !important;
+}
+html[data-theme="light"] .hero-hide-btn:hover {
+  background: #027a9e !important;
+  border-color: #027a9e !important;
+  color: #FDFDFD !important;
+}
+html[data-theme="light"] .cursor-hint {
+  background: #FDFDFD !important;
+  color: #090b0f !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Revealed Light Theme Hero (revealed on top of #FDFDFD hero-paint) */
 html[data-theme="light"] .hero-invert {
   --ink: #11141b !important;
   --ink-dim: #4d5462 !important;
@@ -1985,34 +2106,37 @@ html[data-theme="light"] .hero-invert {
   --btn-bg: #11141b !important;
   --btn-fg: #FDFDFD !important;
 }
-html[data-theme="light"] .hero-btn.primary {
-  background: #11141b;
-  color: #FDFDFD;
-  border: 1px solid #11141b;
+html[data-theme="light"] .hero-invert .hero-hello {
+  color: #4d5462 !important;
 }
-html[data-theme="light"] .hero-btn.primary:hover {
-  background: #027a9e;
-  border-color: #027a9e;
-  color: #FDFDFD;
+html[data-theme="light"] .hero-invert .hero-title {
+  color: #11141b !important;
 }
-html[data-theme="light"] .hero-btn.ghost {
-  color: #11141b;
-  border: 1px solid rgba(18, 22, 30, 0.18);
-  background: rgba(255, 255, 255, 0.85);
+html[data-theme="light"] .hero-invert .hero-desc {
+  color: #4d5462 !important;
 }
-html[data-theme="light"] .hero-btn.ghost:hover {
-  border-color: #027a9e;
-  color: #027a9e;
+html[data-theme="light"] .hero-invert .hero-btn.primary {
+  background: #11141b !important;
+  color: #FDFDFD !important;
+  border: 1px solid #11141b !important;
 }
-html[data-theme="light"] .hero-strip {
-  border-top: 1px solid rgba(18, 22, 30, 0.12);
-  color: #4d5462;
+html[data-theme="light"] .hero-invert .hero-btn.primary:hover {
+  background: #027a9e !important;
+  border-color: #027a9e !important;
+  color: #FDFDFD !important;
 }
-html[data-theme="light"] .cursor-hint {
-  background: #11141b;
-  color: #FDFDFD;
-  border: 1px solid rgba(18, 22, 30, 0.12);
-  box-shadow: 0 6px 20px rgba(18, 22, 30, 0.16);
+html[data-theme="light"] .hero-invert .hero-btn.ghost {
+  color: #11141b !important;
+  border: 1px solid rgba(18, 22, 30, 0.2) !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+}
+html[data-theme="light"] .hero-invert .hero-btn.ghost:hover {
+  border-color: #027a9e !important;
+  color: #027a9e !important;
+}
+html[data-theme="light"] .hero-invert .hero-strip {
+  border-top: 1px solid rgba(18, 22, 30, 0.12) !important;
+  color: #4d5462 !important;
 }
 
 /* ── INTRO / ABOUT (LIGHT) ── */
