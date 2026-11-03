@@ -26,17 +26,17 @@
     --border-accent: rgba(169, 221, 240, 0.3);
     --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35);
     --shadow-elevated: 0 20px 48px rgba(0, 0, 0, 0.5);
-    --btn-primary-bg: #ffffff;
+    --btn-primary-bg: #FDFDFD;
     --btn-primary-fg: #090b0f;
     --btn-secondary-bg: rgba(255, 255, 255, 0.03);
     --btn-secondary-border: rgba(255, 255, 255, 0.12);
     --btn-secondary-fg: #f2f1ec;
     --hero-bg: #f7f7f5;
     --hero-paint-bg: #090b0f;
-    --hero-invert-ink: #ffffff;
+    --hero-invert-ink: #FDFDFD;
     --hero-invert-ink-dim: #a3a3a3;
     --hero-invert-ink-line: rgba(255, 255, 255, 0.14);
-    --hero-invert-btn-bg: #ffffff;
+    --hero-invert-btn-bg: #FDFDFD;
     --hero-invert-btn-fg: #090b0f;
   }
 
@@ -46,9 +46,9 @@
     --bg-primary: #f8f7f4;
     --bg-dark: #f8f7f4;
     --bg-surface: #eeece5;
-    --bg-card: #ffffff;
+    --bg-card: #FDFDFD;
     --bg-card-hover: #fcfbf9;
-    --bg-elevated: #ffffff;
+    --bg-elevated: #FDFDFD;
     --accent: #027a9e;
     --accent-rgb: 2, 122, 158;
     --accent-glow: rgba(2, 122, 158, 0.14);
@@ -65,7 +65,7 @@
     --shadow-card: 0 8px 30px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.04);
     --shadow-elevated: 0 20px 48px rgba(18, 22, 30, 0.10), 0 4px 12px rgba(18, 22, 30, 0.05);
     --btn-primary-bg: #11141b;
-    --btn-primary-fg: #ffffff;
+    --btn-primary-fg: #FDFDFD;
     --btn-secondary-bg: rgba(18, 22, 30, 0.035);
     --btn-secondary-border: rgba(18, 22, 30, 0.14);
     --btn-secondary-fg: #11141b;
@@ -75,7 +75,7 @@
     --hero-invert-ink-dim: #4d5462;
     --hero-invert-ink-line: rgba(18, 22, 30, 0.14);
     --hero-invert-btn-bg: #11141b;
-    --hero-invert-btn-fg: #ffffff;
+    --hero-invert-btn-fg: #FDFDFD;
   }
 
   * {
@@ -99,7 +99,7 @@
 
   ::selection {
     background-color: var(--accent);
-    color: #ffffff;
+    color: #FDFDFD;
   }
 }
 
@@ -228,7 +228,7 @@ html[data-theme="light"] .bg-\[\#090b0f\] {
 
 /* Primary surface & cards */
 html[data-theme="light"] .bg-\[\#11141b\] {
-  background-color: #ffffff !important;
+  background-color: #FDFDFD !important;
   box-shadow: 0 10px 32px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.03);
 }
 
@@ -241,7 +241,7 @@ html[data-theme="light"] .bg-\[\#0d1016\] {
 
 /* Primary & secondary text */
 html[data-theme="light"] .text-\[\#f2f1ec\],
-html[data-theme="light"] .text-\[\#ffffff\] {
+html[data-theme="light"] .text-\[\#FDFDFD\] {
   color: #11141b !important;
 }
 
@@ -315,29 +315,29 @@ html[data-theme="light"] .text-white\/80 {
 }
 
 /* Action CTA Buttons in light mode: deep carbon black with white text */
-html[data-theme="light"] a.bg-\[\#ffffff\],
-html[data-theme="light"] button.bg-\[\#ffffff\],
+html[data-theme="light"] a.bg-\[\#FDFDFD\],
+html[data-theme="light"] button.bg-\[\#FDFDFD\],
 html[data-theme="light"] a.bg-\[\#f2f1ec\],
 html[data-theme="light"] button.bg-\[\#f2f1ec\] {
   background-color: #11141b !important;
-  color: #ffffff !important;
+  color: #FDFDFD !important;
   border-color: #11141b !important;
   box-shadow: 0 4px 16px rgba(18, 22, 30, 0.12) !important;
 }
 
-html[data-theme="light"] a.bg-\[\#ffffff\]:hover,
-html[data-theme="light"] button.bg-\[\#ffffff\]:hover,
+html[data-theme="light"] a.bg-\[\#FDFDFD\]:hover,
+html[data-theme="light"] button.bg-\[\#FDFDFD\]:hover,
 html[data-theme="light"] a.bg-\[\#f2f1ec\]:hover,
 html[data-theme="light"] button.bg-\[\#f2f1ec\]:hover {
   background-color: #027a9e !important;
-  color: #ffffff !important;
+  color: #FDFDFD !important;
   border-color: #027a9e !important;
 }
 
 /* Secondary outline buttons */
 html[data-theme="light"] a.border-white\/\[0\.12\],
 html[data-theme="light"] button.border-white\/\[0\.12\] {
-  background-color: #ffffff !important;
+  background-color: #FDFDFD !important;
   border-color: rgba(18, 22, 30, 0.15) !important;
   color: #11141b !important;
 }
@@ -353,7 +353,7 @@ html[data-theme="light"] input[type="text"],
 html[data-theme="light"] input[type="email"],
 html[data-theme="light"] textarea,
 html[data-theme="light"] select {
-  background-color: #ffffff !important;
+  background-color: #FDFDFD !important;
   border-color: rgba(18, 22, 30, 0.14) !important;
   color: #11141b !important;
 }
@@ -390,7 +390,7 @@ html[data-theme="light"] .cursor-ring.is-text {
 }
 
 html[data-theme="light"] .cursor-ring .cursor-text {
-  color: #ffffff;
+  color: #FDFDFD;
 }
 
 /* Grid lines overlay in light mode */

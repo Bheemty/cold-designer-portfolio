@@ -398,7 +398,7 @@ export default function AboutPage() {
             <a
               href="mailto:abolarintaye20@gmail.com"
               onClick={() => sound.playClick()}
-              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#ffffff] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
+              className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
             >
               <span>abolarintaye20@gmail.com</span>
               <svg

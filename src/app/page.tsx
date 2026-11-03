@@ -6,7 +6,7 @@ import NotebookKokil from "@/components/kokil/NotebookKokil";
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col bg-[#090b0f] text-[#ffffff] overflow-x-hidden">
+    <main className="relative flex min-h-screen flex-col bg-[#090b0f] text-[#FDFDFD] overflow-x-hidden">
       {/* Background Interactive Cursor Grid */}
       <CursorGrid
         cellSize={64}

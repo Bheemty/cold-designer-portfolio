@@ -151,7 +151,7 @@ export default function WorkArchivePage() {
                 }}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all cursor-pointer ${
                   viewMode === "editorial"
-                    ? "bg-[#ffffff] text-[#090b0f] font-semibold shadow-sm"
+                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-sm"
                     : "text-[#89919d] hover:text-[#f2f1ec]"
                 }`}
                 aria-pressed={viewMode === "editorial"}
@@ -167,7 +167,7 @@ export default function WorkArchivePage() {
                 }}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all cursor-pointer ${
                   viewMode === "table"
-                    ? "bg-[#ffffff] text-[#090b0f] font-semibold shadow-sm"
+                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-sm"
                     : "text-[#89919d] hover:text-[#f2f1ec]"
                 }`}
                 aria-pressed={viewMode === "table"}
@@ -370,7 +370,7 @@ export default function WorkArchivePage() {
                               <Link
                                 href={`/work/${p.slug}`}
                                 onClick={() => sound.playClick()}
-                                className="inline-flex items-center gap-2.5 rounded-full bg-[#ffffff] text-[#090b0f] font-mono-code text-xs font-semibold px-6 py-3 hover:bg-[#a9ddf0] transition-colors shadow-lg cursor-pointer"
+                                className="inline-flex items-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] font-mono-code text-xs font-semibold px-6 py-3 hover:bg-[#a9ddf0] transition-colors shadow-lg cursor-pointer"
                               >
                                 <span>View Case Study</span>
                                 <svg
@@ -634,7 +634,7 @@ export default function WorkArchivePage() {
           </div>
           <a
             href="mailto:abolarintaye20@gmail.com"
-            className="inline-flex items-center gap-2 rounded-full bg-[#ffffff] text-[#090b0f] px-6 py-3 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
+            className="inline-flex items-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
           >
             <span>Start a Direct Conversation</span>
             <svg

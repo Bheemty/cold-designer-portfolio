@@ -123,7 +123,7 @@ export default function CodexPage() {
     },
     paper: {
       bg: "#f8f7f4",
-      cardBg: "#ffffff",
+      cardBg: "#FDFDFD",
       border: "rgba(18, 22, 30, 0.1)",
       textPrimary: "#11141b",
       textMuted: "#4d5462",
@@ -260,10 +260,10 @@ export default function CodexPage() {
                       disabled={lifecycleState !== "idle"}
                       className={`w-full py-3.5 px-6 rounded-full font-mono-code text-xs font-semibold flex items-center justify-center gap-2.5 transition-all duration-300 cursor-pointer shadow-lg ${
                         lifecycleState === "idle"
-                          ? "bg-[#ffffff] text-[#090b0f] hover:bg-[#a9ddf0] hover:scale-[1.01]"
+                          ? "bg-[#FDFDFD] text-[#090b0f] hover:bg-[#a9ddf0] hover:scale-[1.01]"
                           : lifecycleState === "loading"
                           ? "bg-[#f59e0b] text-[#090b0f] cursor-wait"
-                          : "bg-[#10b981] text-[#ffffff]"
+                          : "bg-[#10b981] text-[#FDFDFD]"
                       }`}
                     >
                       {lifecycleState === "idle" && (
@@ -459,7 +459,7 @@ export default function CodexPage() {
                       }}
                       className={`w-full py-3.5 px-6 rounded-full font-mono-code text-xs font-semibold transition-all duration-200 cursor-pointer ${
                         identityVerified
-                          ? "bg-[#ffffff] text-[#090b0f] hover:bg-[#a9ddf0] shadow-lg cursor-pointer"
+                          ? "bg-[#FDFDFD] text-[#090b0f] hover:bg-[#a9ddf0] shadow-lg cursor-pointer"
                           : "bg-white/5 border border-white/10 text-white/30 cursor-not-allowed"
                       }`}
                     >
@@ -789,7 +789,7 @@ export default function CodexPage() {
                     }}
                     style={{
                       backgroundColor: currentTheme.accent,
-                      color: activeTheme === "paper" ? "#ffffff" : "#090b0f",
+                      color: activeTheme === "paper" ? "#FDFDFD" : "#090b0f",
                       padding: densityMode === "spacious" ? "12px 24px" : "8px 16px",
                       fontSize: densityMode === "spacious" ? "13px" : "11px",
                       transform: highlightAction ? "scale(1.03)" : "scale(1)",
@@ -929,7 +929,7 @@ export default function CodexPage() {
                     </p>
 
                     <div className="pt-2 flex items-center justify-between">
-                      <span className="inline-flex items-center gap-2 rounded-full bg-[#ffffff] text-[#090b0f] font-mono-code text-xs font-semibold px-5 py-2.5 shadow-md">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] font-mono-code text-xs font-semibold px-5 py-2.5 shadow-md">
                         <span>View Case Study</span>
                         <svg
                           viewBox="0 0 24 24"
@@ -1072,7 +1072,7 @@ export default function CodexPage() {
             <Link
               href="/work"
               onClick={() => sound.playClick()}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ffffff] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
             >
               <span>Explore Selected Work</span>
               <svg
