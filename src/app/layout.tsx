@@ -98,6 +98,12 @@ export default function RootLayout({
                   document.documentElement.setAttribute('data-theme', 'dark');
                   document.documentElement.classList.add('dark');
                 }
+                try {
+                  var heroRevealed = sessionStorage.getItem('cold_designer_hero_revealed');
+                  if (heroRevealed === 'true') {
+                    document.documentElement.setAttribute('data-hero-revealed', 'true');
+                  }
+                } catch (e) {}
               })();
             `,
           }}

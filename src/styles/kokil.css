@@ -523,6 +523,26 @@
 .hero-invert .hero-btn {
   pointer-events: auto;
 }
+
+/* ── PERSISTENT REVEALED HERO (ACROSS NAVIGATION & SESSION) ── */
+#hero.is-revealed,
+html[data-hero-revealed="true"] #hero {
+  background: var(--hero-paint-bg, #090b0f) !important;
+}
+
+#hero.is-revealed .hero-paint,
+html[data-hero-revealed="true"] #hero .hero-paint,
+#hero.is-revealed .hero-invert,
+html[data-hero-revealed="true"] #hero .hero-invert {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+#hero.is-revealed .cursor-hint,
+html[data-hero-revealed="true"] #hero .cursor-hint {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
 .hero-main {
   flex: 1;
   display: flex;
@@ -2565,6 +2585,26 @@ html[data-theme="light"] .hero-invert .hero-btn.ghost:hover {
 html[data-theme="light"] .hero-invert .hero-strip {
   border-top: 1px solid rgba(18, 22, 30, 0.12) !important;
   color: #4d5462 !important;
+}
+
+/* ── PERSISTENT REVEALED HERO (LIGHT THEME) ── */
+html[data-theme="light"] #hero.is-revealed,
+html[data-theme="light"][data-hero-revealed="true"] #hero {
+  background: #FDFDFD !important;
+}
+
+html[data-theme="light"] #hero.is-revealed .hero-paint,
+html[data-theme="light"][data-hero-revealed="true"] #hero .hero-paint,
+html[data-theme="light"] #hero.is-revealed .hero-invert,
+html[data-theme="light"][data-hero-revealed="true"] #hero .hero-invert {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+html[data-theme="light"] #hero.is-revealed .cursor-hint,
+html[data-theme="light"][data-hero-revealed="true"] #hero .cursor-hint {
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* ── INTRO / ABOUT (LIGHT) ── */
