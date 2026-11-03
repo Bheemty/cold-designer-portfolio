@@ -61,11 +61,11 @@ const JOURNAL_PAGES: JournalSheet[] = [
   },
   {
     id: "codex",
-    tabLabel: "Codex Lab",
-    title: "Tactile UI Laboratory",
+    tabLabel: "Playground",
+    title: "Interactive Design Playground",
     pageNo: "04",
-    category: "Interactive Laboratory // Haptics",
-    desc: "A living playground of tactile buttons, spring physics, and Web Audio synthesis.",
+    category: "Design Decisions // Interactive Playground",
+    desc: "Experience interface decisions firsthand: button feedback lifecycles, layout density, and theme contrast.",
     isInteractive: true,
     href: "/codex",
   },
@@ -77,10 +77,23 @@ export default function NotebookKokil() {
   const nbRef = useRef<HTMLDivElement>(null);
   const timersRef = useRef<NodeJS.Timeout[]>([]);
 
-  // Interactive sheet 4 state
-  const [labClicks, setLabClicks] = useState<number>(0);
+  // Interactive sheet 4 state (Design Playground preview)
+  const [previewState, setPreviewState] = useState<"idle" | "loading" | "success">("idle");
+  const [previewDensity, setPreviewDensity] = useState<"spacious" | "compact">("spacious");
   const [labSoundOn, setLabSoundOn] = useState<boolean>(true);
-  const [labPillActive, setLabPillActive] = useState<boolean>(false);
+
+  function handleTestState() {
+    if (previewState !== "idle") return;
+    setPreviewState("loading");
+    if (labSoundOn) sound.playClick();
+    setTimeout(() => {
+      setPreviewState("success");
+      if (labSoundOn) sound.playChime(660, 0.2);
+      setTimeout(() => {
+        setPreviewState("idle");
+      }, 1600);
+    }, 900);
+  }
 
   const TURN_DURATION = 850;
   const STAGGER = 180;
@@ -265,7 +278,20 @@ export default function NotebookKokil() {
                   aria-label="Inspect spatial daylighting study"
                 >
                   <span className="nb-shot-hint" aria-hidden="true">
-                    Explore &nearr;
+                    <span>Explore</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="11"
+                      height="11"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </span>
                 </Link>
                 <p className="nb-pg-desc">{JOURNAL_PAGES[1].desc}</p>
@@ -328,7 +354,20 @@ export default function NotebookKokil() {
                   aria-label="Inspect micro-commerce study"
                 >
                   <span className="nb-shot-hint" aria-hidden="true">
-                    Explore &nearr;
+                    <span>Explore</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="11"
+                      height="11"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </span>
                 </Link>
                 <p className="nb-pg-desc">{JOURNAL_PAGES[2].desc}</p>
@@ -391,7 +430,20 @@ export default function NotebookKokil() {
                   aria-label="Inspect acoustic study"
                 >
                   <span className="nb-shot-hint" aria-hidden="true">
-                    Explore &nearr;
+                    <span>Explore</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="11"
+                      height="11"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </span>
                 </Link>
                 <p className="nb-pg-desc">{JOURNAL_PAGES[3].desc}</p>
@@ -424,7 +476,7 @@ export default function NotebookKokil() {
               </div>
             </div>
 
-            {/* Sheet 4: Working Interactive Codex Laboratory */}
+            {/* Sheet 4: Interactive Design Playground Preview */}
             <div
               className={`nb-sheet ${currentPage > 4 ? "is-flipped" : ""}`}
               data-page="codex"
@@ -432,8 +484,8 @@ export default function NotebookKokil() {
                 zIndex: currentPage === 4 ? 30 : 17,
               }}
             >
-              <section className="nb-face nb-face--front" aria-label="Interactive Codex Lab">
-                <h3 className="nb-h">Codex Tactile Lab</h3>
+              <section className="nb-face nb-face--front" aria-label="Interactive Design Playground">
+                <h3 className="nb-h">Design Playground</h3>
                 <div className="nb-pg-meta">
                   <button type="button" className="nb-back" onClick={() => goTo(0)}>
                     &larr; Index
@@ -441,44 +493,66 @@ export default function NotebookKokil() {
                   <span>Entry 04</span>
                 </div>
 
-                {/* Real Working Interactive Controls inside the notebook */}
+                <p className="nb-pg-desc" style={{ marginBottom: "0.8cqw", fontSize: "1.25cqw" }}>
+                  Experience interface decisions firsthand: state lifecycles, density scaling, and theme contrast.
+                </p>
+
+                {/* Working Interactive Playground Preview */}
                 <div className="nb-lab-box">
+                  {/* Row 1: Button Feedback Lifecycle */}
                   <div className="nb-lab-row">
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.2cqw" }}>
+                      <span style={{ fontSize: "1.2cqw", fontFamily: "'Poppins', sans-serif", fontWeight: 600, color: "#1a1a1a" }}>
+                        Button State Lifecycle
+                      </span>
+                      <span style={{ fontSize: "1cqw", color: "#666" }}>
+                        Try clicking to test feedback
+                      </span>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => {
-                        setLabClicks((c) => c + 1);
-                        if (labSoundOn) sound.playClick();
-                      }}
-                      className="nb-lab-tactile-btn"
+                      onClick={handleTestState}
+                      className={`nb-lab-state-btn is-${previewState}`}
+                      disabled={previewState !== "idle"}
                     >
-                      <span>Press Mechanical</span>
+                      {previewState === "idle" && <span>Schedule Triage</span>}
+                      {previewState === "loading" && <span>Confirming...</span>}
+                      {previewState === "success" && <span>Confirmed &#10003;</span>}
                     </button>
-                    <span className="nb-lab-counter">Clicks: {labClicks}</span>
                   </div>
 
+                  {/* Row 2: Ergonomic Density Switcher */}
                   <div className="nb-lab-row">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setLabPillActive(!labPillActive);
-                        if (labSoundOn) sound.playPop();
-                      }}
-                      className={`nb-lab-pill ${labPillActive ? "is-active" : ""}`}
-                    >
-                      {labPillActive ? "Spring: Active" : "Spring: Rest"}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const next = !labSoundOn;
-                        setLabSoundOn(next);
-                        if (next) sound.playChime(660, 0.2);
-                      }}
-                      className="nb-lab-audio-toggle"
-                    >
-                      {labSoundOn ? "Sound: ON" : "Sound: OFF"}
-                    </button>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.2cqw" }}>
+                      <span style={{ fontSize: "1.2cqw", fontFamily: "'Poppins', sans-serif", fontWeight: 600, color: "#1a1a1a" }}>
+                        Ergonomic Density
+                      </span>
+                      <span style={{ fontSize: "1cqw", color: "#666" }}>
+                        Layout: {previewDensity === "spacious" ? "Spacious" : "Compact"}
+                      </span>
+                    </div>
+                    <div style={{ display: "flex", gap: "0.6cqw" }}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewDensity("spacious");
+                          if (labSoundOn) sound.playPop();
+                        }}
+                        className={`nb-lab-pill ${previewDensity === "spacious" ? "is-active" : ""}`}
+                      >
+                        Spacious
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setPreviewDensity("compact");
+                          if (labSoundOn) sound.playPop();
+                        }}
+                        className={`nb-lab-pill ${previewDensity === "compact" ? "is-active" : ""}`}
+                      >
+                        Compact
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -491,7 +565,20 @@ export default function NotebookKokil() {
                     &larr; Entry 03
                   </button>
                   <Link href="/codex" className="nb-visit">
-                    <span>Open Full Codex Lab &rarr;</span>
+                    <span>Open Playground</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="12"
+                      height="12"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
                   </Link>
                 </div>
               </section>
@@ -500,9 +587,9 @@ export default function NotebookKokil() {
                 onClick={() => goTo(4)}
                 aria-hidden="true"
               >
-                <span className="nb-ghost">Codex</span>
+                <span className="nb-ghost">Playground</span>
                 <button type="button" className="nb-prev" tabIndex={-1}>
-                  &larr; Back to Codex
+                  &larr; Back to Playground
                 </button>
               </div>
             </div>

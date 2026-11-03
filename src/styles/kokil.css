@@ -1303,9 +1303,17 @@
   font-size: 1.45cqw;
   font-weight: 500;
   text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 .nb-visit:hover {
   background: #000;
+  transform: translateY(-0.2cqw);
+}
+.nb-visit svg {
+  transition: transform 0.2s ease;
+}
+.nb-visit:hover svg {
+  transform: translate(2px, -2px);
 }
 .nb-shot--link {
   display: block;
@@ -1320,6 +1328,9 @@
   position: absolute;
   right: 1cqw;
   bottom: 1cqw;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4cqw;
   padding: 0.5cqw 1.1cqw;
   border-radius: 99px;
   background: #fff;
@@ -1328,6 +1339,17 @@
   font-size: 1.15cqw;
   font-weight: 600;
   box-shadow: 0 0.3cqw 0.8cqw rgba(0, 0, 0, 0.25);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.nb-shot--link:hover .nb-shot-hint {
+  transform: translateY(-0.2cqw);
+  background: #a9ddf0;
+}
+.nb-shot-hint svg {
+  transition: transform 0.2s ease;
+}
+.nb-shot--link:hover .nb-shot-hint svg {
+  transform: translate(1px, -1px);
 }
 .nb-prev-inline {
   display: none;
@@ -1721,6 +1743,36 @@
   font-size: 2.1cqw;
   color: #1a1a1a;
 }
+
+.nb-lab-state-btn {
+  padding: 0.6cqw 1.4cqw;
+  border-radius: 99px;
+  border: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.2cqw;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 0.3cqw 0.8cqw rgba(0, 0, 0, 0.2);
+}
+.nb-lab-state-btn.is-idle {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+.nb-lab-state-btn.is-idle:hover {
+  background: #000000;
+  transform: translateY(-0.15cqw);
+}
+.nb-lab-state-btn.is-loading {
+  background: #f59e0b;
+  color: #000000;
+  cursor: wait;
+}
+.nb-lab-state-btn.is-success {
+  background: #10b981;
+  color: #ffffff;
+}
+
 .nb-lab-pill {
   padding: 0.6cqw 1.4cqw;
   border-radius: 99px;

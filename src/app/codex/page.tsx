@@ -2,118 +2,150 @@
 
 import { useState, useRef, useEffect, useId } from "react";
 import Link from "next/link";
-import { ArrowLeft, Volume2, VolumeX, Sliders, Layers } from "lucide-react";
+import { ArrowLeft, Volume2, VolumeX, Sparkles, Check, AlertCircle, RefreshCw } from "lucide-react";
 import { sound } from "@/lib/sounds";
 
 export default function CodexPage() {
-  // Sound mute state
+  // Global Audio Feedback Toggle (Never autoplays; user must interact)
   const [soundEnabled, setSoundEnabled] = useState(true);
 
-  // Button interaction counters & states
-  const [clickCount, setClickCount] = useState(0);
-  const [hapticActive, setHapticActive] = useState(false);
-  const [magneticToggled, setMagneticToggled] = useState(false);
-  const [pulseCount, setPulseCount] = useState(0);
+  // ─────────────────────────────────────────────────────────────
+  // EXPERIMENT 1: THE INTERACTION STUDIO STATE
+  // ─────────────────────────────────────────────────────────────
+  // A. Async Lifecycle Button
+  const [lifecycleState, setLifecycleState] = useState<"idle" | "loading" | "success">("idle");
+  const lifecycleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Typography tension slider
-  const [fontWeight, setFontWeight] = useState(600);
-  const [letterSpacing, setLetterSpacing] = useState(-0.02);
-  const [fontSample, setFontSample] = useState("Cold Design Engineering");
+  const handleTriggerLifecycle = () => {
+    if (lifecycleState !== "idle") return;
+    setLifecycleState("loading");
+    if (soundEnabled) sound.playClick();
 
-  // Web Audio custom pitch
-  const [customPitch, setCustomPitch] = useState(440);
+    lifecycleTimerRef.current = setTimeout(() => {
+      setLifecycleState("success");
+      if (soundEnabled) sound.playChime(660, 0.25);
 
-  // Design Token Theme Switcher
-  const [activeTheme, setActiveTheme] = useState<"obsidian" | "studio" | "slate" | "midnight">("obsidian");
+      lifecycleTimerRef.current = setTimeout(() => {
+        setLifecycleState("idle");
+      }, 2000);
+    }, 1100);
+  };
 
-  // Draggable Puck Physics State
-  const puckRef = useRef<HTMLDivElement>(null);
-  const [puckPos, setPuckPos] = useState({ x: 0, y: 0 });
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartRef = useRef({ x: 0, y: 0 });
+  // B. Hold-to-Confirm Destructive Action
+  const [holdProgress, setHoldProgress] = useState(0);
+  const [isHolding, setIsHolding] = useState(false);
+  const [isArchived, setIsArchived] = useState(false);
+  const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Generate unique IDs for accessibility
-  const weightInputId = useId();
-  const spacingInputId = useId();
-  const pitchInputId = useId();
+  const startHold = () => {
+    if (isArchived) return;
+    setIsHolding(true);
+    if (soundEnabled) sound.playPop(320);
 
-  // Handle puck dragging
-  const handlePuckStart = (e: React.MouseEvent | React.TouchEvent) => {
-    setIsDragging(true);
-    const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-    const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-    dragStartRef.current = { x: clientX - puckPos.x, y: clientY - puckPos.y };
+    const startTime = Date.now();
+    const duration = 1200; // 1.2s to confirm
+
+    holdIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(100, (elapsed / duration) * 100);
+      setHoldProgress(progress);
+
+      if (progress >= 100) {
+        clearInterval(holdIntervalRef.current!);
+        setIsHolding(false);
+        setIsArchived(true);
+        if (soundEnabled) sound.playChime(520, 0.3);
+      }
+    }, 25);
+  };
+
+  const endHold = () => {
+    if (isArchived) return;
+    if (holdIntervalRef.current) clearInterval(holdIntervalRef.current);
+    if (holdProgress < 100 && isHolding) {
+      if (soundEnabled) sound.playClick();
+    }
+    setIsHolding(false);
+    setHoldProgress(0);
+  };
+
+  const resetArchive = () => {
+    setIsArchived(false);
+    setHoldProgress(0);
     if (soundEnabled) sound.playPop();
   };
 
+  // C. Operational Mode Toggle
+  const [autonomousTriage, setAutonomousTriage] = useState(true);
+
+  // D. Precondition Gate
+  const [identityVerified, setIdentityVerified] = useState(false);
+  const [gateSubmitted, setGateSubmitted] = useState(false);
+
+  // ─────────────────────────────────────────────────────────────
+  // EXPERIMENT 2: THE INTERFACE SWITCHER STATE
+  // ─────────────────────────────────────────────────────────────
+  const [activeTheme, setActiveTheme] = useState<"obsidian" | "paper" | "midnight">("obsidian");
+  const [densityMode, setDensityMode] = useState<"spacious" | "compact">("spacious");
+  const [highlightAction, setHighlightAction] = useState(false);
+
+  // ─────────────────────────────────────────────────────────────
+  // EXPERIMENT 3: TYPE & VISUAL HIERARCHY STATE
+  // ─────────────────────────────────────────────────────────────
+  const [hierarchyMode, setHierarchyMode] = useState<"intentional" | "flat">("intentional");
+  const [typeWeight, setTypeWeight] = useState(700);
+  const [typeTracking, setTypeTracking] = useState(-0.02);
+  const [sampleHeadline, setSampleHeadline] = useState("Structured WhatsApp-First Triage Gateway");
+
+  const weightSliderId = useId();
+  const trackingSliderId = useId();
+
+  // Cleanup timers on unmount
   useEffect(() => {
-    const handleMove = (e: MouseEvent | TouchEvent) => {
-      if (!isDragging) return;
-      const clientX = "touches" in e ? e.touches[0].clientX : e.clientX;
-      const clientY = "touches" in e ? e.touches[0].clientY : e.clientY;
-      const rawX = clientX - dragStartRef.current.x;
-      const rawY = clientY - dragStartRef.current.y;
-      // Apply elastic damping limit
-      const dist = Math.hypot(rawX, rawY);
-      const maxDist = 90;
-      if (dist > maxDist) {
-        const angle = Math.atan2(rawY, rawX);
-        setPuckPos({ x: Math.cos(angle) * maxDist, y: Math.sin(angle) * maxDist });
-      } else {
-        setPuckPos({ x: rawX, y: rawY });
-      }
-    };
-
-    const handleEnd = () => {
-      if (!isDragging) return;
-      setIsDragging(false);
-      // Spring release snap back
-      if (soundEnabled) sound.playClick();
-      setPuckPos({ x: 0, y: 0 });
-    };
-
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMove);
-      window.addEventListener("mouseup", handleEnd);
-      window.addEventListener("touchmove", handleMove);
-      window.addEventListener("touchend", handleEnd);
-    }
     return () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mouseup", handleEnd);
-      window.removeEventListener("touchmove", handleMove);
-      window.removeEventListener("touchend", handleEnd);
+      if (lifecycleTimerRef.current) clearTimeout(lifecycleTimerRef.current);
+      if (holdIntervalRef.current) clearInterval(holdIntervalRef.current);
     };
-  }, [isDragging, soundEnabled]);
+  }, []);
 
-  const handleCustomSynthPlay = (freq: number) => {
-    if (!soundEnabled) return;
-    try {
-      const AudioCtx =
-        window.AudioContext ||
-        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
-      const ctx = new AudioCtx();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, ctx.currentTime);
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.35);
-    } catch {
-      // AudioContext unavailable
-    }
+  // Theme variable map for live component preview
+  const themeStyles = {
+    obsidian: {
+      bg: "#090b0f",
+      cardBg: "#11141b",
+      border: "rgba(255, 255, 255, 0.1)",
+      textPrimary: "#f2f1ec",
+      textMuted: "#89919d",
+      accent: "#a9ddf0",
+      accentSurface: "rgba(169, 221, 240, 0.12)",
+      tagBg: "rgba(255, 255, 255, 0.04)",
+      tagBorder: "rgba(255, 255, 255, 0.08)",
+    },
+    paper: {
+      bg: "#f7f7f5",
+      cardBg: "#ffffff",
+      border: "rgba(0, 0, 0, 0.12)",
+      textPrimary: "#090b0f",
+      textMuted: "#666b75",
+      accent: "#0284c7",
+      accentSurface: "rgba(2, 132, 199, 0.1)",
+      tagBg: "rgba(0, 0, 0, 0.04)",
+      tagBorder: "rgba(0, 0, 0, 0.08)",
+    },
+    midnight: {
+      bg: "#0b1329",
+      cardBg: "#131e3d",
+      border: "rgba(56, 189, 248, 0.2)",
+      textPrimary: "#f8fafc",
+      textMuted: "#94a3b8",
+      accent: "#38bdf8",
+      accentSurface: "rgba(56, 189, 248, 0.14)",
+      tagBg: "rgba(56, 189, 248, 0.05)",
+      tagBorder: "rgba(56, 189, 248, 0.15)",
+    },
   };
 
-  const themes = {
-    obsidian: { bg: "#090b0f", surface: "#11141b", accent: "#a9ddf0", text: "#f2f1ec", border: "rgba(255,255,255,0.12)" },
-    studio: { bg: "#f7f7f5", surface: "#ffffff", accent: "#111111", text: "#111111", border: "rgba(0,0,0,0.12)" },
-    slate: { bg: "#0f172a", surface: "#1e293b", accent: "#38bdf8", text: "#f8fafc", border: "rgba(56,189,248,0.2)" },
-    midnight: { bg: "#0d0a1a", surface: "#1a1430", accent: "#e879f9", text: "#fdf4ff", border: "rgba(232,121,249,0.25)" },
-  };
+  const currentTheme = themeStyles[activeTheme];
 
   return (
     <main className="min-h-screen pt-32 sm:pt-40 pb-28 px-6 sm:px-10 lg:px-16 bg-[#090b0f] text-[#f2f1ec]">
@@ -130,13 +162,13 @@ export default function CodexPage() {
           </Link>
         </div>
 
-        {/* Page Header */}
+        {/* Editorial Page Header */}
         <header className="border-b border-white/[0.08] pb-12 mb-16">
           <div className="flex flex-wrap items-center justify-between gap-4 mb-4 font-mono-code text-xs">
             <div className="flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
               <span className="uppercase tracking-widest text-[#a9ddf0]">
-                (01) &mdash; Creative Journal &amp; Codex // Interactive Laboratory
+                (01) &mdash; Interactive Design Playground // Living Systems Lab
               </span>
             </div>
 
@@ -166,404 +198,920 @@ export default function CodexPage() {
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-            Creative Journal &amp; Codex.
+            Design Decisions in Action.
           </h1>
 
-          <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            A real-time laboratory of tactile micro-interactions, spring mechanics, Web Audio synthesizers, and design system token governance by Taye Abolarin.
+          <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
+            A curated playground exploring how digital interfaces communicate through state lifecycles, adaptive themes, density ergonomics, and typographic hierarchy. Every interaction below serves an intentional design purpose.
           </p>
+
+          <div className="mt-8 flex flex-wrap items-center gap-3 font-mono-code text-xs text-[#89919d]">
+            <span className="px-3 py-1 rounded-full bg-white/[0.04] border border-white/[0.08]">
+              Codex &bull; Cold Designer Laboratory
+            </span>
+            <span>&bull;</span>
+            <span>3 Art-Directed Experiments</span>
+            <span>&bull;</span>
+            <span className="text-[#a9ddf0]">Touch &amp; Keyboard Accessible</span>
+          </div>
         </header>
 
-        {/* LAB GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {/* SECTION 1: TACTILE BUTTONS & CONTROLS (7 Cols) */}
-          <section className="lg:col-span-7 rounded-3xl border border-white/[0.1] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
+        {/* ─────────────────────────────────────────────────────────────
+            EXPERIMENT 01: THE INTERACTION STUDIO
+           ───────────────────────────────────────────────────────────── */}
+        <section aria-labelledby="exp1-title" className="mb-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 mb-10 gap-4">
             <div>
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-8">
-                <div className="flex items-center gap-2">
-                  <Sliders size={16} className="text-[#a9ddf0]" />
-                  <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
-                    01 // Tactile Physics &amp; Haptic States
-                  </span>
-                </div>
-                <span className="font-mono-code text-xs text-[#89919d]">Live CSS Springs</span>
+              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
+                EXPERIMENT 01 // INTERACTION STUDIO
               </div>
+              <h2 id="exp1-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+                State Lifecycles &amp; Intentional Friction
+              </h2>
+            </div>
+            <p className="font-mono-code text-xs text-[#89919d] max-w-md">
+              Instruction: Try clicking, pressing, and holding each control to observe how real interfaces communicate state.
+            </p>
+          </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
-                {/* 1. Mechanical Click Button */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
-                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
-                    Mechanical Plunger
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setClickCount((c) => c + 1);
-                      if (soundEnabled) sound.playClick();
-                    }}
-                    className="relative px-6 py-3.5 rounded-xl bg-gradient-to-b from-white to-[#d4d4d4] text-[#090b0f] font-mono-code text-xs font-bold shadow-[0_6px_0_#8e8e8e,0_12px_16px_rgba(0,0,0,0.4)] active:translate-y-1.5 active:shadow-[0_0px_0_#8e8e8e,0_4px_8px_rgba(0,0,0,0.4)] transition-all cursor-pointer"
-                  >
-                    PRESS DOWN ({clickCount})
-                  </button>
-                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
-                    6px spring offset + low pop
-                  </span>
-                </div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Interactive Workspace (8 cols) */}
+            <div className="lg:col-span-8 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                {/* 1. Async Lifecycle Button */}
+                <div className="rounded-2xl border border-white/[0.06] bg-[#090b0f] p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d] mb-3">
+                      <span className="uppercase text-[#a9ddf0]">A &mdash; Async Lifecycle</span>
+                      <span>Single Tap</span>
+                    </div>
+                    <h3 className="font-display font-semibold text-lg text-[#f2f1ec] mb-2">
+                      Telehealth Booking Action
+                    </h3>
+                    <p className="text-xs text-[#89919d] leading-relaxed mb-6">
+                      Click to observe the complete asynchronous progression: Idle &rarr; Loading &rarr; Success &rarr; Auto-reset.
+                    </p>
+                  </div>
 
-                {/* 2. Magnetic Toggle */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
-                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
-                    Magnetic Snap State
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMagneticToggled((m) => !m);
-                      if (soundEnabled) sound.playChime(magneticToggled ? 520 : 680, 0.15);
-                    }}
-                    className={`relative w-20 h-10 rounded-full p-1 transition-colors duration-300 cursor-pointer ${
-                      magneticToggled ? "bg-[#a9ddf0]" : "bg-white/10"
-                    }`}
-                    aria-label="Toggle magnetic state"
-                  >
-                    <div
-                      className={`w-8 h-8 rounded-full bg-[#090b0f] shadow-md transition-transform duration-300 ease-out flex items-center justify-center ${
-                        magneticToggled ? "translate-x-10 bg-[#090b0f]" : "translate-x-0 bg-white"
+                  <div className="space-y-4">
+                    <button
+                      type="button"
+                      onClick={handleTriggerLifecycle}
+                      disabled={lifecycleState !== "idle"}
+                      className={`w-full py-3.5 px-6 rounded-full font-mono-code text-xs font-semibold flex items-center justify-center gap-2.5 transition-all duration-300 cursor-pointer shadow-lg ${
+                        lifecycleState === "idle"
+                          ? "bg-[#ffffff] text-[#090b0f] hover:bg-[#a9ddf0] hover:scale-[1.01]"
+                          : lifecycleState === "loading"
+                          ? "bg-[#f59e0b] text-[#090b0f] cursor-wait"
+                          : "bg-[#10b981] text-[#ffffff]"
                       }`}
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
+                      {lifecycleState === "idle" && (
+                        <>
+                          <span>Schedule Consultation</span>
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="14"
+                            height="14"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.4"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M7 17L17 7M17 7H7M17 7V17" />
+                          </svg>
+                        </>
+                      )}
+                      {lifecycleState === "loading" && (
+                        <>
+                          <RefreshCw size={14} className="animate-spin" />
+                          <span>Verifying Physician Availability...</span>
+                        </>
+                      )}
+                      {lifecycleState === "success" && (
+                        <>
+                          <Check size={14} />
+                          <span>Consultation Confirmed</span>
+                        </>
+                      )}
+                    </button>
+
+                    <div className="font-mono-code text-[11px] text-[#89919d] flex items-center justify-between border-t border-white/[0.06] pt-2">
+                      <span>STATE:</span>
+                      <span className="text-[#a9ddf0] font-semibold uppercase">{lifecycleState}</span>
                     </div>
-                  </button>
-                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
-                    Status: {magneticToggled ? "ENGAGED" : "DORMANT"}
-                  </span>
+                  </div>
                 </div>
 
-                {/* 3. Soft Haptic Cushion */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
-                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
-                    Haptic Cushion
-                  </span>
-                  <button
-                    type="button"
-                    onMouseDown={() => {
-                      setHapticActive(true);
-                      if (soundEnabled) sound.playPop(340);
-                    }}
-                    onMouseUp={() => setHapticActive(false)}
-                    onTouchStart={() => {
-                      setHapticActive(true);
-                      if (soundEnabled) sound.playPop(340);
-                    }}
-                    onTouchEnd={() => setHapticActive(false)}
-                    className={`px-7 py-3 rounded-full border border-[#a9ddf0]/30 font-mono-code text-xs text-[#a9ddf0] transition-all duration-200 cursor-pointer ${
-                      hapticActive
-                        ? "scale-90 bg-[#a9ddf0]/20 shadow-[inset_0_4px_12px_rgba(0,0,0,0.6)]"
-                        : "scale-100 bg-[#a9ddf0]/5 shadow-none"
-                    }`}
-                  >
-                    {hapticActive ? "COMPRESSED" : "PRESS & HOLD"}
-                  </button>
-                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
-                    Sub-harmonic pitch shift
-                  </span>
+                {/* 2. Hold-to-Confirm Destructive Action */}
+                <div className="rounded-2xl border border-white/[0.06] bg-[#090b0f] p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d] mb-3">
+                      <span className="uppercase text-[#ef4444]">B &mdash; Intentional Friction</span>
+                      <span>Hold 1.2s</span>
+                    </div>
+                    <h3 className="font-display font-semibold text-lg text-[#f2f1ec] mb-2">
+                      Archive Critical Record
+                    </h3>
+                    <p className="text-xs text-[#89919d] leading-relaxed mb-6">
+                      Press and hold for 1.2s to commit. Releasing early safely cancels the action without committing.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    {!isArchived ? (
+                      <div className="relative">
+                        <button
+                          type="button"
+                          onMouseDown={startHold}
+                          onMouseUp={endHold}
+                          onMouseLeave={endHold}
+                          onTouchStart={startHold}
+                          onTouchEnd={endHold}
+                          className="relative w-full py-3.5 px-6 rounded-full font-mono-code text-xs font-semibold overflow-hidden border border-red-500/40 bg-red-500/10 text-red-200 hover:border-red-500 transition-colors cursor-pointer select-none"
+                        >
+                          {/* Dynamic Fill Progress Bar */}
+                          <div
+                            style={{ width: `${holdProgress}%` }}
+                            className="absolute inset-0 bg-red-500/30 transition-all duration-75 ease-linear pointer-events-none"
+                          />
+                          <span className="relative z-10 flex items-center justify-center gap-2">
+                            {isHolding ? (
+                              <span>Holding... {Math.round(holdProgress)}%</span>
+                            ) : (
+                              <span>Press &amp; Hold to Archive</span>
+                            )}
+                          </span>
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between gap-3 p-2.5 rounded-full bg-red-500/15 border border-red-500/40 font-mono-code text-xs text-red-200">
+                        <span className="flex items-center gap-1.5 pl-2">
+                          <Check size={14} className="text-red-400" />
+                          <span>Record Archived</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={resetArchive}
+                          className="px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-[#f2f1ec] cursor-pointer"
+                        >
+                          Undo
+                        </button>
+                      </div>
+                    )}
+
+                    <div className="font-mono-code text-[11px] text-[#89919d] flex items-center justify-between border-t border-white/[0.06] pt-2">
+                      <span>HOLD PROGRESS:</span>
+                      <span className="text-red-300 font-semibold">{Math.round(holdProgress)}%</span>
+                    </div>
+                  </div>
                 </div>
 
-                {/* 4. Pulse Generator */}
-                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-6 flex flex-col items-center justify-between text-center min-h-[190px]">
-                  <span className="font-mono-code text-[11px] text-[#89919d] uppercase mb-4">
-                    Harmonic Resonator
-                  </span>
+                {/* 3. Operational Mode Toggle */}
+                <div className="rounded-2xl border border-white/[0.06] bg-[#090b0f] p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d] mb-3">
+                      <span className="uppercase text-[#a9ddf0]">C &mdash; Kinetic Haptics</span>
+                      <span>Toggle State</span>
+                    </div>
+                    <h3 className="font-display font-semibold text-lg text-[#f2f1ec] mb-2">
+                      Operational Dispatch Mode
+                    </h3>
+                    <p className="text-xs text-[#89919d] leading-relaxed mb-6">
+                      Toggle between autonomous conversational routing and direct manual physician assignment.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between p-4 rounded-xl border border-white/[0.08] bg-white/[0.02]">
+                    <div className="flex flex-col">
+                      <span className="font-mono-code text-xs font-semibold text-[#f2f1ec]">
+                        {autonomousTriage ? "Autonomous WhatsApp Triage" : "Manual Doctor Review"}
+                      </span>
+                      <span className="font-mono-code text-[11px] text-[#89919d]">
+                        {autonomousTriage ? "Instant algorithmic matching" : "Physician review queue"}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAutonomousTriage((prev) => !prev);
+                        if (soundEnabled) sound.playChime(autonomousTriage ? 480 : 640, 0.15);
+                      }}
+                      className={`relative w-14 h-8 rounded-full p-1 transition-colors duration-250 cursor-pointer ${
+                        autonomousTriage ? "bg-[#a9ddf0]" : "bg-white/10"
+                      }`}
+                      aria-label="Toggle autonomous triage mode"
+                    >
+                      <div
+                        className={`w-6 h-6 rounded-full shadow-md transition-transform duration-250 ease-out flex items-center justify-center ${
+                          autonomousTriage ? "translate-x-6 bg-[#090b0f]" : "translate-x-0 bg-white"
+                        }`}
+                      >
+                        <span
+                          className={`h-1.5 w-1.5 rounded-full ${
+                            autonomousTriage ? "bg-[#a9ddf0]" : "bg-[#090b0f]"
+                          }`}
+                        />
+                      </div>
+                    </button>
+                  </div>
+                </div>
+
+                {/* 4. Precondition Gate (Disabled vs Active) */}
+                <div className="rounded-2xl border border-white/[0.06] bg-[#090b0f] p-6 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d] mb-3">
+                      <span className="uppercase text-[#a9ddf0]">D &mdash; Precondition Gate</span>
+                      <span>Form Logic</span>
+                    </div>
+                    <h3 className="font-display font-semibold text-lg text-[#f2f1ec] mb-2">
+                      Disabled State Clarity
+                    </h3>
+                    <p className="text-xs text-[#89919d] leading-relaxed mb-6">
+                      Toggle the requirement checkbox below to see how disabled states should inform rather than frustrate.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <label className="flex items-center gap-3 font-mono-code text-xs text-[#89919d] cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={identityVerified}
+                        onChange={(e) => {
+                          setIdentityVerified(e.target.checked);
+                          if (soundEnabled) sound.playClick();
+                        }}
+                        className="w-4 h-4 rounded accent-[#a9ddf0] cursor-pointer"
+                      />
+                      <span className="text-[#f2f1ec]">Patient identity &amp; consent confirmed</span>
+                    </label>
+
+                    <button
+                      type="button"
+                      disabled={!identityVerified}
+                      onClick={() => {
+                        setGateSubmitted(true);
+                        if (soundEnabled) sound.playChime(700, 0.2);
+                        setTimeout(() => setGateSubmitted(false), 2000);
+                      }}
+                      className={`w-full py-3.5 px-6 rounded-full font-mono-code text-xs font-semibold transition-all duration-200 cursor-pointer ${
+                        identityVerified
+                          ? "bg-[#ffffff] text-[#090b0f] hover:bg-[#a9ddf0] shadow-lg cursor-pointer"
+                          : "bg-white/5 border border-white/10 text-white/30 cursor-not-allowed"
+                      }`}
+                    >
+                      {gateSubmitted ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <Check size={14} /> Intake Submitted
+                        </span>
+                      ) : identityVerified ? (
+                        "Proceed to Intake Gateway"
+                      ) : (
+                        "Verify Consent to Proceed"
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Interaction Studio Footer */}
+              <div className="pt-4 border-t border-white/[0.08] flex flex-wrap items-center justify-between font-mono-code text-xs text-[#89919d] gap-2">
+                <span>EXECUTION PRINCIPLE:</span>
+                <span className="text-[#a9ddf0]">Zero dead clicks &bull; Clear feedback loops &bull; Friction where safety is required</span>
+              </div>
+            </div>
+
+            {/* Design Thinking Sidebar (4 cols) */}
+            <div className="lg:col-span-4 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between space-y-6">
+              <div>
+                <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
+                  THE DESIGN RATIONALE
+                </span>
+                <h3 className="font-display text-2xl font-bold text-[#f2f1ec] mb-4">
+                  Why Micro-Interactions Matter
+                </h3>
+                <div className="space-y-4 text-sm text-[#89919d] font-light leading-relaxed">
+                  <p>
+                    A button is the primary tactile threshold between a human decision and a computational event. When feedback is delayed, vague, or missing, users experience cognitive friction.
+                  </p>
+                  <p>
+                    In clinical healthcare systems (like MEDesy) and urban transit check-ins (9jaTrip), double-submissions cause duplicate charges and clinician confusion.
+                  </p>
+                  <p>
+                    By engineering optimistic locking during async loads, and adding intentional physical friction (hold-to-confirm) on destructive commands, we protect users without intrusive confirmation popups.
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-5 font-mono-code text-xs text-[#89919d] space-y-2">
+                <div className="flex justify-between">
+                  <span>ASYNC LOCK:</span>
+                  <span className="text-[#a9ddf0]">Guaranteed</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>HOLD PHYSICS:</span>
+                  <span className="text-[#f2f1ec]">Linear Time Clamp</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>AUDIO CUES:</span>
+                  <span className="text-[#f2f1ec]">{soundEnabled ? "Active (Web Audio)" : "Muted"}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─────────────────────────────────────────────────────────────
+            EXPERIMENT 02: THE INTERFACE SWITCHER
+           ───────────────────────────────────────────────────────────── */}
+        <section aria-labelledby="exp2-title" className="mb-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 mb-10 gap-4">
+            <div>
+              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
+                EXPERIMENT 02 // INTERFACE SWITCHER
+              </div>
+              <h2 id="exp2-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+                Adaptive Themes &amp; Density Ergonomics
+              </h2>
+            </div>
+            <p className="font-mono-code text-xs text-[#89919d] max-w-md">
+              Instruction: Switch themes and toggle density to observe how the interface adapts to different operational environments.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12">
+            {/* Control Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-6 pb-8 mb-8 border-b border-white/[0.08]">
+              {/* Theme Selector */}
+              <div>
+                <span className="font-mono-code text-xs text-[#89919d] block mb-2 uppercase">
+                  Appearance Theme
+                </span>
+                <div className="flex items-center gap-2 font-mono-code text-xs">
+                  {(
+                    [
+                      { id: "obsidian", label: "Obsidian Dark" },
+                      { id: "paper", label: "Studio Light" },
+                      { id: "midnight", label: "Midnight Slate" },
+                    ] as const
+                  ).map((t) => (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => {
+                        setActiveTheme(t.id);
+                        if (soundEnabled) sound.playClick();
+                      }}
+                      className={`px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                        activeTheme === t.id
+                          ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
+                          : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
+                      }`}
+                    >
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Density Mode */}
+              <div>
+                <span className="font-mono-code text-xs text-[#89919d] block mb-2 uppercase">
+                  Layout Density
+                </span>
+                <div className="flex items-center gap-2 font-mono-code text-xs">
                   <button
                     type="button"
                     onClick={() => {
-                      setPulseCount((p) => p + 1);
-                      if (soundEnabled) sound.playChime(440 + (pulseCount % 5) * 80, 0.25);
+                      setDensityMode("spacious");
+                      if (soundEnabled) sound.playPop();
                     }}
-                    className="relative w-12 h-12 rounded-full border border-white/20 bg-white/5 flex items-center justify-center hover:border-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-all cursor-pointer group"
-                    aria-label="Trigger harmonic chime"
+                    className={`px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                      densityMode === "spacious"
+                        ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
+                        : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
+                    }`}
                   >
-                    <span className="h-3 w-3 rounded-full bg-[#a9ddf0] group-hover:scale-125 transition-transform" />
+                    Spacious (Consumer)
                   </button>
-                  <span className="font-mono-code text-[10px] text-[#89919d] mt-4">
-                    Pentatonic harmonic ladder
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="font-mono-code text-xs text-[#89919d] pt-4 border-t border-white/[0.08] flex items-center justify-between">
-              <span>PHYSICS ENGINE:</span>
-              <span className="text-[#a9ddf0]">Cubic-Bezier Spring + Web Audio</span>
-            </div>
-          </section>
-
-          {/* SECTION 2: ELASTIC DRAG PUCK (5 Cols) */}
-          <section className="lg:col-span-5 rounded-3xl border border-white/[0.1] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-8">
-                <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
-                  02 // Elastic Inertia Anchor
-                </span>
-                <span className="font-mono-code text-xs text-[#89919d]">Kinetic Tension</span>
-              </div>
-
-              {/* Elastic Playground Arena */}
-              <div className="relative w-full aspect-square rounded-2xl bg-[#090b0f] border border-white/[0.08] flex items-center justify-center overflow-hidden mb-6">
-                {/* Tension Center Reticle */}
-                <div className="absolute w-24 h-24 rounded-full border border-white/[0.06] flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full border border-white/[0.08]" />
-                </div>
-                <div className="absolute font-mono-code text-[9px] text-[#89919d]/40 select-none">
-                  RESTING ANCHOR (0, 0)
-                </div>
-
-                {/* Elastic String Line (SVG) */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none">
-                  <line
-                    x1="50%"
-                    y1="50%"
-                    x2={`calc(50% + ${puckPos.x}px)`}
-                    y2={`calc(50% + ${puckPos.y}px)`}
-                    stroke={isDragging ? "#a9ddf0" : "rgba(255,255,255,0.15)"}
-                    strokeWidth={isDragging ? 2.5 : 1}
-                    strokeDasharray={isDragging ? "none" : "3 3"}
-                  />
-                </svg>
-
-                {/* Draggable Puck */}
-                <div
-                  ref={puckRef}
-                  onMouseDown={handlePuckStart}
-                  onTouchStart={handlePuckStart}
-                  style={{
-                    transform: `translate(${puckPos.x}px, ${puckPos.y}px)`,
-                    transition: isDragging ? "none" : "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                  }}
-                  className={`w-16 h-16 rounded-full border flex items-center justify-center font-mono-code text-xs select-none cursor-grab active:cursor-grabbing shadow-xl ${
-                    isDragging
-                      ? "border-[#a9ddf0] bg-[#a9ddf0] text-[#090b0f] font-bold scale-110 shadow-[0_0_24px_rgba(169,221,240,0.5)]"
-                      : "border-white/20 bg-white/10 text-[#f2f1ec] scale-100"
-                  }`}
-                >
-                  <span>{isDragging ? "DRAG" : "PULL"}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d]">
-                <span>TENSION DELTA:</span>
-                <span className="text-[#a9ddf0]">
-                  ΔX: {Math.round(puckPos.x)}px | ΔY: {Math.round(puckPos.y)}px
-                </span>
-              </div>
-            </div>
-
-            <div className="font-mono-code text-[11px] text-[#89919d] pt-4 border-t border-white/[0.08] mt-6">
-              Release cursor anywhere to observe inverse spring velocity.
-            </div>
-          </section>
-
-          {/* SECTION 3: TYPOGRAPHIC TENSION SLIDER (6 Cols) */}
-          <section className="lg:col-span-6 rounded-3xl border border-white/[0.1] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-8">
-                <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
-                  03 // Variable Typographic Tension
-                </span>
-                <span className="font-mono-code text-xs text-[#89919d]">Variable Axes</span>
-              </div>
-
-              {/* Dynamic Sample Display */}
-              <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-8 min-h-[140px] flex items-center justify-center text-center overflow-hidden mb-8">
-                <span
-                  style={{
-                    fontWeight: fontWeight,
-                    letterSpacing: `${letterSpacing}em`,
-                  }}
-                  className="font-display text-2xl sm:text-3xl text-[#f2f1ec] transition-all duration-75 block max-w-full truncate"
-                >
-                  {fontSample}
-                </span>
-              </div>
-
-              {/* Sliders */}
-              <div className="space-y-6">
-                <div>
-                  <div className="flex justify-between font-mono-code text-xs mb-2">
-                    <label htmlFor={weightInputId} className="text-[#89919d]">FONT WEIGHT (wght)</label>
-                    <span className="text-[#a9ddf0] font-semibold">{fontWeight}</span>
-                  </div>
-                  <input
-                    id={weightInputId}
-                    type="range"
-                    min="300"
-                    max="900"
-                    step="50"
-                    value={fontWeight}
-                    onChange={(e) => {
-                      setFontWeight(Number(e.target.value));
-                      if (soundEnabled) sound.playClick();
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setDensityMode("compact");
+                      if (soundEnabled) sound.playPop();
                     }}
-                    className="w-full accent-[#a9ddf0] bg-white/10 rounded-lg cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <div className="flex justify-between font-mono-code text-xs mb-2">
-                    <label htmlFor={spacingInputId} className="text-[#89919d]">TRACKING / KERNING (em)</label>
-                    <span className="text-[#a9ddf0] font-semibold">{letterSpacing.toFixed(3)}em</span>
-                  </div>
-                  <input
-                    id={spacingInputId}
-                    type="range"
-                    min="-0.08"
-                    max="0.25"
-                    step="0.01"
-                    value={letterSpacing}
-                    onChange={(e) => {
-                      setLetterSpacing(Number(e.target.value));
-                      if (soundEnabled) sound.playClick();
-                    }}
-                    className="w-full accent-[#a9ddf0] bg-white/10 rounded-lg cursor-pointer"
-                  />
+                    className={`px-4 py-2 rounded-full border transition-all cursor-pointer ${
+                      densityMode === "compact"
+                        ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
+                        : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
+                    }`}
+                  >
+                    Compact (Clinician Queue)
+                  </button>
                 </div>
               </div>
-            </div>
 
-            {/* Quick Word Preset Pills */}
-            <div className="flex flex-wrap gap-2 pt-6 border-t border-white/[0.08] mt-6">
-              {["Cold Design Engineering", "WhatsApp Triage Architecture", "Spatial Luxury Lookbook"].map((sample) => (
+              {/* Hierarchy Focus Switch */}
+              <div>
+                <span className="font-mono-code text-xs text-[#89919d] block mb-2 uppercase">
+                  Optical Focus
+                </span>
                 <button
-                  key={sample}
                   type="button"
                   onClick={() => {
-                    setFontSample(sample);
-                    if (soundEnabled) sound.playPop();
+                    setHighlightAction(!highlightAction);
+                    if (soundEnabled) sound.playClick();
                   }}
-                  className={`rounded-full px-3 py-1 font-mono-code text-[11px] border transition-colors cursor-pointer ${
-                    fontSample === sample
-                      ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#a9ddf0]"
-                      : "border-white/[0.08] text-[#89919d] hover:text-[#f2f1ec]"
+                  className={`px-4 py-2 rounded-full border font-mono-code text-xs transition-all cursor-pointer ${
+                    highlightAction
+                      ? "border-[#a9ddf0] bg-[#a9ddf0] text-[#090b0f] font-semibold"
+                      : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:text-[#f2f1ec]"
                   }`}
                 >
-                  {sample}
+                  {highlightAction ? "Primary Path Highlighted" : "Highlight Primary Action"}
                 </button>
-              ))}
-            </div>
-          </section>
-
-          {/* SECTION 4: DESIGN TOKEN THEME MATRIX (6 Cols) */}
-          <section className="lg:col-span-6 rounded-3xl border border-white/[0.1] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-8">
-                <div className="flex items-center gap-2">
-                  <Layers size={16} className="text-[#a9ddf0]" />
-                  <span className="font-mono-code text-xs font-semibold uppercase text-[#f2f1ec] tracking-wider">
-                    04 // Design System Token Matrix
-                  </span>
-                </div>
-                <span className="font-mono-code text-xs text-[#89919d]">Live Token Engine</span>
               </div>
+            </div>
 
-              {/* Theme Selection Buttons */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-6">
-                {(["obsidian", "studio", "slate", "midnight"] as const).map((t) => (
+            {/* Live Interactive Component Preview Canvas */}
+            <div
+              style={{
+                backgroundColor: currentTheme.bg,
+                transition: "background-color 0.35s ease, color 0.35s ease",
+              }}
+              className="rounded-2xl p-6 sm:p-10 flex items-center justify-center border border-white/[0.06] shadow-2xl"
+            >
+              <div
+                style={{
+                  backgroundColor: currentTheme.cardBg,
+                  borderColor: currentTheme.border,
+                  color: currentTheme.textPrimary,
+                  padding: densityMode === "spacious" ? "32px" : "18px",
+                  transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
+                }}
+                className="w-full max-w-2xl rounded-2xl border shadow-xl flex flex-col justify-between"
+              >
+                <div>
+                  {/* Card Eyebrow & Status */}
+                  <div
+                    style={{
+                      borderBottomColor: currentTheme.border,
+                      paddingBottom: densityMode === "spacious" ? "14px" : "8px",
+                      marginBottom: densityMode === "spacious" ? "18px" : "10px",
+                    }}
+                    className="flex items-center justify-between border-b font-mono-code text-xs"
+                  >
+                    <span
+                      style={{
+                        color: currentTheme.accent,
+                        backgroundColor: currentTheme.accentSurface,
+                        padding: "3px 8px",
+                        borderRadius: "99px",
+                      }}
+                      className="font-semibold"
+                    >
+                      TRIAGE RECORD // PT-48201
+                    </span>
+                    <span
+                      style={{
+                        color: currentTheme.textMuted,
+                        opacity: highlightAction ? 0.4 : 1,
+                        transition: "opacity 0.2s",
+                      }}
+                    >
+                      Priority: Urgent Referral
+                    </span>
+                  </div>
+
+                  {/* Patient Headline */}
+                  <h4
+                    style={{
+                      color: currentTheme.textPrimary,
+                      fontSize: densityMode === "spacious" ? "24px" : "18px",
+                      marginBottom: densityMode === "spacious" ? "8px" : "4px",
+                    }}
+                    className="font-display font-bold tracking-tight"
+                  >
+                    Amara Okafor &bull; Acute Symptom Triage
+                  </h4>
+
+                  <p
+                    style={{
+                      color: currentTheme.textMuted,
+                      fontSize: densityMode === "spacious" ? "15px" : "13px",
+                      marginBottom: densityMode === "spacious" ? "20px" : "12px",
+                      opacity: highlightAction ? 0.3 : 1,
+                      transition: "opacity 0.2s",
+                    }}
+                    className="font-light leading-relaxed"
+                  >
+                    Patient initiated WhatsApp triage for severe headache with visual aura. Automated decision flow identified secondary red flag indicators; matched to licensed neurologist for urgent consultation.
+                  </p>
+
+                  {/* Specifications Matrix */}
+                  <div
+                    style={{
+                      gap: densityMode === "spacious" ? "12px" : "6px",
+                      marginBottom: densityMode === "spacious" ? "24px" : "14px",
+                      opacity: highlightAction ? 0.35 : 1,
+                      transition: "opacity 0.2s",
+                    }}
+                    className="grid grid-cols-2 sm:grid-cols-3 font-mono-code text-xs"
+                  >
+                    <div
+                      style={{
+                        backgroundColor: currentTheme.tagBg,
+                        borderColor: currentTheme.tagBorder,
+                        padding: densityMode === "spacious" ? "10px" : "6px",
+                      }}
+                      className="rounded-lg border"
+                    >
+                      <span style={{ color: currentTheme.textMuted }} className="block text-[10px] uppercase">
+                        Matched Doctor
+                      </span>
+                      <strong style={{ color: currentTheme.textPrimary }}>Dr. E. Adebayo</strong>
+                    </div>
+                    <div
+                      style={{
+                        backgroundColor: currentTheme.tagBg,
+                        borderColor: currentTheme.tagBorder,
+                        padding: densityMode === "spacious" ? "10px" : "6px",
+                      }}
+                      className="rounded-lg border"
+                    >
+                      <span style={{ color: currentTheme.textMuted }} className="block text-[10px] uppercase">
+                        Response Window
+                      </span>
+                      <strong style={{ color: currentTheme.textPrimary }}>&lt; 5 Minutes</strong>
+                    </div>
+                    <div
+                      style={{
+                        backgroundColor: currentTheme.tagBg,
+                        borderColor: currentTheme.tagBorder,
+                        padding: densityMode === "spacious" ? "10px" : "6px",
+                      }}
+                      className="rounded-lg border"
+                    >
+                      <span style={{ color: currentTheme.textMuted }} className="block text-[10px] uppercase">
+                        Channel
+                      </span>
+                      <strong style={{ color: currentTheme.textPrimary }}>WhatsApp Direct</strong>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Primary Action Button */}
+                <div
+                  style={{
+                    borderTopColor: currentTheme.border,
+                    paddingTop: densityMode === "spacious" ? "16px" : "10px",
+                  }}
+                  className="flex items-center justify-between border-t gap-4"
+                >
+                  <span
+                    style={{
+                      color: currentTheme.textMuted,
+                      fontSize: "12px",
+                      opacity: highlightAction ? 0.4 : 1,
+                    }}
+                    className="font-mono-code hidden sm:inline"
+                  >
+                    End-to-End Encrypted Triage
+                  </span>
+
                   <button
-                    key={t}
                     type="button"
                     onClick={() => {
-                      setActiveTheme(t);
                       if (soundEnabled) sound.playClick();
                     }}
-                    className={`rounded-xl p-3 border font-mono-code text-xs text-left capitalize transition-all cursor-pointer ${
-                      activeTheme === t
-                        ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#a9ddf0] font-semibold scale-[1.02]"
-                        : "border-white/[0.08] bg-[#090b0f] text-[#89919d] hover:border-white/20"
+                    style={{
+                      backgroundColor: currentTheme.accent,
+                      color: activeTheme === "paper" ? "#ffffff" : "#090b0f",
+                      padding: densityMode === "spacious" ? "12px 24px" : "8px 16px",
+                      fontSize: densityMode === "spacious" ? "13px" : "11px",
+                      transform: highlightAction ? "scale(1.03)" : "scale(1)",
+                      boxShadow: highlightAction
+                        ? `0 0 24px ${currentTheme.accent}66`
+                        : "none",
+                    }}
+                    className="inline-flex items-center gap-2 rounded-full font-mono-code font-semibold transition-all duration-200 cursor-pointer whitespace-nowrap"
+                  >
+                    <span>Initiate Doctor Handoff</span>
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="13"
+                      height="13"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Design Rationale */}
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 font-mono-code text-xs text-[#89919d]">
+              <div>
+                <span className="text-[#a9ddf0] font-semibold block mb-1 uppercase">Dark vs Light Purpose</span>
+                <p className="font-sans text-sm text-[#89919d] leading-relaxed">
+                  Dark themes reduce eye strain in low-light clinical emergency rooms; light editorial themes maximize legibility for daytime patient lookbooks.
+                </p>
+              </div>
+              <div>
+                <span className="text-[#a9ddf0] font-semibold block mb-1 uppercase">Density Ergonomics</span>
+                <p className="font-sans text-sm text-[#89919d] leading-relaxed">
+                  Spacious layouts calm anxious patients reading symptoms; compact density allows specialists to manage triage queues without horizontal or vertical friction.
+                </p>
+              </div>
+              <div>
+                <span className="text-[#a9ddf0] font-semibold block mb-1 uppercase">Optical Focus</span>
+                <p className="font-sans text-sm text-[#89919d] leading-relaxed">
+                  By controlling relative contrast, the interface ensures the user&apos;s attention lands squarely on the most critical clinical action.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─────────────────────────────────────────────────────────────
+            EXPERIMENT 03: TYPE & VISUAL HIERARCHY STUDIO
+           ───────────────────────────────────────────────────────────── */}
+        <section aria-labelledby="exp3-title" className="mb-24">
+          <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/[0.08] pb-4 mb-10 gap-4">
+            <div>
+              <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
+                EXPERIMENT 03 // TYPE &amp; VISUAL HIERARCHY
+              </div>
+              <h2 id="exp3-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+                Scale, Tracking &amp; Scanning Hierarchy
+              </h2>
+            </div>
+            <p className="font-mono-code text-xs text-[#89919d] max-w-md">
+              Instruction: Toggle between Flat and Intentional hierarchy, or slide weight and tracking to experience how typography guides human attention.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            {/* Hierarchy Contrast Tester (6 cols) */}
+            <div className="lg:col-span-6 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/[0.08]">
+                  <span className="font-mono-code text-xs text-[#a9ddf0] uppercase font-semibold">
+                    A &mdash; Contrast Hierarchy Test
+                  </span>
+                  <div className="flex items-center gap-1.5 font-mono-code text-xs">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHierarchyMode("flat");
+                        if (soundEnabled) sound.playClick();
+                      }}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        hierarchyMode === "flat"
+                          ? "border-red-400/50 bg-red-400/15 text-red-200 font-semibold"
+                          : "border-white/[0.08] text-[#89919d]"
+                      }`}
+                    >
+                      Flat (Anti-Pattern)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHierarchyMode("intentional");
+                        if (soundEnabled) sound.playClick();
+                      }}
+                      className={`px-3 py-1 rounded-full border transition-all cursor-pointer ${
+                        hierarchyMode === "intentional"
+                          ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
+                          : "border-white/[0.08] text-[#89919d]"
+                      }`}
+                    >
+                      Intentional (Cold Standard)
+                    </button>
+                  </div>
+                </div>
+
+                {/* Specimen Card */}
+                {hierarchyMode === "flat" ? (
+                  <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-8 text-center space-y-3 font-sans text-sm text-[#89919d]">
+                    <div className="font-mono-code text-xs text-red-300 uppercase mb-2">
+                      Notice: Low Contrast &bull; Flat Visual Weight &bull; Difficult to Scan
+                    </div>
+                    <div>medesy solution healthcare triage 2024 product designer</div>
+                    <div>structured whatsapp-first triage gateway connecting patients to licensed physicians</div>
+                    <div>eliminating waiting room friction and app installation barriers across nigerian clinics</div>
+                    <div>view case study figma prototype live documentation</div>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl border border-[#a9ddf0]/30 bg-[#090b0f] p-8 space-y-4">
+                    <div className="flex items-center justify-between border-b border-white/[0.08] pb-3 font-mono-code text-xs">
+                      <span className="text-[#a9ddf0] uppercase font-semibold">
+                        (01) &mdash; Healthcare &amp; Conversational UX
+                      </span>
+                      <span className="text-[#89919d]">2024</span>
+                    </div>
+
+                    <h4 className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] tracking-tight">
+                      MEDesy Solution
+                    </h4>
+
+                    <p className="text-base text-[#89919d] font-light leading-relaxed">
+                      Structured WhatsApp-First Triage Gateway connecting patients to licensed physicians with zero app installation friction.
+                    </p>
+
+                    <div className="pt-2 flex items-center justify-between">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[#ffffff] text-[#090b0f] font-mono-code text-xs font-semibold px-5 py-2.5 shadow-md">
+                        <span>View Case Study</span>
+                        <svg
+                          viewBox="0 0 24 24"
+                          width="13"
+                          height="13"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden="true"
+                        >
+                          <path d="M7 17L17 7M17 7H7M17 7V17" />
+                        </svg>
+                      </span>
+                      <span className="font-mono-code text-xs text-[#89919d]">WCAG AAA 14.8:1</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="font-mono-code text-xs text-[#89919d] pt-6 border-t border-white/[0.08] mt-6">
+                Status: {hierarchyMode === "intentional" ? "High eye-scanning velocity" : "High cognitive friction"}
+              </div>
+            </div>
+
+            {/* Variable Typographic Tension Slider (6 cols) */}
+            <div className="lg:col-span-6 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between pb-4 mb-6 border-b border-white/[0.08]">
+                  <span className="font-mono-code text-xs text-[#a9ddf0] uppercase font-semibold">
+                    B &mdash; Variable Typography Tension
+                  </span>
+                  <span className="font-mono-code text-xs text-[#89919d]">Live Sliders</span>
+                </div>
+
+                {/* Sample Display */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#090b0f] p-8 min-h-[140px] flex items-center justify-center text-center overflow-hidden mb-8">
+                  <span
+                    style={{
+                      fontWeight: typeWeight,
+                      letterSpacing: `${typeTracking}em`,
+                    }}
+                    className="font-display text-2xl sm:text-3xl text-[#f2f1ec] transition-all duration-75 block max-w-full"
+                  >
+                    {sampleHeadline}
+                  </span>
+                </div>
+
+                {/* Sliders */}
+                <div className="space-y-6">
+                  <div>
+                    <div className="flex justify-between font-mono-code text-xs mb-2">
+                      <label htmlFor={weightSliderId} className="text-[#89919d]">
+                        FONT WEIGHT (wght: 300 &mdash; 800)
+                      </label>
+                      <span className="text-[#a9ddf0] font-semibold">{typeWeight}</span>
+                    </div>
+                    <input
+                      id={weightSliderId}
+                      type="range"
+                      min="300"
+                      max="800"
+                      step="50"
+                      value={typeWeight}
+                      onChange={(e) => {
+                        setTypeWeight(Number(e.target.value));
+                        if (soundEnabled) sound.playClick();
+                      }}
+                      className="w-full accent-[#a9ddf0] bg-white/10 rounded-lg cursor-pointer"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex justify-between font-mono-code text-xs mb-2">
+                      <label htmlFor={trackingSliderId} className="text-[#89919d]">
+                        LETTER TRACKING (em: -0.04 &mdash; +0.16)
+                      </label>
+                      <span className="text-[#a9ddf0] font-semibold">{typeTracking.toFixed(3)}em</span>
+                    </div>
+                    <input
+                      id={trackingSliderId}
+                      type="range"
+                      min="-0.04"
+                      max="0.16"
+                      step="0.01"
+                      value={typeTracking}
+                      onChange={(e) => {
+                        setTypeTracking(Number(e.target.value));
+                        if (soundEnabled) sound.playClick();
+                      }}
+                      className="w-full accent-[#a9ddf0] bg-white/10 rounded-lg cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Sample Preset Buttons */}
+              <div className="flex flex-wrap gap-2 pt-6 border-t border-white/[0.08] mt-6">
+                {[
+                  "Structured WhatsApp-First Triage Gateway",
+                  "Intercity Transit Booking & Hub Logistics",
+                  "Atmospheric Coastal Hospitality Lookbook",
+                ].map((sample) => (
+                  <button
+                    key={sample}
+                    type="button"
+                    onClick={() => {
+                      setSampleHeadline(sample);
+                      if (soundEnabled) sound.playPop();
+                    }}
+                    className={`rounded-full px-3.5 py-1 font-mono-code text-[11px] border transition-colors cursor-pointer ${
+                      sampleHeadline === sample
+                        ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#a9ddf0]"
+                        : "border-white/[0.08] text-[#89919d] hover:text-[#f2f1ec]"
                     }`}
                   >
-                    <span>{t}</span>
+                    {sample.split(" ")[0]}...
                   </button>
                 ))}
               </div>
-
-              {/* Live Theme Canvas Preview */}
-              <div
-                style={{
-                  backgroundColor: themes[activeTheme].bg,
-                  borderColor: themes[activeTheme].border,
-                  color: themes[activeTheme].text,
-                }}
-                className="rounded-2xl border p-6 transition-all duration-300 mb-6 space-y-4"
-              >
-                <div className="flex justify-between items-center font-mono-code text-xs">
-                  <span style={{ color: themes[activeTheme].accent }} className="font-bold uppercase tracking-wider">
-                    Theme: {activeTheme}
-                  </span>
-                  <span>Tokens Active</span>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: themes[activeTheme].surface,
-                    borderColor: themes[activeTheme].border,
-                  }}
-                  className="rounded-xl border p-4 flex items-center justify-between"
-                >
-                  <span className="font-display font-medium text-sm">
-                    Tokenized Interface Card
-                  </span>
-                  <button
-                    type="button"
-                    style={{
-                      backgroundColor: themes[activeTheme].accent,
-                      color: themes[activeTheme].bg,
-                    }}
-                    className="rounded-full px-3.5 py-1 text-xs font-bold font-mono-code transition-transform active:scale-95 cursor-pointer"
-                  >
-                    Action
-                  </button>
-                </div>
-              </div>
             </div>
+          </div>
+        </section>
 
-            <div className="rounded-xl bg-[#090b0f] border border-white/[0.06] p-4 font-mono-code text-xs text-[#89919d] space-y-1">
-              <div>--theme-bg: <span className="text-[#f2f1ec]">{themes[activeTheme].bg}</span></div>
-              <div>--theme-accent: <span className="text-[#a9ddf0]">{themes[activeTheme].accent}</span></div>
-            </div>
-          </section>
-        </div>
-
-        {/* Bottom Dialogue Box */}
-        <div className="mt-20 rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 flex flex-col sm:flex-row items-center justify-between gap-6 font-mono-code text-xs">
-          <div>
-            <span className="text-[#a9ddf0] uppercase font-semibold block mb-1">
-              Craft &amp; Technical Execution
+        {/* ─────────────────────────────────────────────────────────────
+            COHERENT CLOSING SECTION
+           ───────────────────────────────────────────────────────────── */}
+        <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs">
+          <div className="max-w-2xl">
+            <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
+              Playground Synthesis &bull; Cold Designer
             </span>
-            <p className="text-[#89919d] max-w-xl">
-              Every interaction above is engineered with zero bloat, pure vanilla React/CSS transforms, and accessible pointer mechanics.
+            <p className="text-base text-[#89919d] font-sans font-light leading-relaxed">
+              Design is the sum of a thousand invisible decisions. When interfaces feel effortless and intuitive, it is because state, feedback, density, and hierarchy were deliberately engineered.
             </p>
           </div>
-          <Link
-            href="/work"
-            onClick={() => sound.playClick()}
-            className="inline-flex items-center gap-2 rounded-full bg-[#ffffff] px-6 py-3.5 font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
-          >
-            <span>Explore All Work</span>
-            <svg
-              viewBox="0 0 24 24"
-              width="14"
-              height="14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto shrink-0">
+            <Link
+              href="/work"
+              onClick={() => sound.playClick()}
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ffffff] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
             >
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </Link>
-        </div>
+              <span>Explore Selected Work</span>
+              <svg
+                viewBox="0 0 24 24"
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </Link>
+
+            <a
+              href="mailto:abolarintaye20@gmail.com"
+              onClick={() => sound.playClick()}
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-3.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors whitespace-nowrap"
+            >
+              <span>Start Direct Dialogue</span>
+              <svg
+                viewBox="0 0 24 24"
+                width="13"
+                height="13"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </div>
+        </section>
       </div>
     </main>
   );

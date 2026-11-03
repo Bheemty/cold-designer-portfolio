@@ -174,7 +174,7 @@ export default function WorkAccordion() {
                       strokeLinejoin="round"
                       aria-hidden="true"
                     >
-                      <path d="M9 6l6 6-6 6" />
+                      <path d="M7 17L17 7M17 7H7M17 7V17" />
                     </svg>
                   </Link>
                 </div>
