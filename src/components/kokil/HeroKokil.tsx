@@ -25,30 +25,38 @@ function setHeroRevealedState(revealed: boolean) {
   try {
     if (revealed) {
       window.sessionStorage.setItem(HERO_REVEALED_KEY, "true");
-      document.documentElement.setAttribute("data-hero-revealed", "true");
+      // Note: We deliberately do NOT set data-hero-revealed on documentElement here
+      // to avoid triggering any CSS mask removal while the visitor is actively on the page!
     } else {
       window.sessionStorage.removeItem(HERO_REVEALED_KEY);
       document.documentElement.removeAttribute("data-hero-revealed");
     }
   } catch {
     try {
-      if (revealed) {
-        document.documentElement.setAttribute("data-hero-revealed", "true");
-      } else {
+      if (!revealed) {
         document.documentElement.removeAttribute("data-hero-revealed");
       }
     } catch {}
   }
 }
 
+// Spatial grid resolution for measuring actual erased surface coverage
+const GRID_COLS = 28;
+const GRID_ROWS = 16;
+const TOTAL_CELLS = GRID_COLS * GRID_ROWS; // 448 discrete surface cells
+const COMPLETION_THRESHOLD = 0.70; // Genuine 70% physical erased surface coverage
+
 export default function HeroKokil() {
   const heroRef = useRef<HTMLElement>(null);
   const dotsGroupRef = useRef<SVGGElement>(null);
 
-  // Initialize revealed state strictly from saved session (returns true only if already completed in an earlier visit)
+  // Initialize revealed state strictly from session (only true if completed on an earlier visit in this session)
   const [isRevealed, setIsRevealed] = useState(() => getHeroRevealedState());
   const [hintHidden, setHintHidden] = useState(() => getHeroRevealedState());
   const hasCompletedRef = useRef(false);
+
+  // Erased cells tracker for measuring genuine physical surface coverage
+  const erasedCellsRef = useRef<Set<number>>(new Set());
 
   const resetScratch = useCallback((e?: React.MouseEvent) => {
     if (e) {
@@ -56,6 +64,7 @@ export default function HeroKokil() {
       e.preventDefault();
     }
     hasCompletedRef.current = false;
+    erasedCellsRef.current.clear();
     setHeroRevealedState(false);
     setIsRevealed(false);
     setHintHidden(false);
@@ -81,12 +90,13 @@ export default function HeroKokil() {
     const dotsGroup = dotsGroupRef.current;
     if (!heroEl || !dotsGroup) return;
 
-    // Check saved session state on mount: if visitor previously completed reveal in this session, show revealed
+    // Check saved session state on mount: if visitor completed reveal on a prior visit in this session, show revealed
     const savedRevealed = getHeroRevealedState();
     if (savedRevealed) {
       hasCompletedRef.current = true;
       setIsRevealed(true);
       setHintHidden(true);
+      document.documentElement.setAttribute("data-hero-revealed", "true");
       heroEl.classList.add("is-revealed");
     }
 
@@ -160,17 +170,13 @@ export default function HeroKokil() {
       }, 150);
     }, 3200);
 
-    // ── Original Progressive Rub-to-Reveal ──
-    const MAX_DOTS = 220; // Lightweight SVG tree that keeps scrolling silky smooth
-    const MIN_DIST = 22;
-    const BRUSH_RADIUS = 280;
+    // ── 100% Pure Manual Progressive Rub-to-Reveal ──
+    const MAX_DOTS = 900; // Capacity from original reference implementation
+    const MIN_DIST = 18; // Distance between strokes from original reference
+    const BRUSH_RADIUS = 280; // Radius from original reference
     let lastX: number | null = null;
     let lastY: number | null = null;
-
-    // Track scratching extent to verify genuine completion of the interaction
-    let dotCount = 0;
-    let minX = Infinity;
-    let maxX = -Infinity;
+    let isScratching = false;
 
     function addDot(clientX: number, clientY: number) {
       if (!heroEl || !dotsGroup || !isHeroVisible) return;
@@ -200,119 +206,132 @@ export default function HeroKokil() {
         }
       }
 
-      // Track extent of progressive scratching
-      dotCount++;
-      minX = Math.min(minX, x);
-      maxX = Math.max(maxX, x);
+      // Calculate genuine surface area erased (without artificially inflating on repeat strokes)
+      const cellW = rect.width / GRID_COLS;
+      const cellH = rect.height / GRID_ROWS;
+      const minCol = Math.max(0, Math.floor((x - BRUSH_RADIUS) / cellW));
+      const maxCol = Math.min(GRID_COLS - 1, Math.floor((x + BRUSH_RADIUS) / cellW));
+      const minRow = Math.max(0, Math.floor((y - BRUSH_RADIUS) / cellH));
+      const maxRow = Math.min(GRID_ROWS - 1, Math.floor((y + BRUSH_RADIUS) / cellH));
 
-      // Record completion state ONLY when the visitor has scratched a substantial proportion of the surface
-      // (at least 60 dots spanning >= 50% of the Hero width)
-      // NOTE: This does NOT automatically unveil the hero or alter the active scratch mask!
-      // The visitor continues scratching naturally with the original progressive reveal.
-      const horizontalSpread = maxX - minX;
-      if (
-        !hasCompletedRef.current &&
-        dotCount >= 60 &&
-        horizontalSpread >= rect.width * 0.5
-      ) {
+      for (let r = minRow; r <= maxRow; r++) {
+        const cellCenterY = (r + 0.5) * cellH;
+        for (let c = minCol; c <= maxCol; c++) {
+          const cellCenterX = (c + 0.5) * cellW;
+          if (Math.hypot(x - cellCenterX, y - cellCenterY) <= BRUSH_RADIUS) {
+            erasedCellsRef.current.add(r * GRID_COLS + c);
+          }
+        }
+      }
+
+      const coverageRatio = erasedCellsRef.current.size / TOTAL_CELLS;
+
+      // Completion occurs ONLY after visitor genuinely scratches the required 70% proportion of surface
+      // NOTE: This NEVER automatically unveils unscratched areas or alters the mask while on the page!
+      // The visitor continues manual scratching uninterrupted.
+      if (!hasCompletedRef.current && coverageRatio >= COMPLETION_THRESHOLD) {
         hasCompletedRef.current = true;
         setHeroRevealedState(true);
       }
     }
 
-    let sweepTimeout: NodeJS.Timeout | null = null;
-    let sweepInterval: NodeJS.Timeout | null = null;
-
-    function cancelAutoSweep() {
-      if (sweepTimeout) {
-        clearTimeout(sweepTimeout);
-        sweepTimeout = null;
-      }
-      if (sweepInterval) {
-        clearInterval(sweepInterval);
-        sweepInterval = null;
-      }
-    }
-
-    function onPointerMove(e: PointerEvent) {
-      cancelAutoSweep();
+    function onPointerDown(e: PointerEvent) {
+      if ((e.target as HTMLElement)?.closest("button, a")) return;
+      isScratching = true;
+      lastX = null;
+      lastY = null;
       addDot(e.clientX, e.clientY);
     }
 
-    function onTouchMove(e: TouchEvent) {
-      cancelAutoSweep();
+    function onPointerMove(e: PointerEvent) {
+      pendingPointerX = e.clientX;
+      pendingPointerY = e.clientY;
+      // Erase only when visitor physically presses and moves, or touches the screen
+      const isMouseDown = (e.buttons & 1) === 1;
+      const isTouch = e.pointerType === "touch";
+      if (isScratching && (isMouseDown || isTouch)) {
+        addDot(e.clientX, e.clientY);
+      }
+    }
+
+    function onPointerUp() {
+      isScratching = false;
+      lastX = null;
+      lastY = null;
+    }
+
+    function onTouchStart(e: TouchEvent) {
+      if ((e.target as HTMLElement)?.closest("button, a")) return;
+      isScratching = true;
+      lastX = null;
+      lastY = null;
       if (e.touches[0]) {
         addDot(e.touches[0].clientX, e.touches[0].clientY);
       }
     }
 
-    function onPointerLeave() {
+    function onTouchMove(e: TouchEvent) {
+      if (e.touches[0]) {
+        pendingPointerX = e.touches[0].clientX;
+        pendingPointerY = e.touches[0].clientY;
+        if (isScratching) {
+          addDot(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }
+    }
+
+    function onTouchEnd() {
+      isScratching = false;
       lastX = null;
       lastY = null;
     }
 
-    // Auto-sweep for touch screens after idle time if user hasn't scratched
-    const isTouch = window.matchMedia("(hover: none)").matches;
-    if (isTouch && !savedRevealed) {
-      sweepTimeout = setTimeout(() => {
-        const r = heroEl.getBoundingClientRect();
-        const rows = Math.max(3, Math.ceil(r.height / 280));
-        let step = 0;
-        const totalSteps = rows * 5;
-        sweepInterval = setInterval(() => {
-          if (step > totalSteps) {
-            if (sweepInterval) clearInterval(sweepInterval);
-            if (!hasCompletedRef.current) {
-              hasCompletedRef.current = true;
-              setHeroRevealedState(true);
-            }
-            return;
-          }
-          const rowIdx = Math.floor(step / 5);
-          const colIdx = step % 5;
-          const x = (colIdx / 4) * r.width;
-          const y = (rowIdx / rows) * r.height;
-          addDot(r.left + x, r.top + y);
-          step++;
-        }, 50);
-      }, 4000);
-    }
-
     const handleThemeChange = () => {
       if (getHeroRevealedState()) {
-        // Maintain revealed state across theme switches
         return;
       }
-      cancelAutoSweep();
       if (dotsGroup) {
         while (dotsGroup.firstChild) {
           dotsGroup.removeChild(dotsGroup.firstChild);
         }
       }
+      erasedCellsRef.current.clear();
+      hasCompletedRef.current = false;
       setHintHidden(false);
       lastX = null;
       lastY = null;
-      dotCount = 0;
-      minX = Infinity;
-      maxX = -Infinity;
     };
 
     window.addEventListener("cold-designer-theme-change", handleThemeChange);
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
+
+    heroEl.addEventListener("pointerdown", onPointerDown);
     heroEl.addEventListener("pointermove", onPointerMove, { passive: true });
+
+    heroEl.addEventListener("touchstart", onTouchStart, { passive: true });
     heroEl.addEventListener("touchmove", onTouchMove, { passive: true });
-    heroEl.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    heroEl.addEventListener("touchend", onTouchEnd, { passive: true });
+    heroEl.addEventListener("touchcancel", onTouchEnd, { passive: true });
 
     return () => {
       observer.disconnect();
       cancelAnimationFrame(eyeRaf);
-      cancelAutoSweep();
       window.removeEventListener("resize", updateEyeCenters);
       window.removeEventListener("cold-designer-theme-change", handleThemeChange);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
+
+      heroEl.removeEventListener("pointerdown", onPointerDown);
       heroEl.removeEventListener("pointermove", onPointerMove);
+
+      heroEl.removeEventListener("touchstart", onTouchStart);
       heroEl.removeEventListener("touchmove", onTouchMove);
-      heroEl.removeEventListener("pointerleave", onPointerLeave);
+      heroEl.removeEventListener("touchend", onTouchEnd);
+      heroEl.removeEventListener("touchcancel", onTouchEnd);
+
       clearInterval(blinkInterval);
     };
   }, []);
