@@ -113,7 +113,13 @@ export default function AboutPage() {
           {/* Left Column: Art-Directed Exhibition Portrait Frame (5 cols) */}
           <div className="lg:col-span-5">
             <div className="sticky top-28 space-y-6">
-              <div className="relative aspect-[4/5] w-full rounded-3xl border border-white/[0.1] bg-[#11141b] overflow-hidden p-8 flex flex-col justify-between shadow-2xl">
+              {/* Exhibition Mount Card */}
+              <div
+                style={{
+                  boxShadow: "0 24px 60px -20px rgba(135, 85, 62, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.08)",
+                }}
+                className="relative w-full rounded-3xl bg-[#11141b] overflow-hidden p-6 sm:p-7 flex flex-col justify-between space-y-6"
+              >
                 {/* Architectural Corner Crosshairs */}
                 <div className="absolute top-4 left-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
                 <div className="absolute top-4 right-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
@@ -121,63 +127,71 @@ export default function AboutPage() {
                 <div className="absolute bottom-4 right-4 font-mono-code text-[10px] text-white/20 select-none">+</div>
 
                 {/* Frame Header */}
-                <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 font-mono-code text-[11px] text-[#89919d]">
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-3.5 font-mono-code text-[11px] text-[#89919d]">
                   <span className="text-[#a9ddf0] uppercase tracking-wider font-semibold">
-                    EXHIBITION IDENTITY
+                    ARCHIVAL PORTRAIT // VERIFIED IDENTITY
                   </span>
                   <span>REF. CD-01</span>
                 </div>
 
-                {/* Center Exhibition Subject: Photo or Monogram */}
-                <div className="relative my-auto flex flex-col items-center justify-center text-center py-8">
-                  {!photoFailed ? (
-                    <div className="relative w-44 h-44 rounded-2xl overflow-hidden border border-white/[0.15] shadow-2xl mb-4 group">
-                      <Image
-                        src="/images/taye-abolarin-portrait.jpg"
-                        alt="Taye Abolarin portrait"
-                        fill
-                        sizes="176px"
-                        className="object-cover"
-                        onError={() => setPhotoFailed(true)}
-                      />
-                    </div>
-                  ) : null}
-
+                {/* Center Exhibition Subject: Authentic Full Portrait */}
+                <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-white/[0.12] shadow-2xl group bg-[#87553e]">
+                  <Image
+                    src="/images/taye-abolarin-portrait.jpg"
+                    alt="Taye Abolarin — Product Designer"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 460px"
+                    priority
+                    className="object-cover object-center group-hover:scale-[1.015] transition-transform duration-700 ease-out"
+                    onError={() => setPhotoFailed(true)}
+                  />
                   {photoFailed && (
-                    <div className="relative flex flex-col items-center justify-center">
-                      <div className="relative w-36 h-36 rounded-full border border-white/[0.12] bg-[#090b0f] p-5 flex items-center justify-center shadow-2xl mb-4">
+                    <div className="absolute inset-0 bg-[#090b0f] flex flex-col items-center justify-center p-6 text-center">
+                      <div className="w-24 h-24 rounded-full border border-white/20 p-4 mb-3">
                         <Image
                           src="/images/cold-designer-avatar.svg"
-                          alt="Cold Designer Monogram Avatar"
-                          width={96}
-                          height={96}
+                          alt="Cold Designer Monogram"
+                          width={64}
+                          height={64}
                           className="object-contain"
                         />
-                        <div className="absolute inset-0 rounded-full border border-[#a9ddf0]/30 animate-pulse pointer-events-none" />
                       </div>
-                      <span className="font-display font-semibold text-lg text-[#f2f1ec] tracking-wide">
-                        Cold Designer
-                      </span>
-                      <span className="font-mono-code text-xs text-[#89919d] mt-1">
-                        Authentic Studio Monogram
-                      </span>
+                      <span className="font-display font-semibold text-sm text-[#f2f1ec]">Cold Designer</span>
                     </div>
                   )}
                 </div>
 
-                {/* Frame Specifications Footer */}
-                <div className="border-t border-white/[0.08] pt-4 font-mono-code text-[11px] text-[#89919d] space-y-1">
-                  <div className="flex justify-between">
-                    <span>DESIGNER:</span>
-                    <span className="text-[#f2f1ec]">Taye Abolarin</span>
+                {/* Identity Plaque & Verification */}
+                <div className="space-y-4 pt-1">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="h-2 w-2 rounded-full bg-[#10b981] animate-pulse" />
+                      <span className="font-mono-code text-[11px] text-[#10b981] tracking-wider uppercase font-semibold">
+                        Available for Select Commissions
+                      </span>
+                    </div>
+                    <h3 className="font-display text-2xl font-bold text-[#f2f1ec] tracking-tight">
+                      Taye Abolarin
+                    </h3>
+                    <p className="font-mono-code text-xs text-[#89919d] mt-0.5">
+                      Product Designer &bull; Cold Designer Studio
+                    </p>
                   </div>
-                  <div className="flex justify-between">
-                    <span>DISCIPLINE:</span>
-                    <span className="text-[#f2f1ec]">Product / UI/UX</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>LOCATION:</span>
-                    <span className="text-[#f2f1ec]">Lagos, NG (Remote)</span>
+
+                  {/* Frame Specifications Ledger */}
+                  <div className="border-t border-white/[0.08] pt-3.5 font-mono-code text-[11px] text-[#89919d] space-y-1.5">
+                    <div className="flex justify-between">
+                      <span>SPECIALIZATION:</span>
+                      <span className="text-[#f2f1ec]">Conversational UX &bull; Mobility</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>LOCATION:</span>
+                      <span className="text-[#f2f1ec]">Lagos, NG (Global Remote)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>BENCHMARK:</span>
+                      <span className="text-[#a9ddf0]">kokiltamta.in standard</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -187,7 +201,7 @@ export default function AboutPage() {
                 href="/Taye Abolarin-Product Designer-Resume.pdf"
                 download="Taye Abolarin-Product Designer-Resume.pdf"
                 onClick={() => sound.playClick()}
-                className="w-full flex items-center justify-between rounded-2xl border border-white/[0.1] bg-[#11141b] p-5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:bg-[#151922] transition-all cursor-pointer group"
+                className="w-full flex items-center justify-between rounded-2xl border border-white/[0.1] bg-[#11141b] p-5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:bg-[#151922] transition-all cursor-pointer group shadow-xl"
                 aria-label="Download Taye Abolarin Product Designer Resume PDF"
               >
                 <div className="flex flex-col text-left">
@@ -219,6 +233,19 @@ export default function AboutPage() {
 
           {/* Right Column: Editorial Narrative & Essays (7 cols) */}
           <div className="lg:col-span-7 space-y-16">
+            {/* Lead Editorial Creed Callout */}
+            <div className="rounded-3xl border border-white/[0.08] bg-[#11141b]/90 p-8 sm:p-10 shadow-2xl space-y-4">
+              <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block font-semibold">
+                DESIGN ETHOS &bull; CLARITY AS A DISCIPLINE
+              </span>
+              <blockquote className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] leading-snug tracking-tight">
+                &ldquo;An interface should feel obvious, not because it is trivial to design, but because every layer of confusion has been stripped away.&rdquo;
+              </blockquote>
+              <p className="text-base text-[#89919d] font-light leading-relaxed">
+                Operating at the intersection of product systems, conversational flows, and production frontend code. Based in Lagos, designing for global users across mobile, web, and spatial platforms.
+              </p>
+            </div>
+
             {/* The Meaning of "Cold" */}
             <section className="space-y-6">
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider flex items-center gap-2">
@@ -256,7 +283,7 @@ export default function AboutPage() {
                 {VERIFIED_ENGAGEMENTS.map((item) => (
                   <div
                     key={item.company}
-                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 hover:border-[#a9ddf0]/30 transition-colors"
+                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 hover:border-[#a9ddf0]/30 transition-colors shadow-lg"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/[0.08] pb-4 mb-4 font-mono-code text-xs">
                       <span className="text-[#a9ddf0] font-semibold">{item.period}</span>
@@ -303,7 +330,7 @@ export default function AboutPage() {
                 {TOOLKIT.map((t) => (
                   <div
                     key={t.category}
-                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6"
+                    className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 shadow-md"
                   >
                     <h3 className="font-mono-code text-xs font-semibold text-[#a9ddf0] uppercase tracking-wider mb-4">
                       {t.category}
@@ -323,7 +350,7 @@ export default function AboutPage() {
 
             {/* Creative Standards & Influences */}
             <section className="border-t border-white/[0.08] pt-14 space-y-8">
-              <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 font-mono-code text-xs">
+              <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 font-mono-code text-xs shadow-md">
                 <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
                   <BookOpen size={16} className="text-[#a9ddf0]" />
                   <span className="uppercase text-[#f2f1ec] font-semibold tracking-wider">
@@ -357,7 +384,7 @@ export default function AboutPage() {
         </div>
 
         {/* Direct Dialogue Invitation Banner */}
-        <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs">
+        <section className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-14 flex flex-col md:flex-row items-start md:items-center justify-between gap-8 font-mono-code text-xs shadow-2xl">
           <div className="max-w-2xl">
             <span className="text-[#a9ddf0] uppercase font-semibold block mb-2 tracking-wider">
               Dialogue &amp; Commission Inquiries
