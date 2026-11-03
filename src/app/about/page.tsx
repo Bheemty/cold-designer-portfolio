@@ -234,7 +234,7 @@ export default function AboutPage() {
           {/* Right Column: Editorial Narrative & Essays (7 cols) */}
           <div className="lg:col-span-7 space-y-16">
             {/* Lead Editorial Creed Callout */}
-            <div className="rounded-3xl border border-white/[0.08] bg-[#11141b]/90 p-8 sm:p-10 shadow-2xl space-y-4">
+            <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10 shadow-2xl space-y-4">
               <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block font-semibold">
                 DESIGN ETHOS &bull; CLARITY AS A DISCIPLINE
               </span>

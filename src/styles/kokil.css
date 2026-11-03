@@ -24,14 +24,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: rgba(22, 26, 35, 0.45);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(18, 22, 30, 0.65);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 999px;
   padding: 6px 8px;
   z-index: 200;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 12px 36px -8px rgba(0, 0, 0, 0.45);
 }
 .kokil-nav-logo {
   width: 42px;
@@ -1928,11 +1928,11 @@
    ========================================================================== */
 
 html[data-theme="light"] .kokil-nav {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(18, 22, 30, 0.1);
-  box-shadow: 0 10px 32px rgba(18, 22, 30, 0.08), 0 1px 3px rgba(18, 22, 30, 0.04);
+  background: rgba(253, 253, 253, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(18, 22, 30, 0.08);
+  box-shadow: 0 10px 30px -8px rgba(18, 22, 30, 0.08), 0 1px 2px rgba(18, 22, 30, 0.03);
 }
 html[data-theme="light"] .kokil-nav-links a {
   color: #4d5462;
@@ -1969,21 +1969,21 @@ html[data-theme="light"] #hero {
   background: #FDFDFD !important;
 }
 html[data-theme="light"] .hero-paint {
-  background: #090b0f;
+  background: #FDFDFD !important;
 }
 html[data-theme="light"] .hero-base {
-  --ink: #11141b;
-  --ink-dim: #4d5462;
-  --ink-line: rgba(18, 22, 30, 0.14);
-  --btn-bg: #11141b;
-  --btn-fg: #FDFDFD;
+  --ink: rgba(18, 22, 30, 0.22);
+  --ink-dim: rgba(18, 22, 30, 0.15);
+  --ink-line: rgba(18, 22, 30, 0.10);
+  --btn-bg: rgba(18, 22, 30, 0.05);
+  --btn-fg: rgba(18, 22, 30, 0.6);
 }
 html[data-theme="light"] .hero-invert {
-  --ink: #FDFDFD;
-  --ink-dim: #89919d;
-  --ink-line: rgba(255, 255, 255, 0.14);
-  --btn-bg: #FDFDFD;
-  --btn-fg: #090b0f;
+  --ink: #11141b !important;
+  --ink-dim: #4d5462 !important;
+  --ink-line: rgba(18, 22, 30, 0.14) !important;
+  --btn-bg: #11141b !important;
+  --btn-fg: #FDFDFD !important;
 }
 html[data-theme="light"] .hero-btn.primary {
   background: #11141b;
@@ -2200,5 +2200,26 @@ html[data-theme="light"] .contact-arrow {
   color: #788090;
 }
 html[data-theme="light"] .contact-link:hover .contact-arrow {
+  color: #027a9e;
+}
+html[data-theme="light"] .contact-list li + li {
+  border-top: 1px solid rgba(18, 22, 30, 0.08);
+}
+html[data-theme="light"] .site-footer {
+  border-top: 1px solid rgba(18, 22, 30, 0.1);
+  color: #555d6e;
+}
+html[data-theme="light"] .footer-links a {
+  color: #11141b;
+  font-weight: 500;
+}
+html[data-theme="light"] .footer-links a:hover {
+  color: #027a9e;
+}
+html[data-theme="light"] .footer-top {
+  color: #555d6e;
+  font-weight: 500;
+}
+html[data-theme="light"] .footer-top:hover {
   color: #027a9e;
 }

@@ -70,12 +70,12 @@
     --btn-secondary-border: rgba(18, 22, 30, 0.14);
     --btn-secondary-fg: #11141b;
     --hero-bg: #FDFDFD;
-    --hero-paint-bg: #090b0f;
-    --hero-invert-ink: #FDFDFD;
-    --hero-invert-ink-dim: #a3a3a3;
-    --hero-invert-ink-line: rgba(255, 255, 255, 0.14);
-    --hero-invert-btn-bg: #FDFDFD;
-    --hero-invert-btn-fg: #090b0f;
+    --hero-paint-bg: #FDFDFD;
+    --hero-invert-ink: #11141b;
+    --hero-invert-ink-dim: #4d5462;
+    --hero-invert-ink-line: rgba(18, 22, 30, 0.14);
+    --hero-invert-btn-bg: #11141b;
+    --hero-invert-btn-fg: #FDFDFD;
   }
 
   * {
@@ -227,10 +227,22 @@ html[data-theme="light"] .bg-\[\#090b0f\] {
 }
 
 /* Primary surface & cards */
-html[data-theme="light"] .bg-\[\#11141b\] {
+html[data-theme="light"] .bg-\[\#11141b\],
+html[data-theme="light"] .bg-\[\#11141b\]\/90,
+html[data-theme="light"] .bg-\[\#11141b\]\/80,
+html[data-theme="light"] .bg-\[\#11141b\]\/60 {
   background-color: #FFFFFF !important;
   border-color: rgba(18, 22, 30, 0.08) !important;
   box-shadow: 0 10px 32px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.03);
+}
+
+/* Translucent dark pill overlays convert to luminous glass pills */
+html[data-theme="light"] .bg-\[\#090b0f\]\/90,
+html[data-theme="light"] .bg-\[\#090b0f\]\/85,
+html[data-theme="light"] .bg-\[\#090b0f\]\/80 {
+  background-color: rgba(253, 253, 253, 0.92) !important;
+  color: #11141b !important;
+  border-color: rgba(18, 22, 30, 0.12) !important;
 }
 
 /* Secondary & elevated cards */
@@ -314,6 +326,49 @@ html[data-theme="light"] .text-white\/60,
 html[data-theme="light"] .text-white\/70,
 html[data-theme="light"] .text-white\/80 {
   color: #4d5462 !important;
+}
+
+/* Inspect Study and dedicated action badges */
+html[data-theme="light"] .work-inspect-btn {
+  background-color: #11141b !important;
+  color: #FDFDFD !important;
+  border-color: #11141b !important;
+  box-shadow: 0 4px 16px rgba(18, 22, 30, 0.16) !important;
+}
+html[data-theme="light"] a:hover .work-inspect-btn,
+html[data-theme="light"] .work-inspect-btn:hover {
+  background-color: #027a9e !important;
+  border-color: #027a9e !important;
+  color: #FDFDFD !important;
+}
+
+/* Semi-transparent text opacities in Light mode */
+html[data-theme="light"] .text-\[\#f2f1ec\]\/80,
+html[data-theme="light"] .text-\[\#f2f1ec\]\/85,
+html[data-theme="light"] .text-\[\#f2f1ec\]\/90 {
+  color: #2b303a !important;
+}
+
+/* Restrained and purposeful shadows in Light mode */
+html[data-theme="light"] .shadow-2xl {
+  box-shadow: 0 16px 40px -12px rgba(18, 22, 30, 0.08), 0 1px 3px rgba(18, 22, 30, 0.04) !important;
+}
+html[data-theme="light"] .shadow-xl {
+  box-shadow: 0 12px 30px -8px rgba(18, 22, 30, 0.06), 0 1px 2px rgba(18, 22, 30, 0.03) !important;
+}
+html[data-theme="light"] .shadow-lg {
+  box-shadow: 0 8px 24px -6px rgba(18, 22, 30, 0.05), 0 1px 2px rgba(18, 22, 30, 0.02) !important;
+}
+html[data-theme="light"] .shadow-md {
+  box-shadow: 0 4px 16px -4px rgba(18, 22, 30, 0.04), 0 1px 2px rgba(18, 22, 30, 0.02) !important;
+}
+
+/* Table Directory divider and row hover */
+html[data-theme="light"] .divide-white\/\[0\.06\] > :not([hidden]) ~ :not([hidden]) {
+  border-color: rgba(18, 22, 30, 0.08) !important;
+}
+html[data-theme="light"] tr.hover\:bg-white\/\[0\.03\]:hover {
+  background-color: rgba(18, 22, 30, 0.03) !important;
 }
 
 /* Action CTA Buttons in light mode: deep carbon black with white text */

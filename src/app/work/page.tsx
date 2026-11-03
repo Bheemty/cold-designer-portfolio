@@ -287,7 +287,7 @@ export default function WorkArchivePage() {
                                   <span>{p.category}</span>
                                 </div>
                               )}
-                              <span className="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-[#090b0f]/90 backdrop-blur-md border border-white/[0.12] px-4 py-2 font-mono-code text-xs text-[#f2f1ec] group-hover:border-[#a9ddf0] group-hover:text-[#a9ddf0] transition-colors">
+                              <span className="work-inspect-btn absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-[#090b0f]/90 backdrop-blur-md border border-white/[0.12] px-4 py-2 font-mono-code text-xs text-[#f2f1ec] group-hover:border-[#a9ddf0] group-hover:text-[#a9ddf0] transition-colors">
                                 <span>Inspect Study</span>
                                 <svg
                                   viewBox="0 0 24 24"
