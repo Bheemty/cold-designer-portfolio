@@ -2,12 +2,14 @@
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
-  private enabled: boolean = false;
+  private enabled: boolean = true; // Enabled by default for interactive lab, respects user preferences
 
   constructor() {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("cold_sound_enabled");
-      this.enabled = stored === "true";
+      if (stored !== null) {
+        this.enabled = stored === "true";
+      }
     }
   }
 
@@ -27,13 +29,19 @@ class SoundEngine {
     return this.enabled;
   }
 
-  public toggle(): boolean {
-    this.enabled = !this.enabled;
+  public setEnabled(val: boolean) {
+    this.enabled = val;
     if (typeof window !== "undefined") {
       localStorage.setItem("cold_sound_enabled", this.enabled ? "true" : "false");
     }
     if (this.enabled) {
       this.initContext();
+    }
+  }
+
+  public toggle(): boolean {
+    this.setEnabled(!this.enabled);
+    if (this.enabled) {
       this.playChime(640, 0.08);
     }
     return this.enabled;
@@ -58,6 +66,30 @@ class SoundEngine {
 
       osc.start();
       osc.stop(this.ctx.currentTime + 0.03);
+    } catch {
+      // AudioContext safe fail
+    }
+  }
+
+  public playPop(freq = 420) {
+    if (!this.enabled) return;
+    try {
+      this.initContext();
+      if (!this.ctx) return;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.4, this.ctx.currentTime + 0.05);
+
+      gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.05);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.05);
     } catch {
       // AudioContext safe fail
     }
@@ -113,4 +145,3 @@ class SoundEngine {
 }
 
 export const sound = new SoundEngine();
-

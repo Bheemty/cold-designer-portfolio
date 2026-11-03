@@ -1,16 +1,123 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
+import { sound } from "@/lib/sounds";
+
+const HERO_REVEALED_KEY = "cold_designer_hero_revealed";
+
+function getHeroRevealedState(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const val = window.sessionStorage.getItem(HERO_REVEALED_KEY);
+    if (val === "true") return true;
+    return document.documentElement.getAttribute("data-hero-revealed") === "true";
+  } catch {
+    try {
+      return document.documentElement.getAttribute("data-hero-revealed") === "true";
+    } catch {
+      return false;
+    }
+  }
+}
+
+function setHeroRevealedState(revealed: boolean) {
+  if (typeof window === "undefined") return;
+  try {
+    if (revealed) {
+      window.sessionStorage.setItem(HERO_REVEALED_KEY, "true");
+      // Note: We deliberately do NOT set data-hero-revealed on documentElement here
+      // while actively on the page to avoid abruptly removing the mask while visitor is viewing/scratching!
+    } else {
+      window.sessionStorage.removeItem(HERO_REVEALED_KEY);
+      document.documentElement.removeAttribute("data-hero-revealed");
+    }
+  } catch {
+    try {
+      if (!revealed) {
+        document.documentElement.removeAttribute("data-hero-revealed");
+      }
+    } catch {}
+  }
+}
+
+// Spatial grid resolution for measuring actual erased surface coverage
+const GRID_COLS = 28;
+const GRID_ROWS = 16;
+const TOTAL_CELLS = GRID_COLS * GRID_ROWS; // 448 discrete surface cells
+const COMPLETION_THRESHOLD = 0.70; // Genuine 70% physical erased surface coverage
 
 export default function HeroKokil() {
   const heroRef = useRef<HTMLElement>(null);
   const dotsGroupRef = useRef<SVGGElement>(null);
-  const [hintHidden, setHintHidden] = useState(false);
+
+  // Initialize revealed state strictly from session (only true if completed on an earlier visit in this session)
+  const [isRevealed, setIsRevealed] = useState(() => getHeroRevealedState());
+  const [hintHidden, setHintHidden] = useState(() => getHeroRevealedState());
+  const hasCompletedRef = useRef(false);
+
+  // Erased cells tracker for measuring genuine physical surface coverage
+  const erasedCellsRef = useRef<Set<number>>(new Set());
+
+  // Refs for managing auto-sweep lifecycle and restart on mobile
+  const autoSweepCancelRef = useRef<(() => void) | null>(null);
+  const triggerAutoScratchRef = useRef<(() => void) | null>(null);
+
+  const resetScratch = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+      e.preventDefault();
+    }
+
+    // Cancel running auto-sweep animation if active
+    if (autoSweepCancelRef.current) {
+      autoSweepCancelRef.current();
+      autoSweepCancelRef.current = null;
+    }
+
+    hasCompletedRef.current = false;
+    erasedCellsRef.current.clear();
+    setHeroRevealedState(false);
+    setIsRevealed(false);
+    setHintHidden(false);
+
+    const heroEl = heroRef.current;
+    if (heroEl) {
+      heroEl.classList.remove("is-revealed");
+    }
+
+    const dotsGroup = dotsGroupRef.current;
+    if (dotsGroup) {
+      while (dotsGroup.firstChild) {
+        dotsGroup.removeChild(dotsGroup.firstChild);
+      }
+    }
+    try {
+      sound.playClick();
+    } catch {}
+
+    // On mobile / touch devices, restart the progressive automatic scratch animation
+    if (triggerAutoScratchRef.current) {
+      triggerAutoScratchRef.current();
+    }
+  }, []);
 
   useEffect(() => {
     const heroEl = heroRef.current;
     const dotsGroup = dotsGroupRef.current;
     if (!heroEl || !dotsGroup) return;
+
+    // Detect device capabilities: mouse/fine pointer desktop vs mobile/tablet touch
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    // Check saved session state on mount: if visitor completed reveal on a prior visit in this session, show revealed
+    const savedRevealed = getHeroRevealedState();
+    if (savedRevealed) {
+      hasCompletedRef.current = true;
+      setIsRevealed(true);
+      setHintHidden(true);
+      document.documentElement.setAttribute("data-hero-revealed", "true");
+      heroEl.classList.add("is-revealed");
+    }
 
     let isHeroVisible = true;
     const observer = new IntersectionObserver(
@@ -82,18 +189,15 @@ export default function HeroKokil() {
       }, 150);
     }, 3200);
 
-    // ── Rub to reveal dark paint ──
-    const MAX_DOTS = 220; // Lightweight SVG tree that keeps scrolling silky smooth
-    const MIN_DIST = 22;
+    // ── Progressive Mask Erasure & Spatial Coverage Engine ──
+    const MAX_DOTS = 900;
+    const MIN_DIST = 18;
     const BRUSH_RADIUS = 280;
     let lastX: number | null = null;
     let lastY: number | null = null;
 
-    function addDot(clientX: number, clientY: number) {
-      if (!heroEl || !dotsGroup || !isHeroVisible) return;
-      const rect = heroEl.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
+    function addLocalDot(x: number, y: number, heroW: number, heroH: number) {
+      if (!heroEl || !dotsGroup) return;
 
       if (lastX !== null && lastY !== null) {
         const dist = Math.hypot(x - lastX, y - lastY);
@@ -116,71 +220,238 @@ export default function HeroKokil() {
           dotsGroup.removeChild(dotsGroup.firstChild);
         }
       }
-    }
 
-    function onPointerMove(e: PointerEvent) {
-      addDot(e.clientX, e.clientY);
-    }
+      // Calculate genuine surface area erased (without artificially inflating on repeat strokes)
+      const cellW = heroW / GRID_COLS;
+      const cellH = heroH / GRID_ROWS;
+      const minCol = Math.max(0, Math.floor((x - BRUSH_RADIUS) / cellW));
+      const maxCol = Math.min(GRID_COLS - 1, Math.floor((x + BRUSH_RADIUS) / cellW));
+      const minRow = Math.max(0, Math.floor((y - BRUSH_RADIUS) / cellH));
+      const maxRow = Math.min(GRID_ROWS - 1, Math.floor((y + BRUSH_RADIUS) / cellH));
 
-    function onTouchMove(e: TouchEvent) {
-      if (e.touches[0]) {
-        addDot(e.touches[0].clientX, e.touches[0].clientY);
+      for (let r = minRow; r <= maxRow; r++) {
+        const cellCenterY = (r + 0.5) * cellH;
+        for (let c = minCol; c <= maxCol; c++) {
+          const cellCenterX = (c + 0.5) * cellW;
+          if (Math.hypot(x - cellCenterX, y - cellCenterY) <= BRUSH_RADIUS) {
+            erasedCellsRef.current.add(r * GRID_COLS + c);
+          }
+        }
+      }
+
+      const coverageRatio = erasedCellsRef.current.size / TOTAL_CELLS;
+
+      // Completion occurs ONLY after visitor genuinely scratches the required 70% proportion of surface
+      // On desktop: never snaps DOM mask while visitor is actively scratching on the page.
+      if (!hasCompletedRef.current && coverageRatio >= COMPLETION_THRESHOLD) {
+        hasCompletedRef.current = true;
+        setHeroRevealedState(true);
       }
     }
 
-    function onPointerLeave() {
+    function addDotFromClientCoords(clientX: number, clientY: number) {
+      if (!heroEl || !dotsGroup || !isHeroVisible) return;
+      const rect = heroEl.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      addLocalDot(x, y, rect.width, rect.height);
+    }
+
+    // ── DESKTOP: MANUAL MOUSE-MOVEMENT SCRATCHING ──
+    let onDesktopPointerMove: ((e: PointerEvent) => void) | null = null;
+    let onDesktopPointerDown: ((e: PointerEvent) => void) | null = null;
+    let onDesktopPointerLeave: (() => void) | null = null;
+
+    if (isDesktop) {
+      // Desktop visitors manually reveal the Hero using ordinary mouse movement.
+      // No clicking, holding or click-and-dragging is required.
+      // Erasing stops immediately when the mouse stops moving.
+      onDesktopPointerMove = (e: PointerEvent) => {
+        if (!isHeroVisible) return;
+        pendingPointerX = e.clientX;
+        pendingPointerY = e.clientY;
+
+        // Keep HIDE button click target clean
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+
+        addDotFromClientCoords(e.clientX, e.clientY);
+      };
+
+      onDesktopPointerDown = (e: PointerEvent) => {
+        if (!isHeroVisible) return;
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+        addDotFromClientCoords(e.clientX, e.clientY);
+      };
+
+      onDesktopPointerLeave = () => {
+        lastX = null;
+        lastY = null;
+      };
+
+      heroEl.addEventListener("pointermove", onDesktopPointerMove, { passive: true });
+      heroEl.addEventListener("pointerdown", onDesktopPointerDown, { passive: true });
+      heroEl.addEventListener("pointerleave", onDesktopPointerLeave, { passive: true });
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+      // No auto-scratch on desktop
+      triggerAutoScratchRef.current = null;
+    }
+
+    // ── MOBILE & TABLET: PROGRESSIVE AUTOMATIC SCRATCH ANIMATION ──
+    if (!isDesktop) {
+      // Mobile and tablet visitors are NOT required to tap, click, drag or swipe.
+      // The website automatically begins a smooth, progressive serpentine / zig-zag scratch animation.
+      function startAutoScratch() {
+        if (!heroEl || !dotsGroup) return;
+        if (hasCompletedRef.current) return;
+
+        const rect = heroEl.getBoundingClientRect();
+        if (rect.height <= 0 || rect.width <= 0) {
+          const retryTimer = window.setTimeout(startAutoScratch, 100);
+          autoSweepCancelRef.current = () => window.clearTimeout(retryTimer);
+          return;
+        }
+
+        const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const numRows = Math.max(4, Math.ceil(rect.height / 180));
+        const stepsInRow = Math.max(12, Math.round(rect.width / 32));
+        const pts: Array<{ x: number; y: number }> = [];
+
+        for (let i = 0; i < numRows; i++) {
+          const rowY = (rect.height * (i + 0.5)) / numRows;
+          const isEven = i % 2 === 0;
+          const fromX = isEven ? -40 : rect.width + 40;
+          const toX = isEven ? rect.width + 40 : -40;
+
+          for (let k = 0; k <= stepsInRow; k++) {
+            const t = k / stepsInRow;
+            const x = fromX + (toX - fromX) * t;
+            const y = rowY + Math.sin(t * Math.PI) * 12;
+            pts.push({ x, y });
+          }
+        }
+
+        if (isReduced) {
+          pts.forEach((pt) => addLocalDot(pt.x, pt.y, rect.width, rect.height));
+          hasCompletedRef.current = true;
+          setHeroRevealedState(true);
+          setIsRevealed(true);
+          heroEl.classList.add("is-revealed");
+          return;
+        }
+
+        let ptIndex = 0;
+        let rafId = 0;
+        let lastTime = 0;
+        const STEP_INTERVAL_MS = 25; // ~25ms per point -> ~1.5s total smooth sweep
+
+        function sweepStep(timestamp: number) {
+          if (!lastTime) lastTime = timestamp;
+          const delta = timestamp - lastTime;
+
+          if (delta >= STEP_INTERVAL_MS) {
+            lastTime = timestamp;
+            const pt = pts[ptIndex++];
+            if (pt) {
+              addLocalDot(pt.x, pt.y, rect.width, rect.height);
+              // Googly eyes follow the sweep coordinates across the surface
+              pendingPointerX = rect.left + pt.x;
+              pendingPointerY = rect.top + pt.y;
+            }
+          }
+
+          if (ptIndex < pts.length) {
+            rafId = requestAnimationFrame(sweepStep);
+          } else {
+            // Sweep complete: Hero is fully revealed
+            hasCompletedRef.current = true;
+            setHeroRevealedState(true);
+            setIsRevealed(true);
+            if (heroEl) {
+              heroEl.classList.add("is-revealed");
+            }
+            autoSweepCancelRef.current = null;
+            lastX = null;
+            lastY = null;
+          }
+        }
+
+        rafId = requestAnimationFrame(sweepStep);
+        autoSweepCancelRef.current = () => {
+          cancelAnimationFrame(rafId);
+        };
+      }
+
+      function scheduleAutoScratch() {
+        if (autoSweepCancelRef.current) {
+          autoSweepCancelRef.current();
+          autoSweepCancelRef.current = null;
+        }
+        // Brief 500ms discovery window showing concealed surface & eyes before progressive animation begins
+        const delayTimer = window.setTimeout(startAutoScratch, 500);
+        autoSweepCancelRef.current = () => {
+          window.clearTimeout(delayTimer);
+        };
+      }
+
+      triggerAutoScratchRef.current = scheduleAutoScratch;
+
+      // If not previously revealed, initiate automatic scratch after brief reveal delay
+      if (!savedRevealed) {
+        scheduleAutoScratch();
+      }
+    }
+
+    const handleThemeChange = () => {
+      if (getHeroRevealedState()) {
+        return;
+      }
+      if (dotsGroup) {
+        while (dotsGroup.firstChild) {
+          dotsGroup.removeChild(dotsGroup.firstChild);
+        }
+      }
+      erasedCellsRef.current.clear();
+      hasCompletedRef.current = false;
+      setHintHidden(false);
       lastX = null;
       lastY = null;
-    }
 
-    // Auto-sweep for touch screens
-    const isTouch = window.matchMedia("(hover: none)").matches;
-    let sweepTimeout: NodeJS.Timeout;
-    if (isTouch) {
-      sweepTimeout = setTimeout(() => {
-        const r = heroEl.getBoundingClientRect();
-        const rows = Math.max(3, Math.ceil(r.height / 280));
-        let step = 0;
-        const totalSteps = rows * 5;
-        const sweepTimer = setInterval(() => {
-          if (step > totalSteps) {
-            clearInterval(sweepTimer);
-            return;
-          }
-          const rowIdx = Math.floor(step / 5);
-          const colIdx = step % 5;
-          const x = (colIdx / 4) * r.width;
-          const y = (rowIdx / rows) * r.height;
-          addDot(r.left + x, r.top + y);
-          step++;
-        }, 50);
-      }, 700);
-    }
+      if (!isDesktop && triggerAutoScratchRef.current) {
+        triggerAutoScratchRef.current();
+      }
+    };
 
-    window.addEventListener("mousemove", handleMouseMove, { passive: true });
-    heroEl.addEventListener("pointermove", onPointerMove, { passive: true });
-    heroEl.addEventListener("touchmove", onTouchMove, { passive: true });
-    heroEl.addEventListener("pointerleave", onPointerLeave, { passive: true });
+    window.addEventListener("cold-designer-theme-change", handleThemeChange);
 
     return () => {
       observer.disconnect();
       cancelAnimationFrame(eyeRaf);
       window.removeEventListener("resize", updateEyeCenters);
-      window.removeEventListener("mousemove", handleMouseMove);
-      heroEl.removeEventListener("pointermove", onPointerMove);
-      heroEl.removeEventListener("touchmove", onTouchMove);
-      heroEl.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("cold-designer-theme-change", handleThemeChange);
       clearInterval(blinkInterval);
-      if (sweepTimeout) clearTimeout(sweepTimeout);
+
+      if (autoSweepCancelRef.current) {
+        autoSweepCancelRef.current();
+        autoSweepCancelRef.current = null;
+      }
+      triggerAutoScratchRef.current = null;
+
+      if (isDesktop) {
+        if (onDesktopPointerMove) heroEl.removeEventListener("pointermove", onDesktopPointerMove);
+        if (onDesktopPointerDown) heroEl.removeEventListener("pointerdown", onDesktopPointerDown);
+        if (onDesktopPointerLeave) heroEl.removeEventListener("pointerleave", onDesktopPointerLeave);
+        window.removeEventListener("mousemove", handleMouseMove);
+      }
     };
   }, []);
 
   return (
-    <section ref={heroRef} id="hero">
-      {/* Dark Obsidian Invert Canvas Paint */}
+    <section ref={heroRef} id="hero" className={isRevealed ? "is-revealed" : ""}>
+      {/* Revealed Canvas Paint (Obsidian dark in dark mode, pristine #FDFDFD in light mode) */}
       <div className="hero-paint" id="heroPaint" />
 
-      {/* Base Light Layer (Text & Buttons are transparent until rubbed) */}
+      {/* Base Layer: completely concealed initial state in both themes */}
       <div className="hero-base">
         <div className="hero-main">
           <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
@@ -194,13 +465,61 @@ export default function HeroKokil() {
                 <span className="eye">
                   <span className="pupil" />
                 </span>
-                <span
-                  className={`cursor-hint ${hintHidden ? "hide" : ""}`}
-                  id="cursorHint"
-                  aria-hidden="true"
-                >
-                  colour me
-                </span>
+                <div className="eyes-labels" aria-hidden="false">
+                  <button
+                    type="button"
+                    className="hero-hide-btn"
+                    onClick={resetScratch}
+                    title="Re-hide hero"
+                    aria-label="Re-hide hero"
+                  >
+                    HIDE
+                  </button>
+                  <span
+                    className={`cursor-hint ${hintHidden ? "hide" : ""}`}
+                    id="cursorHint"
+                    aria-hidden={hintHidden}
+                  >
+                    COLOR ME
+                  </span>
+                </div>
+              </span>
+            </span>
+            <span className="line line-2">Designer</span>
+          </h1>
+        </div>
+        <div className="hero-bottom">
+          <p className="hero-desc">
+            I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
+          </p>
+          <div className="hero-actions">
+            <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true">
+              Explore selected work <span aria-hidden="true">&darr;</span>
+            </a>
+            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost" tabIndex={-1} aria-hidden="true">
+              Get in touch
+            </a>
+          </div>
+        </div>
+        <div className="hero-strip" aria-hidden="true">
+          <span>Portfolio &rsquo;26</span>
+          <span className="skills">
+            Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
+          </span>
+          <span>Scroll &darr;</span>
+        </div>
+      </div>
+
+      {/* Invert Layer: progressively revealed only within scratched areas */}
+      <div className="hero-invert" id="heroInvert" aria-hidden="true">
+        <div className="hero-main">
+          <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
+          <h1 className="hero-title">
+            <span className="line line-1">
+              Product
+              <span className="eyes-spacer" aria-hidden="true">
+                <span />
+                <span />
               </span>
             </span>
             <span className="line line-2">Designer</span>
@@ -228,48 +547,11 @@ export default function HeroKokil() {
         </div>
       </div>
 
-      {/* Invert Dark Obsidian Layer (revealed where pointer rubs over the SVG mask) */}
-      <div className="hero-invert" id="heroInvert" aria-hidden="true">
-        <div className="hero-main">
-          <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
-          <h1 className="hero-title">
-            <span className="line line-1">
-              Product
-              <span className="eyes-spacer" aria-hidden="true">
-                <span />
-                <span />
-              </span>
-            </span>
-            <span className="line line-2">Designer</span>
-          </h1>
-        </div>
-        <div className="hero-bottom">
-          <p className="hero-desc">
-            I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
-          </p>
-          <div className="hero-actions">
-            <a href="#work" className="hero-btn primary" tabIndex={-1}>
-              Explore selected work <span aria-hidden="true">&darr;</span>
-            </a>
-            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost" tabIndex={-1}>
-              Get in touch
-            </a>
-          </div>
-        </div>
-        <div className="hero-strip">
-          <span>Portfolio &rsquo;26</span>
-          <span className="skills">
-            Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
-          </span>
-          <span>Scroll &darr;</span>
-        </div>
-      </div>
-
       {/* SVG Mask with dynamic #rubDots */}
       <svg width="0" height="0" style={{ position: "absolute" }} aria-hidden="true">
         <defs>
           <mask id="rubMask" maskUnits="objectBoundingBox" x="-20%" y="-20%" width="140%" height="140%">
-            <rect x="-2000" y="-2000" width="5000" height="5000" fill="black" />
+            <rect x="-2000" y="-2000" width="5000" height="5000" fill={isRevealed ? "white" : "black"} />
             <g ref={dotsGroupRef} id="rubDots" />
           </mask>
         </defs>

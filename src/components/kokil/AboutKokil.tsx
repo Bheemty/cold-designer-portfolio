@@ -21,74 +21,90 @@ export default function AboutKokil() {
   const textRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    const container = containerRef.current;
     const textEl = textRef.current;
-    if (!container || !textEl) return;
+    if (!textEl) return;
 
     const words = Array.from(textEl.querySelectorAll<HTMLSpanElement>(".word"));
-    if (!words.length) return;
+    if (words.length === 0) return;
 
-    let cachedTop = 0;
-    let cachedHeight = 0;
-    let lastRevealCount = -1;
-    let ticking = false;
-    let isVisible = false;
-
-    // Cache layout bounds on resize to NEVER trigger layout thrashing during scroll
-    function measure() {
-      if (!container) return;
-      const rect = container.getBoundingClientRect();
-      cachedTop = rect.top + window.scrollY;
-      cachedHeight = container.offsetHeight;
+    // Accessibility check: instantly reveal all words if user prefers reduced motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      words.forEach((w) => w.classList.add("revealed"));
+      return;
     }
 
-    measure();
+    let lastRevealCount = -1;
+    let ticking = false;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        isVisible = entries[0]?.isIntersecting ?? false;
-        if (isVisible) update();
-      },
-      { rootMargin: "150px 0px 150px 0px" }
-    );
-    observer.observe(container);
-
-    function update() {
+    // Kokil Tamta exact scroll reveal formula:
+    // When the top of the text enters from the bottom of viewport (start = vh * 0.9),
+    // words progressively unblur and illuminate as scroll continues towards upper-center (end = vh * 0.35).
+    // Scrolling upwards naturally reverses the unblur wave back into blurred state.
+    const update = () => {
       ticking = false;
-      if (!isVisible) return;
+      if (!textEl) return;
 
-      const scrollY = window.scrollY;
+      // Clean 0-reset guarantee whenever at the top of Hero
+      if (window.scrollY < 30) {
+        if (lastRevealCount !== 0) {
+          lastRevealCount = 0;
+          words.forEach((w) => w.classList.remove("revealed"));
+        }
+        return;
+      }
+
+      const rect = textEl.getBoundingClientRect();
       const vh = window.innerHeight;
-      const start = cachedTop - vh * 0.85;
-      const end = cachedTop - vh * 0.25;
-
-      let progress = (scrollY - start) / (end - start);
+      const start = vh * 0.9;
+      const end = vh * 0.35;
+      let progress = (start - rect.top) / (start - end);
       progress = Math.min(1, Math.max(0, progress));
       const revealCount = Math.round(progress * words.length);
 
       if (revealCount !== lastRevealCount) {
         lastRevealCount = revealCount;
-        words.forEach((w, i) => {
-          w.classList.toggle("revealed", i < revealCount);
-        });
+        for (let i = 0; i < words.length; i++) {
+          if (i < revealCount) {
+            words[i].classList.add("revealed");
+          } else {
+            words[i].classList.remove("revealed");
+          }
+        }
       }
-    }
+    };
 
-    function onScroll() {
-      if (!isVisible) return;
+    const onScroll = () => {
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(update);
       }
-    }
+    };
+
+    // Run initial update on mount (handles page refresh when already scrolled down)
+    update();
 
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", measure, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+
+    // Synchronize with Lenis smooth scrolling for frame-perfect momentum sync
+    const lenis = (window as unknown as {
+      __lenis?: {
+        on: (event: string, cb: () => void) => void;
+        off: (event: string, cb: () => void) => void;
+      };
+    }).__lenis;
+
+    if (lenis?.on) {
+      lenis.on("scroll", update);
+    }
 
     return () => {
-      observer.disconnect();
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", measure);
+      window.removeEventListener("resize", update);
+      if (lenis?.off) {
+        lenis.off("scroll", update);
+      }
     };
   }, []);
 
@@ -100,7 +116,7 @@ export default function AboutKokil() {
       <p ref={textRef} className="intro-text">
         {tokens.map((token, idx) => {
           if (/^\s+$/.test(token)) {
-            return " ";
+            return token;
           }
           const isEmphasis =
             token.toLowerCase().includes("obvious") ||
@@ -124,7 +140,20 @@ export default function AboutKokil() {
         </ul>
 
         <Link href="/about" className="intro-more">
-          Read design monograph <span aria-hidden="true">&rarr;</span>
+          <span>Read Design Monograph</span>
+          <svg
+            viewBox="0 0 24 24"
+            width="15"
+            height="15"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.4"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M7 17L17 7M17 7H7M17 7V17" />
+          </svg>
         </Link>
       </div>
     </section>

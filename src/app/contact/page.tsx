@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Mail, Check, Copy, ArrowUpRight, Sparkles, Send } from "lucide-react";
 import confetti from "canvas-confetti";
 import { sound } from "@/lib/sounds";
+import ScrollReveal from "@/components/motion/ScrollReveal";
 
 const SCOPES = [
   "Conversational UX & Healthtech",
@@ -78,13 +79,13 @@ export default function ContactPage() {
           </h1>
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            Available for select product design engagements, conversational UX architecture, and design systems consulting.
+            Open for thoughtful product discussions, design systems architecture, and professional dialogue.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Direct Coordinates */}
-          <div className="lg:col-span-5 space-y-8 font-mono-code text-xs">
+          <ScrollReveal start="top 85%" y={20} duration={0.45} className="lg:col-span-5 space-y-8 font-mono-code text-xs">
             {/* Direct Email Card */}
             <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 space-y-4">
               <span className="text-[#89919d] uppercase block">DIRECT EMAIL</span>
@@ -93,7 +94,7 @@ export default function ContactPage() {
               </div>
               <button
                 onClick={handleCopyEmail}
-                className="w-full flex items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.03] py-2.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
+                className="w-full flex items-center justify-center gap-2 rounded-lg border border-white/[0.12] bg-white/[0.03] py-2.5 text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] active:scale-[0.98] transition-all"
               >
                 {copiedEmail ? (
                   <>
@@ -172,10 +173,10 @@ export default function ContactPage() {
                 </a>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Interactive Inquiry Form */}
-          <div className="lg:col-span-7">
+          <ScrollReveal start="top 85%" y={20} duration={0.45} className="lg:col-span-7">
             <div className="rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10">
               {submitted ? (
                 <div className="py-12 text-center space-y-4 font-mono-code">
@@ -309,7 +310,7 @@ export default function ContactPage() {
                 </form>
               )}
             </div>
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </main>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowUpRight, CheckCircle2, Cpu, ExternalLink, Code2 } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
+import ScrollReveal from "@/components/motion/ScrollReveal";
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -138,6 +139,7 @@ export default async function CaseStudyPage({
         </header>
 
         {/* Hero Visual Mockup or Video Showcase */}
+        <ScrollReveal start="top 85%" y={24} duration={0.5}>
         {project.videoSrc ? (
           <div className="mb-20 overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-6 shadow-2xl">
             <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#090b0f]">
@@ -175,8 +177,10 @@ export default async function CaseStudyPage({
             </div>
           </div>
         ) : null}
+        </ScrollReveal>
 
         {/* Deliverables Pills */}
+        <ScrollReveal start="top 85%" y={20} duration={0.45}>
         <section className="mb-20">
           <span className="font-mono-code text-xs text-[#89919d] uppercase tracking-wider block mb-4">
             Deliverables &amp; Artifacts:
@@ -193,8 +197,10 @@ export default async function CaseStudyPage({
             ))}
           </div>
         </section>
+        </ScrollReveal>
 
         {/* Strategic Context & Friction */}
+        <ScrollReveal start="top 85%" y={20} duration={0.45}>
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
           <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
             <span>01 // STRATEGIC CONTEXT</span>
@@ -217,8 +223,10 @@ export default async function CaseStudyPage({
             </div>
           </div>
         </section>
+        </ScrollReveal>
 
         {/* The Solution & Architecture */}
+        <ScrollReveal start="top 85%" y={20} duration={0.45}>
         <section className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20 border-t border-white/[0.08] pt-16">
           <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
             <span>02 // ARCHITECTURAL SOLUTION</span>
@@ -234,6 +242,7 @@ export default async function CaseStudyPage({
             {/* System Highlights Cards */}
             <div className="grid grid-cols-1 gap-4 pt-4">
               {project.systemHighlights.map((hl, i) => (
+                <ScrollReveal key={hl.title} start="top 85%" y={20} duration={0.45}>
                 <div
                   key={hl.title}
                   className="rounded-xl border border-white/[0.08] bg-[#11141b] p-6 hover:border-white/20 transition-colors"
@@ -246,10 +255,12 @@ export default async function CaseStudyPage({
                     {hl.description}
                   </p>
                 </div>
+                </ScrollReveal>
               ))}
             </div>
           </div>
         </section>
+        </ScrollReveal>
 
         {/* Visual Design Artifacts & Final Interface Screens */}
         {project.gallery && project.gallery.length > 0 && (
@@ -268,6 +279,7 @@ export default async function CaseStudyPage({
 
             <div className="space-y-12">
               {project.gallery.map((item, idx) => (
+                <ScrollReveal key={item.src + idx} start="top 85%" y={24} duration={0.45}>
                 <div
                   key={item.src + idx}
                   className="group overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-8 transition-all hover:border-white/20"
@@ -290,6 +302,7 @@ export default async function CaseStudyPage({
                     </span>
                   </div>
                 </div>
+                </ScrollReveal>
               ))}
             </div>
           </section>
@@ -297,6 +310,7 @@ export default async function CaseStudyPage({
 
         {/* Editorial Notice for Conceptual/Figma-Only Projects */}
         {(!project.gallery || project.gallery.length === 0) && (
+          <ScrollReveal start="top 85%" y={20} duration={0.45}>
           <section className="mb-20 border-t border-white/[0.08] pt-16">
             <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10">
               <div className="flex items-center gap-2 font-mono-code text-xs text-[#a9ddf0] mb-3">
@@ -335,9 +349,11 @@ export default async function CaseStudyPage({
               </div>
             </div>
           </section>
+          </ScrollReveal>
         )}
 
         {/* Technical & Verification Specs */}
+        <ScrollReveal start="top 85%" y={20} duration={0.45}>
         <section className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 mb-20 font-mono-code text-xs">
           <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
             <Cpu size={15} className="text-[#a9ddf0]" />
@@ -360,8 +376,10 @@ export default async function CaseStudyPage({
             <span className="text-[#f2f1ec]/80">{project.wireframeSummary}</span>
           </div>
         </section>
+        </ScrollReveal>
 
         {/* Bottom Next & Previous Project Switcher */}
+        <ScrollReveal start="top 88%" y={20} duration={0.45}>
         <nav className="border-t border-white/[0.08] pt-16">
           <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d] mb-6 uppercase">
             <span>Navigation Relays</span>
@@ -371,7 +389,7 @@ export default async function CaseStudyPage({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <Link
               href={`/work/${prevProject.slug}`}
-              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 hover:border-[#a9ddf0]/30 transition-colors"
+              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 hover:border-[#a9ddf0]/40 hover:shadow-xl active:scale-[0.99] transition-all"
             >
               <span className="font-mono-code text-xs text-[#89919d] block mb-2">
                 ← PREVIOUS PROJECT
@@ -384,7 +402,7 @@ export default async function CaseStudyPage({
 
             <Link
               href={`/work/${nextProject.slug}`}
-              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 text-right hover:border-[#a9ddf0]/30 transition-colors"
+              className="group rounded-xl border border-white/[0.08] bg-[#11141b] p-6 text-right hover:border-[#a9ddf0]/40 hover:shadow-xl active:scale-[0.99] transition-all"
             >
               <span className="font-mono-code text-xs text-[#89919d] block mb-2">
                 NEXT PROJECT →
@@ -396,6 +414,7 @@ export default async function CaseStudyPage({
             </Link>
           </div>
         </nav>
+        </ScrollReveal>
       </div>
     </main>
   );

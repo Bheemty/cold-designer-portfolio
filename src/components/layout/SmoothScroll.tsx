@@ -1,10 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     // Respect user's motion preferences
@@ -18,6 +22,8 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     // Ensure CSS doesn't fight Lenis
     document.documentElement.style.scrollBehavior = "auto";
 
+    gsap.registerPlugin(ScrollTrigger);
+
     const lenis = new Lenis({
       duration: 0.95,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -30,6 +36,13 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     });
 
     lenisRef.current = lenis;
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
+    const onScrollUpdate = () => {
+      ScrollTrigger.update();
+    };
+
+    lenis.on("scroll", onScrollUpdate);
     lenis.resize();
 
     let rafId: number;
@@ -42,11 +55,30 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     return () => {
       cancelAnimationFrame(rafId);
+      lenis.off("scroll", onScrollUpdate);
       lenis.destroy();
       lenisRef.current = null;
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
       document.documentElement.style.scrollBehavior = "";
     };
   }, []);
+
+  // When pathname changes, immediately reset scroll position to top
+  useEffect(() => {
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(0, { immediate: true });
+    } else if (typeof window !== "undefined") {
+      window.scrollTo(0, 0);
+    }
+    ScrollTrigger.refresh();
+
+    // Re-calculate after 0.32s page transition completes to ensure pinpoint accuracy
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 360);
+
+    return () => clearTimeout(timer);
+  }, [pathname]);
 
   return <>{children}</>;
 }

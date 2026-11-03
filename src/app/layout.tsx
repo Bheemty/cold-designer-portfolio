@@ -6,6 +6,7 @@ import SmoothScroll from "@/components/layout/SmoothScroll";
 import CustomCursor from "@/components/layout/CustomCursor";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,6 +67,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-theme="dark"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased dark`}
     >
       <head>
@@ -75,14 +78,46 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter+Tight:wght@700;800&family=JetBrains+Mono:wght@400;500;600&family=Patrick+Hand&family=Poppins:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
+        {/* Anti-flash synchronous theme initialization */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var saved = localStorage.getItem('cold-designer-theme');
+                  var theme = (saved === 'light' || saved === 'dark') ? saved : 'dark';
+                  document.documentElement.setAttribute('data-theme', theme);
+                  if (theme === 'light') {
+                    document.documentElement.classList.add('theme-light');
+                    document.documentElement.classList.remove('dark');
+                  } else {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('theme-light');
+                  }
+                } catch (e) {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                  document.documentElement.classList.add('dark');
+                }
+                try {
+                  var heroRevealed = sessionStorage.getItem('cold_designer_hero_revealed');
+                  if (heroRevealed === 'true') {
+                    document.documentElement.setAttribute('data-hero-revealed', 'true');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
-      <body className="min-h-full flex flex-col bg-[#090b0f] text-[#f2f1ec] selection:bg-[#a9ddf0] selection:text-[#090b0f]">
-        <SmoothScroll>
-          <CustomCursor />
-          <Navbar />
-          <div className="flex-1">{children}</div>
-          <Footer />
-        </SmoothScroll>
+      <body className="min-h-full flex flex-col bg-[var(--bg-primary,#090b0f)] text-[var(--text-primary,#f2f1ec)] selection:bg-[var(--accent,#a9ddf0)] selection:text-[var(--bg-primary,#090b0f)]">
+        <ThemeProvider>
+          <SmoothScroll>
+            <CustomCursor />
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </SmoothScroll>
+        </ThemeProvider>
       </body>
     </html>
   );
