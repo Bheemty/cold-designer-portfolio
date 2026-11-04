@@ -17,7 +17,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/", label: "Home", index: "01" },
   { href: "/work", label: "Work", index: "02" },
   { href: "/about", label: "About", index: "03" },
-  { href: "/codex", label: "Codex", index: "04" },
+  { href: "/lab", label: "Lab", index: "04" },
 ];
 
 export default function Navbar() {
@@ -27,10 +27,26 @@ export default function Navbar() {
 
   // Track scroll position to enhance frosted glass density when content moves behind
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 15);
+    let lastScrolled = false;
+    let ticking = false;
+
+    const checkScroll = () => {
+      const scrolled = window.scrollY > 15;
+      if (scrolled !== lastScrolled) {
+        lastScrolled = scrolled;
+        setIsScrolled(scrolled);
+      }
+      ticking = false;
     };
-    handleScroll();
+
+    const handleScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(checkScroll);
+      }
+    };
+
+    checkScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -135,8 +151,8 @@ export default function Navbar() {
           <Link href="/about" className={pathname === "/about" ? "active" : ""}>
             About
           </Link>
-          <Link href="/codex" className={pathname === "/codex" ? "active" : ""}>
-            Codex
+          <Link href="/lab" className={pathname === "/lab" ? "active" : ""}>
+            Lab
           </Link>
         </div>
 

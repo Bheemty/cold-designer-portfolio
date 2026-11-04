@@ -1340,6 +1340,7 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
 /* ── 3D SPIRAL NOTEBOOK (CREATIVE JOURNAL & CODEX) ── */
 #playground,
 #codex.journal-codex-section,
+#lab.journal-codex-section,
 .journal-codex-section {
   position: relative;
   width: 100%;
@@ -1863,7 +1864,7 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
 .nb-ribbons i:nth-child(4) { --r: #8f8f8f; }
 
 @media (max-width: 900px) {
-  #playground, #codex.journal-codex-section, .journal-codex-section { flex-direction: column; align-items: stretch; padding: 70px clamp(20px, 4vw, 32px); gap: 32px; }
+  #playground, #codex.journal-codex-section, #lab.journal-codex-section, .journal-codex-section { flex-direction: column; align-items: stretch; padding: 70px clamp(20px, 4vw, 32px); gap: 32px; }
   .mp-title { writing-mode: horizontal-tb; transform: none; font-size: clamp(32px, 10vw, 44px); }
   .nb { aspect-ratio: 520 / 540; }
   .nb-cover, .nb-note, .nb-pocket, .nb-spine, .nb-ribbons { display: none; }

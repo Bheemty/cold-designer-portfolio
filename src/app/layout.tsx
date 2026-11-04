@@ -6,6 +6,7 @@ import SmoothScroll from "@/components/layout/SmoothScroll";
 import CustomCursor from "@/components/layout/CustomCursor";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import AskCold from "@/components/ask-cold/AskCold";
 import { ThemeProvider } from "@/context/ThemeContext";
 
 const geistSans = Geist({
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
     title: "Taye Abolarin — Cold Designer | Independent Product Designer",
     description:
       "Crafting conversational UX, transit systems, and tactile editorial web experiences.",
-    url: "https://colddesigner.com",
+    url: "https://cold-designer-portfolio.vercel.app",
     siteName: "Cold Designer Portfolio",
     locale: "en_US",
     type: "website",
@@ -116,6 +117,7 @@ export default function RootLayout({
             <Navbar />
             <div className="flex-1">{children}</div>
             <Footer />
+            <AskCold />
           </SmoothScroll>
         </ThemeProvider>
       </body>

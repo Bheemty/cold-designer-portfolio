@@ -41,7 +41,10 @@ export interface Project {
 }
 
 export const PROJECTS: Project[] = [
-  {
+  // ─────────────────────────────────────────────────────────────
+  // 1. PRESERVED ORIGINAL PORTFOLIO PROJECTS (Foundational Work)
+  // ─────────────────────────────────────────────────────────────
+{
     slug: "medesy",
     title: "MEDesy Solution",
     client: "Medesy Technologies",
@@ -104,7 +107,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Structured around frictionless chat-initiated triage, high-clarity doctor profile summaries, and unambiguous consultation steps.",
   },
-  {
+{
     slug: "9jatrip",
     title: "9jaTrip",
     client: "9jaTrip",
@@ -126,27 +129,22 @@ export const PROJECTS: Project[] = [
     featured: true,
     featuredOrder: 2,
     tags: ["Mobility", "Intercity Transit", "Mobile App", "Terminal UX"],
-    heroImage: "/images/projects/9jatrip/home-screen-mockup.png",
+    heroImage: "/images/projects/9jatrip/booking-screen.png",
     gallery: [
       {
-        src: "/images/projects/9jatrip/home-screen-mockup.png",
-        caption: "9jaTrip terminal hub route selector: scheduled departures between intercity hubs with upfront pricing.",
-        alt: "9jaTrip Home Screen Mockup",
-      },
-      {
-        src: "/images/projects/9jatrip/booking-ride-mockup.png",
-        caption: "Intercity transit booking interface: vehicle capacity, seat tier options, and luggage allowances.",
-        alt: "9jaTrip Booking Ride Mockup",
-      },
-      {
-        src: "/images/projects/9jatrip/live-tracking-mockup.png",
-        caption: "Intercity coach and transit live departure tracking with terminal bay indicators.",
-        alt: "9jaTrip Live Tracking Mockup",
+        src: "/images/projects/9jatrip/booking-screen.png",
+        caption: "9jaTrip intercity journey booking and payment gateway: trip itinerary, departure schedule, and Moniepoint verification.",
+        alt: "9jaTrip Intercity Booking and Payment Gateway",
       },
       {
         src: "/images/projects/9jatrip/ride-receipt.png",
-        caption: "Digital boarding pass and itemized fare receipt with terminal check-in QR code.",
-        alt: "9jaTrip Boarding Pass & Receipt",
+        caption: "Digital boarding pass and departure confirmation: seat assignment, passenger verification, and terminal check-in QR code.",
+        alt: "9jaTrip Digital Boarding Pass & Confirmation Ticket",
+      },
+      {
+        src: "/images/projects/9jatrip/chatter-receipt.png",
+        caption: "Charter booking reservation receipt: transparent flat-rate vehicle charter with cash-on-arrival payment flexibility.",
+        alt: "9jaTrip Charter Booking Reservation Receipt",
       },
     ],
     overview:
@@ -182,7 +180,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Optimized bottom-sheet drawer patterns for rapid destination search, live map pin placement, and single-tap vehicle category selection.",
   },
-  {
+{
     slug: "somewhere-hotel",
     title: "Somewhere Hotel",
     client: "Self-Initiated Concept",
@@ -201,7 +199,7 @@ export const PROJECTS: Project[] = [
     summary:
       "An editorial digital experience for a fictional luxury coastal sanctuary, using photography-led spatial journeys across day, sunset, and night alongside a refined room reservation demonstration.",
     accentColor: "#A9DDF0",
-    featured: true,
+    featured: false,
     featuredOrder: 3,
     tags: ["Hospitality", "Editorial Design", "Spatial Web", "Art Direction"],
     heroImage: "/images/projects/somewhere/suite-balcony-sunset.png",
@@ -260,7 +258,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Full-bleed hero transitions, contextual suite galleries with lighting toggles, and persistent reservation bar.",
   },
-  {
+{
     slug: "buybuddy",
     title: "BuyBuddy",
     client: "Self-Initiated Concept",
@@ -279,7 +277,7 @@ export const PROJECTS: Project[] = [
     summary:
       "A mobile-first commerce ecosystem connecting independent merchants with buyers, featuring an intuitive merchant inventory studio, multi-variant product catalog, and seamless shopper order workflows.",
     accentColor: "#A9DDF0",
-    featured: true,
+    featured: false,
     featuredOrder: 4,
     tags: ["Commerce", "Marketplace", "Next.js", "Design System"],
     heroImage: "/images/projects/buybuddy/vendor-products.png",
@@ -338,7 +336,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Modular product grid cards, interactive sticky bag drawer, and vendor management navigation.",
   },
-  {
+{
     slug: "stillwater",
     title: "Stillwater Hall",
     client: "Self-Initiated Concept",
@@ -357,7 +355,7 @@ export const PROJECTS: Project[] = [
     summary:
       "An experiential web exploration guiding concertgoers through a cinematic architectural sequence from exterior arrival to center stage, complete with interactive seat selection and digital demo pass issuance.",
     accentColor: "#A9DDF0",
-    featured: true,
+    featured: false,
     featuredOrder: 5,
     tags: ["Cinematic Web", "Motion Design", "Video Walkthrough", "Creative Code"],
     heroImage: "/images/projects/stillwater/05_Full_Stage.png",
@@ -423,61 +421,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Full-viewport progressive scrollytelling canvas with chapter indicator dock, seat selection overlay, and pass modal.",
   },
-  {
-    slug: "nova-wellness",
-    title: "Nova Wellness",
-    client: "Self-Initiated Concept",
-    type: "Concept / Lab Exploration",
-    category: "Mobile Health & Supportive Companion",
-    year: "2024",
-    role: "Product Designer & React Native Developer",
-    timeline: "Mobile Exploration",
-    deliverables: [
-      "Daily Wellness Check-In Companion",
-      "Voice Reflection Journal (AssemblyAI)",
-      "Conversational Reflection Guidance (Gemini)",
-      "Private On-Device Data Architecture",
-    ],
-    headline: "Supportive Daily Wellness Companion with Voice Journaling and Gemini AI",
-    summary:
-      "A React Native mobile application built with Expo SDK 57, offering mindful mood check-ins, AssemblyAI voice transcription, reflective AI conversation via Gemini, and privacy-first on-device data persistence.",
-    accentColor: "#A9DDF0",
-    featured: false,
-    tags: ["Mobile App", "React Native", "AI Companion", "Mental Wellness"],
-    overview:
-      "Nova is a supportive mobile companion designed to facilitate daily mental check-ins, reflective voice journaling, and habit tracking without intrusive telemetry or unsolicited clinical diagnoses. The app operates with strict on-device data storage, ensuring personal entries remain confidential.",
-    challenge:
-      "Designing an empathetic, calm mobile interface that encourages daily consistency without inducing screen guilt or gamifying mental well-being.",
-    solution:
-      "Implemented a calm typography-driven design language, quick morning/evening check-in sheets, voice-to-text reflections with editable transcriptions, and a contextual Gemini conversation assistant that only responds when explicitly summoned.",
-    systemHighlights: [
-      {
-        title: "Voice-to-Text Reflection",
-        description:
-          "Streamlined voice recording with AssemblyAI integration, producing editable transcripts before saving.",
-      },
-      {
-        title: "Intentional Gemini Conversations",
-        description:
-          "AI reflection partner operating within bounded contexts, providing supportive inquiry without clinical claims.",
-      },
-      {
-        title: "Private On-Device Storage",
-        description:
-          "All check-in entries, voice transcripts, and routine logs persist strictly on the local device.",
-      },
-    ],
-    specifications: [
-      { label: "Tech Stack", value: "React Native, Expo SDK 57, TypeScript, Reanimated" },
-      { label: "AI & Audio", value: "Gemini Developer API, AssemblyAI Transcription" },
-      { label: "Focus", value: "Mindful Check-Ins, Voice Journaling, Local Privacy" },
-      { label: "Repository", value: "github.com/Bheemty/nova-wellness" },
-    ],
-    githubUrl: "https://github.com/Bheemty/nova-wellness",
-    wireframeSummary:
-      "Floating navigation bar, keyboard-safe bottom sheets, and expandable voice recording states.",
-  },
-  {
+{
     slug: "greall-website",
     title: "Greall Corporate Rebrand",
     client: "Greall Technologies",
@@ -531,7 +475,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Clear corporate narrative grid, interactive service highlights, and responsive navigation header.",
   },
-  {
+{
     slug: "will",
     title: "Will (Digital Legacy)",
     client: "Self-Initiated Concept",
@@ -585,7 +529,7 @@ export const PROJECTS: Project[] = [
     wireframeSummary:
       "Multi-stage legacy setup wizards, secure asset inventory list, and trustee assignment drawer.",
   },
-  {
+{
     slug: "agrivillage",
     title: "AgriVillage",
     client: "Self-Initiated Concept",
@@ -606,6 +550,14 @@ export const PROJECTS: Project[] = [
     accentColor: "#A9DDF0",
     featured: false,
     tags: ["Agritech", "Marketplace", "Logistics", "Mobile First"],
+    heroImage: "/images/projects/agrivillage/hero.jpg",
+    gallery: [
+      {
+        src: "/images/projects/agrivillage/hero.jpg",
+        caption: "AgriVillage platform exploration: 'Transforming Agriculture with Innovation and Technology' — farmer cooperative marketplace hero and responsive showcase.",
+        alt: "AgriVillage Hero Section Design",
+      },
+    ],
     overview:
       "Agricultural supply chains in emerging markets suffer from severe intermediary markups and harvest waste. AgriVillage connects farming cooperatives directly with commercial food buyers, enabling transparent produce lot listing and coordinated aggregation.",
     challenge:
@@ -638,5 +590,452 @@ export const PROJECTS: Project[] = [
     prototypeUrl: "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
     wireframeSummary:
       "Large-touch target produce selectors, simple batch creation cards, and clear delivery timeline trackers.",
+  },
+
+  // ─────────────────────────────────────────────────────────────
+  // 2. BEHANCE PORTFOLIO EXPANSIONS (Approved Additions)
+  // ─────────────────────────────────────────────────────────────
+{
+    "slug": "spot",
+    "title": "Spot",
+    "client": "Spot Creative Community",
+    "type": "Client / Freelance",
+    "category": "SaaS & Creative Collaboration",
+    "year": "2024",
+    "role": "Lead Product Designer",
+    "timeline": "8-Week Cross-Functional Production",
+    "deliverables": [
+      "Product UX & Information Architecture (30+ High-Fidelity Screens)",
+      "Interactive Feedback Canvas with Pinned Contextual Critique",
+      "Collaborator Hub & Community Design Forum",
+      "Multi-Device Design System & Component Library",
+      "Qualitative Survey & Competitive Benchmark Studies"
+    ],
+    "headline": "Structured Creative Feedback Platform Empowering Designers Through Community Critique",
+    "summary": "A dedicated web-based creative collaboration platform enabling designers to upload works-in-progress, receive pinned contextual critique from verified peers, access curated design resources, and engage in community design forums.",
+    "accentColor": "#EAA823",
+    "featured": true,
+    "featuredOrder": 3,
+    "tags": [
+      "SaaS",
+      "Lead Product Designer",
+      "Creative Feedback",
+      "Design System",
+      "Web App"
+    ],
+    "heroImage": "/images/projects/spot/hero.png",
+    "gallery": [
+      {
+        "src": "/images/projects/spot/hero.png",
+        "caption": "Spot creative collaboration platform: web-based hub for designers to upload work and receive structured peer feedback.",
+        "alt": "Spot Creative Feedback Platform Hero"
+      },
+      {
+        "src": "/images/projects/spot/problem-solution.png",
+        "caption": "Problem statement & 8-week production scope: addressing the lack of actionable critique and fragmented design resources across 30+ screens.",
+        "alt": "Spot Problem Statement and Metrics"
+      },
+      {
+        "src": "/images/projects/spot/research-personas.png",
+        "caption": "User research synthesis and empathy mapping: identifying key roadblocks in junior and independent designer workflows.",
+        "alt": "Spot User Research & Personas"
+      },
+      {
+        "src": "/images/projects/spot/design-system.png",
+        "caption": "Spot multi-platform design system: token hierarchy, high-contrast typography, and reusable interaction components.",
+        "alt": "Spot Design System"
+      },
+      {
+        "src": "/images/projects/spot/feedback-canvas.png",
+        "caption": "Contextual feedback canvas: pinned inline annotations, structured critique categories, and version comparisons.",
+        "alt": "Spot Contextual Feedback Canvas"
+      },
+      {
+        "src": "/images/projects/spot/screens-overview.png",
+        "caption": "Comprehensive screen architecture: from onboarding and project showcases to community discussions and resource vaults.",
+        "alt": "Spot High-Fidelity Responsive Screens"
+      }
+    ],
+    "overview": "Designers often struggle in isolation without access to structured, constructive critique. Fragmented feedback across social media or messaging apps lacks spatial context and actionable depth. Spot provides a specialized web-based workspace where designers share projects, pin contextual feedback directly to visual layers, and collaborate with verified industry peers.",
+    "challenge": "Fostering constructive, respectful critique without letting feedback devolve into superficial praise or unhelpful criticism, while ensuring the canvas commenting interface feels lightweight and fluid on dense multi-artboard uploads.",
+    "solution": "As Lead Product Designer, guided an 8-week product cycle coordinating with engineering and project leadership. Engineered a pinned-commenting engine allowing reviewers to highlight exact interface coordinates, categorize remarks by UX, visual hierarchy, or typography, and track resolution states across design iterations.",
+    "systemHighlights": [
+      {
+        "title": "Pinned Spatial Critique Canvas",
+        "description": "Allows reviewers to click directly onto design artboards and attach categorized, actionable feedback with resolution status tags."
+      },
+      {
+        "title": "Cross-Functional Design Leadership",
+        "description": "Directed product architecture across 8 weeks, coordinating with front-end engineers and supporting junior product designers."
+      },
+      {
+        "title": "Curated Resource & Discussion Forum",
+        "description": "Integrated community hubs enabling designers to share design assets, seek mentorship, and discuss emerging industry standards."
+      }
+    ],
+    "specifications": [
+      {
+        "label": "Role",
+        "value": "Lead Product Designer"
+      },
+      {
+        "label": "Platform",
+        "value": "Responsive Web Application (30+ Screens)"
+      },
+      {
+        "label": "Duration",
+        "value": "8+ Weeks (Cross-Functional Team)"
+      },
+      {
+        "label": "Team",
+        "value": "1 PM, 1 Lead Designer, 2 Developers, 2 Designers"
+      },
+      {
+        "label": "Tools",
+        "value": "Figma, Adobe Photoshop, Figjam, Slack, Google Meet"
+      }
+    ],
+    "prototypeUrl": "https://www.behance.net/gallery/214429537/Spot-Redefining-Creative-Feedback-A-Case-Study",
+    "wireframeSummary": "Grid-based portfolio showcase, sticky lateral critique inspector, and multi-artboard canvas navigation."
+  },
+{
+    "slug": "profile",
+    "title": "PROfile",
+    "client": "Enterprise Solutions",
+    "type": "Client / Freelance",
+    "category": "Enterprise SaaS & HR Tech",
+    "year": "2025",
+    "role": "Product Designer",
+    "timeline": "Enterprise SaaS UX Architecture",
+    "deliverables": [
+      "Enterprise Executive & HR Administrative Dashboard",
+      "Employee Self-Service (ESS) Mobile & Web Portals",
+      "Automated Clock-In, Attendance & Leave Request Workflows",
+      "Company Payroll Distribution & Predictive Attrition Analytics",
+      "Multi-Persona Role Permissions & Navigation System"
+    ],
+    "headline": "Integrated Organizational HRMS and Employee Self-Service Portal",
+    "summary": "A comprehensive enterprise human resource management solution uniting administrative attendance tracking, automated clock-in, predictive attrition analytics, and employee self-service into an intuitive, accessible dashboard.",
+    "accentColor": "#1B59F8",
+    "featured": true,
+    "featuredOrder": 4,
+    "tags": [
+      "Enterprise SaaS",
+      "HR Tech",
+      "Dashboard UX",
+      "Data Visualization",
+      "Mobile App"
+    ],
+    "heroImage": "/images/projects/profile/hero.png",
+    "gallery": [
+      {
+        "src": "/images/projects/profile/hero.png",
+        "caption": "PROfile enterprise overview dashboard: real-time headcount (258 employees), working format ratio, performance charts, and payroll breakdown.",
+        "alt": "PROfile Enterprise Overview Dashboard"
+      },
+      {
+        "src": "/images/projects/profile/about-problems.png",
+        "caption": "Core problem framework: replacing fragmented spreadsheets and manual tracking with centralized, automated, and predictive HR workflows.",
+        "alt": "PROfile Problems and Objectives"
+      },
+      {
+        "src": "/images/projects/profile/research-findings.png",
+        "caption": "Quantitative user research & stakeholder insights: addressing attrition warning signs and employee self-service demands.",
+        "alt": "PROfile User Research and Findings"
+      },
+      {
+        "src": "/images/projects/profile/dashboard-overview.png",
+        "caption": "Modular administrative workspaces: attendance rosters, payroll processing schedules, and departmental performance matrices.",
+        "alt": "PROfile Administrative Workspaces"
+      },
+      {
+        "src": "/images/projects/profile/mobile-screens.png",
+        "caption": "Employee Self-Service (ESS) mobile app: one-tap clock-in, leave application tracker, shift calendar, and digital paystubs.",
+        "alt": "PROfile ESS Mobile Application"
+      }
+    ],
+    "overview": "Organizations frequently manage workforce operations across siloed spreadsheets, disconnected payroll tools, and paper attendance sheets. PROfile centralizes human resource administration and employee self-service into a singular, responsive platform that simplifies day-to-day operations for HR managers while giving employees transparent control over their work life.",
+    "challenge": "Displaying dense enterprise metrics (headcount, attendance status, attrition risk, payroll distribution) without overwhelming administrative users, while making daily mobile tasks (clock-in, leave requests, feedback) effortless for frontline employees.",
+    "solution": "Architected a multi-persona system: a high-density administrative dashboard with high-clarity data visualizations for HR leadership, and a lightweight mobile companion for employees with one-tap attendance verification, leave status trackers, and company directories.",
+    "systemHighlights": [
+      {
+        "title": "Predictive Attrition & Retention Signals",
+        "description": "Surfaces departmental performance trends and employee satisfaction metrics to help leadership proactively address burnout and turnover."
+      },
+      {
+        "title": "Unified Attendance & Clock-In Gateway",
+        "description": "Real-time attendance ledger distinguishing on-time arrivals, lateness, absences, and approved leaves with automatic shift reconciliation."
+      },
+      {
+        "title": "Zero-Friction Employee Self-Service (ESS)",
+        "description": "Mobile-first portal allowing employees to log attendance, submit time-off requests, and review benefit allocations directly."
+      }
+    ],
+    "specifications": [
+      {
+        "label": "Platform",
+        "value": "Web Application & Mobile Companion"
+      },
+      {
+        "label": "Domain",
+        "value": "Enterprise SaaS, Human Resource Management (HRMS)"
+      },
+      {
+        "label": "Deliverable",
+        "value": "37 High-Resolution Modules & Responsive Design System"
+      },
+      {
+        "label": "Tools",
+        "value": "Figma, Grain, Teams, Google Docs, Google Forms, Google Meet"
+      }
+    ],
+    "prototypeUrl": "https://www.behance.net/gallery/222769651/PROfile-An-Organizational-HRM-Solution",
+    "wireframeSummary": "Dual-tier navigation with sticky left operations rail, modular metric cards, and responsive slide-over employee profiles."
+  },
+{
+    "slug": "quickeats",
+    "title": "QuickEats",
+    "client": "QuickEats Health",
+    "type": "Concept / Lab Exploration",
+    "category": "Consumer Mobile & Food Tech",
+    "year": "2025",
+    "role": "Product Designer",
+    "timeline": "4 Weeks (Dec 14 – Jan 9)",
+    "deliverables": [
+      "End-to-End Consumer Mobile Application (45 Presentation Boards)",
+      "Dual Light & Dark Theme Design System",
+      "Interactive Weekly Meal Planning & Schedule Grid",
+      "Smart Pantry Ingredient Match & Batch Cooking Mode",
+      "Automated Budget-Friendly Grocery List Generator"
+    ],
+    "headline": "Smart Meal Planning and Automated Grocery Companion for Busy Lifestyles",
+    "summary": "A thoughtful consumer mobile app empowering students and busy professionals to eat healthy on a budget through personalized 20-minute recipes, smart pantry matching, and automated grocery lists.",
+    "accentColor": "#10B981",
+    "featured": true,
+    "featuredOrder": 5,
+    "tags": [
+      "Consumer Mobile",
+      "Food Tech",
+      "Meal Planning",
+      "Design System",
+      "Dual Theme"
+    ],
+    "heroImage": "/images/projects/quickeats/hero.png",
+    "gallery": [
+      {
+        "src": "/images/projects/quickeats/hero.png",
+        "caption": "QuickEats dual-theme mobile interface: light and dark theme comparison of the weekly meal planning dashboard.",
+        "alt": "QuickEats Dual Theme Mobile Dashboard"
+      },
+      {
+        "src": "/images/projects/quickeats/problem-solution.png",
+        "caption": "Three-pillar problem framework: time constraints, lack of cooking confidence, and grocery budget mismanagement solved through smart UI.",
+        "alt": "QuickEats Problems and Solutions"
+      },
+      {
+        "src": "/images/projects/quickeats/user-research.png",
+        "caption": "User research & survey analysis: identifying key grocery hurdles, dietary preferences, and preparation time limits.",
+        "alt": "QuickEats User Research Synthesis"
+      },
+      {
+        "src": "/images/projects/quickeats/meal-planning-flow.png",
+        "caption": "Structured weekly meal planner: calendar scheduling (Breakfast, Lunch, Dinner), interactive recipe cards, and batch cooking guides.",
+        "alt": "QuickEats Meal Planning Workflow"
+      },
+      {
+        "src": "/images/projects/quickeats/design-system.png",
+        "caption": "Comprehensive component library: typography scale, semantic color palettes for light/dark modes, and interactive food cards.",
+        "alt": "QuickEats Design System & UI Kit"
+      }
+    ],
+    "overview": "Young adults, students, and working professionals frequently struggle to maintain a healthy diet. Busy schedules lead to impulse takeout, food waste, and unnecessary grocery expenses. QuickEats turns grocery chaos into effortless, budget-friendly meals by pairing quick recipes (under 20 minutes) with intelligent shopping lists and pantry-aware recipe recommendations.",
+    "challenge": "Overcoming meal-prep intimidation without making nutrition tracking feel like a restrictive chore, while accommodating diverse dietary preferences, budget constraints, and time limitations.",
+    "solution": "Designed a frictionless mobile experience built around a flexible 7-day meal matrix. Users select dietary goals, tap available ingredients from their kitchen to generate recipes, and auto-export shopping lists sorted by supermarket aisle to save time and money.",
+    "systemHighlights": [
+      {
+        "title": "Pantry Ingredient Matching",
+        "description": "Instantly suggests nutritious recipes using items already at home, minimizing grocery runs and household food waste."
+      },
+      {
+        "title": "20-Minute Batch Cooking Mode",
+        "description": "Step-by-step cooking guides optimized for quick preparation and weekend batch storage."
+      },
+      {
+        "title": "Auto-Consolidated Grocery Lists",
+        "description": "Aggregates ingredient requirements across all scheduled meals into a categorized, budget-aware shopping checklist."
+      }
+    ],
+    "specifications": [
+      {
+        "label": "Platform",
+        "value": "iOS & Android Native Mobile App"
+      },
+      {
+        "label": "Deliverable",
+        "value": "45 Presentation Boards, Dual Light/Dark UI Kit"
+      },
+      {
+        "label": "Duration",
+        "value": "4 Weeks (Dec 14 – Jan 9)"
+      },
+      {
+        "label": "Tools",
+        "value": "Figma, Google Docs, Google Forms, Google Meet, Slack"
+      }
+    ],
+    "prototypeUrl": "https://www.behance.net/gallery/218767855/Meal-Prepping-Mobile-App-A-Case-Study",
+    "wireframeSummary": "Bottom-dock navigation with calendar header, card-based swipe gestures for dish swaps, and collapsible ingredient trays."
+  },
+{
+    "slug": "raven-bank",
+    "title": "Raven Bank App",
+    "client": "Raven Bank (Redesign Sprint)",
+    "type": "Concept / Lab Exploration",
+    "category": "Fintech & Mobile Banking",
+    "year": "2025",
+    "role": "Product Designer",
+    "timeline": "2-Day Intensive Redesign Challenge",
+    "deliverables": [
+      "Personal Banking Mobile App Redesign (10 Modules)",
+      "Streamlined Account Balance & Virtual Card Dashboard",
+      "Frictionless P2P Money Transfer & Beneficiary Flow",
+      "Modernized Biometric Security & Onboarding Sequence"
+    ],
+    "headline": "High-Clarity Personal Banking and Instant P2P Transfer Experience",
+    "summary": "A 2-day intensive mobile banking redesign for Raven, modernizing the personal banking dashboard, clarifying balance management, and eliminating multi-step friction during peer-to-peer transfers.",
+    "accentColor": "#7C3AED",
+    "featured": false,
+    "tags": [
+      "Fintech",
+      "Mobile Banking",
+      "P2P Transfers",
+      "Rapid Sprint",
+      "UI/UX"
+    ],
+    "heroImage": "/images/projects/raven-bank/hero.png",
+    "gallery": [
+      {
+        "src": "/images/projects/raven-bank/hero.png",
+        "caption": "Raven Bank redesign hero: redesigned onboarding, personal account dashboard (BestStar MFB), and security screens.",
+        "alt": "Raven Bank Mobile Redesign Hero"
+      },
+      {
+        "src": "/images/projects/raven-bank/problem-solution.png",
+        "caption": "Sprint objectives: replacing cluttered legacy navigation with clear financial controls, intuitive balance visibility, and instant transfers.",
+        "alt": "Raven Bank Challenge and Solution"
+      },
+      {
+        "src": "/images/projects/raven-bank/onboarding-flow.png",
+        "caption": "High-trust security onboarding: biometric login verification and clear account privacy protections.",
+        "alt": "Raven Bank Security and Onboarding"
+      },
+      {
+        "src": "/images/projects/raven-bank/transfer-screens.png",
+        "caption": "Streamlined money transfer workflow: quick beneficiary shortcuts (Kola, Sophia, Donald), instant amount entry, and receipt cards.",
+        "alt": "Raven Bank Transfer Experience"
+      },
+      {
+        "src": "/images/projects/raven-bank/dashboard-cards.png",
+        "caption": "Modular financial cards: one-tap access to airtime, utility bills, data bundles, and recent transfer logs.",
+        "alt": "Raven Bank Financial Dashboards"
+      }
+    ],
+    "overview": "Digital banking in Nigeria demands rapid, unambiguous interactions where transfers succeed without second-guessing. The Raven Bank personal app was redesigned in an intensive 2-day sprint to improve visual hierarchy, speed up peer-to-peer payments, and establish a modern, trustworthy aesthetic for users across all levels of tech experience.",
+    "challenge": "Simplifying complex everyday banking tasks without sacrificing regulatory security standards or obscuring vital account information.",
+    "solution": "Rebuilt the dashboard around a high-contrast balance hero with single-tap Send, Receive, and Pay actions. Introduced quick-transfer avatar chips for frequent beneficiaries and simplified transfer confirmation into a single clear step.",
+    "systemHighlights": [
+      {
+        "title": "Single-Tap Transfer Shortcuts",
+        "description": "Circular frequent beneficiary chips on the home dashboard allowing users to initiate transfers in a single tap."
+      },
+      {
+        "title": "High-Contrast Balance Controls",
+        "description": "Clean balance card with instant privacy toggle, MFB verification badge, and direct account number copy action."
+      },
+      {
+        "title": "Rapid Sprint Execution",
+        "description": "Delivered a complete, cohesive mobile experience in a focused 48-hour design challenge."
+      }
+    ],
+    "specifications": [
+      {
+        "label": "Platform",
+        "value": "iOS & Android Mobile Banking"
+      },
+      {
+        "label": "Format",
+        "value": "2-Day Rapid Sprint Challenge"
+      },
+      {
+        "label": "Credit",
+        "value": "Abolarin, Taye Joseph (@cold_designer)"
+      },
+      {
+        "label": "Tools",
+        "value": "Figma, Figjam, Google Meet"
+      }
+    ],
+    "prototypeUrl": "https://www.behance.net/gallery/221018589/Fintech-Application-Raven-Bank-App-A-Case-Study",
+    "wireframeSummary": "Header with notification badges, central balance capsule, horizontal beneficiary carousel, and quick utility tiles."
+  },
+];
+
+// ─────────────────────────────────────────────────────────────
+// PRIVATE / UNRELEASED SOURCE (Strictly Excluded from Public Routes)
+// ─────────────────────────────────────────────────────────────
+export const PRIVATE_UNRELEASED_PROJECTS: Project[] = [
+{
+    slug: "nova-wellness",
+    title: "Nova Wellness",
+    client: "Self-Initiated Concept",
+    type: "Concept / Lab Exploration",
+    category: "Mobile Health & Supportive Companion",
+    year: "2024",
+    role: "Product Designer & React Native Developer",
+    timeline: "Mobile Exploration",
+    deliverables: [
+      "Daily Wellness Check-In Companion",
+      "Voice Reflection Journal (AssemblyAI)",
+      "Conversational Reflection Guidance (Gemini)",
+      "Private On-Device Data Architecture",
+    ],
+    headline: "Supportive Daily Wellness Companion with Voice Journaling and Gemini AI",
+    summary:
+      "A React Native mobile application built with Expo SDK 57, offering mindful mood check-ins, AssemblyAI voice transcription, reflective AI conversation via Gemini, and privacy-first on-device data persistence.",
+    accentColor: "#A9DDF0",
+    featured: false,
+    tags: ["Mobile App", "React Native", "AI Companion", "Mental Wellness"],
+    overview:
+      "Nova is a supportive mobile companion designed to facilitate daily mental check-ins, reflective voice journaling, and habit tracking without intrusive telemetry or unsolicited clinical diagnoses. The app operates with strict on-device data storage, ensuring personal entries remain confidential.",
+    challenge:
+      "Designing an empathetic, calm mobile interface that encourages daily consistency without inducing screen guilt or gamifying mental well-being.",
+    solution:
+      "Implemented a calm typography-driven design language, quick morning/evening check-in sheets, voice-to-text reflections with editable transcriptions, and a contextual Gemini conversation assistant that only responds when explicitly summoned.",
+    systemHighlights: [
+      {
+        title: "Voice-to-Text Reflection",
+        description:
+          "Streamlined voice recording with AssemblyAI integration, producing editable transcripts before saving.",
+      },
+      {
+        title: "Intentional Gemini Conversations",
+        description:
+          "AI reflection partner operating within bounded contexts, providing supportive inquiry without clinical claims.",
+      },
+      {
+        title: "Private On-Device Storage",
+        description:
+          "All check-in entries, voice transcripts, and routine logs persist strictly on the local device.",
+      },
+    ],
+    specifications: [
+      { label: "Tech Stack", value: "React Native, Expo SDK 57, TypeScript, Reanimated" },
+      { label: "AI & Audio", value: "Gemini Developer API, AssemblyAI Transcription" },
+      { label: "Focus", value: "Mindful Check-Ins, Voice Journaling, Local Privacy" },
+      { label: "Repository", value: "github.com/Bheemty/nova-wellness" },
+    ],
+    githubUrl: "https://github.com/Bheemty/nova-wellness",
+    wireframeSummary:
+      "Floating navigation bar, keyboard-safe bottom sheets, and expandable voice recording states.",
   },
 ];

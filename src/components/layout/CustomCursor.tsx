@@ -84,16 +84,26 @@ export default function CustomCursor() {
       }
     };
 
-    // Smooth lerp rendering loop
+    // Smooth lerp rendering loop (resting state optimization to free main-thread during scroll)
+    let lastRenderMouseX = -999;
+    let lastRenderMouseY = -999;
+
     const render = () => {
       if (isVisible) {
-        // Direct transform update on dot (instant)
-        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+        const dx = mouseX - ringX;
+        const dy = mouseY - ringY;
+        const distSq = dx * dx + dy * dy;
 
-        // Spring-like lerp on ring (damping ~ 0.18)
-        ringX += (mouseX - ringX) * 0.2;
-        ringY += (mouseY - ringY) * 0.2;
-        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+        // Only commit DOM style mutations while the cursor or spring ring is in active motion
+        if (distSq > 0.04 || mouseX !== lastRenderMouseX || mouseY !== lastRenderMouseY) {
+          lastRenderMouseX = mouseX;
+          lastRenderMouseY = mouseY;
+          dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+
+          ringX += dx * 0.2;
+          ringY += dy * 0.2;
+          ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+        }
       }
 
       rafId = requestAnimationFrame(render);

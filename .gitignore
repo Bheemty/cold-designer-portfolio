@@ -47,3 +47,6 @@ Cold_Designer_Creative_Direction_Pack/
 # reference scratch files
 kokil_*
 scripts/
+
+scratch/
+*.backup.pdf

@@ -35,7 +35,7 @@ const JOURNAL_PAGES: JournalSheet[] = [
     pageNo: "01",
     category: "Observational Note // Spatial UI",
     desc: "Why do luxury hotel bookings rely on sterile enterprise calendars? An interface study replacing static room grids with dynamic solar angles—reflecting actual Golden Hour suite illumination before the guest even reserves.",
-    image: "/images/projects/somewhere/suite-balcony-sunset.png",
+    image: "/images/projects/somewhere/suite-balcony-sunset-opt.webp",
     linkText: "Inspect Spatial Study",
     href: "/work/somewhere-hotel",
   },
@@ -46,7 +46,7 @@ const JOURNAL_PAGES: JournalSheet[] = [
     pageNo: "02",
     category: "Field Study // Lagos Micro-Commerce",
     desc: "Observing friction in informal social commerce. Rather than forcing multi-step cart funnels onto WhatsApp buyers, exploring structured single-payload links that bundle product selections, sizing, and payment instructions directly into a message.",
-    image: "/images/projects/buybuddy/whatsapp-chat.png",
+    image: "/images/projects/buybuddy/whatsapp-chat-opt.webp",
     linkText: "Inspect Commerce Study",
     href: "/work/buybuddy",
   },
@@ -57,19 +57,19 @@ const JOURNAL_PAGES: JournalSheet[] = [
     pageNo: "03",
     category: "Interaction Experiment // Web Audio",
     desc: "Examining architectural acoustics as digital pacing. Translating physical threshold transitions—from concrete street silence to reverberant timber auditorium—into continuous stereo web audio panning.",
-    image: "/images/projects/stillwater/04_Auditorium_Threshold.png",
+    image: "/images/projects/stillwater/04_Auditorium_Threshold-opt.webp",
     linkText: "Inspect Acoustic Study",
     href: "/work/stillwater",
   },
   {
-    id: "codex",
-    tabLabel: "Playground",
-    title: "Interactive Design Playground",
+    id: "lab",
+    tabLabel: "The Lab",
+    title: "Interactive Design Experiments",
     pageNo: "04",
-    category: "Design Decisions // Interactive Playground",
+    category: "Design Decisions // The Lab",
     desc: "Experience interface decisions firsthand: button feedback lifecycles, layout density, and theme contrast.",
     isInteractive: true,
-    href: "/codex",
+    href: "/lab",
   },
 ];
 
@@ -190,9 +190,10 @@ export default function NotebookKokil() {
     <section ref={sectionRef} id="playground" className="journal-codex-section" aria-labelledby="playgroundTitle">
       {/* Invisible anchor for #codex backward compatibility */}
       <span id="codex" className="sr-only" tabIndex={-1} aria-hidden="true" />
+      <span id="lab" className="sr-only" tabIndex={-1} aria-hidden="true" />
 
       <h2 ref={titleRef} className="mp-title" id="playgroundTitle">
-        Creative Journal &amp; Codex
+        Creative Journal &amp; Lab
       </h2>
 
       <div ref={wrapRef} className="nb-wrap">
@@ -506,7 +507,7 @@ export default function NotebookKokil() {
                     className="nb-next"
                     onClick={() => goTo(4)}
                   >
-                    Codex Lab &rarr;
+                    The Lab &rarr;
                   </button>
                 </div>
               </section>
@@ -525,13 +526,13 @@ export default function NotebookKokil() {
             {/* Sheet 4: Interactive Design Playground Preview */}
             <div
               className={`nb-sheet ${currentPage > 4 ? "is-flipped" : ""}`}
-              data-page="codex"
+              data-page="lab"
               style={{
                 zIndex: currentPage === 4 ? 30 : 17,
               }}
             >
-              <section className="nb-face nb-face--front" aria-label="Interactive Design Playground">
-                <h3 className="nb-h">Design Playground</h3>
+              <section className="nb-face nb-face--front" aria-label="Interactive Design Experiments">
+                <h3 className="nb-h">The Lab</h3>
                 <div className="nb-pg-meta">
                   <button type="button" className="nb-back" onClick={() => goTo(0)}>
                     &larr; Index
@@ -610,8 +611,8 @@ export default function NotebookKokil() {
                   >
                     &larr; Entry 03
                   </button>
-                  <Link href="/codex" className="nb-visit">
-                    <span>Open Playground</span>
+                  <Link href="/lab" className="nb-visit">
+                    <span>Open The Lab</span>
                     <svg
                       viewBox="0 0 24 24"
                       width="12"

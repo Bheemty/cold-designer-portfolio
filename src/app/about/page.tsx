@@ -32,7 +32,7 @@ const VERIFIED_ENGAGEMENTS = [
     company: "Cold Designer Studio",
     location: "Lagos, Nigeria",
     description:
-      "Designing and prototyping specialized digital products across mobility (9jaTrip), social micro-commerce (BuyBuddy), mobile wellness companions (Nova Wellness in React Native), and cinematic web experiences (Stillwater Hall, Somewhere Hotel).",
+      "Designing and prototyping specialized digital products across mobility (9jaTrip), social micro-commerce (BuyBuddy), corporate identity systems (Greall), and cinematic web experiences (Stillwater Hall, Somewhere Hotel).",
     tags: ["Product Strategy", "React Native", "Next.js", "Design-to-Code"],
   },
 ];

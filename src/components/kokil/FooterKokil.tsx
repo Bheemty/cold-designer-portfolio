@@ -16,7 +16,7 @@ const CONTACTS: ContactLink[] = [
   {
     name: "LinkedIn",
     desc: "Professional trajectory & verified client recommendations",
-    href: "https://linkedin.com/in/taye-abolarin",
+    href: "https://www.linkedin.com/in/taye-abolarin-b503b0240/",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -28,7 +28,7 @@ const CONTACTS: ContactLink[] = [
   {
     name: "Behance",
     desc: "Complete visual archive & interaction design portfolio",
-    href: "https://behance.net/abolarintaye",
+    href: "https://www.behance.net/Abolarin_Taye_Joseph",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4 6h7a3 3 0 0 1 0 6H4V6z" />
@@ -45,6 +45,16 @@ const CONTACTS: ContactLink[] = [
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+      </svg>
+    ),
+  },
+  {
+    name: "TikTok",
+    desc: "Design process videos, interface interactions & breakdowns",
+    href: "https://www.tiktok.com/@taye_abolarin2",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
       </svg>
     ),
   },
@@ -310,9 +320,9 @@ export default function FooterKokil() {
         <div className="footer-links">
           <Link href="/work">Work</Link>
           <Link href="/about">About</Link>
-          <Link href="/codex">Codex</Link>
+          <Link href="/lab">Lab</Link>
           <a
-            href="https://linkedin.com/in/taye-abolarin"
+            href="https://www.linkedin.com/in/taye-abolarin-b503b0240/"
             target="_blank"
             rel="noopener noreferrer"
           >

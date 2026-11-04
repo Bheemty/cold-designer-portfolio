@@ -136,7 +136,7 @@ export default function ContactPage() {
                   <ArrowUpRight size={13} />
                 </a>
                 <a
-                  href="https://www.tiktok.com/@taye_abolarin2?is_from_webapp=1&sender_device=pc"
+                  href="https://www.tiktok.com/@taye_abolarin2"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between text-[#89919d] hover:text-[#a9ddf0] transition-colors"

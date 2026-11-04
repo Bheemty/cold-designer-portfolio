@@ -148,7 +148,7 @@ export default function SelectedWork() {
   const [activeChapterIndex, setActiveChapterIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
-  const [videoProgress, setVideoProgress] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const [selectedTier, setSelectedTier] = useState<"stalls" | "circle" | "balcony">("stalls");
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -164,9 +164,9 @@ export default function SelectedWork() {
   }, [activeChapterIndex, activeChapter.src]);
 
   const handleTimeUpdate = () => {
-    if (videoRef.current && videoRef.current.duration) {
+    if (videoRef.current && videoRef.current.duration && progressBarRef.current) {
       const prog = (videoRef.current.currentTime / videoRef.current.duration) * 100;
-      setVideoProgress(prog);
+      progressBarRef.current.style.width = `${prog}%`;
     }
   };
 
@@ -473,7 +473,7 @@ export default function SelectedWork() {
                   <span className="text-[#89919d]">Terminal Interface Specimen:</span>
                   <div className="flex items-center gap-2 rounded-full bg-[#11141b] p-1 border border-white/[0.08]">
                     {[
-                      { id: "screen", label: "Hub Terminal View" },
+                      { id: "screen", label: "Booking & Gateway" },
                       { id: "receipt", label: "Digital Boarding Pass" },
                     ].map((btn) => (
                       <button
@@ -508,8 +508,8 @@ export default function SelectedWork() {
                           className="relative w-full h-full"
                         >
                           <Image
-                            src="/images/projects/9jatrip/home-screen-mockup.png"
-                            alt="9jaTrip Terminal Hub Selection Screen"
+                            src="/images/projects/9jatrip/booking-screen.png"
+                            alt="9jaTrip Intercity Route Booking and Payment Gateway"
                             fill
                             className="object-contain"
                             sizes="(max-width: 1024px) 100vw, 750px"
@@ -538,7 +538,7 @@ export default function SelectedWork() {
                   <div className="mt-4 flex items-center justify-between font-mono-code text-[11px] text-[#89919d]">
                     <span>
                       {tripViewMode === "screen"
-                        ? "Intercity Hub Departure Timetable & Route Selector"
+                        ? "Intercity Route Booking & Moniepoint Payment Gateway"
                         : "High-Contrast Boarding Pass with Gate QR Code"}
                     </span>
                     <span>Specimen 02</span>
@@ -995,7 +995,8 @@ export default function SelectedWork() {
                 <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
                   <div
                     className="h-full bg-[#a9ddf0] transition-all duration-200"
-                    style={{ width: `${videoProgress}%` }}
+                    ref={progressBarRef}
+                    style={{ width: "0%" }}
                   />
                 </div>
 

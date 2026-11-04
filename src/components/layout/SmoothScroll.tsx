@@ -38,24 +38,23 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     lenisRef.current = lenis;
     (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
 
-    const onScrollUpdate = () => {
-      ScrollTrigger.update();
-    };
-
-    lenis.on("scroll", onScrollUpdate);
+    // 1. Tell ScrollTrigger to update whenever Lenis scrolls
+    lenis.on("scroll", ScrollTrigger.update);
     lenis.resize();
 
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
+    // 2. Drive Lenis through GSAP's unified master ticker
+    // Eliminates competing requestAnimationFrame loops, double-ticking, and frame-tearing
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000); // GSAP provides time in seconds; Lenis expects milliseconds
+    };
+    gsap.ticker.add(updateTicker);
 
-    rafId = requestAnimationFrame(raf);
+    // 3. Disable lagSmoothing to prevent GSAP from jumping or hitching on fast momentum scrolls
+    gsap.ticker.lagSmoothing(0);
 
     return () => {
-      cancelAnimationFrame(rafId);
-      lenis.off("scroll", onScrollUpdate);
+      gsap.ticker.remove(updateTicker);
+      lenis.off("scroll", ScrollTrigger.update);
       lenis.destroy();
       lenisRef.current = null;
       delete (window as unknown as { __lenis?: Lenis }).__lenis;

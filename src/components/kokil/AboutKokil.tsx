@@ -55,6 +55,10 @@ export default function AboutKokil() {
       }
 
       const rect = textEl.getBoundingClientRect();
+      // Fast path: if element is scrolled completely above viewport and fully revealed, skip computation
+      if (lastRevealCount === words.length && rect.bottom < 0) {
+        return;
+      }
       const vh = window.innerHeight;
       const start = vh * 0.9;
       const end = vh * 0.35;
@@ -84,10 +88,10 @@ export default function AboutKokil() {
     // Run initial update on mount (handles page refresh when already scrolled down)
     update();
 
-    window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", update, { passive: true });
 
-    // Synchronize with Lenis smooth scrolling for frame-perfect momentum sync
+    // Synchronize with Lenis smooth scrolling or native window scroll
+    // Eliminates duplicate dual-scroll callbacks that caused double layout reflows per frame
     const lenis = (window as unknown as {
       __lenis?: {
         on: (event: string, cb: () => void) => void;
@@ -96,14 +100,16 @@ export default function AboutKokil() {
     }).__lenis;
 
     if (lenis?.on) {
-      lenis.on("scroll", update);
+      lenis.on("scroll", onScroll);
+    } else {
+      window.addEventListener("scroll", onScroll, { passive: true });
     }
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", update);
       if (lenis?.off) {
-        lenis.off("scroll", update);
+        lenis.off("scroll", onScroll);
       }
     };
   }, []);

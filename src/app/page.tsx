@@ -3,6 +3,7 @@ import HeroKokil from "@/components/kokil/HeroKokil";
 import AboutKokil from "@/components/kokil/AboutKokil";
 import WorkAccordion from "@/components/kokil/WorkAccordion";
 import NotebookKokil from "@/components/kokil/NotebookKokil";
+import AssetPreloader from "@/components/kokil/AssetPreloader";
 
 export default function Home() {
   return (
@@ -31,6 +32,9 @@ export default function Home() {
 
       {/* Physical 3D Spiral Flippable Notebook */}
       <NotebookKokil />
+
+      {/* Background idle image pre-decoder for smooth scroll transitions */}
+      <AssetPreloader />
     </main>
   );
 }

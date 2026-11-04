@@ -67,7 +67,7 @@ export default async function CaseStudyPage({
             <span className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]">
               {project.type}
             </span>
-            <span className="text-[#89919d]">// {project.year}</span>
+            <span className="text-[#89919d]">{"// "}{project.year}</span>
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">

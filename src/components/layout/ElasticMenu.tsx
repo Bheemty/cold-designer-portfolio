@@ -18,16 +18,16 @@ const NAV_LINKS = [
   { href: "/", label: "Index", index: "01", caption: "Featured Work & Doctrine" },
   { href: "/work", label: "Archive", index: "02", caption: "Complete Project Directory" },
   { href: "/about", label: "About", index: "03", caption: "Verified Practice & Experience" },
-  { href: "/contact", label: "Contact", index: "04", caption: "Dialogue & Collaboration" },
+  { href: "/lab", label: "Lab", index: "04", caption: "Interactive Design Experiments" },
+  { href: "/contact", label: "Contact", index: "05", caption: "Dialogue & Collaboration" },
 ];
 
 const SOCIAL_LINKS = [
   { label: "X (Twitter)", href: "https://x.com/taye_abolarin2" },
-  { label: "TikTok", href: "https://www.tiktok.com/@taye_abolarin2?is_from_webapp=1&sender_device=pc" },
+  { label: "TikTok", href: "https://www.tiktok.com/@taye_abolarin2" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/taye-abolarin-b503b0240/" },
   { label: "Behance", href: "https://www.behance.net/Abolarin_Taye_Joseph" },
   { label: "GitHub", href: "https://github.com/Bheemty" },
-  { label: "Lovable", href: "https://colddesigner.lovable.app/" },
 ];
 
 export default function ElasticMenu({

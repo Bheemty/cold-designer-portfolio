@@ -13,23 +13,24 @@ const CATEGORIES = [
   "All",
   "Healthcare & Conversational",
   "Mobility & Transit",
-  "Commerce & Merchant",
-  "Spatial & Performing Arts",
+  "Spatial & Hospitality",
+  "Commerce & Marketplace",
+  "Enterprise & SaaS",
   "Fintech & Systems",
 ];
 
 // Strict Project Ordering as mandated by design direction:
-// 1. MEDesy Solution (medesy)
-// 2. 9jaTrip (9jatrip)
-// 3. Somewhere Hotel (somewhere-hotel)
-// 4. BuyBuddy (buybuddy)
-// 5. Stillwater (stillwater)
-// Followed by extended concepts:
-// 6. Greall (greall-website)
-// 7. Will (will)
-// 8. Nova (nova-wellness)
-// 9. AgriVillage (agrivillage)
+// 1. MEDesy Solution (medesy) - Healthcare & Conversational UI
+// 2. 9jaTrip (9jatrip) - Mobility & Transit
+// 3. Spot (spot) - SaaS & Creative Collaboration (Lead Product Designer)
+// 4. PROfile (profile) - Enterprise SaaS & HR Tech
+// 5. QuickEats (quickeats) - Consumer Mobile & Food Tech
+// Followed by extended systems:
+// 6. Raven Bank App (raven-bank) - Fintech & Mobile Banking Redesign
+// 7. Will (will) - Digital Legacy & Asset Management
+// 8. AgriVillage (agrivillage) - Agritech & Cooperative Commerce
 const ORDERED_SLUGS = [
+  // 1-8: Original Preserved Public Projects in Original Order
   "medesy",
   "9jatrip",
   "somewhere-hotel",
@@ -37,8 +38,12 @@ const ORDERED_SLUGS = [
   "stillwater",
   "greall-website",
   "will",
-  "nova-wellness",
   "agrivillage",
+  // 9-12: Approved Behance Portfolio Expansions
+  "spot",
+  "profile",
+  "quickeats",
+  "raven-bank",
 ];
 
 const ORDERED_PROJECTS: Project[] = ORDERED_SLUGS.map((slug) => {
@@ -67,44 +72,57 @@ export default function WorkArchivePage() {
 
       if (!matchesSearch) return false;
 
-      if (selectedCategory === "All") return true;
+            if (selectedCategory === "All") return true;
       if (selectedCategory === "Healthcare & Conversational") {
         return (
           project.category.includes("Healthcare") ||
-          project.category.includes("Health") ||
+          project.category.includes("Conversational") ||
           project.tags.includes("Conversational UI")
         );
       }
       if (selectedCategory === "Mobility & Transit") {
         return project.category.includes("Mobility") || project.category.includes("Transit");
       }
-      if (selectedCategory === "Commerce & Merchant") {
-        return (
-          project.category.includes("Commerce") ||
-          project.category.includes("Marketplace") ||
-          project.category.includes("Retail")
-        );
-      }
-      if (selectedCategory === "Spatial & Performing Arts") {
+      if (selectedCategory === "Spatial & Hospitality") {
         return (
           project.category.includes("Hospitality") ||
           project.category.includes("Performing Arts") ||
           project.category.includes("Spatial")
         );
       }
+      if (selectedCategory === "Commerce & Marketplace") {
+        return (
+          project.category.includes("Commerce") ||
+          project.category.includes("Marketplace") ||
+          project.category.includes("Retail") ||
+          project.category.includes("Agritech")
+        );
+      }
+      if (selectedCategory === "Enterprise & SaaS") {
+        return (
+          project.category.includes("Enterprise") ||
+          project.category.includes("SaaS") ||
+          project.category.includes("HR") ||
+          project.tags.includes("HR Tech") ||
+          project.tags.includes("Creative Feedback")
+        );
+      }
       if (selectedCategory === "Fintech & Systems") {
         return (
-          project.category.includes("Corporate") ||
           project.category.includes("Fintech") ||
-          project.category.includes("Legacy") ||
-          project.category.includes("Agritech")
+          project.category.includes("Banking") ||
+          project.category.includes("Corporate") ||
+          project.category.includes("Brand") ||
+          project.tags.includes("Fintech") ||
+          project.tags.includes("Digital Legacy") ||
+          project.tags.includes("Brand Identity")
         );
       }
       return true;
     });
   }, [selectedCategory, searchQuery]);
 
-  const featuredList = useMemo(() => {
+    const featuredList = useMemo(() => {
     return filteredProjects.filter((p) =>
       ["medesy", "9jatrip", "somewhere-hotel", "buybuddy", "stillwater"].includes(p.slug)
     );
@@ -112,7 +130,7 @@ export default function WorkArchivePage() {
 
   const conceptList = useMemo(() => {
     return filteredProjects.filter((p) =>
-      ["greall-website", "will", "nova-wellness", "agrivillage"].includes(p.slug)
+      ["greall-website", "spot", "profile", "quickeats", "raven-bank", "will", "agrivillage"].includes(p.slug)
     );
   }, [filteredProjects]);
 
@@ -136,7 +154,7 @@ export default function WorkArchivePage() {
               </span>
             </div>
             <span className="text-[#89919d]">
-              09 Verified Case Studies &amp; Architectural Concepts
+              12 Verified Production Systems &amp; Product Case Studies
             </span>
           </div>
 
@@ -145,9 +163,7 @@ export default function WorkArchivePage() {
               <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
                 Selected Works.
               </h1>
-              <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">
-                A verified index of production healthcare systems, intercity transit platforms, social commerce storefronts, and atmospheric spatial web experiences designed by Taye Abolarin (Cold Designer).
-              </p>
+              <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">A verified index of healthcare systems, intercity transit logistics, creative collaboration platforms, enterprise HR solutions, corporate rebrands, and fintech experiences designed by Taye Abolarin (Cold Designer).</p>
             </div>
 
             {/* View Mode Switcher */}
@@ -251,10 +267,10 @@ export default function WorkArchivePage() {
               <section aria-label="Featured Case Studies">
                 <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-14 font-mono-code text-xs">
                   <span className="text-[#a9ddf0] uppercase tracking-widest font-semibold">
-                    (01) &mdash; Featured Case Studies // Production &amp; Spatial
+                    (01) &mdash; Featured Case Studies // Production Systems
                   </span>
                   <span className="text-[#89919d]">
-                    {featuredList.length} of 05 Entries
+                    {featuredList.length} of 05 Flagship Case Studies
                   </span>
                 </div>
 
@@ -460,10 +476,10 @@ export default function WorkArchivePage() {
               <section aria-label="Extended Concept Directory" className="pt-8">
                 <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-12 font-mono-code text-xs">
                   <span className="text-[#a9ddf0] uppercase tracking-widest font-semibold">
-                    (02) &mdash; Extended Concepts &amp; Digital Architectures
+                    (02) &mdash; Systems &amp; Extended Case Studies
                   </span>
                   <span className="text-[#89919d]">
-                    04 Verified Explorations
+                    {conceptList.length} Verified Product Systems &amp; Rebrands
                   </span>
                 </div>
 

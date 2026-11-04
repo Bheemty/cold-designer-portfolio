@@ -116,7 +116,7 @@ export default function DesignManifesto() {
                 >
                   <div className="space-y-1.5">
                     <span className="text-[#a9ddf0] font-semibold text-[11px] block">
-                      {p.number} // {p.subtitle}
+                      {p.number} {"// "} {p.subtitle}
                     </span>
                     <h3
                       className={`font-display text-xl sm:text-2xl font-bold transition-colors ${
