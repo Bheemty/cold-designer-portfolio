@@ -66,10 +66,10 @@ export const PROJECTS: Project[] = [
     featured: true,
     featuredOrder: 1,
     tags: ["Healthcare", "Conversational UI", "WhatsApp", "Design System"],
-    heroImage: "/images/projects/medesy/whatsapp-mockup.png",
+    heroImage: "/images/projects/medesy/whatsapp-mockup-opt.webp",
     gallery: [
       {
-        src: "/images/projects/medesy/whatsapp-mockup.png",
+        src: "/images/projects/medesy/whatsapp-mockup-opt.webp",
         caption: "MEDesy WhatsApp triage interface: immediate symptom guidance, licensed doctor matching, and structured consultation actions.",
         alt: "MEDesy WhatsApp Triage Mockup",
       },
@@ -202,25 +202,25 @@ export const PROJECTS: Project[] = [
     featured: false,
     featuredOrder: 3,
     tags: ["Hospitality", "Editorial Design", "Spatial Web", "Art Direction"],
-    heroImage: "/images/projects/somewhere/suite-balcony-sunset.png",
+    heroImage: "/images/projects/somewhere/suite-balcony-sunset-opt.webp",
     gallery: [
       {
-        src: "/images/projects/somewhere/suite-balcony-sunset.png",
+        src: "/images/projects/somewhere/suite-balcony-sunset-opt.webp",
         caption: "Horizon Suite ocean terrace during golden-hour sunset with warm natural ambient light.",
         alt: "Somewhere Hotel Horizon Suite at Sunset",
       },
       {
-        src: "/images/projects/somewhere/suite-balcony-day.png",
+        src: "/images/projects/somewhere/suite-balcony-day-opt.webp",
         caption: "Horizon Suite ocean terrace under midday daylight conditions.",
         alt: "Somewhere Hotel Horizon Suite at Day",
       },
       {
-        src: "/images/projects/somewhere/suite-balcony-night.png",
+        src: "/images/projects/somewhere/suite-balcony-night-opt.webp",
         caption: "Horizon Suite ocean terrace under twilight and architectural night lighting.",
         alt: "Somewhere Hotel Horizon Suite at Night",
       },
       {
-        src: "/images/projects/somewhere/hotel-exterior-sunset.png",
+        src: "/images/projects/somewhere/hotel-exterior-sunset-opt.webp",
         caption: "Minimalist architectural entrance facade with soft twilight landscape lighting.",
         alt: "Somewhere Hotel Facade",
       },
@@ -298,7 +298,7 @@ export const PROJECTS: Project[] = [
         alt: "BuyBuddy Vendor Wallet",
       },
       {
-        src: "/images/projects/buybuddy/store-landing.png",
+        src: "/images/projects/buybuddy/store-landing-opt.webp",
         caption: "Shopper-facing storefront view: clean mobile category navigation and product variant selectors.",
         alt: "BuyBuddy Store Landing",
       },
@@ -358,31 +358,31 @@ export const PROJECTS: Project[] = [
     featured: false,
     featuredOrder: 5,
     tags: ["Cinematic Web", "Motion Design", "Video Walkthrough", "Creative Code"],
-    heroImage: "/images/projects/stillwater/05_Full_Stage.png",
+    heroImage: "/images/projects/stillwater/05_Full_Stage-opt.webp",
     videoSrc: "/videos/stillwater/01_approach.mp4",
     gallery: [
       {
-        src: "/images/projects/stillwater/01_Exterior.png",
+        src: "/images/projects/stillwater/01_Exterior-opt.webp",
         caption: "Stage 01: Evening exterior approach — twilight architectural illumination and atmospheric arrival.",
         alt: "Stillwater Hall Exterior Approach",
       },
       {
-        src: "/images/projects/stillwater/03_Lobby.png",
+        src: "/images/projects/stillwater/03_Lobby-opt.webp",
         caption: "Stage 02: Grand foyer & lobby transition through glass threshold into the auditorium promenade.",
         alt: "Stillwater Grand Foyer",
       },
       {
-        src: "/images/projects/stillwater/05_Full_Stage.png",
+        src: "/images/projects/stillwater/05_Full_Stage-opt.webp",
         caption: "Stage 03: Acoustic auditorium stage perspective with warm stage illumination.",
         alt: "Stillwater Full Stage",
       },
       {
-        src: "/images/projects/stillwater/06_Front_Seating.png",
+        src: "/images/projects/stillwater/06_Front_Seating-opt.webp",
         caption: "Stage 04: Turn toward audience seating with interactive tier and sightline details.",
         alt: "Stillwater Front & Mid Seating",
       },
       {
-        src: "/images/projects/stillwater/08_Rear_Seating.png",
+        src: "/images/projects/stillwater/08_Rear_Seating-opt.webp",
         caption: "Stage 05: Rear auditorium seating and elevation vantage point.",
         alt: "Stillwater Rear Auditorium Seating",
       },
@@ -550,10 +550,10 @@ export const PROJECTS: Project[] = [
     accentColor: "#A9DDF0",
     featured: false,
     tags: ["Agritech", "Marketplace", "Logistics", "Mobile First"],
-    heroImage: "/images/projects/agrivillage/hero.jpg",
+    heroImage: "/images/projects/agrivillage/hero-opt.webp",
     gallery: [
       {
-        src: "/images/projects/agrivillage/hero.jpg",
+        src: "/images/projects/agrivillage/hero-opt.webp",
         caption: "AgriVillage platform exploration: 'Transforming Agriculture with Innovation and Technology' — farmer cooperative marketplace hero and responsive showcase.",
         alt: "AgriVillage Hero Section Design",
       },
@@ -623,10 +623,10 @@ export const PROJECTS: Project[] = [
       "Design System",
       "Web App"
     ],
-    "heroImage": "/images/projects/spot/hero.png",
+    "heroImage": "/images/projects/spot/hero-opt.webp",
     "gallery": [
       {
-        "src": "/images/projects/spot/hero.png",
+        "src": "/images/projects/spot/hero-opt.webp",
         "caption": "Spot creative collaboration platform: web-based hub for designers to upload work and receive structured peer feedback.",
         "alt": "Spot Creative Feedback Platform Hero"
       },
@@ -641,12 +641,12 @@ export const PROJECTS: Project[] = [
         "alt": "Spot User Research & Personas"
       },
       {
-        "src": "/images/projects/spot/design-system.png",
+        "src": "/images/projects/spot/design-system-opt.webp",
         "caption": "Spot multi-platform design system: token hierarchy, high-contrast typography, and reusable interaction components.",
         "alt": "Spot Design System"
       },
       {
-        "src": "/images/projects/spot/feedback-canvas.png",
+        "src": "/images/projects/spot/feedback-canvas-opt.webp",
         "caption": "Contextual feedback canvas: pinned inline annotations, structured critique categories, and version comparisons.",
         "alt": "Spot Contextual Feedback Canvas"
       },
@@ -726,10 +726,10 @@ export const PROJECTS: Project[] = [
       "Data Visualization",
       "Mobile App"
     ],
-    "heroImage": "/images/projects/profile/hero.png",
+    "heroImage": "/images/projects/profile/hero-opt.webp",
     "gallery": [
       {
-        "src": "/images/projects/profile/hero.png",
+        "src": "/images/projects/profile/hero-opt.webp",
         "caption": "PROfile enterprise overview dashboard: real-time headcount (258 employees), working format ratio, performance charts, and payroll breakdown.",
         "alt": "PROfile Enterprise Overview Dashboard"
       },
@@ -820,30 +820,30 @@ export const PROJECTS: Project[] = [
       "Design System",
       "Dual Theme"
     ],
-    "heroImage": "/images/projects/quickeats/hero.png",
+    "heroImage": "/images/projects/quickeats/hero-opt.webp",
     "gallery": [
       {
-        "src": "/images/projects/quickeats/hero.png",
+        "src": "/images/projects/quickeats/hero-opt.webp",
         "caption": "QuickEats dual-theme mobile interface: light and dark theme comparison of the weekly meal planning dashboard.",
         "alt": "QuickEats Dual Theme Mobile Dashboard"
       },
       {
-        "src": "/images/projects/quickeats/problem-solution.png",
+        "src": "/images/projects/quickeats/problem-solution-opt.webp",
         "caption": "Three-pillar problem framework: time constraints, lack of cooking confidence, and grocery budget mismanagement solved through smart UI.",
         "alt": "QuickEats Problems and Solutions"
       },
       {
-        "src": "/images/projects/quickeats/user-research.png",
+        "src": "/images/projects/quickeats/user-research-opt.webp",
         "caption": "User research & survey analysis: identifying key grocery hurdles, dietary preferences, and preparation time limits.",
         "alt": "QuickEats User Research Synthesis"
       },
       {
-        "src": "/images/projects/quickeats/meal-planning-flow.png",
+        "src": "/images/projects/quickeats/meal-planning-flow-opt.webp",
         "caption": "Structured weekly meal planner: calendar scheduling (Breakfast, Lunch, Dinner), interactive recipe cards, and batch cooking guides.",
         "alt": "QuickEats Meal Planning Workflow"
       },
       {
-        "src": "/images/projects/quickeats/design-system.png",
+        "src": "/images/projects/quickeats/design-system-opt.webp",
         "caption": "Comprehensive component library: typography scale, semantic color palettes for light/dark modes, and interactive food cards.",
         "alt": "QuickEats Design System & UI Kit"
       }
@@ -912,15 +912,15 @@ export const PROJECTS: Project[] = [
       "Rapid Sprint",
       "UI/UX"
     ],
-    "heroImage": "/images/projects/raven-bank/hero.png",
+    "heroImage": "/images/projects/raven-bank/hero-opt.webp",
     "gallery": [
       {
-        "src": "/images/projects/raven-bank/hero.png",
+        "src": "/images/projects/raven-bank/hero-opt.webp",
         "caption": "Raven Bank redesign hero: redesigned onboarding, personal account dashboard (BestStar MFB), and security screens.",
         "alt": "Raven Bank Mobile Redesign Hero"
       },
       {
-        "src": "/images/projects/raven-bank/problem-solution.png",
+        "src": "/images/projects/raven-bank/problem-solution-opt.webp",
         "caption": "Sprint objectives: replacing cluttered legacy navigation with clear financial controls, intuitive balance visibility, and instant transfers.",
         "alt": "Raven Bank Challenge and Solution"
       },

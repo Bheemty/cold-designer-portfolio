@@ -8,15 +8,13 @@ interface AskColdLauncherProps {
   isOpen: boolean;
   onToggle: () => void;
   hasUnread?: boolean;
-  liftOffset?: number;
-}
+  }
 
 export default function AskColdLauncher({
   isOpen,
   onToggle,
   hasUnread = false,
-  liftOffset = 0,
-}: AskColdLauncherProps) {
+  }: AskColdLauncherProps) {
   return (
     <button
       type="button"
@@ -32,7 +30,7 @@ export default function AskColdLauncher({
           : "bg-[var(--bg-surface,#11141b)]/90 backdrop-blur-xl text-[var(--text-primary,#f2f1ec)] border border-white/[0.14] hover:border-[var(--accent,#a9ddf0)] hover:scale-105"
       }`}
       style={{
-        transform: liftOffset > 0 ? `translate3d(0, -${liftOffset}px, 0)` : undefined,
+        transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
         transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease",
         boxShadow: isOpen
           ? "0 12px 36px -4px rgba(0, 0, 0, 0.6)"

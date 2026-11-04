@@ -23,16 +23,20 @@ export default function AskCold() {
   const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
   const [isEnquiryOpen, setIsEnquiryOpen] = useState(false);
   const [quotaExhausted, setQuotaExhausted] = useState(false);
-  const [liftOffset, setLiftOffset] = useState(0);
+  // liftOffset is driven directly via CSS variable --ask-cold-lift to prevent 60-120fps React re-renders during scroll
 
   // Position coordinator: dynamically lift launcher & panel above "Back to Top" whenever it is visible in the viewport
   useEffect(() => {
     let ticking = false;
 
+    let lastLift = -1;
     const computeLift = () => {
       const backToTop = document.querySelector(".footer-top") as HTMLElement | null;
       if (!backToTop) {
-        setLiftOffset(0);
+        if (lastLift !== 0) {
+          lastLift = 0;
+          document.documentElement.style.setProperty("--ask-cold-lift", "0px");
+        }
         ticking = false;
         return;
       }
@@ -46,10 +50,16 @@ export default function AskCold() {
         const gap = 20; // 20px comfortable vertical gap (16-24px spec)
         const defaultBottom = window.innerWidth >= 640 ? 24 : 16;
         const neededBottom = bottomDistance + gap;
-        const lift = Math.max(0, neededBottom - defaultBottom);
-        setLiftOffset(Math.round(lift));
+        const lift = Math.max(0, Math.round(neededBottom - defaultBottom));
+        if (lift !== lastLift) {
+          lastLift = lift;
+          document.documentElement.style.setProperty("--ask-cold-lift", `${lift}px`);
+        }
       } else {
-        setLiftOffset(0);
+        if (lastLift !== 0) {
+          lastLift = 0;
+          document.documentElement.style.setProperty("--ask-cold-lift", "0px");
+        }
       }
       ticking = false;
     };
@@ -213,7 +223,7 @@ export default function AskCold() {
         isOpen={isOpen}
         onToggle={() => setIsOpen((prev) => !prev)}
         hasUnread={messages.length === 0}
-        liftOffset={liftOffset}
+        
       />
 
       {/* Main Chat Panel */}
@@ -228,7 +238,7 @@ export default function AskCold() {
         currentPath={pathname || "/"}
         persistenceEnabled={persistenceEnabled}
         quotaExhausted={quotaExhausted}
-        liftOffset={liftOffset}
+        
       />
 
       {/* Preferences Dialog */}

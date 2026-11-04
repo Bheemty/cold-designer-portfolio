@@ -37,8 +37,7 @@ interface AskColdPanelProps {
   currentPath: string;
   persistenceEnabled: boolean;
   quotaExhausted?: boolean;
-  liftOffset?: number;
-}
+  }
 
 export default function AskColdPanel({
   isOpen,
@@ -51,8 +50,7 @@ export default function AskColdPanel({
   currentPath,
   persistenceEnabled,
   quotaExhausted = false,
-  liftOffset = 0,
-}: AskColdPanelProps) {
+  }: AskColdPanelProps) {
   const [inputText, setInputText] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState("");
@@ -220,7 +218,7 @@ export default function AskColdPanel({
       aria-label="Ask Cold AI Representative Panel"
       className="fixed bottom-20 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] max-h-[82vh] h-[640px] rounded-3xl bg-[var(--bg-primary,#090b0f)]/95 backdrop-blur-2xl border border-[var(--border-subtle,rgba(255,255,255,0.12))] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300"
       style={{
-        transform: liftOffset > 0 ? `translate3d(0, -${liftOffset}px, 0)` : undefined,
+        transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
         transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         boxShadow: "0 24px 64px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)",
       }}

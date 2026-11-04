@@ -15,7 +15,7 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) return;
 
-    // Do not hijack native touch scrolling on mobile devices (prevents sluggish iOS/Android scroll)
+    // Do not hijack native touch scrolling on touch-only mobile devices (prevents sluggish iOS/Android scroll)
     const isTouchOnly = window.matchMedia("(pointer: coarse) and (hover: none)").matches;
     if (isTouchOnly) return;
 
@@ -49,10 +49,27 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     };
     gsap.ticker.add(updateTicker);
 
-    // 3. Disable lagSmoothing to prevent GSAP from jumping or hitching on fast momentum scrolls
-    gsap.ticker.lagSmoothing(0);
+    // 3. Keep lagSmoothing at a healthy threshold so hitch recovery works smoothly without violent jumping
+    gsap.ticker.lagSmoothing(500, 33);
+
+    // 4. Continuously synchronize Lenis limits with dynamic DOM height changes (images loading, accordions, filters)
+    let resizeTimer: NodeJS.Timeout;
+    const resizeObserver = new ResizeObserver(() => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        if (lenisRef.current) {
+          lenisRef.current.resize();
+        }
+        ScrollTrigger.refresh();
+      }, 60);
+    });
+    if (document.body) {
+      resizeObserver.observe(document.body);
+    }
 
     return () => {
+      clearTimeout(resizeTimer);
+      resizeObserver.disconnect();
       gsap.ticker.remove(updateTicker);
       lenis.off("scroll", ScrollTrigger.update);
       lenis.destroy();
@@ -62,10 +79,11 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
     };
   }, []);
 
-  // When pathname changes, immediately reset scroll position to top
+  // When pathname changes, immediately reset scroll position to top and force immediate dimension recalculation
   useEffect(() => {
     if (lenisRef.current) {
       lenisRef.current.scrollTo(0, { immediate: true });
+      lenisRef.current.resize();
     } else if (typeof window !== "undefined") {
       window.scrollTo(0, 0);
     }
@@ -73,6 +91,9 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     // Re-calculate after 0.32s page transition completes to ensure pinpoint accuracy
     const timer = setTimeout(() => {
+      if (lenisRef.current) {
+        lenisRef.current.resize();
+      }
       ScrollTrigger.refresh();
     }, 360);
 
