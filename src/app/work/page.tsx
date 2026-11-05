@@ -167,7 +167,7 @@ export default function WorkArchivePage() {
             </div>
 
             {/* View Mode Switcher */}
-            <div className="flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] p-1.5 font-mono-code text-xs shrink-0 self-start lg:self-end">
+            <div className="flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] backdrop-blur-xl p-1.5 font-mono-code text-xs shrink-0 self-start lg:self-end shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.18),0_8px_24px_-4px_rgba(0,0,0,0.4)]">
               <button
                 type="button"
                 onClick={() => {
@@ -176,8 +176,8 @@ export default function WorkArchivePage() {
                 }}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all cursor-pointer ${
                   viewMode === "editorial"
-                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-sm"
-                    : "text-[#89919d] hover:text-[#f2f1ec]"
+                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.8)]"
+                    : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.05]"
                 }`}
                 aria-pressed={viewMode === "editorial"}
               >
@@ -192,8 +192,8 @@ export default function WorkArchivePage() {
                 }}
                 className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all cursor-pointer ${
                   viewMode === "table"
-                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-sm"
-                    : "text-[#89919d] hover:text-[#f2f1ec]"
+                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.8)]"
+                    : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.05]"
                 }`}
                 aria-pressed={viewMode === "table"}
               >
@@ -219,8 +219,8 @@ export default function WorkArchivePage() {
                 }}
                 className={`rounded-full px-4 py-2 transition-all border whitespace-nowrap cursor-pointer ${
                   selectedCategory === cat
-                    ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold"
-                    : "border-white/[0.08] bg-white/[0.02] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
+                    ? "border-[#a9ddf0]/50 bg-gradient-to-r from-[#a9ddf0]/25 to-[#a9ddf0]/15 backdrop-blur-xl text-[#a9ddf0] font-semibold shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.35),0_0_18px_0_rgba(169,221,240,0.2)]"
+                    : "border-white/[0.09] bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md text-[#89919d] hover:text-[#f2f1ec] hover:border-white/20 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.06)]"
                 }`}
               >
                 {cat}
@@ -236,7 +236,7 @@ export default function WorkArchivePage() {
               placeholder="Search systems, roles, tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-full border border-white/[0.08] bg-[#11141b] py-2 pl-9 pr-4 font-mono-code text-xs text-[#f2f1ec] placeholder-[#89919d]/60 focus:border-[#a9ddf0] focus:outline-none transition-colors"
+              className="w-full rounded-full border border-white/[0.12] bg-white/[0.03] backdrop-blur-xl py-2 pl-9 pr-4 font-mono-code text-xs text-[#f2f1ec] placeholder-[#89919d]/60 focus:border-[#a9ddf0] focus:outline-none transition-all shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.1)] focus:shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.2),0_0_16px_rgba(169,221,240,0.15)]"
             />
           </div>
         </div>
@@ -312,7 +312,7 @@ export default function WorkArchivePage() {
                                   <span>{p.category}</span>
                                 </div>
                               )}
-                              <span className="work-inspect-btn absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-[#090b0f]/90 backdrop-blur-md border border-white/[0.12] px-4 py-2 font-mono-code text-xs text-[#f2f1ec] group-hover:border-[#a9ddf0] group-hover:text-[#a9ddf0] transition-colors">
+                              <span className="work-inspect-btn absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-[#090b0f]/80 backdrop-blur-xl border border-white/[0.18] px-4 py-2 font-mono-code text-xs text-[#f2f1ec] group-hover:border-[#a9ddf0] group-hover:text-[#a9ddf0] shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.5)] transition-all">
                                 <span>Inspect Study</span>
                                 <svg
                                   viewBox="0 0 24 24"

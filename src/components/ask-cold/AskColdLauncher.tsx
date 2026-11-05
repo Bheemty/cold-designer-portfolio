@@ -24,17 +24,12 @@ export default function AskColdLauncher({
       }}
       aria-expanded={isOpen}
       aria-label={isOpen ? "Close Ask Cold assistant" : "Open Ask Cold AI representative"}
-      className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 group flex items-center gap-2.5 rounded-full p-2.5 sm:px-4 sm:py-2.5 transition-all duration-300 cursor-pointer shadow-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent,#a9ddf0)] ${
-        isOpen
-          ? "bg-[var(--bg-surface,#11141b)] text-[var(--text-primary,#f2f1ec)] border border-white/[0.14] scale-95"
-          : "bg-[var(--bg-surface,#11141b)]/90 backdrop-blur-xl text-[var(--text-primary,#f2f1ec)] border border-white/[0.14] hover:border-[var(--accent,#a9ddf0)] hover:scale-105"
+      className={`ask-cold-glass-launcher fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 group flex items-center gap-2.5 rounded-full p-2.5 sm:px-4 sm:py-2.5 transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent,#a9ddf0)] ${
+        isOpen ? "scale-95" : "hover:scale-105"
       }`}
       style={{
         transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
-        transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease",
-        boxShadow: isOpen
-          ? "0 12px 36px -4px rgba(0, 0, 0, 0.6)"
-          : "0 16px 40px -6px rgba(0, 0, 0, 0.5), 0 0 20px 0 rgba(169, 221, 240, 0.12)",
+        transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, background-color 0.3s ease",
       }}
     >
       {/* Icon Badge */}

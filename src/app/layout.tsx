@@ -8,6 +8,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AskCold from "@/components/ask-cold/AskCold";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { ColdGlassFilterDefs } from "@/components/ui/ColdGlassSurface";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -113,6 +114,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-[var(--bg-primary,#090b0f)] text-[var(--text-primary,#f2f1ec)] selection:bg-[var(--accent,#a9ddf0)] selection:text-[var(--bg-primary,#090b0f)]">
         <ThemeProvider>
           <SmoothScroll>
+            <ColdGlassFilterDefs />
             <CustomCursor />
             <Navbar />
             <div className="flex-1">{children}</div>

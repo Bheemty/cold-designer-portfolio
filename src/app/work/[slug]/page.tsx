@@ -51,7 +51,7 @@ export default async function CaseStudyPage({
         <div className="mb-12">
           <Link
             href="/work"
-            className="inline-flex items-center gap-2 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
+            className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] backdrop-blur-xl px-4 py-2 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] hover:border-[#a9ddf0]/30 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.12),0_4px_16px_rgba(0,0,0,0.3)] transition-all"
           >
             <ArrowLeft size={13} />
             <span>Return to Project Index</span>
@@ -61,10 +61,10 @@ export default async function CaseStudyPage({
         {/* Case Study Hero */}
         <header className="border-b border-white/[0.08] pb-16 mb-16">
           <div className="flex flex-wrap items-center gap-3 mb-6 font-mono-code text-xs">
-            <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-2.5 py-1 font-semibold">
+            <span className="rounded-full bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/30 backdrop-blur-md px-3.5 py-1 font-semibold shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.25)]">
               {project.category}
             </span>
-            <span className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]">
+            <span className="rounded-full bg-white/[0.04] border border-white/[0.10] backdrop-blur-md px-3 py-1 text-[#89919d] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.08)]">
               {project.type}
             </span>
             <span className="text-[#89919d]">{"// "}{project.year}</span>
@@ -97,7 +97,7 @@ export default async function CaseStudyPage({
                 href={project.prototypeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-white/[0.04] backdrop-blur-xl px-5 py-2.5 font-mono-code text-xs font-semibold text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.18),0_4px_16px_rgba(0,0,0,0.3)] transition-all"
               >
                 <span>Inspect in Figma</span>
                 <ArrowUpRight size={13} />
@@ -109,7 +109,7 @@ export default async function CaseStudyPage({
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#89919d] hover:text-[#f2f1ec] transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-white/[0.04] backdrop-blur-xl px-5 py-2.5 font-mono-code text-xs font-semibold text-[#89919d] hover:text-[#f2f1ec] hover:border-white/30 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.12),0_4px_16px_rgba(0,0,0,0.3)] transition-all"
               >
                 <Code2 size={13} />
                 <span>Source Repository</span>

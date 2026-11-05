@@ -115,7 +115,10 @@ export default function AskColdEnquiryModal({
       aria-modal="true"
       aria-labelledby="enquiry-modal-title"
       data-lenis-prevent
-      className="absolute inset-0 z-50 rounded-3xl bg-[var(--bg-primary,#090b0f)]/98 backdrop-blur-md p-6 flex flex-col justify-between border border-[var(--border-subtle,rgba(255,255,255,0.12))] overflow-y-auto animate-in fade-in duration-200"
+      onWheel={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      className="absolute inset-0 z-50 rounded-3xl p-6 flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 bg-[var(--bg-primary,#090b0f)]/95 backdrop-blur-2xl"
+      style={{ overscrollBehavior: "contain" }}
     >
       <div>
         {/* Header */}

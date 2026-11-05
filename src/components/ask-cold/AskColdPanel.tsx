@@ -216,15 +216,18 @@ export default function AskColdPanel({
     <div
       role="region"
       aria-label="Ask Cold AI Representative Panel"
-      className="fixed bottom-20 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] max-h-[82vh] h-[640px] rounded-3xl bg-[var(--bg-primary,#090b0f)]/95 backdrop-blur-2xl border border-[var(--border-subtle,rgba(255,255,255,0.12))] shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300"
+      data-lenis-prevent
+      onWheel={(e) => e.stopPropagation()}
+      onTouchMove={(e) => e.stopPropagation()}
+      className="ask-cold-glass-panel fixed bottom-20 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] max-h-[82vh] h-[640px] rounded-3xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300 backdrop-blur-2xl"
       style={{
         transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
         transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
-        boxShadow: "0 24px 64px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)",
+        overscrollBehavior: "contain",
       }}
     >
       {/* ── PANEL HEADER ── */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08] bg-white/[0.02]">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08] shrink-0">
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center h-8 w-8 rounded-full bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-bold shrink-0">
             <Sparkles size={16} />
@@ -275,7 +278,7 @@ export default function AskColdPanel({
       </div>
 
       {/* ── CONTEXT PILL BAR ── */}
-      <div className="flex items-center justify-between px-5 py-2 bg-white/[0.015] border-b border-white/[0.04] font-mono-code text-[11px] text-[var(--text-secondary,#89919d)]">
+      <div className="flex items-center justify-between px-5 py-2 bg-white/[0.015] border-b border-white/[0.04] font-mono-code text-[11px] text-[var(--text-secondary,#89919d)] shrink-0">
         <div className="flex items-center gap-1.5 truncate">
           <Compass size={11} className="text-[var(--accent,#a9ddf0)] shrink-0" />
           <span className="truncate">{contextData.label}</span>
@@ -285,8 +288,14 @@ export default function AskColdPanel({
         </span>
       </div>
 
-      {/* ── MESSAGES CONTAINER ── */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-4 font-sans text-sm scroll-smooth">
+      {/* ── MESSAGES CONTAINER (INDEPENDENT SCROLL) ── */}
+      <div
+        data-lenis-prevent
+        onWheel={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        className="flex-1 min-h-0 overflow-y-auto p-5 space-y-4 font-sans text-sm overscroll-contain"
+        style={{ overscrollBehavior: "contain" }}
+      >
         {/* Welcome Screen when Empty */}
         {messages.length === 0 && (
           <div className="space-y-5 animate-in fade-in duration-300">
@@ -420,10 +429,10 @@ export default function AskColdPanel({
           <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-200 font-mono-code text-xs space-y-2">
             <div className="flex items-center gap-2 font-semibold">
               <AlertCircle size={14} />
-              <span>Offline / Quota Mode Active</span>
+              <span>Direct Navigation Active</span>
             </div>
             <p className="font-sans text-[11px] leading-relaxed text-amber-200/80">
-              The free AI quota has reached its current limit. You can still use quick buttons, browse projects, or download Taye&apos;s resume directly.
+              Ask Cold is currently experiencing high visitor volume. You can still use quick buttons, browse projects, or download Taye&apos;s resume directly.
             </p>
             <div className="flex flex-wrap gap-2 pt-1">
               <Link href="/work" onClick={() => sound.playClick()} className="underline hover:opacity-80">
@@ -443,8 +452,13 @@ export default function AskColdPanel({
       </div>
 
       {/* ── INPUT BAR ── */}
-      <form onSubmit={handleFormSubmit} className="p-3 sm:p-4 border-t border-white/[0.08] bg-white/[0.02]">
-        <div className="relative flex items-end rounded-2xl bg-white/[0.03] border border-white/[0.1] focus-within:border-[var(--accent,#a9ddf0)] transition-colors p-1.5">
+      <form
+        onSubmit={handleFormSubmit}
+        onWheel={(e) => e.stopPropagation()}
+        onTouchMove={(e) => e.stopPropagation()}
+        className="p-3 sm:p-4 border-t border-white/[0.08] shrink-0"
+      >
+        <div className="ask-cold-composer-input relative flex items-end rounded-2xl bg-white/[0.03] border border-white/[0.1] focus-within:border-[var(--accent,#a9ddf0)] transition-colors p-1.5">
           {/* Text Area */}
           <textarea
             ref={inputRef}
@@ -479,7 +493,7 @@ export default function AskColdPanel({
               type="submit"
               disabled={!inputText.trim() || isLoading}
               aria-label="Send message to Ask Cold"
-              className="p-2 rounded-xl bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-semibold hover:opacity-90 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-sm"
+              className="ask-cold-send-btn p-2 rounded-xl bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-semibold hover:opacity-90 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-sm"
             >
               <Send size={14} />
             </button>
@@ -488,7 +502,7 @@ export default function AskColdPanel({
 
         {/* Footer Attribution & Disclaimer */}
         <div className="flex items-center justify-between px-2 pt-2 text-[10px] font-mono-code text-[var(--text-muted,#565d6b)]">
-          <span>Ask Cold &bull; Gemini Free Tier</span>
+          <span>Ask Cold &bull; Portfolio Guide</span>
           <span>Not an impersonation</span>
         </div>
       </form>

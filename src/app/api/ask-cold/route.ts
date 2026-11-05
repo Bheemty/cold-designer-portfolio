@@ -190,7 +190,7 @@ ${retrieved.groundedSummary}
     return NextResponse.json({
       reply: candidateText.trim(),
       actionChips: actionChips.slice(0, 3),
-      source: "gemini-api",
+      source: "assistant",
     });
   } catch (error: unknown) {
     const errorMsg = error instanceof Error ? error.message : String(error);
@@ -199,7 +199,7 @@ ${retrieved.groundedSummary}
     return NextResponse.json({
       reply: local.text,
       actionChips: local.actionChips || [],
-      source: "fallback-grounded",
+      source: "assistant",
     });
   }
 }

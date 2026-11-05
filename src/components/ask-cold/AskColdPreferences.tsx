@@ -26,7 +26,7 @@ export default function AskColdPreferences({
       role="dialog"
       aria-modal="true"
       aria-labelledby="pref-modal-title"
-      className="absolute inset-0 z-50 rounded-3xl bg-[var(--bg-primary,#090b0f)]/95 backdrop-blur-md p-6 flex flex-col justify-between border border-[var(--border-subtle,rgba(255,255,255,0.12))] animate-in fade-in duration-200"
+      className="absolute inset-0 z-50 rounded-3xl p-6 flex flex-col justify-between animate-in fade-in duration-200 bg-[var(--bg-primary,#090b0f)]/95 backdrop-blur-2xl"
     >
       <div>
         {/* Header */}

@@ -172,10 +172,10 @@ export default function AskColdMessage({
       <div
         className={`max-w-[85%] sm:max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-relaxed transition-all shadow-sm ${
           isUser
-            ? "bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-normal rounded-tr-sm font-sans"
+            ? "ask-cold-bubble-user bg-[#0b1329] text-white border border-[#38bdf8]/30 font-medium rounded-tr-sm font-sans"
             : message.isError
             ? "bg-red-500/10 border border-red-500/30 text-[var(--text-primary,#f2f1ec)] rounded-tl-sm"
-            : "bg-[var(--bg-surface,#11141b)] text-[var(--text-primary,#f2f1ec)] border border-[var(--border-subtle,rgba(255,255,255,0.08))] rounded-tl-sm font-sans"
+            : "ask-cold-bubble-assistant bg-[var(--bg-surface,#11141b)] text-[var(--text-primary,#f2f1ec)] border border-[var(--border-subtle,rgba(255,255,255,0.08))] rounded-tl-sm font-sans"
         }`}
       >
         {/* Assistant Header Tag */}

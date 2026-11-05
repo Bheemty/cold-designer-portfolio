@@ -117,7 +117,19 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className={`kokil-nav ${isScrolled ? "is-scrolled" : ""}`} aria-label="Main Navigation">
+      <nav
+        className={`kokil-nav ${isScrolled ? "is-scrolled" : ""}`}
+        aria-label="Main Navigation"
+        onMouseMove={(e: React.MouseEvent<HTMLElement>) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          e.currentTarget.style.setProperty("--nav-mouse-x", `${e.clientX - rect.left}px`);
+          e.currentTarget.style.setProperty("--nav-mouse-y", `${e.clientY - rect.top}px`);
+          e.currentTarget.style.setProperty("--nav-mouse-opacity", "1");
+        }}
+        onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
+          e.currentTarget.style.setProperty("--nav-mouse-opacity", "0");
+        }}
+      >
         {/* Cold Designer Avatar Logo */}
         <Link
           href="/"
