@@ -26,6 +26,47 @@ export interface KnowledgeProject {
   liveUrl?: string;
 }
 
+export interface KnowledgeService {
+  id: string;
+  title: string;
+  category: string;
+  headline: string;
+  description: string;
+  deliverables: string[];
+  idealFor: string;
+}
+
+export interface KnowledgeEmployment {
+  company: string;
+  role: string;
+  period: string;
+  type: string;
+  summary: string;
+  keyContributions: string[];
+}
+
+export interface KnowledgeAvailability {
+  status: string;
+  openFor: string[];
+  timeframe: string;
+  collaborationModel: string;
+  bookingGuidance: string;
+}
+
+export interface KnowledgePricing {
+  model: string;
+  policy: string;
+  explanation: string;
+  guidance: string;
+}
+
+export interface KnowledgeProcessStep {
+  step: number;
+  phase: string;
+  description: string;
+  outputs: string[];
+}
+
 export interface KnowledgeBase {
   profile: {
     fullName: string;
@@ -49,6 +90,11 @@ export interface KnowledgeBase {
       tiktok: string;
     };
   };
+  services: KnowledgeService[];
+  employmentHistory: KnowledgeEmployment[];
+  availability: KnowledgeAvailability;
+  pricingPolicy: KnowledgePricing;
+  designProcess: KnowledgeProcessStep[];
   projects: KnowledgeProject[];
   labExperiments: {
     id: string;
@@ -118,6 +164,212 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
       tiktok: "https://www.tiktok.com/@taye_abolarin2",
     },
   },
+
+  services: [
+    {
+      id: "product-architecture-saas",
+      title: "Enterprise SaaS & Web Applications",
+      category: "Product Architecture & SaaS",
+      headline: "Complex multi-persona platforms, data-dense dashboards, and operational workflows.",
+      description:
+        "Architecting end-to-end web applications and enterprise tools that turn dense operational data into actionable, high-clarity user interfaces.",
+      deliverables: [
+        "Information Architecture & Scaffolding",
+        "Wireframing & User Journey Mapping",
+        "30+ High-Fidelity Responsive Modules",
+        "Role Permissions & Multi-Persona Dashboard UX",
+      ],
+      idealFor:
+        "Founders, engineering leaders, and product teams building B2B SaaS, internal tools, HRMS, and data analytics platforms.",
+    },
+    {
+      id: "mobile-app-design",
+      title: "Mobile App Design (iOS & Android)",
+      category: "Mobile Interaction Design",
+      headline: "Native iOS and Android application design with tactile feedback and dual light/dark themes.",
+      description:
+        "Crafting intuitive consumer and enterprise mobile applications with platform-native ergonomics, rapid booking/checkout flows, and gesture-driven navigation.",
+      deliverables: [
+        "Full Mobile App UI/UX (Figma)",
+        "Dual Light & Dark Theme UI Kits",
+        "Interactive Mobile Click-Through Prototypes",
+        "Developer Handoff Specifications & Redlines",
+      ],
+      idealFor:
+        "Startups and product teams launching new consumer mobile apps, fintech banking, transit booking, or health/food tech.",
+    },
+    {
+      id: "conversational-triage",
+      title: "Conversational UX & Triage Gateways",
+      category: "Conversational UI",
+      headline: "Zero-barrier conversational interfaces on WhatsApp and web chat channels.",
+      description:
+        "Engineering humane conversational decision trees and symptom/request triage flows that eliminate account creation friction and meet users in familiar channels.",
+      deliverables: [
+        "Conversational UX Decision Trees",
+        "WhatsApp Flow Architecture & Fallback Paths",
+        "Web Service Triage Entrypoints",
+        "Specialist / Clinician Handoff Routing",
+      ],
+      idealFor:
+        "Healthcare providers, consultation platforms, and customer intake systems seeking zero-friction onboarding.",
+    },
+    {
+      id: "design-systems",
+      title: "Design Systems & Token Architecture",
+      category: "Design Systems",
+      headline: "Scalable Figma component libraries and multi-platform design tokens.",
+      description:
+        "Building production-grade design systems with atomic component hierarchies, accessible typographic scales, semantic color tokens, and engineering documentation.",
+      deliverables: [
+        "Figma Component Libraries (Auto-Layout 5.0)",
+        "Design Tokens (JSON / CSS variables)",
+        "Light & Dark Mode Token Semantic Aliases",
+        "Component Usage & Accessibility Guidelines",
+      ],
+      idealFor:
+        "Growing engineering and design teams needing consistency, rapid shipping velocity, and unified brand standards across platforms.",
+    },
+    {
+      id: "ux-audits",
+      title: "UX Audits & Heuristic Evaluation",
+      category: "Design Strategy & Audits",
+      headline: "Empirical usability reviews, friction point identification, and conversion optimization.",
+      description:
+        "Diagnosing drop-off points, typographic scanning friction, layout density issues, and usability hurdles in existing digital products with concrete redesign recommendations.",
+      deliverables: [
+        "Heuristic Usability Teardown",
+        "Competitive Benchmarking Matrix",
+        "Prioritized UX Recommendation Matrix",
+        "Rapid Redesign Screen Concepts",
+      ],
+      idealFor:
+        "Teams with established products facing high user drop-off, low conversion, or interface clutter.",
+    },
+    {
+      id: "design-technologist",
+      title: "Design Technologist & Interaction Prototyping",
+      category: "Frontend Craft & Prototyping",
+      headline: "High-fidelity interactive prototypes bridging design and production code.",
+      description:
+        "Translating sophisticated micro-interactions, spring physics, and fluid choreography into functional prototypes using React, Next.js, Tailwind, and GSAP.",
+      deliverables: [
+        "Functional Next.js / React Prototypes",
+        "GSAP / Framer Motion Choreography Specs",
+        "Web Audio / Haptic Feedback Integration",
+        "Production-Ready Frontend Component Implementation",
+      ],
+      idealFor:
+        "Teams aiming for world-class tactile polish, smooth transitions, and flawless design-to-engineering parity.",
+    },
+  ],
+
+  employmentHistory: [
+    {
+      company: "Medesy Technologies",
+      role: "Product Designer",
+      period: "2024",
+      type: "Employment Engagement",
+      summary:
+        "Designed a structured WhatsApp-first triage gateway connecting patients in Nigeria with licensed physicians, removing waiting room delays and app download barriers.",
+      keyContributions: [
+        "Architected an intuitive 3-step conversational triage pathway for symptom articulation over WhatsApp.",
+        "Created the responsive web service gateway, doctor referral guidance, and consultation summary flows.",
+        "Engineered the custom MEDesy component library and multi-platform design system.",
+      ],
+    },
+    {
+      company: "Greall Technologies",
+      role: "Product Designer",
+      period: "2023",
+      type: "Employment Engagement",
+      summary:
+        "Led the complete corporate brand identity evolution and responsive web architecture overhaul for Greall Technologies.",
+      keyContributions: [
+        "Art-directed a modern brand visual system with refined typography and palette hierarchy.",
+        "Rebuilt the responsive corporate website optimized for institutional partner evaluation across desktop and mobile.",
+        "Created structured service ecosystem pillars communicating technical fintech credibility.",
+      ],
+    },
+    {
+      company: "Cold Designer Studio / Independent Practice",
+      role: "Lead Product Designer & Design Technologist",
+      period: "2023 - Present",
+      type: "Independent Studio Practice",
+      summary:
+        "Leading product architecture, mobile app design, and design system engagements for founders and startups worldwide.",
+      keyContributions: [
+        "Directed an 8-week cross-functional team (PM, 2 frontend engineers, 2 designers) as Lead Product Designer on Spot, producing 30+ screens with pinned spatial critique.",
+        "Designed PROfile enterprise HRMS: 37 high-resolution modules, predictive attrition analytics, and mobile self-service.",
+        "Designed QuickEats consumer mobile app: 45 presentation boards, 20-minute recipe generator, dual light/dark themes.",
+        "Designed Raven Bank personal banking app in an intensive 48-hour sprint featuring 1-tap beneficiary transfers.",
+        "Designed 9jaTrip intercity transit mobile booking with terminal hub selection and digital QR boarding passes.",
+      ],
+    },
+  ],
+
+  availability: {
+    status: "Open for select freelance gigs, contract roles, and design consultations.",
+    openFor: [
+      "Freelance Product Design Gigs (Web & Mobile Apps)",
+      "Contract Product Designer / Design Technologist Roles (3 to 6+ months)",
+      "Design System Architecture & Multi-Platform Component Libraries",
+      "Comprehensive UX Audits & Product Strategy Consultations",
+    ],
+    timeframe: "Available to start new engagements immediately or on scheduled sprint cycles.",
+    collaborationModel:
+      "Full remote, asynchronous collaboration across US, European, and African time zones with dedicated weekly syncs.",
+    bookingGuidance:
+      "You can start a project enquiry right here through Ask Cold or email Taye directly at abolarintaye20@gmail.com with your project goals, scope, and target timeline.",
+  },
+
+  pricingPolicy: {
+    model: "Value- and Scope-Based Pricing",
+    policy:
+      "Taye does not quote generic flat fees or invent arbitrary rates without understanding the project's specific scope and requirements.",
+    explanation:
+      "Every digital product is unique in its architectural complexity, number of platforms (web, iOS, Android), deliverable depth (from low-fi wireframes to coded design tokens), and timeline. Pricing is structured around project value, milestone deliverables, or defined monthly contract engagements.",
+    guidance:
+      "To receive an accurate estimate or proposal, share a high-level overview of your project (goals, key features, target timeline, and platform) via Ask Cold's 'Start Project Enquiry' option or by emailing abolarintaye20@gmail.com.",
+  },
+
+  designProcess: [
+    {
+      step: 1,
+      phase: "Discovery & Strategy Alignment",
+      description:
+        "Deep dive into business goals, core user personas, technical constraints, and competitive benchmarks to establish clear success metrics.",
+      outputs: ["Project Brief & Success Criteria", "User Journey Maps", "Information Hierarchy Scaffolding"],
+    },
+    {
+      step: 2,
+      phase: "System Architecture & Wireframing",
+      description:
+        "Rapid iteration on structural layouts, information flow, and low-fidelity wireframes to validate interaction paths without visual distraction.",
+      outputs: ["Low-Fidelity Screen Flows", "Clickable Wireframe Walkthroughs", "Stakeholder Alignment Review"],
+    },
+    {
+      step: 3,
+      phase: "High-Fidelity UI & Design System",
+      description:
+        "Translating wireframes into polished, accessible, production-ready interfaces with typography scale, dual-theme color tokens, and atomic Figma components.",
+      outputs: ["Production-Ready UI Screens", "Scalable Figma Component Library", "Dual Light & Dark Theme Assets"],
+    },
+    {
+      step: 4,
+      phase: "Interactive Prototyping & Motion",
+      description:
+        "Crafting fluid micro-interactions, transition choreography, and interactive click-throughs to test ergonomics and validate usability.",
+      outputs: ["High-Fidelity Interactive Prototypes", "Motion & Transition Specifications", "Usability Feedback Revisions"],
+    },
+    {
+      step: 5,
+      phase: "Engineering Handoff & Quality Assurance",
+      description:
+        "Detailed developer documentation, token exports, auto-layout verification, and direct collaboration during frontend implementation.",
+      outputs: ["Design Token Specs (JSON/CSS)", "Responsive Breakpoint Guidelines", "Design QA Audits on Staging"],
+    },
+  ],
 
   projects: [
     {
@@ -726,13 +978,56 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
       category: "Identity",
       questions: ["Who is Taye?", "Who is Cold Designer?", "Tell me about Taye"],
       answerSummary:
-        "Taye Abolarin, known professionally as Cold Designer, is an independent product designer and design technologist based in Nigeria, working with global teams. He specializes in conversational UX, mobility systems, creative SaaS platforms, enterprise HR solutions, and high-fidelity interaction design.",
+        "Taye Abolarin, known professionally as Cold Designer (@cold_designer), is an independent product designer and design technologist based in Nigeria, working with global teams. He specializes in conversational UX, mobility systems, creative SaaS platforms, enterprise HR solutions, and high-fidelity interaction design.",
     },
     {
-      category: "Hiring & Services",
-      questions: ["Can I hire Taye?", "How can we work together?", "What services does he offer?"],
+      category: "Availability & Gigs",
+      questions: [
+        "Are you available for a gig?",
+        "Can I hire Taye?",
+        "Is Taye taking on freelance work?",
+        "Are you available for contract roles?",
+      ],
       answerSummary:
-        "Yes, Taye is available for select product design engagements, design system contracts, mobile/web app design, and design consultations. You can discuss a project right here through Ask Cold or reach him directly at abolarintaye20@gmail.com.",
+        "Yes! Taye is currently open for select freelance gigs, contract roles (3-6+ months), and design consultations. He works remotely with global teams across US, European, and African time zones. You can start an enquiry directly through Ask Cold or email him at abolarintaye20@gmail.com.",
+    },
+    {
+      category: "Pricing & Rates",
+      questions: [
+        "How much does a project cost?",
+        "What are your rates?",
+        "How much for a website or app?",
+        "Do you have a fixed price list?",
+      ],
+      answerSummary:
+        "Taye uses value- and scope-based pricing rather than generic flat fees. Pricing is determined by architectural complexity, platform count (web, iOS, Android), deliverables, and timeline. To get an accurate quote, share a brief project summary via Ask Cold's enquiry option or email abolarintaye20@gmail.com.",
+    },
+    {
+      category: "Services & Mobile Apps",
+      questions: [
+        "Do you design mobile apps?",
+        "What services do you offer?",
+        "Can you build a design system?",
+        "Do you do UX audits?",
+      ],
+      answerSummary:
+        "Yes, Taye specializes in Mobile App Design (iOS & Android native apps like QuickEats, Raven Bank, and 9jaTrip), Enterprise SaaS & Web Platforms (Spot, PROfile), Conversational UX (WhatsApp healthcare triage in MEDesy), Scalable Design Systems in Figma, and UX Audits.",
+    },
+    {
+      category: "Employment & Experience",
+      questions: [
+        "What is Taye's work history?",
+        "Tell me about his time at Medesy",
+        "What was his role at Greall?",
+      ],
+      answerSummary:
+        "Taye was Product Designer at Medesy Technologies (designing the WhatsApp healthcare triage gateway and web portal), Product Designer at Greall Technologies (leading their corporate rebrand and web redesign), and Lead Product Designer & Design Technologist at Cold Designer Studio directing projects like Spot, PROfile, QuickEats, and 9jaTrip.",
+    },
+    {
+      category: "Design Process",
+      questions: ["What is your design process?", "How do you work?", "How do we collaborate?"],
+      answerSummary:
+        "Taye follows a structured 5-stage workflow: 1) Discovery & Strategy Alignment, 2) System Architecture & Wireframing, 3) High-Fidelity UI & Design Systems, 4) Interactive Prototyping & Motion, and 5) Engineering Handoff & QA with detailed token specs.",
     },
     {
       category: "Resume",

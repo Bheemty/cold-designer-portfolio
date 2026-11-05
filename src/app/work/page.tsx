@@ -3,10 +3,15 @@
 import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Search, Grid, List, Filter } from "lucide-react";
+import { Search, Grid, List, Filter, Eye, ArrowUpRight, Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 import { sound } from "@/lib/sounds";
 import { PROJECTS, Project } from "@/data/projects";
 import ScrollReveal from "@/components/motion/ScrollReveal";
+import BlurTextReveal from "@/components/motion/BlurTextReveal";
+import MorphingDialog from "@/components/ui/MorphingDialog";
+import MagneticButton from "@/components/ui/MagneticButton";
+import DirectionalTabs, { TabItem } from "@/components/ui/DirectionalTabs";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const CATEGORIES = [
@@ -17,6 +22,16 @@ const CATEGORIES = [
   "Commerce & Marketplace",
   "Enterprise & SaaS",
   "Fintech & Systems",
+];
+
+const CATEGORY_TABS: TabItem[] = CATEGORIES.map((cat) => ({
+  id: cat,
+  label: cat,
+}));
+
+const VIEW_TABS: TabItem[] = [
+  { id: "editorial", label: "Editorial Showcase", icon: Grid },
+  { id: "table", label: "Directory Index", icon: List },
 ];
 
 // Strict Project Ordering as mandated by design direction:
@@ -58,6 +73,7 @@ export default function WorkArchivePage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"editorial" | "table">("editorial");
+  const [inspectingProject, setInspectingProject] = useState<Project | null>(null);
 
   const filteredProjects = useMemo(() => {
     return ORDERED_PROJECTS.filter((project) => {
@@ -160,72 +176,47 @@ export default function WorkArchivePage() {
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
             <div className="max-w-3xl">
-              <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-                Selected Works.
-              </h1>
+              <BlurTextReveal
+                as="h1"
+                text="Selected Works."
+                className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6"
+              />
               <p className="text-lg sm:text-xl text-[#89919d] font-light leading-relaxed">A verified index of healthcare systems, intercity transit logistics, creative collaboration platforms, enterprise HR solutions, corporate rebrands, and fintech experiences designed by Taye Abolarin (Cold Designer).</p>
             </div>
 
-            {/* View Mode Switcher */}
-            <div className="flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] backdrop-blur-xl p-1.5 font-mono-code text-xs shrink-0 self-start lg:self-end shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.18),0_8px_24px_-4px_rgba(0,0,0,0.4)]">
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  setViewMode("editorial");
-                }}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all cursor-pointer ${
-                  viewMode === "editorial"
-                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.8)]"
-                    : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.05]"
-                }`}
-                aria-pressed={viewMode === "editorial"}
-              >
-                <Grid size={13} />
-                <span>Editorial Showcase</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  setViewMode("table");
-                }}
-                className={`flex items-center gap-2 rounded-full px-4 py-2 transition-all cursor-pointer ${
-                  viewMode === "table"
-                    ? "bg-[#FDFDFD] text-[#090b0f] font-semibold shadow-[0_4px_14px_rgba(0,0,0,0.25),inset_0_1px_1px_rgba(255,255,255,0.8)]"
-                    : "text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.05]"
-                }`}
-                aria-pressed={viewMode === "table"}
-              >
-                <List size={13} />
-                <span>Directory Index</span>
-              </button>
+            {/* View Mode Switcher with Directional Sliding Hover Tabs */}
+            <div
+              className="work-view-switcher-glass flex items-center rounded-full border border-white/[0.12] bg-white/[0.04] p-1 font-mono-code text-xs shrink-0 self-start lg:self-end shadow-[inset_0_1.5px_1.5px_0_rgba(255,255,255,0.22),0_8px_24px_-4px_rgba(0,0,0,0.4)]"
+              style={{
+                backdropFilter: "url(#cold-glass-filter-pill) blur(20px) saturate(185%) contrast(105%)",
+                WebkitBackdropFilter: "blur(20px) saturate(185%) contrast(105%)",
+              }}
+            >
+              <DirectionalTabs
+                tabs={VIEW_TABS}
+                activeId={viewMode}
+                onChange={(id) => setViewMode(id as "editorial" | "table")}
+                idPrefix="work-view"
+                variant="glass"
+                ariaLabel="Work view mode switcher"
+              />
             </div>
           </div>
         </header>
 
         {/* Filter & Search Controls */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-16">
-          {/* Categories */}
+          {/* Categories with Directional Sliding Hover Tabs */}
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar font-mono-code text-xs">
             <Filter size={13} className="text-[#89919d] mr-1 hidden sm:inline shrink-0" />
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => {
-                  sound.playClick();
-                  setSelectedCategory(cat);
-                }}
-                className={`rounded-full px-4 py-2 transition-all border whitespace-nowrap cursor-pointer ${
-                  selectedCategory === cat
-                    ? "border-[#a9ddf0]/50 bg-gradient-to-r from-[#a9ddf0]/25 to-[#a9ddf0]/15 backdrop-blur-xl text-[#a9ddf0] font-semibold shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.35),0_0_18px_0_rgba(169,221,240,0.2)]"
-                    : "border-white/[0.09] bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md text-[#89919d] hover:text-[#f2f1ec] hover:border-white/20 shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.06)]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+            <DirectionalTabs
+              tabs={CATEGORY_TABS}
+              activeId={selectedCategory}
+              onChange={(id) => setSelectedCategory(id)}
+              idPrefix="work-category"
+              variant="pill"
+              ariaLabel="Work category filter"
+            />
           </div>
 
           {/* Search Input */}
@@ -236,7 +227,11 @@ export default function WorkArchivePage() {
               placeholder="Search systems, roles, tags..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-full border border-white/[0.12] bg-white/[0.03] backdrop-blur-xl py-2 pl-9 pr-4 font-mono-code text-xs text-[#f2f1ec] placeholder-[#89919d]/60 focus:border-[#a9ddf0] focus:outline-none transition-all shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.1)] focus:shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.2),0_0_16px_rgba(169,221,240,0.15)]"
+              className="work-view-switcher-glass w-full rounded-full border border-white/[0.12] bg-white/[0.03] py-2 pl-9 pr-4 font-mono-code text-xs text-[#f2f1ec] placeholder-[#89919d]/60 focus:border-[#a9ddf0] focus:outline-none transition-all shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.1)] focus:shadow-[inset_0_1px_1.5px_0_rgba(255,255,255,0.2),0_0_16px_rgba(169,221,240,0.15)]"
+              style={{
+                backdropFilter: "url(#cold-glass-filter-pill) blur(20px) saturate(185%) contrast(105%)",
+                WebkitBackdropFilter: "blur(20px) saturate(185%) contrast(105%)",
+              }}
             />
           </div>
         </div>
@@ -391,27 +386,43 @@ export default function WorkArchivePage() {
                             </div>
 
                             {/* Actions */}
-                            <div className="pt-5 border-t border-white/[0.08] flex items-center justify-between gap-4">
-                              <Link
-                                href={`/work/${p.slug}`}
-                                onClick={() => sound.playClick()}
-                                className="inline-flex items-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] font-mono-code text-xs font-semibold px-6 py-3 hover:bg-[#a9ddf0] transition-colors shadow-lg cursor-pointer"
-                              >
-                                <span>View Case Study</span>
-                                <svg
-                                  viewBox="0 0 24 24"
-                                  width="14"
-                                  height="14"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth="2.4"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  aria-hidden="true"
+                            <div className="pt-5 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-4">
+                              <div className="flex items-center gap-3">
+                                <Link
+                                  href={`/work/${p.slug}`}
+                                  onClick={() => sound.playClick()}
+                                  className="inline-flex items-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] font-mono-code text-xs font-semibold px-6 py-3 hover:bg-[#a9ddf0] transition-colors shadow-lg cursor-pointer"
                                 >
-                                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                                </svg>
-                              </Link>
+                                  <span>View Case Study</span>
+                                  <svg
+                                    viewBox="0 0 24 24"
+                                    width="14"
+                                    height="14"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2.4"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                  </svg>
+                                </Link>
+
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    sound.playClick();
+                                    setInspectingProject(p);
+                                  }}
+                                  className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-3 font-mono-code text-xs text-[#89919d] hover:text-[#f2f1ec] hover:border-[#a9ddf0] transition-colors cursor-pointer"
+                                  aria-label={`Inspect ${p.title} specifications`}
+                                >
+                                  <Eye size={13} />
+                                  <span>Quick Specs</span>
+                                </button>
+                              </div>
 
                               {p.liveUrl && (
                                 <a
@@ -532,26 +543,42 @@ export default function WorkArchivePage() {
 
                         {/* Actions */}
                         <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between gap-4 font-mono-code text-xs">
-                          <Link
-                            href={`/work/${p.slug}`}
-                            onClick={() => sound.playClick()}
-                            className="inline-flex items-center gap-2 text-[#f2f1ec] hover:text-[#a9ddf0] transition-colors font-semibold"
-                          >
-                            <span>Read Case Study</span>
-                            <svg
-                              viewBox="0 0 24 24"
-                              width="14"
-                              height="14"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2.4"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              aria-hidden="true"
+                          <div className="flex items-center gap-3">
+                            <Link
+                              href={`/work/${p.slug}`}
+                              onClick={() => sound.playClick()}
+                              className="inline-flex items-center gap-2 text-[#f2f1ec] hover:text-[#a9ddf0] transition-colors font-semibold"
                             >
-                              <path d="M7 17L17 7M17 7H7M17 7V17" />
-                            </svg>
-                          </Link>
+                              <span>Read Case Study</span>
+                              <svg
+                                viewBox="0 0 24 24"
+                                width="14"
+                                height="14"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.4"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                              </svg>
+                            </Link>
+
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                sound.playClick();
+                                setInspectingProject(p);
+                              }}
+                              className="inline-flex items-center gap-1.5 text-[#89919d] hover:text-[#a9ddf0] transition-colors cursor-pointer"
+                              aria-label={`Inspect ${p.title} specifications`}
+                            >
+                              <Eye size={12} />
+                              <span>Specs</span>
+                            </button>
+                          </div>
 
                           {p.prototypeUrl && (
                             <a
@@ -622,25 +649,39 @@ export default function WorkArchivePage() {
                     <td className="py-4 px-6 text-[#f2f1ec]">{p.role}</td>
                     <td className="py-4 px-6 text-[#89919d]">{p.year}</td>
                     <td className="py-4 px-6 text-right">
-                      <Link
-                        href={`/work/${p.slug}`}
-                        className="inline-flex items-center gap-1 text-[#89919d] group-hover:text-[#a9ddf0] transition-colors"
-                      >
-                        <span>Study</span>
-                        <svg
-                          viewBox="0 0 24 24"
-                          width="12"
-                          height="12"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="2.2"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          aria-hidden="true"
+                      <div className="inline-flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            sound.playClick();
+                            setInspectingProject(p);
+                          }}
+                          className="inline-flex items-center gap-1 text-[#89919d] hover:text-[#a9ddf0] transition-colors cursor-pointer"
+                          aria-label={`Inspect ${p.title} specifications`}
                         >
-                          <path d="M7 17L17 7M17 7H7M17 7V17" />
-                        </svg>
-                      </Link>
+                          <Eye size={12} />
+                          <span>Specs</span>
+                        </button>
+                        <Link
+                          href={`/work/${p.slug}`}
+                          className="inline-flex items-center gap-1 text-[#89919d] group-hover:text-[#a9ddf0] transition-colors"
+                        >
+                          <span>Study</span>
+                          <svg
+                            viewBox="0 0 24 24"
+                            width="12"
+                            height="12"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M7 17L17 7M17 7H7M17 7V17" />
+                          </svg>
+                        </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -660,28 +701,147 @@ export default function WorkArchivePage() {
                 Open for professional dialogue, design systems collaboration, and technical consultations. Direct messages receive personal responses.
               </p>
             </div>
-            <a
-              href="mailto:abolarintaye20@gmail.com"
-              className="inline-flex items-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
-            >
-              <span>Start a Direct Conversation</span>
-              <svg
-                viewBox="0 0 24 24"
-                width="14"
-                height="14"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+            <MagneticButton maxDistance={10} strength={0.25}>
+              <a
+                href="mailto:abolarintaye20@gmail.com"
+                className="inline-flex items-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
               >
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </a>
+                <span>Start a Direct Conversation</span>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </a>
+            </MagneticButton>
           </div>
         </ScrollReveal>
       </div>
+
+      {/* Morphing Dialog / FLIP Quick-Look Project Specifications Inspector */}
+      <MorphingDialog
+        isOpen={inspectingProject !== null}
+        onClose={() => setInspectingProject(null)}
+        title={inspectingProject?.title}
+        category={inspectingProject?.category}
+        maxWidth="2xl"
+      >
+        {inspectingProject && (
+          <div className="space-y-6">
+            {/* Project Hero Preview */}
+            {inspectingProject.heroImage && (
+              <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-white/[0.08] shadow-lg bg-[#090b0f]">
+                <Image
+                  src={inspectingProject.heroImage}
+                  alt={inspectingProject.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+
+            {/* Headline & Overview */}
+            <div>
+              <h4 className="font-display text-xl font-bold text-[#f2f1ec] mb-2">
+                {inspectingProject.headline}
+              </h4>
+              <p className="text-sm text-[#89919d] font-light leading-relaxed">
+                {inspectingProject.overview}
+              </p>
+            </div>
+
+            {/* Specifications Ledger */}
+            <div className="rounded-2xl bg-[#090b0f] border border-white/[0.08] p-5 font-mono-code text-xs space-y-3">
+              <div className="flex justify-between border-b border-white/[0.06] pb-2">
+                <span className="text-[#89919d]">CLIENT / IMPRINT:</span>
+                <span className="text-[#f2f1ec] font-semibold">{inspectingProject.client}</span>
+              </div>
+              <div className="flex justify-between border-b border-white/[0.06] pb-2">
+                <span className="text-[#89919d]">ROLE:</span>
+                <span className="text-[#f2f1ec] font-semibold">{inspectingProject.role}</span>
+              </div>
+              <div className="flex justify-between border-b border-white/[0.06] pb-2">
+                <span className="text-[#89919d]">YEAR &amp; TIMELINE:</span>
+                <span className="text-[#f2f1ec] font-semibold">
+                  {inspectingProject.year} &bull; {inspectingProject.timeline}
+                </span>
+              </div>
+              <div className="flex justify-between border-b border-white/[0.06] pb-2">
+                <span className="text-[#89919d]">ENGAGEMENT TYPE:</span>
+                <span className="text-[#f2f1ec] font-semibold">{inspectingProject.type}</span>
+              </div>
+              <div>
+                <span className="text-[#89919d] block mb-1.5">KEY DELIVERABLES:</span>
+                <div className="flex flex-wrap gap-1.5 pt-0.5">
+                  {inspectingProject.deliverables.map((d) => (
+                    <span
+                      key={d}
+                      className="rounded-full bg-white/[0.04] border border-white/[0.08] px-2.5 py-0.5 text-[11px] text-[#a9ddf0]"
+                    >
+                      {d}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* System Highlights */}
+            {inspectingProject.systemHighlights && inspectingProject.systemHighlights.length > 0 && (
+              <div className="space-y-2.5">
+                <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block font-semibold">
+                  System Architecture &amp; Decisions:
+                </span>
+                <div className="space-y-2">
+                  {inspectingProject.systemHighlights.map((h) => (
+                    <div
+                      key={h.title}
+                      className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 text-xs"
+                    >
+                      <span className="font-semibold text-[#f2f1ec] block mb-1">{h.title}</span>
+                      <span className="text-[#89919d] leading-relaxed">{h.description}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action Footer */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-white/[0.08]">
+              <Link
+                href={`/work/${inspectingProject.slug}`}
+                onClick={() => {
+                  sound.playClick();
+                  setInspectingProject(null);
+                }}
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#FDFDFD] text-[#090b0f] font-mono-code text-xs font-semibold px-6 py-3 hover:bg-[#a9ddf0] transition-colors shadow-lg cursor-pointer"
+              >
+                <span>Read Full Case Study</span>
+                <ArrowUpRight size={14} />
+              </Link>
+
+              {inspectingProject.prototypeUrl && (
+                <a
+                  href={inspectingProject.prototypeUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-5 py-3 font-mono-code text-xs text-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-colors"
+                >
+                  <span>Live Prototype</span>
+                  <ArrowUpRight size={14} />
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+      </MorphingDialog>
     </main>
   );
 }

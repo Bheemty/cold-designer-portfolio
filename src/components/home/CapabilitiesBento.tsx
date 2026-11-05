@@ -4,6 +4,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Compass, Layers, Sparkles, Code2, ArrowUpRight, Check } from "lucide-react";
 import { sound } from "@/lib/sounds";
+import BlurTextReveal from "@/components/motion/BlurTextReveal";
+import GlowCard from "@/components/ui/GlowCard";
 
 const CAPABILITIES = [
   {
@@ -119,13 +121,11 @@ export default function CapabilitiesBento() {
 
         {/* Section Title */}
         <div className="mb-20 max-w-3xl">
-          <h2 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.08]">
-            Architecture, systems, and{" "}
-            <span className="font-editorial-italic font-normal text-[#a9ddf0]">
-              tactile execution
-            </span>
-            .
-          </h2>
+          <BlurTextReveal
+            as="h2"
+            text="Architecture, systems, and tactile execution."
+            className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.08]"
+          />
         </div>
 
         {/* Interactive Capability Exhibition */}
@@ -143,13 +143,33 @@ export default function CapabilitiesBento() {
                     setSelectedIdx(idx);
                   }}
                   onMouseEnter={() => sound.playHover()}
-                  className={`w-full text-left p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex items-center justify-between ${
+                  onPointerMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    e.currentTarget.style.setProperty("--glow-x", `${e.clientX - rect.left}px`);
+                    e.currentTarget.style.setProperty("--glow-y", `${e.clientY - rect.top}px`);
+                    e.currentTarget.style.setProperty("--glow-opacity", "1");
+                  }}
+                  onPointerLeave={(e) => {
+                    e.currentTarget.style.setProperty("--glow-opacity", "0");
+                  }}
+                  className={`relative w-full text-left p-6 sm:p-7 rounded-2xl border transition-all duration-300 flex items-center justify-between overflow-hidden cursor-pointer ${
                     isSelected
                       ? "border-[#a9ddf0] bg-[#161a23] shadow-lg shadow-[#a9ddf0]/10"
                       : "border-white/[0.08] bg-[#11141b]/60 hover:border-white/20 hover:bg-[#11141b]"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  {/* Ambient Proximity Glow Beam */}
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-0 transition-opacity duration-300"
+                    style={{
+                      opacity: "var(--glow-opacity, 0)",
+                      background:
+                        "radial-gradient(280px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(169, 221, 240, 0.15), transparent 70%)",
+                    }}
+                  />
+
+                  <div className="relative z-10 flex items-center gap-4">
                     <div
                       className={`p-2.5 rounded-xl border transition-colors ${
                         isSelected
@@ -174,7 +194,7 @@ export default function CapabilitiesBento() {
                   </div>
 
                   <span
-                    className={`h-2.5 w-2.5 rounded-full transition-all shrink-0 ml-2 ${
+                    className={`relative z-10 h-2.5 w-2.5 rounded-full transition-all shrink-0 ml-2 ${
                       isSelected ? "bg-[#a9ddf0] scale-125" : "bg-white/10"
                     }`}
                   />
@@ -185,7 +205,7 @@ export default function CapabilitiesBento() {
 
           {/* Right Column: Detailed Capability Pavilion */}
           <div className="lg:col-span-7">
-            <div className="rounded-3xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+            <GlowCard className="p-8 sm:p-12 shadow-2xl relative overflow-hidden rounded-3xl" glowColor="rgba(169, 221, 240, 0.12)">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={active.id}
@@ -307,7 +327,7 @@ export default function CapabilitiesBento() {
                   </div>
                 </motion.div>
               </AnimatePresence>
-            </div>
+            </GlowCard>
           </div>
         </div>
       </div>

@@ -6,6 +6,9 @@ import Image from "next/image";
 import { BookOpen } from "lucide-react";
 import { sound } from "@/lib/sounds";
 import ScrollReveal from "@/components/motion/ScrollReveal";
+import BlurTextReveal from "@/components/motion/BlurTextReveal";
+import GlowCard from "@/components/ui/GlowCard";
+import MagneticButton from "@/components/ui/MagneticButton";
 
 const VERIFIED_ENGAGEMENTS = [
   {
@@ -100,9 +103,11 @@ export default function AboutPage() {
             </span>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-            Taye Abolarin.
-          </h1>
+          <BlurTextReveal
+            as="h1"
+            text="Taye Abolarin."
+            className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6"
+          />
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
             UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Focused on creating structured, intuitive digital products across conversational healthcare gateways, regional transit platforms, and interactive web systems.
@@ -336,9 +341,10 @@ export default function AboutPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {TOOLKIT.map((t) => (
-                    <div
+                    <GlowCard
                       key={t.category}
-                      className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 shadow-md"
+                      className="p-6 shadow-md"
+                      glowColor="rgba(169, 221, 240, 0.12)"
                     >
                       <h3 className="font-mono-code text-xs font-semibold text-[#a9ddf0] uppercase tracking-wider mb-4">
                         {t.category}
@@ -351,7 +357,7 @@ export default function AboutPage() {
                           </li>
                         ))}
                       </ul>
-                    </div>
+                    </GlowCard>
                   ))}
                 </div>
               </section>
@@ -407,26 +413,28 @@ export default function AboutPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:w-auto shrink-0">
-              <a
-                href="mailto:abolarintaye20@gmail.com"
-                onClick={() => sound.playClick()}
-                className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
-              >
-                <span>abolarintaye20@gmail.com</span>
-                <svg
-                  viewBox="0 0 24 24"
-                  width="14"
-                  height="14"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
+              <MagneticButton maxDistance={10} strength={0.25}>
+                <a
+                  href="mailto:abolarintaye20@gmail.com"
+                  onClick={() => sound.playClick()}
+                  className="inline-flex items-center justify-center gap-2.5 rounded-full bg-[#FDFDFD] text-[#090b0f] px-6 py-3.5 font-semibold hover:bg-[#a9ddf0] transition-colors whitespace-nowrap cursor-pointer shadow-lg"
                 >
-                  <path d="M7 17L17 7M17 7H7M17 7V17" />
-                </svg>
-              </a>
+                  <span>abolarintaye20@gmail.com</span>
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
+                </a>
+              </MagneticButton>
 
               <Link
                 href="/contact"

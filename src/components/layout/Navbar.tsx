@@ -119,6 +119,10 @@ export default function Navbar() {
     <>
       <nav
         className={`kokil-nav ${isScrolled ? "is-scrolled" : ""}`}
+        style={{
+          backdropFilter: "url(#cold-glass-filter-pill) blur(24px) saturate(190%) contrast(106%)",
+          WebkitBackdropFilter: "blur(24px) saturate(190%) contrast(106%)",
+        }}
         aria-label="Main Navigation"
         onMouseMove={(e: React.MouseEvent<HTMLElement>) => {
           const rect = e.currentTarget.getBoundingClientRect();

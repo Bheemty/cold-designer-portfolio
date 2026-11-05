@@ -219,8 +219,10 @@ export default function AskColdPanel({
       data-lenis-prevent
       onWheel={(e) => e.stopPropagation()}
       onTouchMove={(e) => e.stopPropagation()}
-      className="ask-cold-glass-panel fixed bottom-20 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] max-h-[82vh] h-[640px] rounded-3xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300 backdrop-blur-2xl"
+      className="ask-cold-glass-panel fixed bottom-20 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] max-h-[82vh] h-[640px] rounded-3xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300"
       style={{
+        backdropFilter: "url(#cold-glass-filter-card) blur(24px) saturate(185%) contrast(105%)",
+        WebkitBackdropFilter: "blur(24px) saturate(185%) contrast(105%)",
         transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
         transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         overscrollBehavior: "contain",

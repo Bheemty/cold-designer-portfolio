@@ -5,6 +5,10 @@ import { Mail, Check, Copy, ArrowUpRight, Sparkles, Send } from "lucide-react";
 import confetti from "canvas-confetti";
 import { sound } from "@/lib/sounds";
 import ScrollReveal from "@/components/motion/ScrollReveal";
+import BlurTextReveal from "@/components/motion/BlurTextReveal";
+import CobeGlobe from "@/components/ui/CobeGlobe";
+import MagneticButton from "@/components/ui/MagneticButton";
+import GlowCard from "@/components/ui/GlowCard";
 
 const SCOPES = [
   "Conversational UX & Healthtech",
@@ -74,9 +78,11 @@ export default function ContactPage() {
             </span>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-            Start a Conversation.
-          </h1>
+          <BlurTextReveal
+            as="h1"
+            text="Start a Conversation."
+            className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6"
+          />
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
             Open for thoughtful product discussions, design systems architecture, and professional dialogue.
@@ -86,6 +92,20 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           {/* Left Column: Direct Coordinates */}
           <ScrollReveal start="top 85%" y={20} duration={0.45} className="lg:col-span-5 space-y-8 font-mono-code text-xs">
+            {/* Interactive WebGL Studio Dot-Matrix Globe */}
+            <GlowCard className="p-6 flex flex-col items-center justify-center shadow-lg" glowColor="rgba(169, 221, 240, 0.12)">
+              <div className="w-full flex items-center justify-between border-b border-white/[0.08] pb-3 mb-2 font-mono-code text-[11px] text-[#89919d]">
+                <div className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0] animate-pulse" />
+                  <span className="text-[#a9ddf0] uppercase tracking-wider font-semibold">
+                    Studio Base // Nigeria
+                  </span>
+                </div>
+                <span>WAT (UTC+1)</span>
+              </div>
+              <CobeGlobe />
+            </GlowCard>
+
             {/* Direct Email Card */}
             <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 space-y-4">
               <span className="text-[#89919d] uppercase block">DIRECT EMAIL</span>
@@ -300,13 +320,17 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#f2f1ec] py-4 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors"
-                  >
-                    <Send size={14} />
-                    <span>Send Project Inquiry</span>
-                  </button>
+                  <div className="w-full flex justify-center">
+                    <MagneticButton maxDistance={10} strength={0.3} className="w-full">
+                      <button
+                        type="submit"
+                        className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#f2f1ec] py-4 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors cursor-pointer shadow-lg"
+                      >
+                        <Send size={14} />
+                        <span>Send Project Inquiry</span>
+                      </button>
+                    </MagneticButton>
+                  </div>
                 </form>
               )}
             </div>

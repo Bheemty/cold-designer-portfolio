@@ -50,9 +50,9 @@ export default function HeroKokil() {
   const heroRef = useRef<HTMLElement>(null);
   const dotsGroupRef = useRef<SVGGElement>(null);
 
-  // Initialize revealed state strictly from session (only true if completed on an earlier visit in this session)
-  const [isRevealed, setIsRevealed] = useState(() => getHeroRevealedState());
-  const [hintHidden, setHintHidden] = useState(() => getHeroRevealedState());
+  // Initialize revealed state as false for SSR consistency; restored on client mount in useEffect
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [hintHidden, setHintHidden] = useState(false);
   const hasCompletedRef = useRef(false);
 
   // Erased cells tracker for measuring genuine physical surface coverage
@@ -145,6 +145,18 @@ export default function HeroKokil() {
       });
     }
 
+    function getEyeMidpoint() {
+      if (eyeCenters.length === 0) {
+        return { mx: window.innerWidth / 2, my: window.innerHeight / 2 };
+      }
+      const sumX = eyeCenters.reduce((acc, c) => acc + c.cx, 0);
+      const sumY = eyeCenters.reduce((acc, c) => acc + c.cy, 0);
+      return {
+        mx: sumX / eyeCenters.length,
+        my: sumY / eyeCenters.length,
+      };
+    }
+
     updateEyeCenters();
     window.addEventListener("resize", updateEyeCenters, { passive: true });
 
@@ -152,23 +164,62 @@ export default function HeroKokil() {
     let pendingPointerY = -1000;
     let eyeRaf = 0;
 
+    // Mobile tap-directed gaze offsets (relative to center -50%, -50%)
+    const currentOx = [0, 0];
+    const currentOy = [0, 0];
+    const targetOx = [0, 0];
+    const targetOy = [0, 0];
+    let hasActiveMobileGaze = false;
+    let mobileRestTimer: number | null = null;
+
     function renderEyes() {
       if (!isHeroVisible || eyeCenters.length === 0) {
         eyeRaf = requestAnimationFrame(renderEyes);
         return;
       }
 
-      pupilEls.forEach((pupil, idx) => {
-        if (!pupil || !eyeCenters[idx]) return;
-        const { cx, cy } = eyeCenters[idx];
-        const dx = pendingPointerX - cx;
-        const dy = pendingPointerY - cy;
-        const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
-        const angle = Math.atan2(dy, dx);
-        const ox = Math.cos(angle) * dist;
-        const oy = Math.sin(angle) * dist;
-        pupil.style.transform = `translate3d(calc(-50% + ${ox.toFixed(1)}px), calc(-50% + ${oy.toFixed(1)}px), 0)`;
-      });
+      if (isDesktop) {
+        // Desktop: Instantaneous 1:1 mouse tracking preserved exactly
+        pupilEls.forEach((pupil, idx) => {
+          if (!pupil || !eyeCenters[idx]) return;
+          const { cx, cy } = eyeCenters[idx];
+          const dx = pendingPointerX - cx;
+          const dy = pendingPointerY - cy;
+          const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
+          const angle = Math.atan2(dy, dx);
+          const ox = Math.cos(angle) * dist;
+          const oy = Math.sin(angle) * dist;
+          pupil.style.transform = `translate3d(calc(-50% + ${ox.toFixed(1)}px), calc(-50% + ${oy.toFixed(1)}px), 0)`;
+        });
+      } else {
+        // Mobile & touch: Smooth biological saccade transition (lerp) toward target tap or auto-sweep position
+        if (hasActiveMobileGaze) {
+          const LERP_FACTOR = 0.14; // ~220ms smooth natural eye motion
+          pupilEls.forEach((pupil, idx) => {
+            if (!pupil) return;
+            currentOx[idx] += (targetOx[idx] - currentOx[idx]) * LERP_FACTOR;
+            currentOy[idx] += (targetOy[idx] - currentOy[idx]) * LERP_FACTOR;
+
+            const isRestTarget = Math.abs(targetOx[idx]) < 0.01 && Math.abs(targetOy[idx]) < 0.01;
+            const isAtRest = Math.abs(currentOx[idx]) < 0.15 && Math.abs(currentOy[idx]) < 0.15;
+
+            if (isRestTarget && isAtRest) {
+              currentOx[idx] = 0;
+              currentOy[idx] = 0;
+              pupil.style.transform = `translate3d(-50%, -50%, 0)`;
+            } else {
+              pupil.style.transform = `translate3d(calc(-50% + ${currentOx[idx].toFixed(1)}px), calc(-50% + ${currentOy[idx].toFixed(1)}px), 0)`;
+            }
+          });
+        } else {
+          // Default initial resting position before any interaction
+          pupilEls.forEach((pupil) => {
+            if (pupil) {
+              pupil.style.transform = `translate3d(-50%, -50%, 0)`;
+            }
+          });
+        }
+      }
 
       eyeRaf = requestAnimationFrame(renderEyes);
     }
@@ -355,8 +406,19 @@ export default function HeroKokil() {
             if (pt) {
               addLocalDot(pt.x, pt.y, rect.width, rect.height);
               // Googly eyes follow the sweep coordinates across the surface
-              pendingPointerX = rect.left + pt.x;
-              pendingPointerY = rect.top + pt.y;
+              const ptX = rect.left + pt.x;
+              const ptY = rect.top + pt.y;
+              eyeCenters.forEach((center, idx) => {
+                const dx = ptX - center.cx;
+                const dy = ptY - center.cy;
+                const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
+                const angle = Math.atan2(dy, dx);
+                targetOx[idx] = Math.cos(angle) * dist;
+                targetOy[idx] = Math.sin(angle) * dist;
+                currentOx[idx] = targetOx[idx];
+                currentOy[idx] = targetOy[idx];
+              });
+              hasActiveMobileGaze = true;
             }
           }
 
@@ -373,6 +435,12 @@ export default function HeroKokil() {
             autoSweepCancelRef.current = null;
             lastX = null;
             lastY = null;
+
+            // Smoothly glide eyes back to resting forward gaze
+            targetOx[0] = 0;
+            targetOy[0] = 0;
+            targetOx[1] = 0;
+            targetOy[1] = 0;
           }
         }
 
@@ -400,6 +468,87 @@ export default function HeroKokil() {
       if (!savedRevealed) {
         scheduleAutoScratch();
       }
+    }
+
+    // ── MOBILE & TOUCH TAP-DIRECTED EYE MOVEMENT ──
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchStartTime = 0;
+    let isTouchScroll = false;
+
+    const onHeroTouchStart = (e: TouchEvent) => {
+      if (!isHeroVisible || e.touches.length !== 1) return;
+      const t = e.touches[0];
+      touchStartX = t.clientX;
+      touchStartY = t.clientY;
+      touchStartTime = performance.now();
+      isTouchScroll = false;
+    };
+
+    const onHeroTouchMove = (e: TouchEvent) => {
+      if (isTouchScroll || e.touches.length !== 1) return;
+      const t = e.touches[0];
+      const dist = Math.hypot(t.clientX - touchStartX, t.clientY - touchStartY);
+      if (dist > 14) {
+        // Visitor is scrolling the page, not tapping
+        isTouchScroll = true;
+      }
+    };
+
+    const onHeroTouchEnd = (e: TouchEvent) => {
+      if (isTouchScroll || !isHeroVisible) return;
+      const duration = performance.now() - touchStartTime;
+      if (duration > 500) return; // Touch held too long for an intentional tap
+
+      // Respect hide button & interactive UI controls
+      const targetEl = e.target as HTMLElement | null;
+      if (targetEl?.closest(".hero-hide-btn, .scratch-btn, button, a")) return;
+
+      const touch = e.changedTouches[0];
+      const tapX = touch && touch.clientX !== undefined ? touch.clientX : touchStartX;
+      const tapY = touch && touch.clientY !== undefined ? touch.clientY : touchStartY;
+
+      // Verify tap is within the hero interactive section bounds
+      const heroRect = heroEl.getBoundingClientRect();
+      if (
+        tapX < heroRect.left ||
+        tapX > heroRect.right ||
+        tapY < heroRect.top ||
+        tapY > heroRect.bottom
+      ) {
+        return;
+      }
+
+      // Clear any pending resting gaze timer
+      if (mobileRestTimer) {
+        window.clearTimeout(mobileRestTimer);
+        mobileRestTimer = null;
+      }
+
+      // Calculate per-pupil target offsets towards tap position
+      eyeCenters.forEach((center, idx) => {
+        const dx = tapX - center.cx;
+        const dy = tapY - center.cy;
+        const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
+        const angle = Math.atan2(dy, dx);
+        targetOx[idx] = Math.cos(angle) * dist;
+        targetOy[idx] = Math.sin(angle) * dist;
+      });
+      hasActiveMobileGaze = true;
+
+      // After ~2.7s of inactivity without another touch, smoothly return eyes forward to resting gaze
+      mobileRestTimer = window.setTimeout(() => {
+        targetOx[0] = 0;
+        targetOy[0] = 0;
+        targetOx[1] = 0;
+        targetOy[1] = 0;
+      }, 2700);
+    };
+
+    if (!isDesktop) {
+      heroEl.addEventListener("touchstart", onHeroTouchStart, { passive: true });
+      heroEl.addEventListener("touchmove", onHeroTouchMove, { passive: true });
+      heroEl.addEventListener("touchend", onHeroTouchEnd, { passive: true });
     }
 
     const handleThemeChange = () => {
@@ -431,6 +580,11 @@ export default function HeroKokil() {
       window.removeEventListener("cold-designer-theme-change", handleThemeChange);
       clearInterval(blinkInterval);
 
+      if (mobileRestTimer) {
+        window.clearTimeout(mobileRestTimer);
+        mobileRestTimer = null;
+      }
+
       if (autoSweepCancelRef.current) {
         autoSweepCancelRef.current();
         autoSweepCancelRef.current = null;
@@ -442,6 +596,10 @@ export default function HeroKokil() {
         if (onDesktopPointerDown) heroEl.removeEventListener("pointerdown", onDesktopPointerDown);
         if (onDesktopPointerLeave) heroEl.removeEventListener("pointerleave", onDesktopPointerLeave);
         window.removeEventListener("mousemove", handleMouseMove);
+      } else {
+        heroEl.removeEventListener("touchstart", onHeroTouchStart);
+        heroEl.removeEventListener("touchmove", onHeroTouchMove);
+        heroEl.removeEventListener("touchend", onHeroTouchEnd);
       }
     };
   }, []);

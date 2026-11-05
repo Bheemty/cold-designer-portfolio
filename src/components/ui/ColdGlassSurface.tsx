@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef } from "react";
+import { STATIC_PILL_NORMAL_MAP, STATIC_CARD_NORMAL_MAP } from "./cold-glass-maps";
 
 export type GlassShape = "pill" | "card" | "circle";
 export type GlassElevation = "nav" | "panel" | "chip" | "subtle";
@@ -16,115 +17,8 @@ export interface ColdGlassSurfaceProps extends React.HTMLAttributes<HTMLElement>
   children?: React.ReactNode;
 }
 
-// ── SDF NORMAL MAP GENERATOR (SNELL'S LAW MENISCUS OPTICS) ──
-function createSdfNormalMap(width: number, height: number, radius: number, rimWidth: number): string {
-  if (typeof document === "undefined") return "";
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
-
-  const imgData = ctx.createImageData(width, height);
-  const data = imgData.data;
-  const r = Math.min(radius, width / 2, height / 2);
-
-  for (let y = 0; y < height; y++) {
-    for (let x = 0; x < width; x++) {
-      const idx = (y * width + x) * 4;
-
-      const cx = x < r ? r : x > width - r ? width - r : x;
-      const cy = y < r ? r : y > height - r ? height - r : y;
-
-      const dx = x - cx;
-      const dy = y - cy;
-      const cornerDist = Math.sqrt(dx * dx + dy * dy);
-
-      let distToEdge = 0;
-      let nx = 0;
-      let ny = 0;
-
-      if (x < r || x > width - r || y < r || y > height - r) {
-        distToEdge = r - cornerDist;
-        if (cornerDist > 0.001) {
-          nx = -dx / cornerDist;
-          ny = -dy / cornerDist;
-        }
-      } else {
-        const distLeft = x;
-        const distRight = width - x;
-        const distTop = y;
-        const distBottom = height - y;
-        distToEdge = Math.min(distLeft, distRight, distTop, distBottom);
-
-        if (distToEdge === distLeft) {
-          nx = 1;
-          ny = 0;
-        } else if (distToEdge === distRight) {
-          nx = -1;
-          ny = 0;
-        } else if (distToEdge === distTop) {
-          nx = 0;
-          ny = 1;
-        } else {
-          nx = 0;
-          ny = -1;
-        }
-      }
-
-      if (distToEdge < 0) {
-        data[idx] = 128;
-        data[idx + 1] = 128;
-        data[idx + 2] = 128;
-        data[idx + 3] = 0;
-        continue;
-      }
-
-      if (distToEdge < rimWidth) {
-        const t = distToEdge / rimWidth;
-        const strengthVal = Math.sin((1 - t) * (Math.PI / 2));
-        const red = Math.round(128 + nx * strengthVal * 127);
-        const green = Math.round(128 + ny * strengthVal * 127);
-
-        data[idx] = Math.max(0, Math.min(255, red));
-        data[idx + 1] = Math.max(0, Math.min(255, green));
-        data[idx + 2] = 128;
-        data[idx + 3] = 255;
-      } else {
-        // Flat center: ZERO displacement, 100% clarity
-        data[idx] = 128;
-        data[idx + 1] = 128;
-        data[idx + 2] = 128;
-        data[idx + 3] = 255;
-      }
-    }
-  }
-
-  ctx.putImageData(imgData, 0, 0);
-  return canvas.toDataURL("image/png");
-}
-
-let globalFilterMounted = false;
-
-// ── GLOBAL SVG FILTER DEFINITION MOUNT ──
+// ── GLOBAL SVG FILTER DEFINITION MOUNT (SYNCHRONOUS STATIC SSR + HYDRATION) ──
 export function ColdGlassFilterDefs() {
-  const [mounted, setMounted] = useState(false);
-  const [pillMapUri, setPillMapUri] = useState("");
-  const [cardMapUri, setCardMapUri] = useState("");
-
-  useEffect(() => {
-    if (typeof window !== "undefined" && !globalFilterMounted) {
-      globalFilterMounted = true;
-      const pill = createSdfNormalMap(256, 64, 32, 22);
-      const card = createSdfNormalMap(256, 256, 28, 22);
-      setPillMapUri(pill);
-      setCardMapUri(card);
-      setMounted(true);
-    }
-  }, []);
-
-  if (!mounted || !pillMapUri) return null;
-
   return (
     <svg
       className="fixed top-0 left-0 w-0 h-0 pointer-events-none opacity-0 select-none"
@@ -140,8 +34,20 @@ export function ColdGlassFilterDefs() {
           height="140%"
           colorInterpolationFilters="sRGB"
         >
-          <feImage href={pillMapUri} result="pillMap" preserveAspectRatio="none" width="100%" height="100%" />
-          <feDisplacementMap in="SourceGraphic" in2="pillMap" scale="22" xChannelSelector="R" yChannelSelector="G" />
+          <feImage
+            href={STATIC_PILL_NORMAL_MAP}
+            result="pillMap"
+            preserveAspectRatio="none"
+            width="100%"
+            height="100%"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="pillMap"
+            scale="22"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
         </filter>
 
         <filter
@@ -152,8 +58,20 @@ export function ColdGlassFilterDefs() {
           height="140%"
           colorInterpolationFilters="sRGB"
         >
-          <feImage href={cardMapUri} result="cardMap" preserveAspectRatio="none" width="100%" height="100%" />
-          <feDisplacementMap in="SourceGraphic" in2="cardMap" scale="22" xChannelSelector="R" yChannelSelector="G" />
+          <feImage
+            href={STATIC_CARD_NORMAL_MAP}
+            result="cardMap"
+            preserveAspectRatio="none"
+            width="100%"
+            height="100%"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="cardMap"
+            scale="22"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
         </filter>
       </defs>
     </svg>
@@ -181,17 +99,6 @@ export const ColdGlassSurface = React.forwardRef<HTMLElement, ColdGlassSurfacePr
     ref
   ) => {
     const surfaceRef = useRef<HTMLElement | null>(null);
-    const [isChromium, setIsChromium] = useState(false);
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-      setIsClient(true);
-      if (typeof window !== "undefined") {
-        const isChromeVendor =
-          /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-        setIsChromium(isChromeVendor);
-      }
-    }, []);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
       if (interactive) {
@@ -228,14 +135,12 @@ export const ColdGlassSurface = React.forwardRef<HTMLElement, ColdGlassSurfacePr
         : "24px";
 
     const filterUrl =
-      isChromium && isClient
-        ? shape === "pill"
-          ? "url(#cold-glass-filter-pill)"
-          : "url(#cold-glass-filter-card)"
-        : "";
+      shape === "pill"
+        ? "url(#cold-glass-filter-pill)"
+        : "url(#cold-glass-filter-card)";
 
-    const baseBackdrop = `blur(${blur}px) saturate(160%) contrast(102%)`;
-    const backdropFilter = filterUrl ? `${filterUrl} ${baseBackdrop}` : baseBackdrop;
+    const baseBackdrop = `blur(${blur}px) saturate(190%) contrast(106%)`;
+    const backdropFilter = `${filterUrl} ${baseBackdrop}`;
 
     return (
       <Component
@@ -279,4 +184,5 @@ export const ColdGlassSurface = React.forwardRef<HTMLElement, ColdGlassSurfacePr
 );
 
 ColdGlassSurface.displayName = "ColdGlassSurface";
+
 

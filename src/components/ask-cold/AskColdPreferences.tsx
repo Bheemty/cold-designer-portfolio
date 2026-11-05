@@ -26,7 +26,11 @@ export default function AskColdPreferences({
       role="dialog"
       aria-modal="true"
       aria-labelledby="pref-modal-title"
-      className="absolute inset-0 z-50 rounded-3xl p-6 flex flex-col justify-between animate-in fade-in duration-200 bg-[var(--bg-primary,#090b0f)]/95 backdrop-blur-2xl"
+      className="ask-cold-modal-glass absolute inset-0 z-50 rounded-3xl p-6 flex flex-col justify-between animate-in fade-in duration-200 bg-[var(--bg-primary,#090b0f)]/95"
+      style={{
+        backdropFilter: "url(#cold-glass-filter-card) blur(24px) saturate(185%) contrast(105%)",
+        WebkitBackdropFilter: "blur(24px) saturate(185%) contrast(105%)",
+      }}
     >
       <div>
         {/* Header */}

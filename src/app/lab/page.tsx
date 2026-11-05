@@ -7,6 +7,10 @@ import { ArrowLeft, Volume2, VolumeX, Sparkles, Check, AlertCircle, RefreshCw } 
 import { sound } from "@/lib/sounds";
 import { useTheme } from "@/context/ThemeContext";
 import ScrollReveal from "@/components/motion/ScrollReveal";
+import BlurTextReveal from "@/components/motion/BlurTextReveal";
+import DitherVeil from "@/components/ui/DitherVeil";
+import MagneticButton from "@/components/ui/MagneticButton";
+import MorphingDialog from "@/components/ui/MorphingDialog";
 
 export default function LabPage() {
   // ─────────────────────────────────────────────────────────────
@@ -17,6 +21,16 @@ export default function LabPage() {
 
   // Global Audio Feedback Toggle (Never autoplays; user must interact)
   const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Quick-Look Experiment Inspector State
+  const [inspectingExperiment, setInspectingExperiment] = useState<{
+    id: string;
+    title: string;
+    category: string;
+    description: string;
+    specifications: { label: string; value: string }[];
+    architecturalNotes: string[];
+  } | null>(null);
 
   // ─────────────────────────────────────────────────────────────
   // EXPERIMENT 1: THE INTERACTION STUDIO STATE
@@ -169,7 +183,9 @@ export default function LabPage() {
   const currentTheme = themeStyles[activeTheme];
 
   return (
-    <main className="min-h-screen pt-32 sm:pt-40 pb-28 px-6 sm:px-10 lg:px-16 bg-[#090b0f] text-[#f2f1ec]">
+    <main className="relative min-h-screen pt-32 sm:pt-40 pb-28 px-6 sm:px-10 lg:px-16 bg-[#090b0f] text-[#f2f1ec] overflow-hidden">
+      {/* 1-Bit Algorithmic Bayer Matrix Dither Texture Atmosphere */}
+      <DitherVeil opacity={0.06} />
       <div className="mx-auto max-w-[1440px]">
         {/* Navigation Breadcrumb */}
         <div className="mb-10">
@@ -194,16 +210,17 @@ export default function LabPage() {
             </div>
 
             {/* Global Audio Toggle */}
-            <button
-              type="button"
-              onClick={() => {
-                const next = !soundEnabled;
-                setSoundEnabled(next);
-                if (next) sound.playChime(660, 0.2);
-              }}
-              className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-1.5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] transition-colors cursor-pointer"
-              aria-label={soundEnabled ? "Mute interactive audio feedback" : "Enable interactive audio feedback"}
-            >
+            <MagneticButton maxDistance={8} strength={0.25}>
+              <button
+                type="button"
+                onClick={() => {
+                  const next = !soundEnabled;
+                  setSoundEnabled(next);
+                  if (next) sound.playChime(660, 0.2);
+                }}
+                className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-1.5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] transition-colors cursor-pointer"
+                aria-label={soundEnabled ? "Mute interactive audio feedback" : "Enable interactive audio feedback"}
+              >
               {soundEnabled ? (
                 <>
                   <Volume2 size={13} className="text-[#a9ddf0]" />
@@ -215,12 +232,15 @@ export default function LabPage() {
                   <span>Audio Muted</span>
                 </>
               )}
-            </button>
+              </button>
+            </MagneticButton>
           </div>
 
-          <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
-            The Lab
-          </h1>
+          <BlurTextReveal
+            as="h1"
+            text="The Lab"
+            className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6"
+          />
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
             A living workspace exploring interactive design experiments, state lifecycles, adaptive themes, density ergonomics, and typographic hierarchy. Every experiment below is an interactive artifact designed to be experienced directly.
@@ -1441,6 +1461,52 @@ export default function LabPage() {
         </section>
       </ScrollReveal>
     </div>
+
+      {/* Morphing Dialog / FLIP Experiment Parameter Inspector */}
+      <MorphingDialog
+        isOpen={inspectingExperiment !== null}
+        onClose={() => setInspectingExperiment(null)}
+        title={inspectingExperiment?.title}
+        category={inspectingExperiment?.category}
+        maxWidth="2xl"
+      >
+        {inspectingExperiment && (
+          <div className="space-y-6">
+            <div>
+              <p className="text-sm text-[#89919d] font-light leading-relaxed">
+                {inspectingExperiment.description}
+              </p>
+            </div>
+
+            {/* Parameter Ledger */}
+            <div className="rounded-2xl bg-[#090b0f] border border-white/[0.08] p-5 font-mono-code text-xs space-y-3">
+              <span className="text-[#a9ddf0] text-[10px] uppercase font-semibold block tracking-wider">
+                Technical Specifications &amp; Parameters:
+              </span>
+              {inspectingExperiment.specifications.map((spec) => (
+                <div key={spec.label} className="flex justify-between border-b border-white/[0.06] pb-2 last:border-b-0 last:pb-0">
+                  <span className="text-[#89919d]">{spec.label}:</span>
+                  <span className="text-[#f2f1ec] font-semibold text-right max-w-[65%]">{spec.value}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Architectural Notes */}
+            <div className="space-y-2.5">
+              <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block font-semibold">
+                Architectural Rationale &amp; Ergonomics:
+              </span>
+              <div className="space-y-2">
+                {inspectingExperiment.architecturalNotes.map((note, idx) => (
+                  <div key={idx} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 text-xs text-[#89919d] leading-relaxed">
+                    {note}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </MorphingDialog>
     </main>
   );
 }

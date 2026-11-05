@@ -160,12 +160,12 @@ export default function AskCold() {
       setIsLoading(true);
 
       // Attempt AI backend call first; fallback gracefully to local retrieval if quota / key missing
-      try {
-        const historyForApi = messages.slice(-6).map((m) => ({
-          role: m.sender === "user" ? "user" : "model",
-          text: m.text,
-        }));
+      const historyForApi = messages.slice(-6).map((m) => ({
+        role: m.sender === "user" ? "user" : "model",
+        text: m.text,
+      }));
 
+      try {
         const res = await fetch("/api/ask-cold", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -200,7 +200,7 @@ export default function AskCold() {
 
       // Local Grounded Mock Response Fallback
       setTimeout(() => {
-        const local = generateLocalMockResponse(text, pathname || "/");
+        const local = generateLocalMockResponse(text, pathname || "/", historyForApi);
         const assistantMsg: ChatMessage = {
           id: `assistant-${Date.now()}`,
           sender: "assistant",
