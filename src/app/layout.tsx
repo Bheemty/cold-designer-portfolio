@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import AskCold from "@/components/ask-cold/AskCold";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ColdGlassFilterDefs } from "@/components/ui/ColdGlassSurface";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -129,6 +130,7 @@ export default function RootLayout({
             <AskCold />
           </SmoothScroll>
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   );
