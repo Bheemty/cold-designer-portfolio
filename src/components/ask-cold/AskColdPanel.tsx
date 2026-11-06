@@ -19,7 +19,7 @@ import {
   AlertCircle,
   Square,
 } from "lucide-react";
-import AskColdMessage, { ChatMessage, MessageActionChip } from "./AskColdMessage";
+import AskColdMessage, { ChatMessage, MessageActionChip, isInternalWebsiteLink } from "./AskColdMessage";
 import {
   isSpeechRecognitionSupported,
   BrowserSpeechRecognizer,
@@ -63,6 +63,7 @@ export default function AskColdPanel({
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const recognizerRef = useRef<BrowserSpeechRecognizer | null>(null);
+  const navigatingInternalRef = useRef(false);
 
   // Auto-expand textarea height as visitor types, clamping at maxHeight (120px)
   useEffect(() => {
@@ -199,7 +200,13 @@ export default function AskColdPanel({
       document.body.style.width = prevStyles.width;
       document.body.style.overflow = prevStyles.overflow;
 
-      window.scrollTo(0, scrollY);
+      // Only restore previous scroll position if closing normally;
+      // when navigating to an internal page or section, preserve destination scroll
+      if (!navigatingInternalRef.current) {
+        window.scrollTo(0, scrollY);
+      }
+      navigatingInternalRef.current = false;
+
       if (lenis?.start) {
         lenis.start();
       }
@@ -357,9 +364,72 @@ export default function AskColdPanel({
     }
   };
 
+  const handleInternalNavigate = (href: string, e?: React.MouseEvent) => {
+    if (!isInternalWebsiteLink(href)) return;
+
+    navigatingInternalRef.current = true;
+    sound.playClick();
+
+    try {
+      const origin = typeof window !== "undefined" ? window.location.origin : "http://localhost";
+      const currentUrl = typeof window !== "undefined" ? new URL(window.location.href) : null;
+      const targetUrl = new URL(href, origin);
+
+      const isSamePage = currentUrl && targetUrl.pathname === currentUrl.pathname;
+      const targetHash = targetUrl.hash;
+
+      if (isSamePage && targetHash) {
+        // Same-page anchor navigation (e.g. #contact or /#contact)
+        e?.preventDefault();
+        onClose();
+
+        setTimeout(() => {
+          const element = document.querySelector(targetHash);
+          if (element) {
+            const lenis = (window as unknown as { __lenis?: { scrollTo: (target: Element | string, opts?: { offset?: number }) => void } }).__lenis;
+            if (lenis?.scrollTo) {
+              lenis.scrollTo(element, { offset: -80 });
+            } else {
+              element.scrollIntoView({ behavior: "smooth" });
+            }
+            try {
+              window.history.pushState(null, "", href);
+            } catch {}
+          }
+        }, 80);
+        return;
+      }
+
+      if (isSamePage && !targetHash) {
+        // Same-page click without hash -> close and scroll to top
+        e?.preventDefault();
+        onClose();
+        setTimeout(() => {
+          const lenis = (window as unknown as { __lenis?: { scrollTo: (t: number) => void } }).__lenis;
+          if (lenis?.scrollTo) {
+            lenis.scrollTo(0);
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+        }, 80);
+        return;
+      }
+    } catch {
+      // Fallback on URL parse error
+    }
+
+    // Different internal route (e.g. /about, /work, /work/spot, /contact, /lab)
+    // Close Ask Cold so the destination page is immediately visible
+    onClose();
+  };
+
   const handleActionClick = (chip: MessageActionChip) => {
     if (chip.action === "enquiry") {
       onOpenEnquiry();
+      return;
+    }
+    if (chip.href && isInternalWebsiteLink(chip.href)) {
+      handleInternalNavigate(chip.href);
     }
   };
 
@@ -593,6 +663,7 @@ export default function AskColdPanel({
             key={m.id}
             message={m}
             onActionClick={handleActionClick}
+            onInternalNavigate={handleInternalNavigate}
             speakingMessageId={speakingMessageId}
             setSpeakingMessageId={setSpeakingMessageId}
           />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname } from "next/navigation";
 import AskColdLauncher from "./AskColdLauncher";
 import AskColdPanel from "./AskColdPanel";
@@ -36,6 +36,17 @@ export default function AskCold() {
       document.documentElement.removeAttribute("data-ask-cold-open");
     };
   }, [isOpen]);
+
+  // Auto-close Ask Cold on route changes so destination page is immediately visible
+  const prevPathnameRef = useRef(pathname);
+  useEffect(() => {
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      if (isOpen) {
+        setIsOpen(false);
+      }
+    }
+  }, [pathname, isOpen]);
 
   // Position coordinator: dynamically lift launcher & panel above "Back to Top" whenever it is visible in the viewport
   useEffect(() => {

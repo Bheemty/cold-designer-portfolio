@@ -12,6 +12,20 @@ export interface MessageActionChip {
   action?: "enquiry" | "resume" | "link";
 }
 
+/**
+ * Checks whether an href represents an internal website navigation route or in-page anchor
+ */
+export function isInternalWebsiteLink(href?: string): boolean {
+  if (!href) return false;
+  if (/^(https?:)?\/\//i.test(href) || href.startsWith("mailto:") || href.startsWith("tel:")) {
+    return false;
+  }
+  if (/\.(pdf|zip|png|jpe?g|svg)$/i.test(href)) {
+    return false;
+  }
+  return href.startsWith("/") || href.startsWith("#");
+}
+
 export interface ChatMessage {
   id: string;
   sender: "user" | "assistant";
@@ -24,6 +38,7 @@ export interface ChatMessage {
 interface AskColdMessageProps {
   message: ChatMessage;
   onActionClick?: (chip: MessageActionChip) => void;
+  onInternalNavigate?: (href: string, e?: React.MouseEvent) => void;
   speakingMessageId: string | null;
   setSpeakingMessageId: (id: string | null) => void;
 }
@@ -31,7 +46,10 @@ interface AskColdMessageProps {
 /**
  * Format markdown text: bold, code, bullet lists, and links
  */
-function renderFormattedText(text: string) {
+function renderFormattedText(
+  text: string,
+  onInternalNavigate?: (href: string, e?: React.MouseEvent) => void
+) {
   // Split into lines for list processing
   const lines = text.split("\n");
 
@@ -52,14 +70,17 @@ function renderFormattedText(text: string) {
       }
       const label = match[1];
       const href = match[2];
-      const isInternal = href.startsWith("/");
+      const isInternal = isInternalWebsiteLink(href);
 
       if (isInternal) {
         parts.push(
           <Link
             key={`link-${lineIdx}-${match.index}`}
             href={href}
-            onClick={() => sound.playClick()}
+            onClick={(e) => {
+              sound.playClick();
+              onInternalNavigate?.(href, e);
+            }}
             className="text-[var(--accent,#a9ddf0)] underline underline-offset-2 hover:opacity-80 transition-opacity font-medium"
           >
             {label}
@@ -146,6 +167,7 @@ function renderInlineText(text: string, keyPrefix: string): React.ReactNode[] {
 export default function AskColdMessage({
   message,
   onActionClick,
+  onInternalNavigate,
   speakingMessageId,
   setSpeakingMessageId,
 }: AskColdMessageProps) {
@@ -205,7 +227,7 @@ export default function AskColdMessage({
         )}
 
         {/* Message Content */}
-        <div className="break-words">{renderFormattedText(message.text)}</div>
+        <div className="break-words">{renderFormattedText(message.text, onInternalNavigate)}</div>
 
         {/* Timestamp */}
         <div
@@ -222,12 +244,16 @@ export default function AskColdMessage({
         <div className="flex flex-wrap gap-1.5 mt-2 max-w-[85%] sm:max-w-[80%] font-mono-code text-xs">
           {message.actionChips.map((chip, idx) => {
             if (chip.href) {
+              const isInternal = isInternalWebsiteLink(chip.href);
               return (
                 <Link
                   key={`chip-${idx}`}
                   href={chip.href}
-                  onClick={() => {
+                  onClick={(e) => {
                     sound.playClick();
+                    if (isInternal) {
+                      onInternalNavigate?.(chip.href!, e);
+                    }
                     onActionClick?.(chip);
                   }}
                   className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 bg-white/[0.04] hover:bg-[var(--accent,#a9ddf0)]/15 border border-white/[0.1] hover:border-[var(--accent,#a9ddf0)] text-[var(--text-secondary,#89919d)] hover:text-[var(--accent,#a9ddf0)] transition-all cursor-pointer text-[11px]"
