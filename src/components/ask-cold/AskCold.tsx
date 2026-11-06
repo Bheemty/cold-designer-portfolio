@@ -25,6 +25,18 @@ export default function AskCold() {
   const [quotaExhausted, setQuotaExhausted] = useState(false);
   // liftOffset is driven directly via CSS variable --ask-cold-lift to prevent 60-120fps React re-renders during scroll
 
+  // Coordinate data-ask-cold-open on html element for mobile navbar hiding
+  useEffect(() => {
+    if (isOpen) {
+      document.documentElement.setAttribute("data-ask-cold-open", "true");
+    } else {
+      document.documentElement.removeAttribute("data-ask-cold-open");
+    }
+    return () => {
+      document.documentElement.removeAttribute("data-ask-cold-open");
+    };
+  }, [isOpen]);
+
   // Position coordinator: dynamically lift launcher & panel above "Back to Top" whenever it is visible in the viewport
   useEffect(() => {
     let ticking = false;

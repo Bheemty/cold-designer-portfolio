@@ -117,7 +117,7 @@ export default function AskColdEnquiryModal({
       data-lenis-prevent
       onWheel={(e) => e.stopPropagation()}
       onTouchMove={(e) => e.stopPropagation()}
-      className="ask-cold-modal-glass absolute inset-0 z-50 rounded-3xl p-6 flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 bg-[var(--bg-primary,#090b0f)]/95"
+      className="ask-cold-modal-glass fixed sm:absolute inset-0 z-50 rounded-none sm:rounded-3xl p-5 sm:p-6 flex flex-col justify-between overflow-y-auto overscroll-contain animate-in fade-in duration-200 bg-[var(--bg-primary,#090b0f)]"
       style={{
         backdropFilter: "url(#cold-glass-filter-card) blur(24px) saturate(185%) contrast(105%)",
         WebkitBackdropFilter: "blur(24px) saturate(185%) contrast(105%)",

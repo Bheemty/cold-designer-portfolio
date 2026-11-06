@@ -25,6 +25,18 @@ html[data-theme="light"],
 }
 
 /* ── NAV BAR ── */
+/* When Ask Cold full-screen mobile chat is open, completely hide the website navbar */
+@media (max-width: 639px) {
+  html[data-ask-cold-open="true"] .kokil-nav,
+  html[data-ask-cold-open="true"] #mobile-nav-panel,
+  html[data-ask-cold-open="true"] .mobile-nav-backdrop {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+}
+
 /* ── APPLE-INSPIRED SUBSTANTIAL FROSTED-GLASS NAV BAR ── */
 .kokil-nav {
   position: fixed;

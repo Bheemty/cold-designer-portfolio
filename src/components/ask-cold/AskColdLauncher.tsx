@@ -18,7 +18,9 @@ export default function AskColdLauncher({
 }: AskColdLauncherProps) {
   return (
     <div
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 pointer-events-none"
+      className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 pointer-events-none ${
+        isOpen ? "hidden sm:block" : "block"
+      }`}
       style={{
         transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
         transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",

@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   X,
   Minus,
@@ -55,10 +56,155 @@ export default function AskColdPanel({
   const [isListening, setIsListening] = useState(false);
   const [interimTranscript, setInterimTranscript] = useState("");
   const [speakingMessageId, setSpeakingMessageId] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState<number | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const recognizerRef = useRef<BrowserSpeechRecognizer | null>(null);
+
+  // Auto-expand textarea height as visitor types, clamping at maxHeight (120px)
+  useEffect(() => {
+    const textarea = inputRef.current;
+    if (!textarea) return;
+    if (!inputText) {
+      textarea.style.height = "38px";
+      textarea.style.overflowY = "hidden";
+      return;
+    }
+    textarea.style.height = "auto";
+    const maxHeight = 120;
+    const scrollHeight = textarea.scrollHeight;
+    const newHeight = Math.max(38, Math.min(scrollHeight, maxHeight));
+    textarea.style.height = `${newHeight}px`;
+    textarea.style.overflowY = scrollHeight > maxHeight ? "auto" : "hidden";
+  }, [inputText]);
+
+  // Desktop outside-click listener (non-blocking, dismisses when clicking anywhere outside)
+  useEffect(() => {
+    if (!isOpen || isMobile) return;
+
+    const handlePointerDownOutside = (e: MouseEvent) => {
+      const panel = panelRef.current;
+      if (!panel) return;
+      const target = e.target as HTMLElement | null;
+      if (!target) return;
+
+      // Click is inside Ask Cold panel -> keep open
+      if (panel.contains(target)) return;
+
+      // Click is on launcher button -> let launcher handle toggle cleanly
+      if (target.closest(".ask-cold-glass-launcher")) return;
+
+      // Click is on Ask Cold submodals (e.g. Enquiry modal, Preferences modal) -> keep open
+      if (target.closest(".ask-cold-modal-glass")) return;
+
+      sound.playClick();
+      onClose();
+    };
+
+    document.addEventListener("mousedown", handlePointerDownOutside);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDownOutside);
+    };
+  }, [isOpen, isMobile, onClose]);
+
+  // Global Escape key listener to close/minimise panel
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDownGlobal = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        sound.playClick();
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDownGlobal);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDownGlobal);
+    };
+  }, [isOpen, onClose]);
+
+  // Monitor viewport size and mobile keyboard changes via visualViewport
+  useEffect(() => {
+    const handleViewport = () => {
+      const mobile = window.innerWidth < 640;
+      setIsMobile(mobile);
+      if (mobile && window.visualViewport) {
+        setViewportHeight(window.visualViewport.height);
+      } else {
+        setViewportHeight(null);
+      }
+    };
+
+    handleViewport();
+    window.addEventListener("resize", handleViewport, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleViewport);
+      window.visualViewport.addEventListener("scroll", handleViewport);
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleViewport);
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener("resize", handleViewport);
+        window.visualViewport.removeEventListener("scroll", handleViewport);
+      }
+    };
+  }, [isOpen]);
+
+  // Mobile background scroll lock: preserves exact scroll position, halts Lenis & prevents touch bleed
+  useEffect(() => {
+    if (!isOpen || !isMobile) return;
+
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    const lenis = (window as unknown as { __lenis?: { stop: () => void; start: () => void } }).__lenis;
+
+    if (lenis?.stop) {
+      lenis.stop();
+    }
+
+    const prevStyles = {
+      position: document.body.style.position,
+      top: document.body.style.top,
+      left: document.body.style.left,
+      right: document.body.style.right,
+      width: document.body.style.width,
+      overflow: document.body.style.overflow,
+    };
+
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+    document.body.style.overflow = "hidden";
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (!target?.closest("[data-chat-scrollable]")) {
+        if (e.cancelable) e.preventDefault();
+      }
+    };
+    document.addEventListener("touchmove", handleTouchMove, { passive: false });
+
+    return () => {
+      document.removeEventListener("touchmove", handleTouchMove);
+      document.body.style.position = prevStyles.position;
+      document.body.style.top = prevStyles.top;
+      document.body.style.left = prevStyles.left;
+      document.body.style.right = prevStyles.right;
+      document.body.style.width = prevStyles.width;
+      document.body.style.overflow = prevStyles.overflow;
+
+      window.scrollTo(0, scrollY);
+      if (lenis?.start) {
+        lenis.start();
+      }
+    };
+  }, [isOpen, isMobile]);
 
   // Auto-scroll to bottom of messages
   useEffect(() => {
@@ -195,10 +341,17 @@ export default function AskColdPanel({
     sound.playClick();
     onSendMessage(clean);
     setInputText("");
+    if (inputRef.current) {
+      inputRef.current.style.height = "38px";
+      inputRef.current.style.overflowY = "hidden";
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
+      if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+        return;
+      }
       e.preventDefault();
       handleFormSubmit();
     }
@@ -214,26 +367,58 @@ export default function AskColdPanel({
 
   return (
     <div
-      role="region"
-      aria-label="Ask Cold AI Representative Panel"
+      ref={panelRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Ask Cold AI Representative"
       data-lenis-prevent
-      onWheel={(e) => e.stopPropagation()}
-      onTouchMove={(e) => e.stopPropagation()}
-      className="ask-cold-glass-panel fixed bottom-20 right-4 sm:right-6 z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] max-h-[82vh] h-[640px] rounded-3xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-300"
+      className={`ask-cold-panel fixed z-50 flex flex-col transition-all duration-300 ${
+        isMobile
+          ? "inset-0 w-full rounded-none bg-[var(--bg-primary,#090b0f)] overflow-hidden"
+          : "ask-cold-glass-panel bottom-20 right-4 sm:right-6 sm:z-40 w-[calc(100vw-2rem)] sm:w-[420px] md:w-[440px] rounded-3xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] border border-white/[0.08]"
+      }`}
       style={{
-        backdropFilter: "url(#cold-glass-filter-card) blur(24px) saturate(185%) contrast(105%)",
-        WebkitBackdropFilter: "blur(24px) saturate(185%) contrast(105%)",
-        transform: "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
-        transition: "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
+        height: isMobile
+          ? viewportHeight
+            ? `${viewportHeight}px`
+            : "100dvh"
+          : "640px",
+        maxHeight: isMobile ? "100dvh" : "82vh",
+        backdropFilter: isMobile
+          ? "none"
+          : "url(#cold-glass-filter-card) blur(24px) saturate(185%) contrast(105%)",
+        WebkitBackdropFilter: isMobile
+          ? "none"
+          : "blur(24px) saturate(185%) contrast(105%)",
+        transform: isMobile
+          ? "none"
+          : "translate3d(0, calc(-1 * var(--ask-cold-lift, 0px)), 0)",
+        transition: isMobile
+          ? "none"
+          : "transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)",
         overscrollBehavior: "contain",
       }}
     >
       {/* ── PANEL HEADER ── */}
-      <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.08] shrink-0">
+      <div
+        className="flex items-center justify-between px-4 sm:px-5 py-3.5 sm:py-4 border-b border-white/[0.08] dark:border-white/[0.08] border-black/[0.08] shrink-0 touch-none"
+        style={{
+          paddingTop: isMobile ? "max(14px, env(safe-area-inset-top, 0px))" : undefined,
+        }}
+      >
         <div className="flex items-center gap-3">
-          <div className="relative flex items-center justify-center h-8 w-8 rounded-full bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-bold shrink-0">
-            <Sparkles size={16} />
-            <span className="absolute bottom-0 right-0 h-2 w-2 rounded-full bg-emerald-400 ring-2 ring-[#090b0f]" />
+          <div className="relative flex items-center justify-center shrink-0">
+            <div className="relative h-8 w-8 rounded-full overflow-hidden border border-white/[0.12] dark:border-white/[0.12] border-black/[0.1] bg-black/20">
+              <Image
+                src="/images/cold-designer-avatar.svg"
+                alt="Cold Designer Logo"
+                width={32}
+                height={32}
+                priority
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 ring-2 ring-[var(--bg-primary,#090b0f)]" />
           </div>
           <div>
             <div className="flex items-center gap-2">
@@ -251,7 +436,7 @@ export default function AskColdPanel({
         </div>
 
         {/* Controls */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <button
             type="button"
             onClick={() => {
@@ -259,28 +444,43 @@ export default function AskColdPanel({
               onOpenPreferences();
             }}
             title={persistenceEnabled ? "Memory: Saved" : "Memory: Temporary"}
-            className="p-1.5 rounded-full text-[var(--text-secondary,#89919d)] hover:text-[var(--text-primary,#f2f1ec)] hover:bg-white/[0.05] transition-colors cursor-pointer"
+            className="p-2 sm:p-1.5 rounded-full text-[var(--text-secondary,#89919d)] hover:text-[var(--text-primary,#f2f1ec)] hover:bg-white/[0.05] transition-colors cursor-pointer"
             aria-label="Conversation privacy and memory settings"
           >
-            <ShieldCheck size={16} className={persistenceEnabled ? "text-[var(--accent,#a9ddf0)]" : ""} />
+            <ShieldCheck size={18} className={persistenceEnabled ? "text-[var(--accent,#a9ddf0)]" : ""} />
           </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              sound.playClick();
-              onClose();
-            }}
-            className="p-1.5 rounded-full text-[var(--text-secondary,#89919d)] hover:text-[var(--text-primary,#f2f1ec)] hover:bg-white/[0.05] transition-colors cursor-pointer"
-            aria-label="Minimize Ask Cold panel"
-          >
-            <Minus size={16} />
-          </button>
+          {isMobile ? (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onClose();
+              }}
+              className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/[0.08] dark:bg-white/[0.08] bg-black/[0.06] text-[var(--text-primary,#f2f1ec)] active:scale-95 transition-all cursor-pointer font-mono-code text-xs font-semibold"
+              aria-label="Close Ask Cold full-screen chat"
+            >
+              <X size={15} />
+              <span>Close</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                sound.playClick();
+                onClose();
+              }}
+              className="p-1.5 rounded-full text-[var(--text-secondary,#89919d)] hover:text-[var(--text-primary,#f2f1ec)] hover:bg-white/[0.05] transition-colors cursor-pointer"
+              aria-label="Minimize Ask Cold panel"
+            >
+              <Minus size={16} />
+            </button>
+          )}
         </div>
       </div>
 
       {/* ── CONTEXT PILL BAR ── */}
-      <div className="flex items-center justify-between px-5 py-2 bg-white/[0.015] border-b border-white/[0.04] font-mono-code text-[11px] text-[var(--text-secondary,#89919d)] shrink-0">
+      <div className="flex items-center justify-between px-4 sm:px-5 py-2 bg-white/[0.015] border-b border-white/[0.04] font-mono-code text-[11px] text-[var(--text-secondary,#89919d)] shrink-0 touch-none">
         <div className="flex items-center gap-1.5 truncate">
           <Compass size={11} className="text-[var(--accent,#a9ddf0)] shrink-0" />
           <span className="truncate">{contextData.label}</span>
@@ -292,11 +492,14 @@ export default function AskColdPanel({
 
       {/* ── MESSAGES CONTAINER (INDEPENDENT SCROLL) ── */}
       <div
+        data-chat-scrollable
         data-lenis-prevent
-        onWheel={(e) => e.stopPropagation()}
-        onTouchMove={(e) => e.stopPropagation()}
-        className="flex-1 min-h-0 overflow-y-auto p-5 space-y-4 font-sans text-sm overscroll-contain"
-        style={{ overscrollBehavior: "contain" }}
+        className="flex-1 min-h-0 overflow-y-auto px-4 sm:px-5 py-4 space-y-4 font-sans text-sm overscroll-contain"
+        style={{
+          overscrollBehavior: "contain",
+          WebkitOverflowScrolling: "touch",
+          touchAction: "pan-y",
+        }}
       >
         {/* Welcome Screen when Empty */}
         {messages.length === 0 && (
@@ -456,9 +659,12 @@ export default function AskColdPanel({
       {/* ── INPUT BAR ── */}
       <form
         onSubmit={handleFormSubmit}
-        onWheel={(e) => e.stopPropagation()}
-        onTouchMove={(e) => e.stopPropagation()}
-        className="p-3 sm:p-4 border-t border-white/[0.08] shrink-0"
+        className="p-3 sm:p-4 border-t border-white/[0.08] dark:border-white/[0.08] border-black/[0.08] shrink-0 touch-none"
+        style={{
+          paddingBottom: isMobile
+            ? "max(12px, env(safe-area-inset-bottom, 0px))"
+            : undefined,
+        }}
       >
         <div className="ask-cold-composer-input relative flex items-end rounded-2xl bg-white/[0.03] border border-white/[0.1] focus-within:border-[var(--accent,#a9ddf0)] transition-colors p-1.5">
           {/* Text Area */}
@@ -470,7 +676,14 @@ export default function AskColdPanel({
             onKeyDown={handleKeyDown}
             placeholder={isListening ? "Listening to your voice..." : "Ask Cold about projects, philosophy, or collaboration..."}
             disabled={isListening || isLoading}
-            className="flex-1 bg-transparent px-3 py-2 text-xs text-[var(--text-primary,#f2f1ec)] placeholder:text-[var(--text-muted,#565d6b)] focus:outline-none resize-none max-h-24 leading-relaxed font-sans"
+            enterKeyHint="send"
+            className="flex-1 bg-transparent px-3 py-2 text-base sm:text-xs text-[var(--text-primary,#f2f1ec)] placeholder:text-[var(--text-muted,#565d6b)] focus:outline-none resize-none leading-relaxed font-sans whitespace-pre-wrap break-words"
+            style={{
+              minHeight: "38px",
+              maxHeight: "120px",
+              height: "38px",
+              overflowY: "hidden",
+            }}
           />
 
           {/* Controls */}
@@ -481,7 +694,7 @@ export default function AskColdPanel({
               onClick={toggleListening}
               title={isListening ? "Stop listening" : "Speak to Ask Cold"}
               aria-label={isListening ? "Stop listening to voice" : "Speak to Ask Cold using microphone"}
-              className={`p-2 rounded-xl transition-all cursor-pointer ${
+              className={`p-2.5 sm:p-2 rounded-xl transition-all cursor-pointer ${
                 isListening
                   ? "bg-red-500 text-white animate-pulse"
                   : "text-[var(--text-secondary,#89919d)] hover:text-[var(--text-primary,#f2f1ec)] hover:bg-white/[0.06]"
@@ -495,9 +708,9 @@ export default function AskColdPanel({
               type="submit"
               disabled={!inputText.trim() || isLoading}
               aria-label="Send message to Ask Cold"
-              className="ask-cold-send-btn p-2 rounded-xl bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-semibold hover:opacity-90 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-sm"
+              className="ask-cold-send-btn p-2.5 sm:p-2 rounded-xl bg-[var(--accent,#a9ddf0)] text-[#090b0f] font-semibold hover:opacity-90 disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer shadow-sm active:scale-95"
             >
-              <Send size={14} />
+              <Send size={15} />
             </button>
           </div>
         </div>
