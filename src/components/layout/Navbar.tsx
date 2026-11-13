@@ -5,7 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import { Sun, Moon } from "lucide-react";
 import { sound } from "@/lib/sounds";
+import { useTheme } from "@/context/ThemeContext";
 
 interface NavItem {
   href: string;
@@ -22,6 +24,7 @@ const NAV_ITEMS: NavItem[] = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { theme, toggleTheme, mounted } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -201,20 +204,40 @@ export default function Navbar() {
           abolarintaye20@gmail.com
         </a>
 
-        {/* Custom Two-Line Hamburger Control (Visible ONLY on Tablet & Mobile < 1024px) */}
-        <button
-          type="button"
-          onClick={toggleMenu}
-          className="kokil-nav-toggle"
-          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-          aria-expanded={isOpen}
-          aria-controls="mobile-nav-panel"
-        >
-          <span className="kokil-nav-toggle-icon" aria-hidden="true">
-            <span className={`toggle-line toggle-line-top ${isOpen ? "open" : ""}`} />
-            <span className={`toggle-line toggle-line-bottom ${isOpen ? "open" : ""}`} />
-          </span>
-        </button>
+        {/* Theme Toggle & Mobile Menu Controls */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              toggleTheme();
+            }}
+            className="kokil-nav-theme-btn"
+            aria-label={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+            title={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+          >
+            {mounted && theme === "light" ? (
+              <Moon size={17} strokeWidth={2.2} />
+            ) : (
+              <Sun size={17} strokeWidth={2.2} />
+            )}
+          </button>
+
+          {/* Custom Two-Line Hamburger Control (Visible ONLY on Tablet & Mobile < 1024px) */}
+          <button
+            type="button"
+            onClick={toggleMenu}
+            className="kokil-nav-toggle"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-nav-panel"
+          >
+            <span className="kokil-nav-toggle-icon" aria-hidden="true">
+              <span className={`toggle-line toggle-line-top ${isOpen ? "open" : ""}`} />
+              <span className={`toggle-line toggle-line-bottom ${isOpen ? "open" : ""}`} />
+            </span>
+          </button>
+        </div>
       </nav>
 
       {/* Responsive Mobile & Tablet Sliding Panel */}
@@ -250,27 +273,50 @@ export default function Navbar() {
                   <span className="w-2 h-2 rounded-full bg-[#a9ddf0] animate-pulse" />
                   <span>Index // Navigation</span>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="mobile-nav-close-btn"
-                  aria-label="Close navigation panel"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    width="16"
-                    height="16"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    fill="none"
-                    aria-hidden="true"
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      sound.playClick();
+                      toggleTheme();
+                    }}
+                    className="mobile-nav-theme-btn"
+                    aria-label={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
                   >
-                    <line x1="18" y1="6" x2="6" y2="18" />
-                    <line x1="6" y1="6" x2="18" y2="18" />
-                  </svg>
-                </button>
+                    {mounted && theme === "light" ? (
+                      <>
+                        <Moon size={13} strokeWidth={2.2} />
+                        <span>Dark</span>
+                      </>
+                    ) : (
+                      <>
+                        <Sun size={13} strokeWidth={2.2} />
+                        <span>Light</span>
+                      </>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="mobile-nav-close-btn"
+                    aria-label="Close navigation panel"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18" />
+                      <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                  </button>
+                </div>
               </div>
 
               {/* Primary Staggered Navigation Links */}

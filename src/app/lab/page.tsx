@@ -638,7 +638,7 @@ export default function LabPage() {
                   >
                     <span
                       className={`inline-block w-2 h-2 rounded-full ${
-                        globalTheme === "light" ? "bg-[#027a9e] animate-pulse" : "bg-[#89919d]/40"
+                        globalTheme === "light" ? "bg-[#016382] animate-pulse" : "bg-[#89919d]/40"
                       }`}
                     />
                     <span>Light Theme (#FDFDFD)</span>

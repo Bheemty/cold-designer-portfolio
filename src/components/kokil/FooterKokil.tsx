@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTheme } from "@/context/ThemeContext";
+import { sound } from "@/lib/sounds";
 
 interface ContactLink {
   name: string;
@@ -72,6 +74,7 @@ const CONTACTS: ContactLink[] = [
 ];
 
 export default function FooterKokil() {
+  const { theme, toggleTheme, mounted } = useTheme();
   const footerRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
@@ -329,6 +332,17 @@ export default function FooterKokil() {
             LinkedIn
           </a>
           <a href="mailto:abolarintaye20@gmail.com">Contact</a>
+          <button
+            type="button"
+            onClick={() => {
+              sound.playClick();
+              toggleTheme();
+            }}
+            className="footer-theme-toggle"
+            aria-label={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+          >
+            {mounted && theme === "light" ? "Dark Mode" : "Light Mode"}
+          </button>
         </div>
         <a href="#hero" className="footer-top" onClick={scrollToTop}>
           Back to top &uarr;

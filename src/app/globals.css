@@ -57,19 +57,19 @@
     --bg-card: #FFFFFF;
     --bg-card-hover: #FDFDFD;
     --bg-elevated: #FFFFFF;
-    --accent: #027a9e;
-    --accent-rgb: 2, 122, 158;
-    --accent-glow: rgba(2, 122, 158, 0.14);
-    --accent-dim: rgba(2, 122, 158, 0.08);
-    --accent-text: #027a9e;
+    --accent: #016382;
+    --accent-rgb: 1, 99, 130;
+    --accent-glow: rgba(1, 99, 130, 0.16);
+    --accent-dim: rgba(1, 99, 130, 0.08);
+    --accent-text: #016382;
     --text-primary: #11141b;
     --text-secondary: #4d5462;
-    --text-muted: #788090;
+    --text-muted: #565d6b;
     --border-subtle: rgba(18, 22, 30, 0.08);
     --border-medium: rgba(18, 22, 30, 0.14);
     --border-strong: rgba(18, 22, 30, 0.22);
-    --border-bright: rgba(2, 122, 158, 0.35);
-    --border-accent: rgba(2, 122, 158, 0.3);
+    --border-bright: rgba(1, 99, 130, 0.35);
+    --border-accent: rgba(1, 99, 130, 0.3);
     --shadow-card: 0 8px 30px rgba(18, 22, 30, 0.06), 0 1px 3px rgba(18, 22, 30, 0.04);
     --shadow-elevated: 0 20px 48px rgba(18, 22, 30, 0.10), 0 4px 12px rgba(18, 22, 30, 0.05);
     --btn-primary-bg: #11141b;
@@ -271,6 +271,7 @@ html[data-theme="light"] .bg-\[\#090b0f\] {
 
 /* Primary surface & cards */
 html[data-theme="light"] .bg-\[\#11141b\],
+html[data-theme="light"] .bg-\[\#11141b\]\/95,
 html[data-theme="light"] .bg-\[\#11141b\]\/90,
 html[data-theme="light"] .bg-\[\#11141b\]\/80,
 html[data-theme="light"] .bg-\[\#11141b\]\/60 {
@@ -306,27 +307,108 @@ html[data-theme="light"] .text-\[\#89919d\] {
   color: #4d5462 !important;
 }
 
-/* Accents */
+/* Accents with WCAG AAA Contrast */
 html[data-theme="light"] .text-\[\#a9ddf0\] {
-  color: #027a9e !important;
+  color: #016382 !important;
 }
 
 html[data-theme="light"] .border-\[\#a9ddf0\] {
-  border-color: #027a9e !important;
+  border-color: #016382 !important;
 }
 
 html[data-theme="light"] .bg-\[\#a9ddf0\]\/10,
 html[data-theme="light"] .bg-\[\#a9ddf0\]\/12,
 html[data-theme="light"] .bg-\[\#a9ddf0\]\/15,
 html[data-theme="light"] .bg-\[\#a9ddf0\]\/20 {
-  background-color: rgba(2, 122, 158, 0.08) !important;
+  background-color: rgba(1, 99, 130, 0.08) !important;
 }
 
 html[data-theme="light"] .border-\[\#a9ddf0\]\/20,
 html[data-theme="light"] .border-\[\#a9ddf0\]\/25,
 html[data-theme="light"] .border-\[\#a9ddf0\]\/30,
 html[data-theme="light"] .border-\[\#a9ddf0\]\/40 {
-  border-color: rgba(2, 122, 158, 0.28) !important;
+  border-color: rgba(1, 99, 130, 0.28) !important;
+}
+
+/* Morphing Dialog / Quick Access modal card & pinned header in Light mode */
+html[data-theme="light"] [role="dialog"] > div.relative,
+html[data-theme="light"] [role="dialog"] .bg-\[\#11141b\] {
+  background-color: #FDFDFD !important;
+  color: #11141b !important;
+  border-color: rgba(18, 22, 30, 0.12) !important;
+  box-shadow: 0 24px 70px -15px rgba(18, 22, 30, 0.18), inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+html[data-theme="light"] [role="dialog"] .shrink-0.sticky,
+html[data-theme="light"] .bg-\[\#11141b\]\/95 {
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  border-bottom-color: rgba(18, 22, 30, 0.08) !important;
+}
+
+html[data-theme="light"] [role="dialog"] h3,
+html[data-theme="light"] [role="dialog"] h4 {
+  color: #11141b !important;
+}
+
+html[data-theme="light"] [role="dialog"] .text-\[\#f2f1ec\] {
+  color: #11141b !important;
+}
+
+html[data-theme="light"] [role="dialog"] .text-\[\#89919d\] {
+  color: #565d6b !important;
+}
+
+html[data-theme="light"] [role="dialog"] .text-\[\#a9ddf0\] {
+  color: #016382 !important;
+}
+
+html[data-theme="light"] [role="dialog"] .bg-\[\#090b0f\] {
+  background-color: #f3f4f6 !important;
+  border-color: rgba(18, 22, 30, 0.08) !important;
+  color: #11141b !important;
+}
+
+html[data-theme="light"] [role="dialog"] .border-white\/\[0\.08\],
+html[data-theme="light"] [role="dialog"] .border-white\/\[0\.06\],
+html[data-theme="light"] [role="dialog"] .border-white\/\[0\.04\] {
+  border-color: rgba(18, 22, 30, 0.08) !important;
+}
+
+html[data-theme="light"] [role="dialog"] button.bg-white\/\[0\.02\] {
+  background-color: #FFFFFF !important;
+  border-color: rgba(18, 22, 30, 0.12) !important;
+  color: #11141b !important;
+}
+
+html[data-theme="light"] [role="dialog"] button.bg-white\/\[0\.02\]:hover {
+  background-color: rgba(1, 99, 130, 0.08) !important;
+  border-color: #016382 !important;
+  color: #016382 !important;
+}
+
+html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"] {
+  color: #4d5462 !important;
+  background-color: rgba(18, 22, 30, 0.05) !important;
+}
+
+html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"]:hover {
+  color: #11141b !important;
+  background-color: rgba(18, 22, 30, 0.12) !important;
+}
+
+html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"]:focus-visible {
+  outline: none !important;
+  box-shadow: 0 0 0 2px #016382 !important;
+}
+
+/* Work view switcher active pill in light mode */
+html[data-theme="light"] .work-view-switcher-glass [data-active-pill="true"] {
+  background-color: #11141b !important;
+  color: #FDFDFD !important;
+}
+
+html[data-theme="light"] .work-view-switcher-glass button[aria-selected="true"] {
+  color: #FDFDFD !important;
 }
 
 /* Hairline borders */

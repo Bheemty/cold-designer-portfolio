@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { ColdGlassSurface, useColdGlass } from "./ColdGlassEngine";
 import {
@@ -136,7 +136,7 @@ export function ColdGlassChat() {
     }
   }, [isOpen, messages]);
 
-  const handleSend = (textToSend?: string) => {
+  const handleSend = useCallback((textToSend?: string) => {
     const text = (textToSend || inputText).trim();
     if (!text) return;
 
@@ -171,7 +171,7 @@ export function ColdGlassChat() {
       setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
     }, 600);
-  };
+  }, [inputText, toggleTheme]);
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
