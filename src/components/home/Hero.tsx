@@ -9,9 +9,10 @@ import { sound } from "@/lib/sounds";
 const EXHIBITION_PILLARS = [
   { index: "01", name: "MEDesy Solution", field: "Telehealth Triage", anchor: "#exhibit-medesy" },
   { index: "02", name: "9jaTrip", field: "Intercity Transit", anchor: "#exhibit-9jatrip" },
-  { index: "03", name: "Somewhere Hotel", field: "Spatial Web Lookbook", anchor: "#exhibit-somewhere" },
-  { index: "04", name: "BuyBuddy", field: "Merchant Marketplace", anchor: "#exhibit-buybuddy" },
-  { index: "05", name: "Stillwater Hall", field: "Cinematic Video", anchor: "#exhibit-stillwater" },
+  { index: "03", name: "PAAI", field: "Autonomous AI & Mobile", anchor: "#exhibit-paai" },
+  { index: "04", name: "Somewhere Hotel", field: "Spatial Web Lookbook", anchor: "#exhibit-somewhere" },
+  { index: "05", name: "BuyBuddy", field: "Merchant Marketplace", anchor: "#exhibit-buybuddy" },
+  { index: "06", name: "Stillwater Hall", field: "Cinematic Video", anchor: "#exhibit-stillwater" },
 ];
 
 export default function Hero() {
@@ -252,7 +253,7 @@ export default function Hero() {
               onMouseEnter={() => sound.playHover()}
               className="group flex items-center gap-3 rounded-full bg-[#f2f1ec] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] transition-all hover:bg-[#a9ddf0] hover:scale-105"
             >
-              <span>Examine Exhibition 01—05</span>
+              <span>Examine Exhibition 01—06</span>
               <ArrowDown
                 size={14}
                 className="group-hover:translate-y-0.5 transition-transform"

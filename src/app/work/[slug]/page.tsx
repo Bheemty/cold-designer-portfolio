@@ -100,7 +100,7 @@ export default async function CaseStudyPage({
             {project.headline}
           </p>
 
-          {/* Action Links (Live, Figma, GitHub) */}
+          {/* Action Links (Live, Behance, GitHub) */}
           <div className="flex flex-wrap gap-3 pt-2">
             {project.liveUrl && (
               <a
@@ -109,7 +109,7 @@ export default async function CaseStudyPage({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors"
               >
-                <span>Visit Live Experience</span>
+                <span>{project.slug === "9jatrip" ? "Visit Live Website" : "Visit Live Experience"}</span>
                 <ExternalLink size={13} />
               </a>
             )}
@@ -121,7 +121,7 @@ export default async function CaseStudyPage({
                 rel="noopener noreferrer"
                 className="case-study-glass-chip inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-white/[0.04] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.18),0_4px_16px_rgba(0,0,0,0.3)] transition-all"
               >
-                <span>Inspect in Figma</span>
+                <span>{project.prototypeUrl.includes("behance.net") ? "Examine on Behance" : "Explore Design Specs"}</span>
                 <ArrowUpRight size={13} />
               </a>
             )}
@@ -489,7 +489,7 @@ export default async function CaseStudyPage({
                 </span>
               </div>
               <span className="font-mono-code text-xs text-[#89919d]">
-                [AUTHENTIC FIGMA DESIGNS &amp; PRODUCTION SPECIMENS]
+                [AUTHENTIC PRODUCTION &amp; INTERFACE SPECIMENS]
               </span>
             </div>
 
@@ -521,7 +521,7 @@ export default async function CaseStudyPage({
           </section>
         )}
 
-        {/* Editorial Notice for Conceptual/Figma-Only Projects */}
+        {/* Editorial Notice for Interface Exploration & Specimen Files */}
         {(!project.gallery || project.gallery.length === 0) && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
             <section className="mb-20 border-t border-white/[0.08] pt-16">
@@ -537,14 +537,25 @@ export default async function CaseStudyPage({
                   Complete user journeys, typography grids, component states, and design system variables for {project.title} are documented in the project source files.
                 </p>
                 <div className="flex flex-wrap gap-3">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors"
+                    >
+                      <span>{project.slug === "9jatrip" ? "Visit Live Website" : "Visit Live Experience"}</span>
+                      <ExternalLink size={13} />
+                    </a>
+                  )}
                   {project.prototypeUrl && (
                     <a
                       href={project.prototypeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
                     >
-                      <span>Open Verified Figma File</span>
+                      <span>{project.prototypeUrl.includes("behance.net") ? "Examine on Behance" : "Explore Design Specs"}</span>
                       <ArrowUpRight size={13} />
                     </a>
                   )}

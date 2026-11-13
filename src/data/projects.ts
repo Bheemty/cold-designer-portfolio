@@ -258,8 +258,6 @@ export const PROJECTS: Project[] = [
       { label: "Design System", value: "Figma Tokens, WhatsApp Business API Architecture" },
       { label: "Role Scope", value: "Conversational UX, Web Gateway, Clinical Card Architecture" },
     ],
-    prototypeUrl:
-      "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
     wireframeSummary:
       "Three-pane conversational intake flow, verified web service hero, and standardized doctor referral cards.",
   },
@@ -437,10 +435,171 @@ export const PROJECTS: Project[] = [
       { label: "Key Integrations", value: "Moniepoint Payment Gateway, QR Verification" },
       { label: "Design Tools", value: "Figma, Figjam, Mobile Prototyping" },
     ],
-    prototypeUrl:
-      "https://www.figma.com/design/QPyY4HiyEc40yQk5609OMG/9jaTrip?node-id=0-1&p=f&t=Mm09Z82YdZ3Is25i-0",
+    liveUrl: "https://www.9jatrip.ng/",
     wireframeSummary:
       "Route discovery filters, dynamic seat selector canvas, payment gateway, and high-contrast digital boarding passes.",
+  },
+
+  {
+    slug: "paai",
+    title: "PAAI",
+    client: "PAAI Systems",
+    type: "Concept / Lab Exploration",
+    category: "AI & Mobile Systems",
+    year: "2024",
+    role: "Lead Product Designer",
+    timeline: "System Architecture & Mobile Product Design",
+    storytellingFormat: "in-depth-case-study",
+    badgeLabel: "AI & Mobile Architecture · Dual Theme System",
+    deliverables: [
+      "Conversational AI Assistant & Natural Language Execution Interface",
+      "Adaptive Dual-Theme Mobile Design System (Dark & Light Mode)",
+      "Autonomous Financial Workflow & Wallet Operations Engine",
+      "Contextual Action Feeds & Real-Time Intelligence Ledger",
+    ],
+    headline: "Autonomous Personal AI Assistant & Unified Financial Workflow Mobile System",
+    summary:
+      "A next-generation personal AI mobile application integrating autonomous workflow execution, intelligent conversational prompts, dual-mode light/dark design systems, and friction-free financial transactions.",
+    accentColor: "#A9DDF0",
+    featured: true,
+    featuredOrder: 3,
+    tags: ["AI & Systems", "Mobile UI", "Conversational AI", "Fintech", "Design System"],
+    heroImage: "/images/projects/paai/paai-canvas-overview.png",
+    gallery: [
+      {
+        src: "/images/projects/paai/paai-canvas-overview.png",
+        caption:
+          "PAAI multi-screen system canvas overview: end-to-end user journeys, dual-theme (Light & Dark) UI architecture, autonomous AI chat, wallet management, and onboarding flows.",
+        alt: "PAAI Mobile Application Multi-Screen System Canvas",
+      },
+    ],
+    problemStatement: {
+      context:
+        "Modern smartphone users juggle dozens of disconnected apps for personal finance, calendar scheduling, daily task management, and conversational assistance, resulting in fragmented context and cognitive overload.",
+      friction:
+        "Traditional mobile interfaces require users to manually navigate multiple submenus and form inputs to complete multi-step tasks, while standalone AI chatbots remain siloed from real-world execution like sending money, tracking balances, or scheduling commitments.",
+      impact:
+        "High friction for daily digital routines, task abandonment, and inability for mobile AI models to execute transactional workflows safely within a single trusted interface.",
+    },
+    overview:
+      "PAAI bridges conversational AI intelligence with concrete mobile utility. Built with an adaptive dual-theme design system (comprehensive Light and Dark modes), PAAI pairs an intelligent conversational assistant with a unified financial wallet and task engine. Users can issue natural language instructions to analyze spending, initiate peer transactions, manage multi-currency balances, and schedule automated actions within an intuitive, high-contrast mobile environment.",
+    challenge:
+      "Balancing conversational simplicity with rigorous transactional safeguards: AI interfaces must feel effortless and conversational without causing ambiguity or accidental money movement, while maintaining seamless legibility across contrasting Light and Dark interface paradigms.",
+    solution:
+      "Architected a modular two-tier interface combining an intent-driven conversational surface with explicit verification cards for financial execution. Designed a systematic dual-theme token hierarchy ensuring accessible contrast ratios, tactile micro-interactions, and real-time transaction feedback across both light and dark visual environments.",
+    discoveryInsights: [
+      {
+        title: "Conversational Intent Demands Explicit Confirmation",
+        description:
+          "Observation: While users love issuing natural-language prompts ('Send ₦25,000 to Sarah for groceries'), they experience anxiety if an AI executes financial movement without a clear, visual verification step.",
+        type: "observation",
+      },
+      {
+        title: "Dual Environment Accessibility",
+        description:
+          "Constraint: Users transition between harsh midday outdoor sunlight (requiring crisp, high-contrast light mode) and late-night bedside interactions (requiring deep, OLED-friendly dark mode with minimal eye strain).",
+        type: "constraint",
+      },
+      {
+        title: "Contextual Multi-Card Wallet Ergonomics",
+        description:
+          "Insight: Users need immediate visual feedback of active card limits, virtual credentials, and real-time balance shifts directly from the assistant feed without jumping between distant screens.",
+        type: "insight",
+      },
+    ],
+    designDecisions: [
+      {
+        title: "Intent-to-Card Confirmation Pattern",
+        rationale:
+          "When the AI parses a transaction instruction, it renders an interactive preview card with amount, recipient, and fee breakdowns before prompting biometric authorization, preventing accidental autonomous transfers.",
+        tradeOff:
+          "Adds one explicit tap to autonomous workflows, trading pure frictionless speed for verified financial security.",
+      },
+      {
+        title: "Synchronous Dual-Theme Design System",
+        rationale:
+          "Engineered semantic color token pairs (Surface 01/02/03, Accent Cyan, Text Primary/Secondary) maintaining identical visual hierarchy and contrast compliance (WCAG AAA) across both Light and Dark modes.",
+        tradeOff:
+          "Requires maintaining double the visual token combinations and testing every component state across two color spaces.",
+      },
+      {
+        title: "Persistent Conversational Composer with Quick Action Chips",
+        rationale:
+          "Anchored an expandable intelligent input bar at the bottom with dynamic quick-prompt suggestions based on recent transactions, upcoming calendar deadlines, and unread notifications.",
+        tradeOff:
+          "Reserves vertical viewport space on smaller mobile screens, requiring compact collapse states during scroll.",
+      },
+    ],
+    coreWorkflows: [
+      {
+        title: "Natural Language Financial Dispatch",
+        steps: [
+          "User types or dictates an action (e.g., 'Transfer ₦15,000 to David and split bill with Tunde').",
+          "PAAI parses intent and displays a structured transaction preview card with fee breakdown.",
+          "User confirms with biometric Face ID / fingerprint for immediate settlement.",
+        ],
+        outcome: "Verified transaction executed in seconds with zero manual recipient routing.",
+      },
+      {
+        title: "Adaptive Theme & Wallet Management",
+        steps: [
+          "User accesses personal wallet to inspect virtual cards, spending limits, and multi-currency balances.",
+          "Interface adapts automatically to ambient lighting conditions or user theme toggle.",
+          "Visual transaction ledger categorizes autonomous AI settlements alongside manual transfers.",
+        ],
+        outcome: "Effortless situational awareness across changing lighting conditions.",
+      },
+    ],
+    systemHighlights: [
+      {
+        title: "Conversational AI Assistant Surface",
+        description:
+          "Dynamic message stream supporting generative text, interactive verification cards, and natural language query resolution.",
+      },
+      {
+        title: "Systematic Dual-Theme UI Library",
+        description:
+          "Comprehensive Light and Dark mode specifications with calibrated contrast ratios, elevation tokens, and typography scales.",
+      },
+      {
+        title: "Integrated Wallet & Transaction Engine",
+        description:
+          "Secure multi-currency wallet cards, real-time spending analytics, and biometric-gated money movement.",
+      },
+    ],
+    specifications: [
+      { label: "Platform", value: "Mobile Application (iOS & Android Architecture)" },
+      { label: "Design System", value: "Dual Theme (Light & Dark Mode) Semantic Token Hierarchy" },
+      { label: "Core Capabilities", value: "Conversational AI, Autonomous Financial Workflows, Wallet Management" },
+      { label: "Role Scope", value: "Lead Product Designer — Architecture, Systems & UI Specs" },
+    ],
+    validation: {
+      methodology:
+        "Heuristic usability evaluations of conversational intent flows, contrast accessibility audits across OLED displays and daylight simulators, and task-completion simulations for multi-party split payments.",
+      feedbackSummary:
+        "Users praised the seamless transition between casual chatting and structured financial cards, noting the verification cards provided reassurance that the AI wouldn't make unwarranted transfers.",
+      iterationsMade: [
+        "Refined composer prompt suggestions to be context-aware rather than generic.",
+        "Adjusted dark mode background from pure #000000 to layered obsidian #090B0F to prevent visual smearing on rapid scrolls.",
+        "Standardized card elevation shadows in light mode to preserve depth without visual clutter.",
+      ],
+      limitationsAcknowledged:
+        "High-resolution individual screen exports and production user telemetry will be finalized as real device testing proceeds.",
+    },
+    outcomes: {
+      deliverablesSummary:
+        "Complete end-to-end mobile design architecture in Figma covering onboarding, conversational assistant, financial card management, dual-theme component library, and interactive prototypes.",
+      keyLearnings: [
+        "Designing for autonomous AI requires designing for trust: transparency and reversible confirmations are essential.",
+        "Dual-mode theming is most successful when conceived from the foundation of semantic design tokens rather than treated as an afterthought.",
+      ],
+      futureImprovements: [
+        "Context-aware voice interactions with local dialect recognition.",
+        "Cross-device desktop widget companion for seamless workflow continuity.",
+      ],
+    },
+    wireframeSummary:
+      "Conversational prompt stream, interactive intent verification cards, dual-theme balance dashboards, and modular wallet management layouts.",
   },
 
   {
@@ -465,7 +624,7 @@ export const PROJECTS: Project[] = [
       "An editorial reservation concept translating architectural daylight transitions, suite spatial layouts, and calm curation into digital hospitality.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 3,
+    featuredOrder: 4,
     tags: ["Spatial Web", "Hospitality", "Editorial Design", "Atmosphere"],
     heroImage: "/images/projects/somewhere/suite-balcony-sunset-opt.webp",
     gallery: [
@@ -621,7 +780,7 @@ export const PROJECTS: Project[] = [
       { label: "Aesthetic", value: "Warm Architectural Editorial & Calm Minimal" },
       { label: "Design Tools", value: "Figma, Next.js, Tailwind CSS, Motion" },
     ],
-    prototypeUrl: "https://somewhere-hotel.vercel.app",
+    liveUrl: "https://somewhere-hotel.vercel.app",
     wireframeSummary:
       "Hero room lookbook with dynamic daylight shift, interactive suite elevation specs, and seamless reservation drawer.",
   },
@@ -648,7 +807,7 @@ export const PROJECTS: Project[] = [
       "A lightweight mobile commerce platform empowering informal social sellers to turn WhatsApp and Instagram catalogs into instant, checkout-ready storefronts.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 4,
+    featuredOrder: 5,
     tags: ["Commerce", "Marketplace", "Mobile Web", "Fintech"],
     heroImage: "/images/projects/buybuddy/vendor-products.png",
     gallery: [
@@ -803,7 +962,7 @@ export const PROJECTS: Project[] = [
       { label: "Focus", value: "Storefront Speed, Inventory Ledger, Payout Wallet" },
       { label: "Design System", value: "Figma Tokens, Mobile Commerce Components" },
     ],
-    prototypeUrl: "https://buybuddy-store.vercel.app",
+    liveUrl: "https://buybuddy-store.vercel.app",
     wireframeSummary:
       "Mobile vendor inventory studio, live orders fulfillment ledger, vendor revenue wallet, and mobile shopper storefront.",
   },
@@ -830,7 +989,7 @@ export const PROJECTS: Project[] = [
       "An architectural web experience choreographing the arrival sequence, acoustic properties, and performance calendar of a modern cultural venue.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 5,
+    featuredOrder: 6,
     tags: ["Cinematic Web", "Motion", "Spatial Design", "Cultural Arts"],
     heroImage: "/images/projects/stillwater/01_Exterior-opt.webp",
     videoSrc: "/videos/stillwater/Stillwater_01.mp4",
@@ -991,7 +1150,7 @@ export const PROJECTS: Project[] = [
       { label: "Typography", value: "Monospace Code & Brutalist Display Serifs" },
       { label: "Media Assets", value: "Cinematic Video Specimen & 5 Spatial Stills" },
     ],
-    prototypeUrl: "https://stillwater-hall.vercel.app",
+    liveUrl: "https://stillwater-hall.vercel.app",
     wireframeSummary:
       "Full-bleed cinematic video header, five-stage architectural scrollytelling section, acoustic sightline specs, and ticketing calendar.",
   },
@@ -1479,8 +1638,6 @@ export const PROJECTS: Project[] = [
       { label: "Design Deliverable", value: "Figma UI/UX & Flow Specs" },
       { label: "Engagement", value: "Concept / Lab Exploration" },
     ],
-    prototypeUrl:
-      "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
     wireframeSummary:
       "Large-touch target produce selectors, simple batch creation cards, and clear delivery timeline trackers.",
   },
@@ -1510,7 +1667,7 @@ export const PROJECTS: Project[] = [
       "A creative review workspace allowing distributed teams to leave pinned, contextual comments directly on interactive web and mobile prototypes.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 6,
+    featuredOrder: 7,
     tags: ["SaaS", "Design System", "Collaboration", "Product Design"],
     heroImage: "/images/projects/spot/hero-opt.webp",
     gallery: [
@@ -1703,7 +1860,7 @@ export const PROJECTS: Project[] = [
       "An enterprise human resource management platform uniting administrative attendance tracking, automated clock-in, predictive attrition analytics, and mobile self-service.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 7,
+    featuredOrder: 8,
     tags: ["Enterprise SaaS", "HR Tech", "Analytics", "Design System"],
     heroImage: "/images/projects/profile/hero-opt.webp",
     gallery: [
@@ -1891,7 +2048,7 @@ export const PROJECTS: Project[] = [
       "A consumer mobile app empowering young adults and students to eat healthy on a budget with personalized 20-minute recipes, smart pantry matching, and automated grocery lists.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 8,
+    featuredOrder: 9,
     tags: ["Mobile App", "Food Tech", "Design System", "Dual Theme"],
     heroImage: "/images/projects/quickeats/hero-opt.webp",
     gallery: [
@@ -2087,7 +2244,7 @@ export const PROJECTS: Project[] = [
       "A 48-hour mobile banking redesign for Raven, modernizing the personal banking dashboard, clarifying balance management, and eliminating friction during P2P transfers.",
     accentColor: "#A9DDF0",
     featured: true,
-    featuredOrder: 9,
+    featuredOrder: 10,
     tags: ["Fintech", "Mobile Banking", "Design Sprint", "P2P Transfers"],
     heroImage: "/images/projects/raven-bank/hero-opt.webp",
     gallery: [

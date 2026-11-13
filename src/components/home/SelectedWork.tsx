@@ -133,15 +133,22 @@ export default function SelectedWork() {
   const [tripViewMode, setTripViewMode] = useState<"screen" | "seat" | "receipt">("screen");
 
   // --------------------------------------------------------------------------
-  // EXHIBIT 03: Somewhere Hotel State (Daylight Atmosphere Phases)
+  // EXHIBIT 03: PAAI State (Flow Simulation)
+  // --------------------------------------------------------------------------
+  const [paaiActiveFlow, setPaaiActiveFlow] = useState<"assistant" | "intent" | "wallet">("assistant");
+
+  // --------------------------------------------------------------------------
+  // EXHIBIT 04: Somewhere Hotel State (Daylight Atmosphere Phases)
   // --------------------------------------------------------------------------
   const [daylightPhase, setDaylightPhase] = useState<"sunset" | "day" | "night" | "exterior">("sunset");
 
   // --------------------------------------------------------------------------
-  // EXHIBIT 04: BuyBuddy State (Dual Marketplace Switcher)
+  // EXHIBIT 05: BuyBuddy State (Dual Marketplace Switcher)
   // --------------------------------------------------------------------------
   const [buybuddyWorkspace, setBuybuddyWorkspace] = useState<"products" | "orders" | "wallet" | "storefront">("products");
 
+  // --------------------------------------------------------------------------
+  // EXHIBIT 06: Stillwater Hall State (Video Walkthrough Player)
   // --------------------------------------------------------------------------
   // EXHIBIT 05: Stillwater Hall State (Video Walkthrough Player)
   // --------------------------------------------------------------------------
@@ -210,7 +217,7 @@ export default function SelectedWork() {
             <div className="flex items-center gap-3 mb-3">
               <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
               <span className="font-mono-code text-xs uppercase tracking-widest text-[#a9ddf0]">
-                Curated Exhibition [01—05]
+                Curated Exhibition [01—06]
               </span>
             </div>
             <h2 className="font-display text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-[#f2f1ec]">
@@ -398,18 +405,6 @@ export default function SelectedWork() {
                     <span>Examine Case Study</span>
                     <ArrowRight size={14} />
                   </Link>
-
-                  <a
-                    href="https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => sound.playClick()}
-                    onMouseEnter={() => sound.playHover()}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
-                  >
-                    <span>Verified Figma Spec</span>
-                    <ArrowUpRight size={13} />
-                  </a>
                 </div>
               </div>
 
@@ -615,15 +610,15 @@ export default function SelectedWork() {
                   </Link>
 
                   <a
-                    href="https://www.figma.com/design/QPyY4HiyEc40yQk5609OMG/9jaTrip?node-id=0-1&p=f&t=Mm09Z82YdZ3Is25i-0"
+                    href="https://www.9jatrip.ng/"
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => sound.playClick()}
                     onMouseEnter={() => sound.playHover()}
                     className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] hover:border-[#a9ddf0] hover:text-[#a9ddf0] px-6 py-3.5 font-mono-code text-xs font-semibold text-[#f2f1ec] transition-all"
                   >
-                    <span>Verified Figma Spec</span>
-                    <ArrowUpRight size={13} />
+                    <span>Visit Live Website</span>
+                    <ExternalLink size={13} />
                   </a>
                 </div>
               </div>
@@ -632,7 +627,241 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            EXHIBIT 03: SOMEWHERE HOTEL
+            EXHIBIT 03: PAAI
+            Theme: Autonomous AI Assistant & Unified Mobile Ecosystem
+            Layout: Dual-Theme Architecture + Interactive Intent-to-Card Simulation
+           ========================================================================= */}
+        <div id="exhibit-paai" className="mb-36 sm:mb-48 scroll-mt-28">
+          <div className="relative">
+            {/* Contextual Bar */}
+            <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
+              <div className="flex items-center gap-3">
+                <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
+                  03 // AUTONOMOUS AI &amp; MOBILE ECOSYSTEM
+                </span>
+                <span className="text-[#89919d]">Mobile Product Architecture · Dual Theme System</span>
+              </div>
+              <div className="flex items-center gap-6 text-[#89919d]">
+                <span>2024</span>
+                <span className="text-white/20">•</span>
+                <span className="text-[#f2f1ec]">Lead Product Designer</span>
+              </div>
+            </div>
+
+            {/* Asymmetric Spread */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+              {/* Narrative & Interactive Simulation (Span 6) */}
+              <div className="lg:col-span-6 space-y-8">
+                <div>
+                  <span className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider block mb-2">
+                    PAAI Systems · Personal Intelligence
+                  </span>
+                  <h3 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] leading-[1.04]">
+                    PAAI.
+                  </h3>
+                </div>
+
+                <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed">
+                  Autonomous mobile intelligence companion uniting natural language execution with an adaptive dual-theme design system and friction-free financial transactions.
+                </p>
+
+                {/* Flow Switcher Controls */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between font-mono-code text-xs text-[#89919d]">
+                    <span className="uppercase tracking-wider">Interactive Architecture Flow:</span>
+                    <span className="text-[#a9ddf0]">Verified Intent Paradigm</span>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      { id: "assistant" as const, label: "AI Assistant", tag: "Natural Lang" },
+                      { id: "intent" as const, label: "Intent-to-Card", tag: "Safe Execution" },
+                      { id: "wallet" as const, label: "Dual Wallet", tag: "Light/Dark" },
+                    ].map((mode) => (
+                      <button
+                        key={mode.id}
+                        type="button"
+                        onClick={() => {
+                          sound.playClick();
+                          setPaaiActiveFlow(mode.id);
+                        }}
+                        className={`rounded-xl border p-3 text-left transition-all cursor-pointer font-mono-code ${
+                          paaiActiveFlow === mode.id
+                            ? "border-[#a9ddf0] bg-[#a9ddf0]/10 text-[#f2f1ec] shadow-[0_0_20px_rgba(169,221,240,0.15)]"
+                            : "border-white/[0.08] bg-[#11141b] text-[#89919d] hover:border-white/20 hover:text-[#f2f1ec]"
+                        }`}
+                      >
+                        <div className="text-xs font-semibold block">{mode.label}</div>
+                        <div className="text-[10px] text-[#89919d] mt-0.5">{mode.tag}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Interactive Simulation Crucible */}
+                <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 space-y-4 font-mono-code text-xs">
+                  <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+                    <div className="flex items-center gap-2 text-[#a9ddf0]">
+                      <Sparkles size={14} />
+                      <span className="font-semibold uppercase tracking-wider">
+                        {paaiActiveFlow === "assistant" && "Autonomous Natural Language Prompt"}
+                        {paaiActiveFlow === "intent" && "Intent-to-Card Verification Gate"}
+                        {paaiActiveFlow === "wallet" && "Unified Multi-Currency Balance Ledger"}
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-[#89919d] uppercase">Dual-Mode Calibrated</span>
+                  </div>
+
+                  {paaiActiveFlow === "assistant" && (
+                    <div className="space-y-3 pt-1">
+                      <div className="flex gap-3 items-start bg-white/[0.02] p-3.5 rounded-xl border border-white/[0.06]">
+                        <span className="text-[#a9ddf0] shrink-0 font-bold">User:</span>
+                        <p className="text-[#f2f1ec] leading-relaxed">
+                          &ldquo;Send ₦25,000 to Sarah for the team lunch bill and summarize our weekly meal expenses.&rdquo;
+                        </p>
+                      </div>
+                      <div className="flex gap-3 items-start bg-[#a9ddf0]/[0.04] p-3.5 rounded-xl border border-[#a9ddf0]/20">
+                        <span className="text-[#a9ddf0] shrink-0 font-bold">PAAI:</span>
+                        <div className="space-y-2 text-[#89919d] leading-relaxed">
+                          <p className="text-[#f2f1ec]">
+                            Prepared instant transfer to <strong className="text-[#a9ddf0]">Sarah Johnson (GTBank)</strong>. Weekly lunch total is currently ₦48,200 across 3 orders.
+                          </p>
+                          <span className="inline-block px-2.5 py-1 rounded bg-[#a9ddf0]/15 text-[#a9ddf0] text-[11px] font-semibold">
+                            Pending Biometric Verification Card ↓
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {paaiActiveFlow === "intent" && (
+                    <div className="space-y-3 pt-1">
+                      <div className="rounded-xl border border-[#a9ddf0]/30 bg-[#090b0f] p-4 space-y-3">
+                        <div className="flex items-center justify-between text-[11px]">
+                          <span className="text-[#89919d] uppercase tracking-wider">Payment Confirmation</span>
+                          <span className="text-[#a9ddf0] font-semibold">₦25,000.00</span>
+                        </div>
+                        <div className="flex items-center gap-3 py-2 border-y border-white/[0.06]">
+                          <div className="h-8 w-8 rounded-full bg-[#a9ddf0]/20 flex items-center justify-center text-[#a9ddf0] font-bold">
+                            SJ
+                          </div>
+                          <div>
+                            <div className="text-[#f2f1ec] font-semibold">Sarah Johnson</div>
+                            <div className="text-[10px] text-[#89919d]">Guaranty Trust Bank · ···· 4821</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center justify-between text-[11px] text-[#89919d]">
+                          <span>Network Transfer Fee: ₦0.00</span>
+                          <span className="text-[#a9ddf0] flex items-center gap-1">
+                            <ShieldCheck size={12} /> Biometric Ready
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {paaiActiveFlow === "wallet" && (
+                    <div className="space-y-3 pt-1">
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
+                        <div className="rounded-xl border border-white/[0.06] bg-[#090b0f] p-3 space-y-1">
+                          <span className="text-[#89919d] block text-[10px] uppercase">Primary Balance</span>
+                          <span className="text-[#f2f1ec] font-bold text-sm">₦1,420,500.00</span>
+                          <span className="text-[#a9ddf0] text-[10px] block">OLED Obsidian Mode</span>
+                        </div>
+                        <div className="rounded-xl border border-white/[0.06] bg-[#090b0f] p-3 space-y-1">
+                          <span className="text-[#89919d] block text-[10px] uppercase">Virtual USD Card</span>
+                          <span className="text-[#f2f1ec] font-bold text-sm">$3,240.00</span>
+                          <span className="text-emerald-400 text-[10px] block">Active · Multi-Currency</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Key Metrics / Highlights */}
+                <div className="grid grid-cols-3 gap-6 pt-4 border-t border-white/[0.08] font-mono-code text-xs">
+                  <div>
+                    <span className="text-[#89919d] block mb-1 uppercase text-[10px] tracking-wider">Themes</span>
+                    <span className="text-2xl font-bold text-[#f2f1ec] font-display">Dual</span>
+                    <span className="text-[#89919d] block text-[11px] mt-0.5">Light &amp; Dark</span>
+                  </div>
+                  <div>
+                    <span className="text-[#89919d] block mb-1 uppercase text-[10px] tracking-wider">Safeguard</span>
+                    <span className="text-2xl font-bold text-[#a9ddf0] font-display">Intent</span>
+                    <span className="text-[#89919d] block text-[11px] mt-0.5">Verified Cards</span>
+                  </div>
+                  <div>
+                    <span className="text-[#89919d] block mb-1 uppercase text-[10px] tracking-wider">Platform</span>
+                    <span className="text-2xl font-bold text-[#f2f1ec] font-display">Mobile</span>
+                    <span className="text-[#89919d] block text-[11px] mt-0.5">iOS &amp; Android</span>
+                  </div>
+                </div>
+
+                {/* Action Links */}
+                <div className="flex flex-wrap items-center gap-4 pt-2">
+                  <Link
+                    href="/work/paai"
+                    onClick={() => sound.playClick()}
+                    onMouseEnter={() => sound.playHover()}
+                    className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] px-7 py-3.5 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-all"
+                  >
+                    <span>Examine Case Study</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Verified Visual Specimen & Canvas Overview (Span 6) */}
+              <div className="lg:col-span-6 space-y-4">
+                <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-6 shadow-2xl transition-all hover:border-white/20">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#090b0f]">
+                    <Image
+                      src="/images/projects/paai/paai-canvas-overview.png"
+                      alt="PAAI Mobile Application Multi-Screen System Canvas"
+                      fill
+                      className="object-contain transition-transform duration-700 hover:scale-[1.02]"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
+                  </div>
+
+                  <div className="mt-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-t border-white/[0.06] pt-4 font-mono-code text-xs">
+                    <span className="text-[#f2f1ec] font-medium leading-relaxed">
+                      Multi-Screen Architecture Canvas: Dual-Theme Onboarding, AI Prompts &amp; Multi-Currency Wallet
+                    </span>
+                    <span className="text-[#89919d] text-[11px] shrink-0">
+                      AUTHENTIC SPECIMEN
+                    </span>
+                  </div>
+                </div>
+
+                {/* Architectural Blueprint Bar */}
+                <div className="grid grid-cols-2 gap-3 font-mono-code text-xs">
+                  <div className="rounded-xl border border-white/[0.06] bg-[#11141b] p-4">
+                    <div className="flex items-center gap-2 text-[#a9ddf0] mb-1 font-semibold">
+                      <Layers size={13} />
+                      <span>Semantic Tokens</span>
+                    </div>
+                    <p className="text-[11px] text-[#89919d] leading-relaxed">
+                      Calibrated contrast ratios across deep obsidian dark backgrounds and clean sunlight light surfaces.
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-white/[0.06] bg-[#11141b] p-4">
+                    <div className="flex items-center gap-2 text-[#a9ddf0] mb-1 font-semibold">
+                      <ShieldCheck size={13} />
+                      <span>Execution Trust</span>
+                    </div>
+                    <p className="text-[11px] text-[#89919d] leading-relaxed">
+                      Two-tier action pattern requiring biometric confirmation on every autonomous AI financial transfer.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* =========================================================================
+            EXHIBIT 04: SOMEWHERE HOTEL
             Theme: Hospitality & Spatial Web Experience (Personal Concept)
             Layout: Full-Bleed Architectural Lookbook + Daylight Phase Shifter
            ========================================================================= */}
@@ -642,7 +871,7 @@ export default function SelectedWork() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-10 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  03 // SPATIAL LOOKBOOK
+                  04 // SPATIAL LOOKBOOK
                 </span>
                 <span className="text-[#89919d]">Personal Digital Concept (Booking Demo Only)</span>
               </div>
@@ -775,7 +1004,7 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            EXHIBIT 04: BUYBUDDY
+            EXHIBIT 05: BUYBUDDY
             Theme: Buyer–Seller Marketplace Platform (Personal Product Concept)
             Layout: Dual Marketplace Workbench (Merchant Studio vs Shopper Catalog)
            ========================================================================= */}
@@ -785,7 +1014,7 @@ export default function SelectedWork() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-12 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  04 // COMMERCE &amp; MARKETPLACE
+                  05 // COMMERCE &amp; MARKETPLACE
                 </span>
                 <span className="text-[#89919d]">Personal Product Concept</span>
               </div>
@@ -919,7 +1148,7 @@ export default function SelectedWork() {
         </div>
 
         {/* =========================================================================
-            EXHIBIT 05: STILLWATER HALL
+            EXHIBIT 06: STILLWATER HALL
             Theme: Performing Arts, Acoustic Scrollytelling, Video Integration
             Layout: Full Cinema Screening Stage + 5-Stage Spatial Chapter Scrubber
            ========================================================================= */}
@@ -929,7 +1158,7 @@ export default function SelectedWork() {
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.08] pb-6 mb-10 font-mono-code text-xs">
               <div className="flex items-center gap-3">
                 <span className="rounded bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/25 px-3 py-1 font-semibold">
-                  05 // CINEMATIC VIDEO WALKTHROUGH
+                  06 // CINEMATIC VIDEO WALKTHROUGH
                 </span>
                 <span className="text-[#89919d]">Personal Web Experience</span>
               </div>

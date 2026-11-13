@@ -25,6 +25,7 @@ export interface DetailedProjectKnowledge {
   keyLearnings: string;
   status: string;
   caseStudyUrl: string;
+  liveUrl?: string;
   prototypeUrl?: string;
   githubUrl?: string;
 }
@@ -208,7 +209,6 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
       "In healthcare, trust is everything. Meeting users where they already feel comfortable (WhatsApp) removes friction that no slick native app could ever solve.",
     status: "Active production platform.",
     caseStudyUrl: "/work/medesy",
-    prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
   },
   {
     slug: "9jatrip",
@@ -242,9 +242,9 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
     toolsAndTech: ["Figma", "Figjam", "Interactive Mobile Prototyping"],
     keyLearnings:
       "Mobility apps must design for the worst-case scenario: low battery, poor terminal connectivity, and bright outdoor glare.",
-    status: "Case study live on portfolio.",
+    status: "Live product in production.",
     caseStudyUrl: "/work/9jatrip",
-    prototypeUrl: "https://www.figma.com/design/QPyY4HiyEc40yQk5609OMG/9jaTrip?node-id=0-1&p=f&t=Mm09Z82YdZ3Is25i-0",
+    liveUrl: "https://www.9jatrip.ng/",
   },
   {
     slug: "somewhere-hotel",
@@ -480,5 +480,40 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
     status: "Open-source repository on GitHub (github.com/Bheemty/nova-wellness).",
     caseStudyUrl: "/lab",
     githubUrl: "https://github.com/Bheemty/nova-wellness",
+  },
+  {
+    slug: "paai",
+    title: "PAAI",
+    client: "PAAI Systems",
+    type: "Concept / Lab Exploration",
+    category: "AI & Mobile Systems",
+    year: "2024",
+    role: "Lead Product Designer",
+    timeline: "System Architecture & Mobile Product Design",
+    headline: "Autonomous Personal AI Assistant & Unified Financial Workflow Mobile System",
+    summary:
+      "A next-generation personal AI mobile application integrating autonomous workflow execution, intelligent conversational prompts, dual-mode light/dark design systems, and friction-free financial transactions.",
+    whyItExists:
+      "Mobile users juggle disconnected apps for personal finance, calendar scheduling, and task management, while standalone AI chatbots remain siloed from real-world execution. PAAI bridges intelligence with transactional execution.",
+    problemAddressed:
+      "High friction navigating complex menus for everyday routines, and the safety dilemma of enabling autonomous AI to execute financial transfers without user anxiety or errors.",
+    myContribution: [
+      "Architected the end-to-end mobile user journey across onboarding, conversational assistant, and multi-currency wallet.",
+      "Engineered an adaptive dual-theme design system with calibrated contrast tokens across OLED Obsidian and Clean Daylight surfaces.",
+      "Designed the intent-to-card verification pattern providing biometric security gates on every AI-initiated transaction.",
+      "Formulated the responsive component library, elevation hierarchy, and interactive prototypes.",
+    ],
+    keyDesignDecisions: [
+      "Intent-to-Card Verification: AI parses natural language prompts but generates a concrete, verifiable review card before requesting biometric approval.",
+      "Synchronous Dual-Theme System: Established semantic token pairs maintaining WCAG AAA compliance and identical hierarchy across Light and Dark modes.",
+      "Persistent Smart Composer: Anchored an expandable input with dynamic action chips informed by recent activity and calendar deadlines.",
+    ],
+    challengesEncountered:
+      "Balancing conversational simplicity with financial security safeguards, and ensuring visual balance across contrasting light and dark display modes.",
+    toolsAndTech: ["Figma", "Figjam", "Mobile Prototyping", "Design Token Architecture"],
+    keyLearnings:
+      "Designing for autonomous AI requires designing for trust: transparency, explicit confirmation cards, and reversible actions are essential.",
+    status: "Case study published on portfolio; design system and architecture documented.",
+    caseStudyUrl: "/work/paai",
   },
 ];

@@ -417,7 +417,6 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Design System", value: "Custom MEDesy Component Library" },
       ],
       caseStudyUrl: "/work/medesy",
-      prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
     },
     {
       slug: "9jatrip",
@@ -464,7 +463,53 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Design Deliverable", value: "Figma UI/UX & Interactive Prototypes" },
       ],
       caseStudyUrl: "/work/9jatrip",
-      prototypeUrl: "https://www.figma.com/design/QPyY4HiyEc40yQk5609OMG/9jaTrip?node-id=0-1&p=f&t=Mm09Z82YdZ3Is25i-0",
+      liveUrl: "https://www.9jatrip.ng/",
+    },
+    {
+      slug: "paai",
+      title: "PAAI",
+      client: "PAAI Systems",
+      category: "AI & Mobile Systems",
+      year: "2024",
+      role: "Lead Product Designer",
+      timeline: "Mobile Architecture & Systems",
+      headline: "Autonomous Personal AI Assistant & Unified Financial Workflow Mobile System",
+      summary:
+        "A personal AI mobile application integrating autonomous workflow execution, intelligent conversational prompts, dual-mode light/dark design systems, and friction-free financial transactions.",
+      overview:
+        "PAAI bridges conversational AI intelligence with concrete mobile utility. Built with an adaptive dual-theme design system (comprehensive Light and Dark modes), PAAI pairs an intelligent conversational assistant with a unified financial wallet and task engine. Users can issue natural language instructions to analyze spending, initiate peer transactions, manage multi-currency balances, and schedule automated actions within an intuitive, high-contrast mobile environment.",
+      challenge:
+        "Balancing conversational simplicity with rigorous transactional safeguards: AI interfaces must feel effortless without causing ambiguity or accidental money movement, while maintaining seamless legibility across contrasting Light and Dark interface paradigms.",
+      solution:
+        "Architected a modular two-tier interface combining an intent-driven conversational surface with explicit verification cards for financial execution. Designed a systematic dual-theme token hierarchy ensuring accessible contrast ratios, tactile micro-interactions, and real-time transaction feedback across both light and dark visual environments.",
+      deliverables: [
+        "Conversational AI Assistant & Natural Language Execution Interface",
+        "Adaptive Dual-Theme Mobile Design System (Dark & Light Mode)",
+        "Autonomous Financial Workflow & Wallet Operations Engine",
+        "Contextual Action Feeds & Real-Time Intelligence Ledger",
+      ],
+      tags: ["AI & Systems", "Mobile UI", "Conversational AI", "Fintech", "Design System"],
+      systemHighlights: [
+        {
+          title: "Conversational AI Assistant Surface",
+          description: "Dynamic message stream supporting generative text, interactive verification cards, and natural language query resolution.",
+        },
+        {
+          title: "Systematic Dual-Theme UI Library",
+          description: "Comprehensive Light and Dark mode specifications with calibrated contrast ratios, elevation tokens, and typography scales.",
+        },
+        {
+          title: "Integrated Wallet & Transaction Engine",
+          description: "Secure multi-currency wallet cards, real-time spending analytics, and biometric-gated money movement.",
+        },
+      ],
+      specifications: [
+        { label: "Platform", value: "iOS & Android Architecture" },
+        { label: "Design System", value: "Dual Theme (Light & Dark Mode) Semantic Token Architecture" },
+        { label: "Core Capabilities", value: "Conversational AI, Autonomous Financial Workflows, Wallet Management" },
+        { label: "Design Deliverable", value: "Figma UI/UX & Interactive Design System" },
+      ],
+      caseStudyUrl: "/work/paai",
     },
     {
       slug: "somewhere-hotel",
@@ -511,7 +556,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Concept / Lab Exploration" },
       ],
       caseStudyUrl: "/work/somewhere-hotel",
-      prototypeUrl: "https://www.figma.com/design/L5fXbK2GfQ5e7XgqB9Y9Xm/Somewhere-Hotel?node-id=0-1",
+      liveUrl: "https://somewhere-hotel.vercel.app",
     },
     {
       slug: "buybuddy",
@@ -558,7 +603,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Lead Product Designer" },
       ],
       caseStudyUrl: "/work/buybuddy",
-      prototypeUrl: "https://www.figma.com/design/buybuddy-spec?node-id=0-1",
+      liveUrl: "https://buybuddy-store.vercel.app",
     },
     {
       slug: "stillwater",
@@ -605,7 +650,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Concept / Architectural Study" },
       ],
       caseStudyUrl: "/work/stillwater",
-      prototypeUrl: "https://www.figma.com/design/stillwater-hall?node-id=0-1",
+      liveUrl: "https://stillwater-hall.vercel.app",
     },
     {
       slug: "greall-website",
@@ -652,7 +697,6 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Year", value: "2023" },
       ],
       caseStudyUrl: "/work/greall-website",
-      prototypeUrl: "https://www.figma.com/design/lF1WVFUs6FAzgNZ4DBEHQz/Greall-s-Website-Rebranding?node-id=463-9841&t=nlMA7sCFaPU6OIpn-1",
     },
     {
       slug: "spot",
@@ -891,7 +935,6 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Concept / Lab Exploration" },
       ],
       caseStudyUrl: "/work/will",
-      prototypeUrl: "https://www.figma.com/design/pLg1nVX9917TdkiDhjohoo/Will?node-id=0-1&t=1v4ItukpKgMzxDIC-1",
     },
     {
       slug: "agrivillage",
@@ -938,7 +981,6 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Concept / Lab Exploration" },
       ],
       caseStudyUrl: "/work/agrivillage",
-      prototypeUrl: "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
     },
   ],
 

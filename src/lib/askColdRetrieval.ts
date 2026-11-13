@@ -112,6 +112,7 @@ function extractTargetProjectFromHistory(
     if (norm.includes("stillwater")) return TAYE_PROJECTS.find((p) => p.slug === "stillwater") || null;
     if (norm.includes("will")) return TAYE_PROJECTS.find((p) => p.slug === "will") || null;
     if (norm.includes("agrivillage") || norm.includes("farmer")) return TAYE_PROJECTS.find((p) => p.slug === "agrivillage") || null;
+    if (norm.includes("paai") || norm.includes("personal ai")) return TAYE_PROJECTS.find((p) => p.slug === "paai") || null;
     if (norm.includes("nova") || norm.includes("wellness")) return TAYE_PROJECTS.find((p) => p.slug === "nova-wellness") || null;
   }
 
@@ -254,7 +255,7 @@ export function detectConversationalIntent(
     const titleNorm = normalize(proj.title);
     if (norm.includes(slugNorm) || norm.includes(titleNorm)) return "taye_project";
   }
-  if (/quickeat|spot|profile|medesy|9ja|raven|somewhere|buybuddy|stillwater|agrivillage|nova/i.test(norm)) {
+  if (/paai|quickeat|spot|profile|medesy|9ja|raven|somewhere|buybuddy|stillwater|agrivillage|nova/i.test(norm)) {
     return "taye_project";
   }
 
@@ -335,6 +336,7 @@ export function retrieveContext(
     if (slugNorm === "9jatrip" && (normQuery.includes("9ja") || normQuery.includes("trip") || normQuery.includes("transit") || normQuery.includes("bus") || normQuery.includes("coach"))) score += 10;
     if (slugNorm === "will" && (normQuery.includes("will") || normQuery.includes("legacy") || normQuery.includes("estate") || normQuery.includes("asset"))) score += 10;
     if (slugNorm === "agrivillage" && (normQuery.includes("agri") || normQuery.includes("farm") || normQuery.includes("produce"))) score += 10;
+    if (slugNorm === "paai" && (normQuery.includes("paai") || normQuery.includes("ai assistant") || normQuery.includes("autonomous") || normQuery.includes("dual theme"))) score += 10;
     if (slugNorm === "nova-wellness" && (normQuery.includes("nova") || normQuery.includes("wellness") || normQuery.includes("mood") || normQuery.includes("mental"))) score += 10;
 
     for (const w of words) {
@@ -704,11 +706,11 @@ export function generateLocalMockResponse(
     }
 
     if (isAskingPrototype) {
-      const url = targetProject.prototypeUrl || targetProject.githubUrl || targetProject.caseStudyUrl;
+      const url = targetProject.liveUrl || targetProject.prototypeUrl || targetProject.githubUrl || targetProject.caseStudyUrl;
       return {
-        text: `You can explore the verified artifacts from my work on **${targetProject.title}** directly:\n\n- [${targetProject.title} Case Study](${targetProject.caseStudyUrl})\n${targetProject.prototypeUrl ? `- [Figma / Behance Specification](${targetProject.prototypeUrl})\n` : ""}${targetProject.githubUrl ? `- [GitHub Source Repository](${targetProject.githubUrl})\n` : ""}`,
+        text: `You can explore the verified artifacts from my work on **${targetProject.title}** directly:\n\n- [${targetProject.title} Case Study](${targetProject.caseStudyUrl})\n${targetProject.liveUrl ? `- [Live Website](${targetProject.liveUrl})\n` : ""}${targetProject.prototypeUrl ? `- [Behance Case Study Specification](${targetProject.prototypeUrl})\n` : ""}${targetProject.githubUrl ? `- [GitHub Source Repository](${targetProject.githubUrl})\n` : ""}`,
         actionChips: [
-          { label: `Open ${targetProject.title}`, href: url },
+          { label: targetProject.liveUrl ? `Visit ${targetProject.title} Website` : `Open ${targetProject.title}`, href: url },
           { label: "View All Projects", href: "/work" },
         ],
       };
@@ -916,10 +918,11 @@ export function generateLocalMockResponse(
   }
 
   // 22. MOBILE APP DESIGN (Only if not asking about a specific project)
-  if (!/raven|quickeat|spot|profile|medesy|9ja|nova/i.test(norm) && /\b(mobile|mobile app|mobile apps|ios|android)\b/i.test(norm)) {
+  if (!/paai|raven|quickeat|spot|profile|medesy|9ja|nova/i.test(norm) && /\b(mobile|mobile app|mobile apps|ios|android)\b/i.test(norm)) {
     return {
-      text: `Yes, **mobile application design is one of my core specializations** across iOS and Android. I focus on platform-native ergonomics, responsive layout hierarchies, and dual light/dark themes.\n\nFeatured mobile case studies:\n- [QuickEats](/work/quickeats): 45-board consumer mobile app with 20-minute meal planning, smart pantry matching, and dual light/dark themes.\n- [Raven Bank](/work/raven-bank): Rapid 48-hour mobile banking sprint featuring single-tap P2P beneficiary transfers.\n- [9jaTrip](/work/9jatrip): Intercity transit booking app with terminal hub selection, seat maps, and QR boarding passes.\n- [PROfile](/work/profile): Mobile companion for enterprise employees featuring one-tap clock-in and leave management.`,
+      text: `Yes, **mobile application design is one of my core specializations** across iOS and Android. I focus on platform-native ergonomics, responsive layout hierarchies, and dual light/dark themes.\n\nFeatured mobile case studies:\n- [PAAI](/work/paai): Autonomous personal AI assistant and financial operations system with an adaptive dual-theme architecture.\n- [QuickEats](/work/quickeats): 45-board consumer mobile app with 20-minute meal planning, smart pantry matching, and dual light/dark themes.\n- [Raven Bank](/work/raven-bank): Rapid 48-hour mobile banking sprint featuring single-tap P2P beneficiary transfers.\n- [9jaTrip](/work/9jatrip): Intercity transit booking app with terminal hub selection, seat maps, and QR boarding passes.\n- [PROfile](/work/profile): Mobile companion for enterprise employees featuring one-tap clock-in and leave management.`,
       actionChips: [
+        { label: "Inspect PAAI", href: "/work/paai" },
         { label: "Inspect QuickEats", href: "/work/quickeats" },
         { label: "Inspect Raven Bank", href: "/work/raven-bank" },
         { label: "Inspect 9jaTrip", href: "/work/9jatrip" },
@@ -928,6 +931,15 @@ export function generateLocalMockResponse(
   }
 
   // 23. SPECIFIC PROJECT INQUIRIES
+  if (/paai|personal ai|autonomous ai assistant/i.test(norm)) {
+    return {
+      text: `**PAAI** is an autonomous personal AI mobile application I designed that bridges natural language conversational intelligence with verified financial execution.\n\nKey architectural pillars:\n- **Intent-to-Card Verification**: The AI parses conversational instructions (e.g. split bills, send money) but surfaces a visual, structured confirmation card requiring biometric Face ID before executing funds movement.\n- **Adaptive Dual-Theme System**: Built from the ground up with semantic design tokens ensuring WCAG AAA contrast across both OLED obsidian dark mode and clean daylight light mode.\n- **Unified Multi-Currency Wallet**: Instant access to virtual cards, spend analytics, and automated transaction ledgers.`,
+      actionChips: [
+        { label: "Inspect PAAI Case Study", href: "/work/paai" },
+        { label: "Explore Work Archive", href: "/work" },
+      ],
+    };
+  }
   if (/quick\s*eat|quickeats|meal prep|pantry\s*match|food\s*tech/i.test(norm)) {
     return {
       text: `**QuickEats** is a consumer mobile application I designed across 45 presentation boards. It solves meal-prep intimidation for students and busy young professionals through personalized 20-minute recipes, smart pantry matching using ingredients already in the kitchen, and auto-generated grocery lists sorted by supermarket aisle. It includes complete dual light and dark theme UI kits.`,
@@ -976,7 +988,6 @@ export function generateLocalMockResponse(
       text: `**MEDesy** is a healthcare platform where I designed a structured WhatsApp-first conversational triage gateway. Rather than forcing patients in distress to download a bulky app, patients articulate symptoms in ordinary language over WhatsApp and connect with licensed Nigerian physicians, eliminating clinic waiting room delays.`,
       actionChips: [
         { label: "Inspect MEDesy Case Study", href: "/work/medesy" },
-        { label: "View Figma Prototype", href: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6" },
       ],
     };
   }
@@ -986,7 +997,7 @@ export function generateLocalMockResponse(
       text: `**9jaTrip** is an intercity mobility platform I designed for commuters across Nigeria. It replaces chaotic bus park queues with verified hub-to-hub terminal route searches, real-time seat selection, transparent upfront pricing, and high-contrast digital QR boarding passes for quick terminal gate scanning.`,
       actionChips: [
         { label: "Inspect 9jaTrip Case Study", href: "/work/9jatrip" },
-        { label: "View Figma Design", href: "https://www.figma.com/design/QPyY4HiyEc40yQk5609OMG/9jaTrip?node-id=0-1&p=f&t=Mm09Z82YdZ3Is25i-0" },
+        { label: "Visit 9jaTrip Website", href: "https://www.9jatrip.ng/" },
       ],
     };
   }

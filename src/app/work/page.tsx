@@ -48,13 +48,14 @@ const ORDERED_SLUGS = [
   // 1-8: Original Preserved Public Projects in Original Order
   "medesy",
   "9jatrip",
+  "paai",
   "somewhere-hotel",
   "buybuddy",
   "stillwater",
   "greall-website",
   "will",
   "agrivillage",
-  // 9-12: Approved Behance Portfolio Expansions
+  // Approved Behance Portfolio Expansions
   "spot",
   "profile",
   "quickeats",
@@ -89,11 +90,14 @@ export default function WorkArchivePage() {
       if (!matchesSearch) return false;
 
             if (selectedCategory === "All") return true;
-      if (selectedCategory === "Healthcare & Conversational") {
+      if (selectedCategory === "Healthcare & AI" || selectedCategory === "Healthcare & Conversational") {
         return (
           project.category.includes("Healthcare") ||
           project.category.includes("Conversational") ||
-          project.tags.includes("Conversational UI")
+          project.category.includes("AI") ||
+          project.tags.includes("Conversational UI") ||
+          project.tags.includes("Conversational AI") ||
+          project.tags.includes("AI & Systems")
         );
       }
       if (selectedCategory === "Mobility & Transit") {
@@ -126,10 +130,13 @@ export default function WorkArchivePage() {
       if (selectedCategory === "Fintech & Systems") {
         return (
           project.category.includes("Fintech") ||
+          project.category.includes("Systems") ||
+          project.category.includes("AI") ||
           project.category.includes("Banking") ||
           project.category.includes("Corporate") ||
           project.category.includes("Brand") ||
           project.tags.includes("Fintech") ||
+          project.tags.includes("AI & Systems") ||
           project.tags.includes("Digital Legacy") ||
           project.tags.includes("Brand Identity")
         );
@@ -431,7 +438,7 @@ export default function WorkArchivePage() {
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1.5 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                                 >
-                                  <span>Live Demo</span>
+                                  <span>{p.slug === "9jatrip" ? "Live Website" : "Live Demo"}</span>
                                   <svg
                                     viewBox="0 0 24 24"
                                     width="13"
@@ -455,7 +462,7 @@ export default function WorkArchivePage() {
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1.5 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                                 >
-                                  <span>Figma Prototype</span>
+                                  <span>{p.prototypeUrl.includes("behance.net") ? "Behance Case Study" : "Design Prototype"}</span>
                                   <svg
                                     viewBox="0 0 24 24"
                                     width="13"
@@ -580,14 +587,14 @@ export default function WorkArchivePage() {
                             </button>
                           </div>
 
-                          {p.prototypeUrl && (
+                          {p.liveUrl ? (
                             <a
-                              href={p.prototypeUrl}
+                              href={p.liveUrl}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1.5 text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                             >
-                              <span>Inspect Prototype</span>
+                              <span>{p.slug === "9jatrip" ? "Live Website" : "Live Demo"}</span>
                               <svg
                                 viewBox="0 0 24 24"
                                 width="12"
@@ -602,7 +609,29 @@ export default function WorkArchivePage() {
                                 <path d="M7 17L17 7M17 7H7M17 7V17" />
                               </svg>
                             </a>
-                          )}
+                          ) : p.prototypeUrl ? (
+                            <a
+                              href={p.prototypeUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 text-[#89919d] hover:text-[#a9ddf0] transition-colors"
+                            >
+                              <span>{p.prototypeUrl.includes("behance.net") ? "Behance" : "Prototype"}</span>
+                              <svg
+                                viewBox="0 0 24 24"
+                                width="12"
+                                height="12"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2.2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M7 17L17 7M17 7H7M17 7V17" />
+                              </svg>
+                            </a>
+                          ) : null}
                         </div>
                       </article>
                     </ScrollReveal>
@@ -827,17 +856,27 @@ export default function WorkArchivePage() {
                 <ArrowUpRight size={14} />
               </Link>
 
-              {inspectingProject.prototypeUrl && (
+              {inspectingProject.liveUrl ? (
+                <a
+                  href={inspectingProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-5 py-3 font-mono-code text-xs text-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-colors"
+                >
+                  <span>{inspectingProject.slug === "9jatrip" ? "Visit Live Website" : "Live Experience"}</span>
+                  <ArrowUpRight size={14} />
+                </a>
+              ) : inspectingProject.prototypeUrl ? (
                 <a
                   href={inspectingProject.prototypeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-5 py-3 font-mono-code text-xs text-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-colors"
                 >
-                  <span>Live Prototype</span>
+                  <span>{inspectingProject.prototypeUrl.includes("behance.net") ? "Examine on Behance" : "Design Prototype"}</span>
                   <ArrowUpRight size={14} />
                 </a>
-              )}
+              ) : null}
             </div>
           </div>
         )}
