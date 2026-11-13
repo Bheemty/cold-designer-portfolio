@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { PROJECTS } from "@/data/projects";
 import ScrollReveal from "@/components/motion/ScrollReveal";
+import CaseStudyQuickAccess from "@/components/work/CaseStudyQuickAccess";
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -100,8 +101,10 @@ export default async function CaseStudyPage({
             {project.headline}
           </p>
 
-          {/* Action Links (Live, Behance, GitHub) */}
-          <div className="flex flex-wrap gap-3 pt-2">
+          {/* Action Links (Quick Access, Live, Behance, GitHub) */}
+          <div className="flex flex-wrap items-center gap-3 pt-2">
+            <CaseStudyQuickAccess project={project} />
+
             {project.liveUrl && (
               <a
                 href={project.liveUrl}
@@ -240,7 +243,7 @@ export default async function CaseStudyPage({
         {/* 01 // STRATEGIC CONTEXT & PROBLEM SPACE */}
         {/* ───────────────────────────────────────────────────────────── */}
         <ScrollReveal start="top 85%" y={20} duration={0.45}>
-          <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20">
+          <section id="section-context" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 scroll-mt-28">
             <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
               <span>01 // STRATEGIC CONTEXT</span>
             </div>
@@ -293,7 +296,7 @@ export default async function CaseStudyPage({
         {/* ───────────────────────────────────────────────────────────── */}
         {project.discoveryInsights && project.discoveryInsights.length > 0 && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
-            <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16">
+            <section id="section-discovery" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
               <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
                 <span>02 // RESEARCH &amp; DISCOVERY</span>
               </div>
@@ -344,7 +347,7 @@ export default async function CaseStudyPage({
         {/* ───────────────────────────────────────────────────────────── */}
         {project.designDecisions && project.designDecisions.length > 0 && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
-            <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16">
+            <section id="section-decisions" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
               <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
                 <span>03 // STRATEGIC DECISIONS</span>
               </div>
@@ -395,7 +398,7 @@ export default async function CaseStudyPage({
         {/* 04 // ARCHITECTURAL SOLUTION & WORKFLOWS */}
         {/* ───────────────────────────────────────────────────────────── */}
         <ScrollReveal start="top 85%" y={20} duration={0.45}>
-          <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16">
+          <section id="section-solution" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
             <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
               <span>04 // ARCHITECTURAL SOLUTION</span>
             </div>
@@ -480,7 +483,7 @@ export default async function CaseStudyPage({
         {/* 05 // VISUAL ARTIFACTS & SPECIMENS */}
         {/* ───────────────────────────────────────────────────────────── */}
         {project.gallery && project.gallery.length > 0 && (
-          <section className="mb-20 border-t border-white/[0.08] pt-16">
+          <section id="section-specimens" className="mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
             <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-10">
               <div className="flex items-center gap-3">
                 <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
@@ -524,7 +527,7 @@ export default async function CaseStudyPage({
         {/* Editorial Notice for Interface Exploration & Specimen Files */}
         {(!project.gallery || project.gallery.length === 0) && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
-            <section className="mb-20 border-t border-white/[0.08] pt-16">
+            <section id="section-specimens" className="mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
               <div className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-8 sm:p-10">
                 <div className="flex items-center gap-2 font-mono-code text-xs text-[#a9ddf0] mb-3">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
@@ -581,7 +584,7 @@ export default async function CaseStudyPage({
         {/* ───────────────────────────────────────────────────────────── */}
         {project.validation && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
-            <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16">
+            <section id="section-validation" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
               <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
                 <span>06 // VALIDATION &amp; ITERATION</span>
               </div>
@@ -657,7 +660,7 @@ export default async function CaseStudyPage({
         {/* ───────────────────────────────────────────────────────────── */}
         {project.outcomes && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
-            <section className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16">
+            <section id="section-outcomes" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
               <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
                 <span>07 // OUTCOMES &amp; LEARNINGS</span>
               </div>
@@ -726,7 +729,7 @@ export default async function CaseStudyPage({
         {/* TECHNICAL & VERIFICATION SPECS */}
         {/* ───────────────────────────────────────────────────────────── */}
         <ScrollReveal start="top 85%" y={20} duration={0.45}>
-          <section className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 mb-20 font-mono-code text-xs">
+          <section id="section-specs" className="rounded-2xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 mb-20 font-mono-code text-xs scroll-mt-28">
             <div className="flex items-center gap-3 mb-6 border-b border-white/[0.08] pb-4">
               <Cpu size={15} className="text-[#a9ddf0]" />
               <span className="uppercase text-[#f2f1ec] font-semibold tracking-wider">

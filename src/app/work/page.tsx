@@ -424,10 +424,10 @@ export default function WorkArchivePage() {
                                     setInspectingProject(p);
                                   }}
                                   className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-3 font-mono-code text-xs text-[#89919d] hover:text-[#f2f1ec] hover:border-[#a9ddf0] transition-colors cursor-pointer"
-                                  aria-label={`Inspect ${p.title} specifications`}
+                                  aria-label={`Open Quick Access for ${p.title}`}
                                 >
                                   <Eye size={13} />
-                                  <span>Quick Specs</span>
+                                  <span>Quick Access</span>
                                 </button>
                               </div>
 
@@ -764,7 +764,7 @@ export default function WorkArchivePage() {
         maxWidth="2xl"
       >
         {inspectingProject && (
-          <div className="space-y-6">
+          <div className="space-y-6 pb-12">
             {/* Project Hero Preview */}
             {inspectingProject.heroImage && (
               <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-white/[0.08] shadow-lg bg-[#090b0f]">

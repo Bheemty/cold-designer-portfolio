@@ -1471,7 +1471,7 @@ export default function LabPage() {
         maxWidth="2xl"
       >
         {inspectingExperiment && (
-          <div className="space-y-6">
+          <div className="space-y-6 pb-10">
             <div>
               <p className="text-sm text-[#89919d] font-light leading-relaxed">
                 {inspectingExperiment.description}

@@ -181,6 +181,26 @@ html.theme-transitioning .hero-invert {
   scrollbar-width: none;
 }
 
+/* Sleek custom scrollbar for accessible dialogs and panels */
+.custom-modal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(169, 221, 240, 0.28) transparent;
+}
+.custom-modal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-modal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-modal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(169, 221, 240, 0.28);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+.custom-modal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(169, 221, 240, 0.55);
+}
+
 /* Text stroke for dramatic editorial typography */
 .text-stroke-accent {
   -webkit-text-stroke: 1.5px var(--accent);
