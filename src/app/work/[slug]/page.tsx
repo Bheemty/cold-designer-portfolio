@@ -124,7 +124,13 @@ export default async function CaseStudyPage({
                 rel="noopener noreferrer"
                 className="case-study-glass-chip inline-flex items-center gap-2 rounded-full border border-white/[0.14] bg-white/[0.04] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.18),0_4px_16px_rgba(0,0,0,0.3)] transition-all"
               >
-                <span>{project.prototypeUrl.includes("behance.net") ? "Examine on Behance" : "Explore Design Specs"}</span>
+                <span>
+                  {project.prototypeUrl.includes("figma.com")
+                    ? "View in Figma"
+                    : project.prototypeUrl.includes("behance.net")
+                    ? "Examine on Behance"
+                    : "Explore Design Specs"}
+                </span>
                 <ArrowUpRight size={13} />
               </a>
             )}
@@ -558,7 +564,13 @@ export default async function CaseStudyPage({
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
                     >
-                      <span>{project.prototypeUrl.includes("behance.net") ? "Examine on Behance" : "Explore Design Specs"}</span>
+                      <span>
+                        {project.prototypeUrl.includes("figma.com")
+                          ? "View in Figma"
+                          : project.prototypeUrl.includes("behance.net")
+                          ? "Examine on Behance"
+                          : "Explore Design Specs"}
+                      </span>
                       <ArrowUpRight size={13} />
                     </a>
                   )}

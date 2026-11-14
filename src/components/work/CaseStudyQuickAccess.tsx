@@ -325,7 +325,13 @@ export default function CaseStudyQuickAccess({
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-2.5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
                 >
-                  <span>{project.prototypeUrl.includes("behance.net") ? "Behance" : "Design Specs"}</span>
+                  <span>
+                    {project.prototypeUrl.includes("figma.com")
+                      ? "View in Figma"
+                      : project.prototypeUrl.includes("behance.net")
+                      ? "Behance"
+                      : "Design Specs"}
+                  </span>
                   <ArrowUpRight size={13} />
                 </a>
               )}

@@ -147,7 +147,7 @@ export default function WorkArchivePage() {
 
     const featuredList = useMemo(() => {
     return filteredProjects.filter((p) =>
-      ["medesy", "9jatrip", "somewhere-hotel", "buybuddy", "stillwater"].includes(p.slug)
+      ["medesy", "9jatrip", "paai", "somewhere-hotel", "buybuddy", "stillwater"].includes(p.slug)
     );
   }, [filteredProjects]);
 
@@ -272,7 +272,7 @@ export default function WorkArchivePage() {
                     (01) &mdash; Featured Case Studies // Production Systems
                   </span>
                   <span className="text-[#89919d]">
-                    {featuredList.length} of 05 Flagship Case Studies
+                    {featuredList.length} of 06 Flagship Case Studies
                   </span>
                 </div>
 
@@ -455,14 +455,20 @@ export default function WorkArchivePage() {
                                 </a>
                               )}
 
-                              {!p.liveUrl && p.prototypeUrl && (
+                              {p.prototypeUrl && (
                                 <a
                                   href={p.prototypeUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1.5 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                                 >
-                                  <span>{p.prototypeUrl.includes("behance.net") ? "Behance Case Study" : "Design Prototype"}</span>
+                                  <span>
+                                    {p.prototypeUrl.includes("figma.com")
+                                      ? "View in Figma"
+                                      : p.prototypeUrl.includes("behance.net")
+                                      ? "Behance Case Study"
+                                      : "Design Prototype"}
+                                  </span>
                                   <svg
                                     viewBox="0 0 24 24"
                                     width="13"
@@ -616,7 +622,7 @@ export default function WorkArchivePage() {
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1.5 text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                             >
-                              <span>{p.prototypeUrl.includes("behance.net") ? "Behance" : "Prototype"}</span>
+                              <span>{p.prototypeUrl.includes("figma.com") ? "View in Figma" : p.prototypeUrl.includes("behance.net") ? "Behance" : "Prototype"}</span>
                               <svg
                                 viewBox="0 0 24 24"
                                 width="12"
@@ -873,7 +879,13 @@ export default function WorkArchivePage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-5 py-3 font-mono-code text-xs text-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-colors"
                 >
-                  <span>{inspectingProject.prototypeUrl.includes("behance.net") ? "Examine on Behance" : "Design Prototype"}</span>
+                  <span>
+                    {inspectingProject.prototypeUrl.includes("figma.com")
+                      ? "View in Figma"
+                      : inspectingProject.prototypeUrl.includes("behance.net")
+                      ? "Examine on Behance"
+                      : "Design Prototype"}
+                  </span>
                   <ArrowUpRight size={14} />
                 </a>
               ) : null}

@@ -260,6 +260,7 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Three-pane conversational intake flow, verified web service hero, and standardized doctor referral cards.",
+    prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
   },
 
   {
@@ -600,6 +601,7 @@ export const PROJECTS: Project[] = [
     },
     wireframeSummary:
       "Conversational prompt stream, interactive intent verification cards, dual-theme balance dashboards, and modular wallet management layouts.",
+    prototypeUrl: "https://www.figma.com/design/gxDuODgmcBJfcQHgeCdJjo/paai-qpp--Copy-?node-id=0-1&t=hcDwYeZdR4qsQ1wQ-1",
   },
 
   {
@@ -1315,6 +1317,7 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Institutional capability hero, modular product pillar cards, developer API gateway, and compliance disclosure footer.",
+    prototypeUrl: "https://www.figma.com/design/lF1WVFUs6FAzgNZ4DBEHQz/Greall-s-Website-Rebranding?node-id=463-9841&t=nlMA7sCFaPU6OIpn-1",
   },
 
   {
@@ -1474,6 +1477,7 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Empathetic milestone wizard, interactive visual allocation sliders, encrypted vault overview, and trusted contact verification ledger.",
+    prototypeUrl: "https://www.figma.com/design/pLg1nVX9917TdkiDhjohoo/Will?node-id=0-1&t=1v4ItukpKgMzxDIC-1",
   },
 
   {
@@ -1640,6 +1644,7 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Large-touch target produce selectors, simple batch creation cards, and clear delivery timeline trackers.",
+    prototypeUrl: "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
   },
 
   // ─────────────────────────────────────────────────────────────

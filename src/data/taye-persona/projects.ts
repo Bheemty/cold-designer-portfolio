@@ -209,6 +209,7 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
       "In healthcare, trust is everything. Meeting users where they already feel comfortable (WhatsApp) removes friction that no slick native app could ever solve.",
     status: "Active production platform.",
     caseStudyUrl: "/work/medesy",
+    prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
   },
   {
     slug: "9jatrip",
@@ -377,6 +378,7 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
       "In B2B fintech, visual discipline is a competitive advantage. Corporate clients equate visual clarity with technical security.",
     status: "Shipped in production.",
     caseStudyUrl: "/work/greall-website",
+    prototypeUrl: "https://www.figma.com/design/lF1WVFUs6FAzgNZ4DBEHQz/Greall-s-Website-Rebranding?node-id=463-9841&t=nlMA7sCFaPU6OIpn-1",
   },
   {
     slug: "will",
@@ -410,6 +412,7 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
       "When designing for emotionally vulnerable moments, software must feel warm, steady, and completely unhurried.",
     status: "Case study published on portfolio.",
     caseStudyUrl: "/work/will",
+    prototypeUrl: "https://www.figma.com/design/pLg1nVX9917TdkiDhjohoo/Will?node-id=0-1&t=1v4ItukpKgMzxDIC-1",
   },
   {
     slug: "agrivillage",
@@ -443,6 +446,7 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
       "Designing for emerging markets requires stripping away all vanity UI to focus 100% on bandwidth efficiency and legibility under direct sunlight.",
     status: "Case study published on portfolio.",
     caseStudyUrl: "/work/agrivillage",
+    prototypeUrl: "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
   },
   {
     slug: "nova-wellness",
@@ -515,5 +519,6 @@ export const TAYE_PROJECTS: DetailedProjectKnowledge[] = [
       "Designing for autonomous AI requires designing for trust: transparency, explicit confirmation cards, and reversible actions are essential.",
     status: "Case study published on portfolio; design system and architecture documented.",
     caseStudyUrl: "/work/paai",
+    prototypeUrl: "https://www.figma.com/design/gxDuODgmcBJfcQHgeCdJjo/paai-qpp--Copy-?node-id=0-1&t=hcDwYeZdR4qsQ1wQ-1",
   },
 ];

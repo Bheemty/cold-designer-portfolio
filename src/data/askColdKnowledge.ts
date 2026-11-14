@@ -417,6 +417,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Design System", value: "Custom MEDesy Component Library" },
       ],
       caseStudyUrl: "/work/medesy",
+      prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
     },
     {
       slug: "9jatrip",
@@ -510,6 +511,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Design Deliverable", value: "Figma UI/UX & Interactive Design System" },
       ],
       caseStudyUrl: "/work/paai",
+      prototypeUrl: "https://www.figma.com/design/gxDuODgmcBJfcQHgeCdJjo/paai-qpp--Copy-?node-id=0-1&t=hcDwYeZdR4qsQ1wQ-1",
     },
     {
       slug: "somewhere-hotel",
@@ -697,6 +699,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Year", value: "2023" },
       ],
       caseStudyUrl: "/work/greall-website",
+      prototypeUrl: "https://www.figma.com/design/lF1WVFUs6FAzgNZ4DBEHQz/Greall-s-Website-Rebranding?node-id=463-9841&t=nlMA7sCFaPU6OIpn-1",
     },
     {
       slug: "spot",
@@ -935,6 +938,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Concept / Lab Exploration" },
       ],
       caseStudyUrl: "/work/will",
+      prototypeUrl: "https://www.figma.com/design/pLg1nVX9917TdkiDhjohoo/Will?node-id=0-1&t=1v4ItukpKgMzxDIC-1",
     },
     {
       slug: "agrivillage",
@@ -981,6 +985,7 @@ export const ASK_COLD_KNOWLEDGE: KnowledgeBase = {
         { label: "Engagement", value: "Concept / Lab Exploration" },
       ],
       caseStudyUrl: "/work/agrivillage",
+      prototypeUrl: "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
     },
   ],
 
