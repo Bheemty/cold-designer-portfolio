@@ -473,34 +473,40 @@ export const PROJECTS: Project[] = [
         alt: "PAAI Flagship Mobile Application Hero Mockup",
       },
       {
-        src: "/images/projects/paai/paai-chat-interface.png",
+        src: "/images/projects/paai/paai-figma-dash-pay-flows.png",
         caption:
-          "Conversational AI assistant interface: multi-turn subscription audit dialogue, intelligent action pills, and waveform prompt input field.",
-        alt: "PAAI Conversational AI Assistant Interface",
+          "Authentic Figma design screens: Dashboard balance ledger, conversational payment modals, transaction verification cards, and payment history flows directly from the design file.",
+        alt: "PAAI Figma Design Screens: Dashboard and Payment Execution Flows",
       },
       {
-        src: "/images/projects/paai/paai-intent-verification.png",
+        src: "/images/projects/paai/paai-figma-voice-assistant.png",
         caption:
-          "Intent-to-Card verification pattern: biometric transaction confirmation card for instant split payments with fee transparency and auto-settle status.",
-        alt: "PAAI Intent-to-Card Verification Modal",
+          "Authentic Figma design screens: On-screen voice command interfaces, manual conversational chat streams, and invoice/receipt camera OCR scanning flows directly from the design file.",
+        alt: "PAAI Figma Design Screens: Conversational Assistant and Voice Command Flows",
       },
       {
-        src: "/images/projects/paai/paai-wallet-system.png",
+        src: "/images/projects/paai/paai-figma-onboarding-auth.png",
         caption:
-          "Multi-currency financial wallet dashboard: primary USD card with emerald microchip, horizontal wallet carousel, quick actions, and verified transaction stream.",
-        alt: "PAAI Multi-Currency Wallet Dashboard",
+          "Authentic Figma design screens: Multi-step splash illustrations, account registration, identity setup, and multi-device authentication screens directly from the design file.",
+        alt: "PAAI Figma Design Screens: Onboarding and Identity Authentication Architecture",
       },
       {
-        src: "/images/projects/paai/paai-dual-theme.png",
+        src: "/images/projects/paai/paai-figma-dark-flows.png",
         caption:
-          "Synchronous dual-theme design system: side-by-side comparison of Obsidian Dark Mode (#0B0F17) and Clean Daylight Light Mode (#FFFFFF / #F8F9FA) with calibrated contrast tokens.",
-        alt: "PAAI Dual-Theme Design System Comparison",
+          "Authentic Figma design screens: OLED Obsidian Dark Mode flows, camera-based transactions, dynamic chat execution, and biometric security settings directly from the design file.",
+        alt: "PAAI Figma Design Screens: Dark Mode System Architecture",
       },
       {
-        src: "/images/projects/paai/paai-canvas-overview.png",
+        src: "/images/projects/paai/paai-figma-light-flows.png",
         caption:
-          "Comprehensive system canvas overview: end-to-end user journeys, dual-theme UI architecture, and multi-screen flow organization.",
-        alt: "PAAI Mobile Application Multi-Screen System Canvas Overview",
+          "Authentic Figma design screens: Complete Light Mode user journey architecture spanning onboarding, dashboards, payment relays, and profile management from the design file.",
+        alt: "PAAI Figma Design Screens: Complete Light Mode Architecture",
+      },
+      {
+        src: "/images/projects/paai/paai-figma-system-canvas.png",
+        caption:
+          "Authentic Figma system canvas: Comprehensive dual-theme (Light Mode and Dark Mode) mobile application component architecture and journey map directly from the design canvas.",
+        alt: "PAAI Figma Design Canvas: Dual-Theme Architecture Overview",
       },
     ],
     problemStatement: {

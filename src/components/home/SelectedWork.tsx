@@ -818,20 +818,20 @@ export default function SelectedWork() {
                     <Image
                       src={
                         paaiActiveFlow === "intent"
-                          ? "/images/projects/paai/paai-intent-verification.png"
+                          ? "/images/projects/paai/paai-figma-dash-pay-flows.png"
                           : paaiActiveFlow === "wallet"
-                          ? "/images/projects/paai/paai-wallet-system.png"
-                          : "/images/projects/paai/paai-hero-mockup.png"
+                          ? "/images/projects/paai/paai-figma-light-flows.png"
+                          : "/images/projects/paai/paai-figma-voice-assistant.png"
                       }
                       alt={
                         paaiActiveFlow === "intent"
-                          ? "PAAI Intent-to-Card Verification Pattern"
+                          ? "PAAI Figma Design Screens: Dashboard & Payment Execution"
                           : paaiActiveFlow === "wallet"
-                          ? "PAAI Multi-Currency Wallet System"
-                          : "PAAI Flagship Mobile Application Hero Mockup"
+                          ? "PAAI Figma Design Screens: Light Mode Architecture & Onboarding"
+                          : "PAAI Figma Design Screens: Conversational Assistant & Voice Commands"
                       }
                       fill
-                      className="object-cover transition-all duration-500 hover:scale-[1.02]"
+                      className="object-contain transition-all duration-500 hover:scale-[1.02]"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                   </div>
@@ -839,13 +839,13 @@ export default function SelectedWork() {
                   <div className="mt-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-t border-white/[0.06] pt-4 font-mono-code text-xs">
                     <span className="text-[#f2f1ec] font-medium leading-relaxed">
                       {paaiActiveFlow === "intent"
-                        ? "Intent-to-Card Verification Gate: Biometric Transaction Confirmation Card"
+                        ? "Figma Design Screens: Dashboard, Pay Flows & Transaction Verification"
                         : paaiActiveFlow === "wallet"
-                        ? "Multi-Currency Financial Wallet: Real-time Balance Ledger & Card Operations"
-                        : "Flagship Mobile Showcase: Autonomous Conversational AI Assistant & Verification"}
+                        ? "Figma Design Screens: Light Mode Onboarding & Multi-Screen Architecture"
+                        : "Figma Design Screens: On-Screen Voice Commands & Conversational Chat Streams"}
                     </span>
                     <span className="text-[#89919d] text-[11px] shrink-0">
-                      AUTHENTIC SPECIMEN
+                      AUTHENTIC FIGMA SCREENS
                     </span>
                   </div>
                 </div>
