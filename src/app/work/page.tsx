@@ -438,7 +438,7 @@ export default function WorkArchivePage() {
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1.5 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                                 >
-                                  <span>{p.slug === "9jatrip" ? "Live Website" : "Live Demo"}</span>
+                                  <span>{p.slug === "9jatrip" ? "Visit Live Website" : "Live Demo"}</span>
                                   <svg
                                     viewBox="0 0 24 24"
                                     width="13"
@@ -463,11 +463,9 @@ export default function WorkArchivePage() {
                                   className="inline-flex items-center gap-1.5 font-mono-code text-xs text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                                 >
                                   <span>
-                                    {p.prototypeUrl.includes("figma.com")
-                                      ? "View in Figma"
-                                      : p.prototypeUrl.includes("behance.net")
+                                    {p.prototypeUrl.includes("behance.net")
                                       ? "Behance Case Study"
-                                      : "Design Prototype"}
+                                      : "Design Artifacts"}
                                   </span>
                                   <svg
                                     viewBox="0 0 24 24"
@@ -622,7 +620,7 @@ export default function WorkArchivePage() {
                               rel="noopener noreferrer"
                               className="inline-flex items-center gap-1.5 text-[#89919d] hover:text-[#a9ddf0] transition-colors"
                             >
-                              <span>{p.prototypeUrl.includes("figma.com") ? "View in Figma" : p.prototypeUrl.includes("behance.net") ? "Behance" : "Prototype"}</span>
+                              <span>{p.prototypeUrl.includes("behance.net") ? "Behance" : "Case Study"}</span>
                               <svg
                                 viewBox="0 0 24 24"
                                 width="12"
@@ -880,11 +878,9 @@ export default function WorkArchivePage() {
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-5 py-3 font-mono-code text-xs text-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-colors"
                 >
                   <span>
-                    {inspectingProject.prototypeUrl.includes("figma.com")
-                      ? "View in Figma"
-                      : inspectingProject.prototypeUrl.includes("behance.net")
+                    {inspectingProject.prototypeUrl.includes("behance.net")
                       ? "Examine on Behance"
-                      : "Design Prototype"}
+                      : "Case Study Artifacts"}
                   </span>
                   <ArrowUpRight size={14} />
                 </a>

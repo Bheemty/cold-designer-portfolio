@@ -70,17 +70,32 @@ export default function MorphingDialog({
       }
     }, 50);
 
-    // Prevent touch scrolling on backdrop or non-scrollable overlay chrome
+    // Support natural touch scrolling: allow content to scroll, and forward header swipes
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
     const handleTouchMove = (e: TouchEvent) => {
       const target = e.target as HTMLElement | null;
-      if (!target?.closest("[data-dialog-scrollable]")) {
-        if (e.cancelable) e.preventDefault();
+      const isInsideScrollable = target?.closest("[data-dialog-scrollable]");
+      if (!isInsideScrollable) {
+        if (target?.closest("[role='dialog']") && contentRef.current) {
+          const currentY = e.touches[0].clientY;
+          const deltaY = touchStartY - currentY;
+          contentRef.current.scrollTop += deltaY;
+          touchStartY = currentY;
+          if (e.cancelable) e.preventDefault();
+        } else {
+          if (e.cancelable) e.preventDefault();
+        }
       }
     };
+    document.addEventListener("touchstart", handleTouchStart, { passive: true });
     document.addEventListener("touchmove", handleTouchMove, { passive: false });
 
     return () => {
       clearTimeout(timer);
+      document.removeEventListener("touchstart", handleTouchStart);
       document.removeEventListener("touchmove", handleTouchMove);
 
       // Restore previous body and html styles
@@ -100,7 +115,7 @@ export default function MorphingDialog({
     };
   }, [isOpen]);
 
-  // Trap Escape key for dismissal
+  // Handle keyboard navigation (Escape dismissal + Arrow / Page scrolling)
   useEffect(() => {
     if (!isOpen) return;
 
@@ -108,6 +123,25 @@ export default function MorphingDialog({
       if (e.key === "Escape") {
         sound.playClick();
         onClose();
+        return;
+      }
+      if (!contentRef.current) return;
+      if (e.key === "ArrowDown") {
+        contentRef.current.scrollTop += 60;
+      } else if (e.key === "ArrowUp") {
+        contentRef.current.scrollTop -= 60;
+      } else if (e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
+        contentRef.current.scrollTop += contentRef.current.clientHeight * 0.8;
+        e.preventDefault();
+      } else if (e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
+        contentRef.current.scrollTop -= contentRef.current.clientHeight * 0.8;
+        e.preventDefault();
+      } else if (e.key === "Home") {
+        contentRef.current.scrollTop = 0;
+        e.preventDefault();
+      } else if (e.key === "End") {
+        contentRef.current.scrollTop = contentRef.current.scrollHeight;
+        e.preventDefault();
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -123,6 +157,13 @@ export default function MorphingDialog({
     "3xl": "max-w-3xl",
     "4xl": "max-w-4xl",
   }[maxWidth];
+
+  // Forward wheel scrolling when mouse is over non-scrollable header or margins
+  const handleWheel = (e: React.WheelEvent) => {
+    if (contentRef.current && !contentRef.current.contains(e.target as Node)) {
+      contentRef.current.scrollTop += e.deltaY;
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -156,7 +197,8 @@ export default function MorphingDialog({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 10 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative flex flex-col w-full ${maxWidthClasses} max-h-[85vh] max-h-[88dvh] rounded-2xl sm:rounded-3xl border border-white/[0.12] bg-[#11141b] text-[#f2f1ec] shadow-[0_24px_70px_-15px_rgba(0,0,0,0.8),inset_0_1px_1.5px_0_rgba(255,255,255,0.15)] overflow-hidden z-10 ${className}`}
+            onWheel={handleWheel}
+            className={`relative flex flex-col w-full ${maxWidthClasses} max-h-[85vh] max-h-[calc(100dvh-2rem)] rounded-2xl sm:rounded-3xl border border-white/[0.12] bg-[#11141b] text-[#f2f1ec] shadow-[0_24px_70px_-15px_rgba(0,0,0,0.8),inset_0_1px_1.5px_0_rgba(255,255,255,0.15)] overflow-hidden z-10 ${className}`}
           >
             {/* Pinned Sticky Header */}
             {(title || category) && (
@@ -183,10 +225,11 @@ export default function MorphingDialog({
                       sound.playClick();
                       onClose();
                     }}
-                    className="rounded-full p-2 text-[#89919d] hover:text-[#f2f1ec] hover:bg-white/[0.08] active:scale-95 transition-all cursor-pointer"
+                    className="dialog-close-btn flex items-center justify-center h-9 w-9 rounded-full border border-white/[0.14] bg-white/[0.06] text-[#f2f1ec] hover:bg-white/[0.15] hover:border-white/[0.28] hover:text-[#FFFFFF] active:scale-95 transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#a9ddf0] shadow-sm shrink-0"
                     aria-label="Close dialog"
+                    title="Close dialog (Esc)"
                   >
-                    <X size={18} />
+                    <X size={18} strokeWidth={2.4} />
                   </button>
                 </div>
               </div>

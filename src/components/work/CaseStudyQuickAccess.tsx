@@ -313,7 +313,7 @@ export default function CaseStudyQuickAccess({
                   rel="noopener noreferrer"
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-2.5 font-mono-code text-xs text-[#a9ddf0] hover:bg-[#a9ddf0]/10 transition-colors"
                 >
-                  <span>{project.slug === "9jatrip" ? "Live Website" : "Live Experience"}</span>
+                  <span>{project.slug === "9jatrip" ? "Visit Live Website" : "Live Experience"}</span>
                   <ExternalLink size={13} />
                 </a>
               )}
@@ -326,9 +326,7 @@ export default function CaseStudyQuickAccess({
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.04] px-4 py-2.5 font-mono-code text-xs text-[#f2f1ec] hover:border-[#a9ddf0] hover:text-[#a9ddf0] transition-colors"
                 >
                   <span>
-                    {project.prototypeUrl.includes("figma.com")
-                      ? "View in Figma"
-                      : project.prototypeUrl.includes("behance.net")
+                    {project.prototypeUrl.includes("behance.net")
                       ? "Behance"
                       : "Design Specs"}
                   </span>

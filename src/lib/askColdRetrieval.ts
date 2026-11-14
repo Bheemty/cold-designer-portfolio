@@ -692,11 +692,9 @@ export function generateLocalMockResponse(
           ...(targetProject.prototypeUrl
             ? [
                 {
-                  label: targetProject.prototypeUrl.includes("figma.com")
-                    ? "View in Figma"
-                    : targetProject.prototypeUrl.includes("behance.net")
+                  label: targetProject.prototypeUrl.includes("behance.net")
                     ? "Examine on Behance"
-                    : "Open Prototype",
+                    : "Open Case Study",
                   href: targetProject.prototypeUrl,
                 },
               ]
@@ -718,16 +716,14 @@ export function generateLocalMockResponse(
 
     if (isAskingPrototype) {
       const url = targetProject.liveUrl || targetProject.prototypeUrl || targetProject.githubUrl || targetProject.caseStudyUrl;
-      const protoLabel = targetProject.prototypeUrl?.includes("figma.com")
-        ? "Figma Design File"
-        : targetProject.prototypeUrl?.includes("behance.net")
+      const protoLabel = targetProject.prototypeUrl?.includes("behance.net")
         ? "Behance Case Study Specification"
         : "Interactive Prototype";
       const chipLabel = targetProject.liveUrl
         ? `Visit ${targetProject.title} Website`
-        : targetProject.prototypeUrl?.includes("figma.com")
-        ? `View ${targetProject.title} in Figma`
-        : `Open ${targetProject.title}`;
+        : targetProject.prototypeUrl?.includes("behance.net")
+        ? `Examine ${targetProject.title} on Behance`
+        : `Explore ${targetProject.title}`;
       return {
         text: `You can explore the verified artifacts from my work on **${targetProject.title}** directly:\n\n- [${targetProject.title} Case Study](${targetProject.caseStudyUrl})\n${targetProject.liveUrl ? `- [Live Website](${targetProject.liveUrl})\n` : ""}${targetProject.prototypeUrl ? `- [${protoLabel}](${targetProject.prototypeUrl})\n` : ""}${targetProject.githubUrl ? `- [GitHub Source Repository](${targetProject.githubUrl})\n` : ""}`,
         actionChips: [

@@ -98,7 +98,7 @@ export const PROJECTS: Project[] = [
     client: "Medesy Technologies",
     type: "Employment",
     category: "Healthcare & Conversational UI",
-    year: "2024",
+    year: "2026",
     role: "Product Designer",
     timeline: "Employment Engagement",
     storytellingFormat: "in-depth-case-study",
@@ -260,7 +260,6 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Three-pane conversational intake flow, verified web service hero, and standardized doctor referral cards.",
-    prototypeUrl: "https://www.figma.com/design/Vl1qsoE22hQjt8oEXZubja/Medesy-2?m=auto&t=jglC0OFhMaDeX2tP-6",
   },
 
   {
@@ -269,7 +268,7 @@ export const PROJECTS: Project[] = [
     client: "9jaTrip Mobility",
     type: "Client / Freelance",
     category: "Intercity Mobility & Transit",
-    year: "2024",
+    year: "2026",
     role: "Product Designer",
     timeline: "Freelance Engagement",
     storytellingFormat: "in-depth-case-study",
@@ -447,7 +446,7 @@ export const PROJECTS: Project[] = [
     client: "PAAI Systems",
     type: "Concept / Lab Exploration",
     category: "AI & Mobile Systems",
-    year: "2024",
+    year: "2025",
     role: "Lead Product Designer",
     timeline: "System Architecture & Mobile Product Design",
     storytellingFormat: "in-depth-case-study",
@@ -601,7 +600,6 @@ export const PROJECTS: Project[] = [
     },
     wireframeSummary:
       "Conversational prompt stream, interactive intent verification cards, dual-theme balance dashboards, and modular wallet management layouts.",
-    prototypeUrl: "https://www.figma.com/design/gxDuODgmcBJfcQHgeCdJjo/paai-qpp--Copy-?node-id=0-1&t=hcDwYeZdR4qsQ1wQ-1",
   },
 
   {
@@ -610,7 +608,7 @@ export const PROJECTS: Project[] = [
     client: "Somewhere Hospitality Group",
     type: "Concept / Lab Exploration",
     category: "Hospitality & Spatial Web",
-    year: "2024",
+    year: "2026",
     role: "Digital Experience & Visual Designer",
     timeline: "Concept / Lab Exploration",
     storytellingFormat: "spatial-showcase",
@@ -793,7 +791,7 @@ export const PROJECTS: Project[] = [
     client: "BuyBuddy Commerce",
     type: "Concept / Lab Exploration",
     category: "Commerce & Marketplace",
-    year: "2024",
+    year: "2026",
     role: "Product Designer",
     timeline: "Concept / Lab Exploration",
     storytellingFormat: "spatial-showcase",
@@ -975,7 +973,7 @@ export const PROJECTS: Project[] = [
     client: "Stillwater Cultural Foundation",
     type: "Concept / Lab Exploration",
     category: "Cinematic Web & Performing Arts",
-    year: "2024",
+    year: "2026",
     role: "Visual & Interaction Designer",
     timeline: "Editorial Web Exploration",
     storytellingFormat: "spatial-showcase",
@@ -1163,7 +1161,7 @@ export const PROJECTS: Project[] = [
     client: "Greall Technologies",
     type: "Employment",
     category: "Corporate Web & Brand Identity",
-    year: "2023",
+    year: "2025",
     role: "Product Designer",
     timeline: "Employment Engagement",
     storytellingFormat: "confidential-practice",
@@ -1317,7 +1315,6 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Institutional capability hero, modular product pillar cards, developer API gateway, and compliance disclosure footer.",
-    prototypeUrl: "https://www.figma.com/design/lF1WVFUs6FAzgNZ4DBEHQz/Greall-s-Website-Rebranding?node-id=463-9841&t=nlMA7sCFaPU6OIpn-1",
   },
 
   {
@@ -1326,7 +1323,7 @@ export const PROJECTS: Project[] = [
     client: "Will Legacy Platform",
     type: "Concept / Lab Exploration",
     category: "Digital Legacy & Asset Succession",
-    year: "2023",
+    year: "2025",
     role: "Product Designer",
     timeline: "Product Architecture Exploration",
     storytellingFormat: "concept-exploration",
@@ -1477,7 +1474,6 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Empathetic milestone wizard, interactive visual allocation sliders, encrypted vault overview, and trusted contact verification ledger.",
-    prototypeUrl: "https://www.figma.com/design/pLg1nVX9917TdkiDhjohoo/Will?node-id=0-1&t=1v4ItukpKgMzxDIC-1",
   },
 
   {
@@ -1486,7 +1482,7 @@ export const PROJECTS: Project[] = [
     client: "AgriVillage Agriculture",
     type: "Concept / Lab Exploration",
     category: "Agritech & Cooperative Commerce",
-    year: "2023",
+    year: "2024",
     role: "Product Designer",
     timeline: "Concept Exploration",
     storytellingFormat: "concept-exploration",
@@ -1644,7 +1640,6 @@ export const PROJECTS: Project[] = [
     ],
     wireframeSummary:
       "Large-touch target produce selectors, simple batch creation cards, and clear delivery timeline trackers.",
-    prototypeUrl: "https://www.figma.com/design/XJQKHJvC4YzQbkN3ng8I22/AgriVillage?node-id=0-1&t=jS5CliPpYKPZb8kI-1",
   },
 
   // ─────────────────────────────────────────────────────────────

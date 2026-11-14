@@ -386,17 +386,22 @@ html[data-theme="light"] [role="dialog"] button.bg-white\/\[0\.02\]:hover {
   color: #016382 !important;
 }
 
-html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"] {
-  color: #4d5462 !important;
-  background-color: rgba(18, 22, 30, 0.05) !important;
-}
-
-html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"]:hover {
+html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"],
+html[data-theme="light"] [role="dialog"] .dialog-close-btn {
   color: #11141b !important;
-  background-color: rgba(18, 22, 30, 0.12) !important;
+  background-color: rgba(18, 22, 30, 0.07) !important;
+  border-color: rgba(18, 22, 30, 0.16) !important;
 }
 
-html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"]:focus-visible {
+html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"]:hover,
+html[data-theme="light"] [role="dialog"] .dialog-close-btn:hover {
+  color: #000000 !important;
+  background-color: rgba(18, 22, 30, 0.14) !important;
+  border-color: rgba(18, 22, 30, 0.28) !important;
+}
+
+html[data-theme="light"] [role="dialog"] button[aria-label="Close dialog"]:focus-visible,
+html[data-theme="light"] [role="dialog"] .dialog-close-btn:focus-visible {
   outline: none !important;
   box-shadow: 0 0 0 2px #016382 !important;
 }
