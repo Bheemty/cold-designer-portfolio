@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const CRITICAL_SCROLL_ASSETS = [
   "/images/projects/medesy/whatsapp-mockup-opt.webp",
   "/images/projects/9jatrip/booking-ride-mockup-opt.webp",
-  "/images/projects/paai/paai-canvas-overview.png",
+  "/images/projects/paai/paai-hero-mockup.png",
   "/images/projects/somewhere/hotel-exterior-sunset-opt.webp",
   "/images/projects/buybuddy/store-landing-opt.webp",
   "/images/projects/stillwater/venue-exterior-opt.webp",

@@ -816,17 +816,33 @@ export default function SelectedWork() {
                 <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-6 shadow-2xl transition-all hover:border-white/20">
                   <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#090b0f]">
                     <Image
-                      src="/images/projects/paai/paai-canvas-overview.png"
-                      alt="PAAI Mobile Application Multi-Screen System Canvas"
+                      src={
+                        paaiActiveFlow === "intent"
+                          ? "/images/projects/paai/paai-intent-verification.png"
+                          : paaiActiveFlow === "wallet"
+                          ? "/images/projects/paai/paai-wallet-system.png"
+                          : "/images/projects/paai/paai-hero-mockup.png"
+                      }
+                      alt={
+                        paaiActiveFlow === "intent"
+                          ? "PAAI Intent-to-Card Verification Pattern"
+                          : paaiActiveFlow === "wallet"
+                          ? "PAAI Multi-Currency Wallet System"
+                          : "PAAI Flagship Mobile Application Hero Mockup"
+                      }
                       fill
-                      className="object-contain transition-transform duration-700 hover:scale-[1.02]"
+                      className="object-cover transition-all duration-500 hover:scale-[1.02]"
                       sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                   </div>
 
                   <div className="mt-4 flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-t border-white/[0.06] pt-4 font-mono-code text-xs">
                     <span className="text-[#f2f1ec] font-medium leading-relaxed">
-                      Multi-Screen Architecture Canvas: Dual-Theme Onboarding, AI Prompts &amp; Multi-Currency Wallet
+                      {paaiActiveFlow === "intent"
+                        ? "Intent-to-Card Verification Gate: Biometric Transaction Confirmation Card"
+                        : paaiActiveFlow === "wallet"
+                        ? "Multi-Currency Financial Wallet: Real-time Balance Ledger & Card Operations"
+                        : "Flagship Mobile Showcase: Autonomous Conversational AI Assistant & Verification"}
                     </span>
                     <span className="text-[#89919d] text-[11px] shrink-0">
                       AUTHENTIC SPECIMEN

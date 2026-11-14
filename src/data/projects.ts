@@ -464,13 +464,43 @@ export const PROJECTS: Project[] = [
     featured: true,
     featuredOrder: 3,
     tags: ["AI & Systems", "Mobile UI", "Conversational AI", "Fintech", "Design System"],
-    heroImage: "/images/projects/paai/paai-canvas-overview.png",
+    heroImage: "/images/projects/paai/paai-hero-mockup.png",
     gallery: [
+      {
+        src: "/images/projects/paai/paai-hero-mockup.png",
+        caption:
+          "PAAI flagship mobile interface: 3D showcase featuring autonomous conversational prompt ledger, dynamic action pills, and biometric verification.",
+        alt: "PAAI Flagship Mobile Application Hero Mockup",
+      },
+      {
+        src: "/images/projects/paai/paai-chat-interface.png",
+        caption:
+          "Conversational AI assistant interface: multi-turn subscription audit dialogue, intelligent action pills, and waveform prompt input field.",
+        alt: "PAAI Conversational AI Assistant Interface",
+      },
+      {
+        src: "/images/projects/paai/paai-intent-verification.png",
+        caption:
+          "Intent-to-Card verification pattern: biometric transaction confirmation card for instant split payments with fee transparency and auto-settle status.",
+        alt: "PAAI Intent-to-Card Verification Modal",
+      },
+      {
+        src: "/images/projects/paai/paai-wallet-system.png",
+        caption:
+          "Multi-currency financial wallet dashboard: primary USD card with emerald microchip, horizontal wallet carousel, quick actions, and verified transaction stream.",
+        alt: "PAAI Multi-Currency Wallet Dashboard",
+      },
+      {
+        src: "/images/projects/paai/paai-dual-theme.png",
+        caption:
+          "Synchronous dual-theme design system: side-by-side comparison of Obsidian Dark Mode (#0B0F17) and Clean Daylight Light Mode (#FFFFFF / #F8F9FA) with calibrated contrast tokens.",
+        alt: "PAAI Dual-Theme Design System Comparison",
+      },
       {
         src: "/images/projects/paai/paai-canvas-overview.png",
         caption:
-          "PAAI multi-screen system canvas overview: end-to-end user journeys, dual-theme (Light & Dark) UI architecture, autonomous AI chat, wallet management, and onboarding flows.",
-        alt: "PAAI Mobile Application Multi-Screen System Canvas",
+          "Comprehensive system canvas overview: end-to-end user journeys, dual-theme UI architecture, and multi-screen flow organization.",
+        alt: "PAAI Mobile Application Multi-Screen System Canvas Overview",
       },
     ],
     problemStatement: {

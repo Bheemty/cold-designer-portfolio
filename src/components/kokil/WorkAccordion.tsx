@@ -49,7 +49,7 @@ const PROJECTS: ProjectItem[] = [
     title: "PAAI: Autonomous personal AI assistant & unified financial workflow",
     desc: "An intelligent personal AI mobile application integrating autonomous natural language instructions, intent-to-card verification gates, and dual light/dark themes.",
     tags: ["Personal AI", "Mobile Product Design", "Dual Theme System", "Fintech"],
-    image: "/images/projects/paai/paai-canvas-overview.png",
+    image: "/images/projects/paai/paai-hero-mockup.png",
     href: "/work/paai",
   },
   {
