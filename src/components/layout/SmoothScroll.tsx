@@ -67,7 +67,26 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
       resizeObserver.observe(document.body);
     }
 
+    // Intercept in-page anchor links for silky smooth Lenis navigation
+    const handleAnchorClick = (e: MouseEvent) => {
+      const anchor = (e.target as HTMLElement).closest('a[href^="#"]');
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href === "#") return;
+      try {
+        const targetElement = document.querySelector(href);
+        if (targetElement && lenisRef.current) {
+          e.preventDefault();
+          lenisRef.current.scrollTo(targetElement as HTMLElement, { offset: -30 });
+        }
+      } catch {
+        // Fallback to browser default for invalid selector
+      }
+    };
+    document.addEventListener("click", handleAnchorClick);
+
     return () => {
+      document.removeEventListener("click", handleAnchorClick);
       clearTimeout(resizeTimer);
       resizeObserver.disconnect();
       gsap.ticker.remove(updateTicker);

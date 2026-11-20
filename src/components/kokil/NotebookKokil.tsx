@@ -289,7 +289,7 @@ export default function NotebookKokil() {
                 aria-hidden="true"
               >
                 <span className="nb-ghost">Index</span>
-                <button type="button" className="nb-prev" tabIndex={-1}>
+                <button type="button" className="nb-prev" onClick={() => goTo(0)}>
                   &larr; Back to Index
                 </button>
               </div>
@@ -365,7 +365,7 @@ export default function NotebookKokil() {
                 aria-hidden="true"
               >
                 <span className="nb-ghost">Light UI</span>
-                <button type="button" className="nb-prev" tabIndex={-1}>
+                <button type="button" className="nb-prev" onClick={() => goTo(1)}>
                   &larr; Back to Entry 01
                 </button>
               </div>
@@ -441,7 +441,7 @@ export default function NotebookKokil() {
                 aria-hidden="true"
               >
                 <span className="nb-ghost">Payloads</span>
-                <button type="button" className="nb-prev" tabIndex={-1}>
+                <button type="button" className="nb-prev" onClick={() => goTo(2)}>
                   &larr; Back to Entry 02
                 </button>
               </div>
@@ -517,7 +517,7 @@ export default function NotebookKokil() {
                 aria-hidden="true"
               >
                 <span className="nb-ghost">Acoustics</span>
-                <button type="button" className="nb-prev" tabIndex={-1}>
+                <button type="button" className="nb-prev" onClick={() => goTo(3)}>
                   &larr; Back to Entry 03
                 </button>
               </div>
@@ -635,7 +635,7 @@ export default function NotebookKokil() {
                 aria-hidden="true"
               >
                 <span className="nb-ghost">Playground</span>
-                <button type="button" className="nb-prev" tabIndex={-1}>
+                <button type="button" className="nb-prev" onClick={() => goTo(4)}>
                   &larr; Back to Playground
                 </button>
               </div>

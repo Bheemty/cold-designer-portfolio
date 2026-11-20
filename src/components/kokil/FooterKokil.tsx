@@ -421,7 +421,7 @@ export default function FooterKokil() {
           >
             LinkedIn
           </a>
-          <a href="mailto:abolarintaye20@gmail.com">Contact</a>
+          <Link href="/contact">Contact</Link>
           <button
             type="button"
             onClick={() => {

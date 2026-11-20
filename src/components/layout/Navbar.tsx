@@ -20,6 +20,7 @@ const NAV_ITEMS: NavItem[] = [
   { href: "/work", label: "Work", index: "02" },
   { href: "/about", label: "About", index: "03" },
   { href: "/lab", label: "Lab", index: "04" },
+  { href: "/contact", label: "Contact", index: "05" },
 ];
 
 export default function Navbar() {
