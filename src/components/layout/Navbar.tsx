@@ -27,6 +27,7 @@ export default function Navbar() {
   const { theme, toggleTheme, mounted } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isPastHero, setIsPastHero] = useState(false);
   const [sfxEnabled, setSfxEnabled] = useState(false);
   const [copiedEmail, setCopiedEmail] = useState(false);
 
@@ -64,16 +65,24 @@ export default function Navbar() {
     window.dispatchEvent(new CustomEvent("cold:open_palette"));
   };
 
-  // Track scroll position to enhance frosted glass density when content moves behind
+  // Track scroll position to enhance frosted glass density & detect dark hero zone
   useEffect(() => {
     let lastScrolled = false;
+    let lastPastHero = false;
     let ticking = false;
 
     const checkScroll = () => {
-      const scrolled = window.scrollY > 15;
+      const scrollY = window.scrollY;
+      const scrolled = scrollY > 15;
+      const pastHero = pathname !== "/" || scrollY > window.innerHeight * 0.82;
+
       if (scrolled !== lastScrolled) {
         lastScrolled = scrolled;
         setIsScrolled(scrolled);
+      }
+      if (pastHero !== lastPastHero) {
+        lastPastHero = pastHero;
+        setIsPastHero(pastHero);
       }
       ticking = false;
     };
@@ -87,8 +96,12 @@ export default function Navbar() {
 
     checkScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    window.addEventListener("resize", checkScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", checkScroll);
+    };
+  }, [pathname]);
 
   // Close menu automatically whenever route changes (covers forward/back browser navigation)
   useEffect(() => {
@@ -154,10 +167,12 @@ export default function Navbar() {
     setIsOpen(false);
   };
 
+  const isOverDarkHero = pathname === "/" && !isPastHero;
+
   return (
     <>
       <nav
-        className={`kokil-nav ${isScrolled ? "is-scrolled" : ""}`}
+        className={`kokil-nav ${isScrolled ? "is-scrolled" : ""} ${isOverDarkHero ? "over-dark-hero" : ""}`}
         style={{
           backdropFilter: "url(#cold-glass-filter-pill) blur(24px) saturate(190%) contrast(106%)",
           WebkitBackdropFilter: "blur(24px) saturate(190%) contrast(106%)",
