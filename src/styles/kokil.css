@@ -2802,36 +2802,37 @@ html[data-theme="light"] .hero-invert {
   visibility: visible !important;
 }
 html[data-theme="light"] .hero-base {
-  display: none !important;
+  display: flex !important;
+  z-index: 4;
 }
 
-/* Eyes on dark hiding surface in light theme */
+/* Googly eyes clearly visible across desktop, tablet, and mobile in light theme */
 html[data-theme="light"] .eyes-scene .eye {
   background: #FDFDFD !important;
-  border: 2px solid #FDFDFD !important;
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.9), 0 8px 24px rgba(0, 0, 0, 0.6) !important;
+  border: 2px solid #11141b !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 html[data-theme="light"] .eyes-scene .pupil {
   background: #090b0f !important;
 }
 
-/* Light-theme HIDE / COLOR ME labels with white typography on the dark hiding surface */
+/* Light-theme HIDE / COLOR ME labels with crisp high-contrast styling */
 html[data-theme="light"] .hero-hide-btn {
   background: #11141b !important;
   color: #FDFDFD !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid #11141b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
 }
 html[data-theme="light"] .hero-hide-btn:hover {
   background: #FDFDFD !important;
-  border-color: #FDFDFD !important;
-  color: #090b0f !important;
+  border-color: #11141b !important;
+  color: #11141b !important;
 }
 html[data-theme="light"] .cursor-hint {
   background: #11141b !important;
   color: #FDFDFD !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid #11141b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14) !important;
 }
 
 /* Revealed Light Theme Hero (revealed on top of #FDFDFD hero-paint) */

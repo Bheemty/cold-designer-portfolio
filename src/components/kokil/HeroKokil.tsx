@@ -203,6 +203,7 @@ export default function HeroKokil() {
 
     updateEyeCenters();
     window.addEventListener("resize", updateEyeCenters, { passive: true });
+    window.addEventListener("scroll", updateEyeCenters, { passive: true });
 
     let pendingPointerX = -1000;
     let pendingPointerY = -1000;
@@ -524,6 +525,35 @@ export default function HeroKokil() {
     }
 
     // ── MOBILE & TOUCH TAP-DIRECTED EYE MOVEMENT ──
+    const directEyesTowards = (clientX: number, clientY: number) => {
+      // Re-measure live eye bounding boxes so gaze direction is 100% accurate at all scroll & layout states
+      updateEyeCenters();
+      if (eyeCenters.length === 0 || eyeCenters[0].cx === 0) return;
+
+      eyeCenters.forEach((center, idx) => {
+        const dx = clientX - center.cx;
+        const dy = clientY - center.cy;
+        const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
+        const angle = Math.atan2(dy, dx);
+        targetOx[idx] = Math.cos(angle) * dist;
+        targetOy[idx] = Math.sin(angle) * dist;
+      });
+
+      hasActiveMobileGaze = true;
+      startEyeLoop();
+
+      if (mobileRestTimer) {
+        window.clearTimeout(mobileRestTimer);
+      }
+      // After ~2.7s of inactivity without another touch, smoothly return eyes forward to resting gaze
+      mobileRestTimer = window.setTimeout(() => {
+        targetOx[0] = 0;
+        targetOy[0] = 0;
+        targetOx[1] = 0;
+        targetOy[1] = 0;
+      }, 2700);
+    };
+
     let touchStartX = 0;
     let touchStartY = 0;
     let touchStartTime = 0;
@@ -536,72 +566,41 @@ export default function HeroKokil() {
       touchStartY = t.clientY;
       touchStartTime = performance.now();
       isTouchScroll = false;
+      // Immediately orient eyes toward the contact point
+      directEyesTowards(t.clientX, t.clientY);
     };
 
     const onHeroTouchMove = (e: TouchEvent) => {
-      if (isTouchScroll || e.touches.length !== 1) return;
+      if (e.touches.length !== 1 || !isHeroVisible) return;
       const t = e.touches[0];
       const dist = Math.hypot(t.clientX - touchStartX, t.clientY - touchStartY);
-      if (dist > 14) {
-        // Visitor is scrolling the page, not tapping
+      if (dist > 18) {
         isTouchScroll = true;
+      }
+      if (!isTouchScroll) {
+        directEyesTowards(t.clientX, t.clientY);
       }
     };
 
     const onHeroTouchEnd = (e: TouchEvent) => {
-      if (isTouchScroll || !isHeroVisible) return;
-      const duration = performance.now() - touchStartTime;
-      if (duration > 500) return; // Touch held too long for an intentional tap
-
-      // Respect hide button & interactive UI controls
-      const targetEl = e.target as HTMLElement | null;
-      if (targetEl?.closest(".hero-hide-btn, .scratch-btn, button, a")) return;
-
+      if (!isHeroVisible) return;
       const touch = e.changedTouches[0];
       const tapX = touch && touch.clientX !== undefined ? touch.clientX : touchStartX;
       const tapY = touch && touch.clientY !== undefined ? touch.clientY : touchStartY;
+      directEyesTowards(tapX, tapY);
+    };
 
-      // Verify tap is within the hero interactive section bounds
-      const heroRect = heroEl.getBoundingClientRect();
-      if (
-        tapX < heroRect.left ||
-        tapX > heroRect.right ||
-        tapY < heroRect.top ||
-        tapY > heroRect.bottom
-      ) {
-        return;
-      }
-
-      // Clear any pending resting gaze timer
-      if (mobileRestTimer) {
-        window.clearTimeout(mobileRestTimer);
-        mobileRestTimer = null;
-      }
-
-      // Calculate per-pupil target offsets towards tap position
-      eyeCenters.forEach((center, idx) => {
-        const dx = tapX - center.cx;
-        const dy = tapY - center.cy;
-        const dist = Math.min(maxMove, Math.hypot(dx, dy) / 8);
-        const angle = Math.atan2(dy, dx);
-        targetOx[idx] = Math.cos(angle) * dist;
-        targetOy[idx] = Math.sin(angle) * dist;
-      });
-      hasActiveMobileGaze = true;
-
-      // After ~2.7s of inactivity without another touch, smoothly return eyes forward to resting gaze
-      mobileRestTimer = window.setTimeout(() => {
-        targetOx[0] = 0;
-        targetOy[0] = 0;
-        targetOx[1] = 0;
-        targetOy[1] = 0;
-      }, 2700);
+    const onHeroPointerDown = (e: PointerEvent) => {
+      if (!isHeroVisible) return;
+      if (e.pointerType === "touch") return; // Touch events handle this
+      directEyesTowards(e.clientX, e.clientY);
     };
 
     if (!isDesktop) {
-      heroEl.addEventListener("touchstart", onHeroTouchStart, { passive: true });
-      heroEl.addEventListener("touchmove", onHeroTouchMove, { passive: true });
-      heroEl.addEventListener("touchend", onHeroTouchEnd, { passive: true });
+      window.addEventListener("touchstart", onHeroTouchStart, { passive: true });
+      window.addEventListener("touchmove", onHeroTouchMove, { passive: true });
+      window.addEventListener("touchend", onHeroTouchEnd, { passive: true });
+      window.addEventListener("pointerdown", onHeroPointerDown, { passive: true });
     }
 
     const handleThemeChange = () => {
@@ -645,15 +644,17 @@ export default function HeroKokil() {
       }
       triggerAutoScratchRef.current = null;
 
+      window.removeEventListener("scroll", updateEyeCenters);
       if (isDesktop) {
         if (onDesktopPointerMove) heroEl.removeEventListener("pointermove", onDesktopPointerMove);
         if (onDesktopPointerDown) heroEl.removeEventListener("pointerdown", onDesktopPointerDown);
         if (onDesktopPointerLeave) heroEl.removeEventListener("pointerleave", onDesktopPointerLeave);
         window.removeEventListener("mousemove", handleMouseMove);
       } else {
-        heroEl.removeEventListener("touchstart", onHeroTouchStart);
-        heroEl.removeEventListener("touchmove", onHeroTouchMove);
-        heroEl.removeEventListener("touchend", onHeroTouchEnd);
+        window.removeEventListener("touchstart", onHeroTouchStart);
+        window.removeEventListener("touchmove", onHeroTouchMove);
+        window.removeEventListener("touchend", onHeroTouchEnd);
+        window.removeEventListener("pointerdown", onHeroPointerDown);
       }
     };
   }, []);
