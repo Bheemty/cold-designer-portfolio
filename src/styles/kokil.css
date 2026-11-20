@@ -1072,7 +1072,7 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   flex: 1 1 0%;
   min-width: 0;
   border: 1.5px solid rgba(169, 221, 240, 0.4);
-  cursor: default;
+  cursor: pointer;
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5);
 }
 .acc-panel:focus-visible {
@@ -1238,6 +1238,10 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   white-space: nowrap;
 }
 .work-go {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -1456,6 +1460,10 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   z-index: 10;
 }
 .work-explore-btn {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
   display: inline-flex;
   align-items: center;
   gap: 14px;

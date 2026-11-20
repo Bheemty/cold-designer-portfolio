@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { sound } from "@/lib/sounds";
 
 interface ProjectItem {
   id: string;
@@ -154,18 +155,25 @@ export default function WorkAccordion() {
   }, []);
 
   function handlePanelClick(p: ProjectItem, e: React.MouseEvent) {
-    const isTouch = typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches;
     const isStacked = typeof window !== "undefined" && window.innerWidth <= 1024;
 
-    // On touch or stacked mobile: first tap opens, second tap / link click navigates
-    if ((isTouch || isStacked) && activeId !== p.id) {
-      e.preventDefault();
+    // On mobile & tablet (stacked cards): all cards are already displayed open,
+    // so tapping anywhere on the card navigates directly to the project case study.
+    if (isStacked) {
+      sound.playClick();
+      router.push(p.href);
+      return;
+    }
+
+    // On desktop: if the panel is currently collapsed, clicking it expands it;
+    // if the panel is already expanded, clicking it navigates to the project case study.
+    if (activeId !== p.id) {
+      sound.playClick();
       setActiveId(p.id);
       return;
     }
 
-    const target = e.target as HTMLElement;
-    if (target.closest(".work-go")) return;
+    sound.playClick();
     router.push(p.href);
   }
 
@@ -229,9 +237,13 @@ export default function WorkAccordion() {
                   <Link
                     href={project.href}
                     prefetch={true}
-                    className="work-go"
+                    className="work-go cursor-pointer"
                     aria-label={`Read ${project.title} case study`}
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      sound.playClick();
+                      router.push(project.href);
+                    }}
                   >
                     <span>View Case Study</span>
                     <svg
@@ -257,7 +269,16 @@ export default function WorkAccordion() {
 
       {/* Prominent "Explore All Work" CTA */}
       <div ref={ctaRef} className="work-closing-cta">
-        <Link href="/work" prefetch={true} className="work-explore-btn" aria-label="Explore All Work in full directory">
+        <Link
+          href="/work"
+          prefetch={true}
+          className="work-explore-btn cursor-pointer"
+          aria-label="Explore All Work in full directory"
+          onClick={() => {
+            sound.playClick();
+            router.push("/work");
+          }}
+        >
           <span>Explore All Work</span>
           <span className="work-explore-arrow" aria-hidden="true">
             <svg
