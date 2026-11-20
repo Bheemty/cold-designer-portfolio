@@ -361,7 +361,8 @@ html[data-theme="light"] .footer-theme-toggle:hover {
   }
   .kokil-nav-links,
   .kokil-nav-resume,
-  .kokil-nav-email {
+  .kokil-nav-email,
+  .kokil-nav-theme-btn {
     display: none !important;
   }
   .kokil-nav-toggle {

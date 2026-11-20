@@ -233,30 +233,11 @@ export default function Navbar() {
           </svg>
         </a>
 
-        {/* One-Click Copy Email Pill (Visible only on Desktop >= 1024px) */}
-        <button
-          type="button"
-          onClick={handleCopyEmail}
-          className="kokil-nav-email cursor-pointer flex items-center gap-1.5 transition-colors"
-          data-cursor-text="Copy Email"
-          title="Click to copy email address"
-          aria-label="Copy email: abolarintaye20@gmail.com"
-        >
-          {copiedEmail ? (
-            <span className="text-[#a9ddf0] font-semibold font-mono-code flex items-center gap-1">
-              <Check size={12} className="text-[#a9ddf0]" />
-              Copied &check;
-            </span>
-          ) : (
-            <span>abolarintaye20@gmail.com</span>
-          )}
-        </button>
-
-        {/* Desktop ⌘K Command Palette Launcher */}
+        {/* Compact ⌘K Command Palette Launcher (Universal across Desktop & Mobile) */}
         <button
           type="button"
           onClick={openCommandPalette}
-          className="hidden lg:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] text-[#89919d] hover:text-[#a9ddf0] hover:border-[#a9ddf0]/30 font-mono-code text-[11px] transition-colors cursor-pointer"
+          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] text-[#89919d] hover:text-[#a9ddf0] hover:border-[#a9ddf0]/30 font-mono-code text-[11px] transition-colors cursor-pointer shrink-0"
           title="Open Command Palette (Cmd+K / Ctrl+K)"
           aria-label="Open Command Palette (Cmd+K / Ctrl+K)"
         >
@@ -264,29 +245,15 @@ export default function Navbar() {
           <span className="font-semibold text-[#a9ddf0]">K</span>
         </button>
 
-        {/* Desktop Tactile Micro-SFX Toggle */}
-        <button
-          type="button"
-          onClick={toggleSfx}
-          className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] text-[#89919d] hover:text-[#a9ddf0] hover:border-[#a9ddf0]/30 font-mono-code text-[11px] transition-colors cursor-pointer"
-          title={sfxEnabled ? "Micro-SFX is ON (Click to Mute)" : "Micro-SFX is OFF (Click to Enable)"}
-          aria-label={sfxEnabled ? "Micro-SFX is ON (Click to Mute)" : "Micro-SFX is OFF (Click to Enable)"}
-        >
-          {sfxEnabled ? <Volume2 size={12} className="text-[#a9ddf0]" /> : <VolumeX size={12} />}
-          <span className={sfxEnabled ? "text-[#a9ddf0] font-semibold" : "opacity-70"}>
-            SFX: {sfxEnabled ? "ON" : "OFF"}
-          </span>
-        </button>
-
-        {/* Theme Toggle & Mobile Menu Controls */}
-        <div className="flex items-center gap-2">
+        {/* Theme Toggle (Desktop Only) & Mobile Menu Toggle (< 1024px) */}
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => {
               sound.playTick();
               toggleTheme();
             }}
-            className="kokil-nav-theme-btn"
+            className="kokil-nav-theme-btn hidden lg:inline-flex"
             aria-label={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
             title={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
           >

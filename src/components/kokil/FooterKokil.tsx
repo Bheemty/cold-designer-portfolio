@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useState } from "react";
+import { useState, useEffect as useReactEffect } from "react";
+import { Volume2, VolumeX } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { sound } from "@/lib/sounds";
 
@@ -78,7 +79,18 @@ export default function FooterKokil() {
   const { theme, toggleTheme, mounted } = useTheme();
   const [copied, setCopied] = useState(false);
   const [watTime, setWatTime] = useState("");
+  const [sfxEnabled, setSfxEnabled] = useState(false);
   const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setSfxEnabled(sound.isEnabled());
+    const onToggle = (e: Event) => {
+      const customEvent = e as CustomEvent<{ enabled: boolean }>;
+      setSfxEnabled(customEvent.detail.enabled);
+    };
+    window.addEventListener("cold:sfx_toggle", onToggle);
+    return () => window.removeEventListener("cold:sfx_toggle", onToggle);
+  }, []);
 
   useEffect(() => {
     const formatWat = () => {
@@ -420,6 +432,18 @@ export default function FooterKokil() {
             aria-label={mounted && theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
           >
             {mounted && theme === "light" ? "Dark Mode" : "Light Mode"}
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              const next = sound.toggle();
+              setSfxEnabled(next);
+            }}
+            className="footer-theme-toggle inline-flex items-center gap-1.5"
+            aria-label={sfxEnabled ? "Micro-SFX is ON. Click to mute" : "Micro-SFX is OFF. Click to enable"}
+          >
+            {sfxEnabled ? <Volume2 size={11} className="text-[#a9ddf0]" /> : <VolumeX size={11} />}
+            <span>SFX: {sfxEnabled ? "ON" : "OFF"}</span>
           </button>
         </div>
         <a href="#hero" className="footer-top" onClick={scrollToTop}>
