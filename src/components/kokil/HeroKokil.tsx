@@ -284,6 +284,9 @@ export default function HeroKokil() {
       pendingPointerX = e.clientX;
       pendingPointerY = e.clientY;
       startEyeLoop();
+      if (isDesktop && !hasCompletedRef.current && !isAutoSweeping) {
+        startAutoScratch();
+      }
     }
 
     const blinkInterval = setInterval(() => {
@@ -362,104 +365,66 @@ export default function HeroKokil() {
       addLocalDot(x, y, rect.width, rect.height);
     }
 
-    // ── DESKTOP: MANUAL MOUSE-MOVEMENT SCRATCHING ──
-    let onDesktopPointerMove: ((e: PointerEvent) => void) | null = null;
-    let onDesktopPointerDown: ((e: PointerEvent) => void) | null = null;
-    let onDesktopPointerLeave: (() => void) | null = null;
+    // ── PROGRESSIVE UNVEILING ENGINE (DESKTOP ON MOUSE MOVE & MOBILE AUTOMATIC) ──
+    let isAutoSweeping = false;
 
-    if (isDesktop) {
-      // Desktop visitors manually reveal the Hero using ordinary mouse movement.
-      // No clicking, holding or click-and-dragging is required.
-      // Erasing stops immediately when the mouse stops moving.
-      onDesktopPointerMove = (e: PointerEvent) => {
-        if (!isHeroVisible) return;
-        pendingPointerX = e.clientX;
-        pendingPointerY = e.clientY;
+    function startAutoScratch() {
+      if (!heroEl || !dotsGroup) return;
+      if (hasCompletedRef.current || isAutoSweeping) return;
+      isAutoSweeping = true;
 
-        // Keep HIDE button click target clean
-        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+      const rect = heroEl.getBoundingClientRect();
+      if (rect.height <= 0 || rect.width <= 0) {
+        const retryTimer = window.setTimeout(startAutoScratch, 100);
+        autoSweepCancelRef.current = () => window.clearTimeout(retryTimer);
+        return;
+      }
 
-        addDotFromClientCoords(e.clientX, e.clientY);
-      };
+      const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const numRows = Math.max(4, Math.ceil(rect.height / 180));
+      const stepsInRow = Math.max(12, Math.round(rect.width / 32));
+      const pts: Array<{ x: number; y: number }> = [];
 
-      onDesktopPointerDown = (e: PointerEvent) => {
-        if (!isHeroVisible) return;
-        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
-        addDotFromClientCoords(e.clientX, e.clientY);
-      };
+      for (let i = 0; i < numRows; i++) {
+        const rowY = (rect.height * (i + 0.5)) / numRows;
+        const isEven = i % 2 === 0;
+        const fromX = isEven ? -40 : rect.width + 40;
+        const toX = isEven ? rect.width + 40 : -40;
 
-      onDesktopPointerLeave = () => {
-        lastX = null;
-        lastY = null;
-      };
-
-      heroEl.addEventListener("pointermove", onDesktopPointerMove, { passive: true });
-      heroEl.addEventListener("pointerdown", onDesktopPointerDown, { passive: true });
-      heroEl.addEventListener("pointerleave", onDesktopPointerLeave, { passive: true });
-      window.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-      // No auto-scratch on desktop
-      triggerAutoScratchRef.current = null;
-    }
-
-    // ── MOBILE & TABLET: PROGRESSIVE AUTOMATIC SCRATCH ANIMATION ──
-    if (!isDesktop) {
-      // Mobile and tablet visitors are NOT required to tap, click, drag or swipe.
-      // The website automatically begins a smooth, progressive serpentine / zig-zag scratch animation.
-      function startAutoScratch() {
-        if (!heroEl || !dotsGroup) return;
-        if (hasCompletedRef.current) return;
-
-        const rect = heroEl.getBoundingClientRect();
-        if (rect.height <= 0 || rect.width <= 0) {
-          const retryTimer = window.setTimeout(startAutoScratch, 100);
-          autoSweepCancelRef.current = () => window.clearTimeout(retryTimer);
-          return;
+        for (let k = 0; k <= stepsInRow; k++) {
+          const t = k / stepsInRow;
+          const x = fromX + (toX - fromX) * t;
+          const y = rowY + Math.sin(t * Math.PI) * 12;
+          pts.push({ x, y });
         }
+      }
 
-        const isReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        const numRows = Math.max(4, Math.ceil(rect.height / 180));
-        const stepsInRow = Math.max(12, Math.round(rect.width / 32));
-        const pts: Array<{ x: number; y: number }> = [];
+      if (isReduced) {
+        pts.forEach((pt) => addLocalDot(pt.x, pt.y, rect.width, rect.height));
+        hasCompletedRef.current = true;
+        setHeroRevealedState(true);
+        setIsRevealed(true);
+        heroEl.classList.add("is-revealed");
+        isAutoSweeping = false;
+        return;
+      }
 
-        for (let i = 0; i < numRows; i++) {
-          const rowY = (rect.height * (i + 0.5)) / numRows;
-          const isEven = i % 2 === 0;
-          const fromX = isEven ? -40 : rect.width + 40;
-          const toX = isEven ? rect.width + 40 : -40;
+      let ptIndex = 0;
+      let rafId = 0;
+      let lastTime = 0;
+      const STEP_INTERVAL_MS = 20; // ~20ms per point -> ~1.4s total smooth sweep
 
-          for (let k = 0; k <= stepsInRow; k++) {
-            const t = k / stepsInRow;
-            const x = fromX + (toX - fromX) * t;
-            const y = rowY + Math.sin(t * Math.PI) * 12;
-            pts.push({ x, y });
-          }
-        }
+      function sweepStep(timestamp: number) {
+        if (!lastTime) lastTime = timestamp;
+        const delta = timestamp - lastTime;
 
-        if (isReduced) {
-          pts.forEach((pt) => addLocalDot(pt.x, pt.y, rect.width, rect.height));
-          hasCompletedRef.current = true;
-          setHeroRevealedState(true);
-          setIsRevealed(true);
-          heroEl.classList.add("is-revealed");
-          return;
-        }
-
-        let ptIndex = 0;
-        let rafId = 0;
-        let lastTime = 0;
-        const STEP_INTERVAL_MS = 25; // ~25ms per point -> ~1.5s total smooth sweep
-
-        function sweepStep(timestamp: number) {
-          if (!lastTime) lastTime = timestamp;
-          const delta = timestamp - lastTime;
-
-          if (delta >= STEP_INTERVAL_MS) {
-            lastTime = timestamp;
-            const pt = pts[ptIndex++];
-            if (pt) {
-              addLocalDot(pt.x, pt.y, rect.width, rect.height);
-              // Googly eyes follow the sweep coordinates across the surface
+        if (delta >= STEP_INTERVAL_MS) {
+          lastTime = timestamp;
+          const pt = pts[ptIndex++];
+          if (pt) {
+            addLocalDot(pt.x, pt.y, rect.width, rect.height);
+            // On mobile / touch, googly eyes follow the sweep coordinates
+            if (!isDesktop) {
               const ptX = rect.left + pt.x;
               const ptY = rect.top + pt.y;
               eyeCenters.forEach((center, idx) => {
@@ -475,55 +440,98 @@ export default function HeroKokil() {
               hasActiveMobileGaze = true;
             }
           }
+        }
 
-          if (ptIndex < pts.length) {
-            rafId = requestAnimationFrame(sweepStep);
-          } else {
-            // Sweep complete: Hero is fully revealed
-            hasCompletedRef.current = true;
-            setHeroRevealedState(true);
-            setIsRevealed(true);
-            if (heroEl) {
-              heroEl.classList.add("is-revealed");
-            }
-            autoSweepCancelRef.current = null;
-            lastX = null;
-            lastY = null;
+        if (ptIndex < pts.length) {
+          rafId = requestAnimationFrame(sweepStep);
+        } else {
+          // Sweep complete: Hero is fully revealed
+          hasCompletedRef.current = true;
+          setHeroRevealedState(true);
+          setIsRevealed(true);
+          if (heroEl) {
+            heroEl.classList.add("is-revealed");
+          }
+          autoSweepCancelRef.current = null;
+          isAutoSweeping = false;
+          lastX = null;
+          lastY = null;
 
-            // Smoothly glide eyes back to resting forward gaze
+          if (!isDesktop) {
             targetOx[0] = 0;
             targetOy[0] = 0;
             targetOx[1] = 0;
             targetOy[1] = 0;
           }
         }
-
-        rafId = requestAnimationFrame(sweepStep);
-        autoSweepCancelRef.current = () => {
-          cancelAnimationFrame(rafId);
-        };
       }
 
-      function scheduleAutoScratch() {
-        if (autoSweepCancelRef.current) {
-          autoSweepCancelRef.current();
-          autoSweepCancelRef.current = null;
+      rafId = requestAnimationFrame(sweepStep);
+      autoSweepCancelRef.current = () => {
+        cancelAnimationFrame(rafId);
+        isAutoSweeping = false;
+      };
+    }
+
+    function scheduleAutoScratch() {
+      if (autoSweepCancelRef.current) {
+        autoSweepCancelRef.current();
+        autoSweepCancelRef.current = null;
+      }
+      // 450ms discovery window showing concealed surface & eyes before progressive animation begins
+      const delayTimer = window.setTimeout(startAutoScratch, 450);
+      autoSweepCancelRef.current = () => {
+        window.clearTimeout(delayTimer);
+        isAutoSweeping = false;
+      };
+    }
+
+    triggerAutoScratchRef.current = !isDesktop ? scheduleAutoScratch : null;
+
+    // ── DESKTOP: MOUSE-DRIVEN PROGRESSIVE UNVEILING ──
+    let onDesktopPointerMove: ((e: PointerEvent) => void) | null = null;
+    let onDesktopPointerDown: ((e: PointerEvent) => void) | null = null;
+    let onDesktopPointerLeave: (() => void) | null = null;
+
+    if (isDesktop) {
+      onDesktopPointerMove = (e: PointerEvent) => {
+        if (!isHeroVisible) return;
+        pendingPointerX = e.clientX;
+        pendingPointerY = e.clientY;
+
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+
+        addDotFromClientCoords(e.clientX, e.clientY);
+        // Once the user moves their mouse around on desktop, the whole unveiling starts!
+        if (!hasCompletedRef.current && !isAutoSweeping) {
+          startAutoScratch();
         }
-        // Brief 500ms discovery window showing concealed surface & eyes before progressive animation begins
-        const delayTimer = window.setTimeout(startAutoScratch, 500);
-        autoSweepCancelRef.current = () => {
-          window.clearTimeout(delayTimer);
-        };
-      }
+      };
 
-      triggerAutoScratchRef.current = scheduleAutoScratch;
+      onDesktopPointerDown = (e: PointerEvent) => {
+        if (!isHeroVisible) return;
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+        addDotFromClientCoords(e.clientX, e.clientY);
+        if (!hasCompletedRef.current && !isAutoSweeping) {
+          startAutoScratch();
+        }
+      };
 
-      // If not previously revealed, initiate automatic scratch after brief reveal delay
+      onDesktopPointerLeave = () => {
+        lastX = null;
+        lastY = null;
+      };
+
+      heroEl.addEventListener("pointermove", onDesktopPointerMove, { passive: true });
+      heroEl.addEventListener("pointerdown", onDesktopPointerDown, { passive: true });
+      heroEl.addEventListener("pointerleave", onDesktopPointerLeave, { passive: true });
+      window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    } else {
+      // Mobile and tablet: Progressive unveiling runs automatically after brief discovery window
       if (!savedRevealed) {
         scheduleAutoScratch();
       }
     }
-
     // ── MOBILE & TOUCH TAP-DIRECTED EYE MOVEMENT ──
     const directEyesTowards = (clientX: number, clientY: number) => {
       // Re-measure live eye bounding boxes so gaze direction is 100% accurate at all scroll & layout states

@@ -2789,18 +2789,6 @@ html[data-theme="light"] .mobile-nav-email-link:focus-visible {
 }
 
 /* ── HERO (LIGHT) ── */
-html[data-theme="light"] #hero {
-  background: #FDFDFD !important;
-}
-html[data-theme="light"] .hero-paint {
-  background: #FDFDFD !important;
-}
-html[data-theme="light"] .hero-invert {
-  -webkit-mask-image: none !important;
-  mask-image: none !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
 html[data-theme="light"] .hero-base {
   display: flex !important;
   z-index: 4;
