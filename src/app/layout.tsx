@@ -34,23 +34,25 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Taye Abolarin — Cold Designer | Independent Product Designer",
+  title: "Taye Abolarin (Cold Designer) — Product Designer",
   description:
-    "Portfolio of Taye Abolarin (Cold Designer) — Independent Product Designer & Design Technologist crafting conversational UX, transit systems, and editorial web experiences.",
+    "Product Designer turning complex workflows into clear interfaces, design systems, and live working prototypes across industries.",
   keywords: [
     "Product Designer",
     "Conversational UX",
     "Design Systems",
     "Mobile Design",
+    "Live Prototyping",
+    "0-to-1 Strategy",
     "Cold Designer",
     "Taye Abolarin",
   ],
   authors: [{ name: "Taye Abolarin (Cold Designer)" }],
   creator: "Taye Abolarin",
   openGraph: {
-    title: "Taye Abolarin — Cold Designer | Independent Product Designer",
+    title: "Taye Abolarin (Cold Designer) — Product Designer",
     description:
-      "Crafting conversational UX, transit systems, and tactile editorial web experiences.",
+      "Product Designer turning complex workflows into clear interfaces, design systems, and live working prototypes across industries.",
     url: "https://cold-designer-portfolio.vercel.app",
     siteName: "Cold Designer Portfolio",
     locale: "en_US",
@@ -58,9 +60,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Taye Abolarin — Cold Designer | Independent Product Designer",
+    title: "Taye Abolarin (Cold Designer) — Product Designer",
     description:
-      "Crafting conversational UX, transit systems, and tactile editorial web experiences.",
+      "Product Designer turning complex workflows into clear interfaces, design systems, and live working prototypes across industries.",
     creator: "@taye_abolarin2",
   },
   icons: {

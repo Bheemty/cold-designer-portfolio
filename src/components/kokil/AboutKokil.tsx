@@ -4,16 +4,16 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 
 const ABOUT_TEXT =
-  "I design digital products that make complex systems feel obvious. Less decorative clutter, more functional clarity — translating messy workflows into structured interfaces, disciplined design systems, and rapid working prototypes.";
+  "Complex products don’t need more features—they need more clarity. Combining hands-on product management instincts with disciplined design systems and rapid front-end prototyping, I help founders and engineering teams validate real interactions early and ship products people actually understand.";
 
 const SKILLS = [
-  "Figma",
   "Product Design",
-  "Conversational UX",
+  "0-to-1 Strategy",
   "Design Systems",
-  "Intercity Mobility",
-  "Rapid Prototyping",
+  "Live Prototyping",
+  "Conversational UX",
   "Information Architecture",
+  "Product Management",
 ];
 
 export default function AboutKokil() {
@@ -125,8 +125,8 @@ export default function AboutKokil() {
             return token;
           }
           const isEmphasis =
-            token.toLowerCase().includes("obvious") ||
-            token.toLowerCase().includes("clarity");
+            token.toLowerCase().includes("clarity") ||
+            token.toLowerCase().includes("understand");
           return (
             <span
               key={idx}

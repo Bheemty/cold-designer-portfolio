@@ -648,7 +648,7 @@ export default function HeroKokil() {
         </div>
         <div className="hero-bottom">
           <p className="hero-desc">
-            I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
+            I take complex, messy workflows from 0-to-1 strategy to clear interfaces and live working prototypes—across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
           <div className="hero-actions">
             <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true">
@@ -662,7 +662,7 @@ export default function HeroKokil() {
         <div className="hero-strip" aria-hidden="true">
           <span>Portfolio &rsquo;26</span>
           <span className="skills">
-            Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
+            0-to-1 Product Strategy<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Live Prototypes<span className="dot">&middot;</span>Cross-Industry UX
           </span>
           <span>Scroll &darr;</span>
         </div>
@@ -685,7 +685,7 @@ export default function HeroKokil() {
         </div>
         <div className="hero-bottom">
           <p className="hero-desc">
-            I design clear, sensible digital products for complex real-world workflows &mdash; turning messy operational problems into intuitive interfaces and rapid working prototypes.
+            I take complex, messy workflows from 0-to-1 strategy to clear interfaces and live working prototypes—across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
           <div className="hero-actions">
             <a href="#work" className="hero-btn primary">
@@ -699,7 +699,7 @@ export default function HeroKokil() {
         <div className="hero-strip">
           <span>Portfolio &rsquo;26</span>
           <span className="skills">
-            Conversational UX<span className="dot">&middot;</span>Transit Systems<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Figma
+            0-to-1 Product Strategy<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Live Prototypes<span className="dot">&middot;</span>Cross-Industry UX
           </span>
           <span>Scroll &darr;</span>
         </div>

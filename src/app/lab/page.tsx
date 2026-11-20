@@ -243,7 +243,7 @@ export default function LabPage() {
           />
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
-            A living workspace exploring interactive design experiments, state lifecycles, adaptive themes, density ergonomics, and typographic hierarchy. Every experiment below is an interactive artifact designed to be experienced directly.
+            Interactive R&amp;D &mdash; exploring state lifecycles, density scaling, spatial interfaces, and front-end micro-interactions directly in code.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center gap-3 font-mono-code text-xs text-[#89919d]">
@@ -267,9 +267,17 @@ export default function LabPage() {
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
                 EXPERIMENT 01 // INTERACTION STUDIO
               </div>
-              <h2 id="exp1-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+              <h2 id="exp1-title" className="font-display text-3xl font-bold text-[#f2f1ec] mb-2">
                 State Lifecycles &amp; Intentional Friction
               </h2>
+              <div className="flex items-center gap-2 font-mono-code text-[11px] text-[#a9ddf0]">
+                <span className="rounded bg-white/[0.04] border border-white/[0.08] px-2 py-0.5">
+                  Tech: React Hooks &middot; Web Audio API &middot; Async State Machine
+                </span>
+              </div>
+              <p className="font-mono-code text-xs text-[#89919d] mt-2.5 max-w-xl leading-relaxed">
+                <span className="text-[#f2f1ec] font-medium">UX Rationale:</span> Explicit multi-stage feedback and intentional friction prevent irreversible errors in high-stakes actions like money movement and clinical triage.
+              </p>
             </div>
             <p className="font-mono-code text-xs text-[#89919d] max-w-md">
               Instruction: Try clicking, pressing, and holding each control to observe how real interfaces communicate state.
@@ -577,9 +585,17 @@ export default function LabPage() {
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
                 EXPERIMENT 02 // INTERFACE SWITCHER
               </div>
-              <h2 id="exp2-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+              <h2 id="exp2-title" className="font-display text-3xl font-bold text-[#f2f1ec] mb-2">
                 Adaptive Themes &amp; Density Ergonomics
               </h2>
+              <div className="flex items-center gap-2 font-mono-code text-[11px] text-[#a9ddf0]">
+                <span className="rounded bg-white/[0.04] border border-white/[0.08] px-2 py-0.5">
+                  Tech: CSS Variables &middot; Semantic Design Tokens &middot; Dynamic Density
+                </span>
+              </div>
+              <p className="font-mono-code text-xs text-[#89919d] mt-2.5 max-w-xl leading-relaxed">
+                <span className="text-[#f2f1ec] font-medium">UX Rationale:</span> Systematic semantic token scaling preserves optical hierarchy and WCAG AAA contrast across dark obsidian, paper light, and dense enterprise modes.
+              </p>
             </div>
             <p className="font-mono-code text-xs text-[#89919d] max-w-md">
               Instruction: Switch themes and toggle density to observe how the interface adapts to different operational environments.
@@ -941,9 +957,17 @@ export default function LabPage() {
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
                 EXPERIMENT 03 // TYPE &amp; VISUAL HIERARCHY
               </div>
-              <h2 id="exp3-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+              <h2 id="exp3-title" className="font-display text-3xl font-bold text-[#f2f1ec] mb-2">
                 Scale, Tracking &amp; Scanning Hierarchy
               </h2>
+              <div className="flex items-center gap-2 font-mono-code text-[11px] text-[#a9ddf0]">
+                <span className="rounded bg-white/[0.04] border border-white/[0.08] px-2 py-0.5">
+                  Tech: Variable Fonts &middot; Optical Tracking &middot; Modular Typographic Scale
+                </span>
+              </div>
+              <p className="font-mono-code text-xs text-[#89919d] mt-2.5 max-w-xl leading-relaxed">
+                <span className="text-[#f2f1ec] font-medium">UX Rationale:</span> Calibrated optical tracking and proportional weight distribution guide user eye-flow through complex information without relying on decorative accent colors.
+              </p>
             </div>
             <p className="font-mono-code text-xs text-[#89919d] max-w-md">
               Instruction: Toggle between Flat and Intentional hierarchy, or slide weight and tracking to experience how typography guides human attention.
@@ -1156,9 +1180,17 @@ export default function LabPage() {
               <div className="font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider mb-1">
                 EXPERIMENT 04 // INTERFACE ARCHITECTURE &amp; HERO STUDIES
               </div>
-              <h2 id="exp4-title" className="font-display text-3xl font-bold text-[#f2f1ec]">
+              <h2 id="exp4-title" className="font-display text-3xl font-bold text-[#f2f1ec] mb-2">
                 Fidelity, Framing &amp; Hero Section Ergonomics
               </h2>
+              <div className="flex items-center gap-2 font-mono-code text-[11px] text-[#a9ddf0]">
+                <span className="rounded bg-white/[0.04] border border-white/[0.08] px-2 py-0.5">
+                  Tech: Spatial UI &middot; WebGL Shaders &middot; Responsive Scrollytelling
+                </span>
+              </div>
+              <p className="font-mono-code text-xs text-[#89919d] mt-2.5 max-w-xl leading-relaxed">
+                <span className="text-[#f2f1ec] font-medium">UX Rationale:</span> Architectural arrival pacing and progressive spatial depth transform standard marketing hero sections into tactile, memorable brand flagships.
+              </p>
             </div>
             <p className="font-mono-code text-xs text-[#89919d] max-w-md">
               Instruction: Switch between the desktop real estate discovery hero and the institutional university redesign. Inspect high-resolution UI layers, problem statements, and responsive layout decisions.

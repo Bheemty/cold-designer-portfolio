@@ -26,6 +26,7 @@ const TIMELINES = [
 ];
 
 export default function ContactPage() {
+  const [intent, setIntent] = useState<"role" | "project">("role");
   const [selectedScope, setSelectedScope] = useState(SCOPES[0]);
   const [selectedTimeline, setSelectedTimeline] = useState(TIMELINES[1]);
   const [formData, setFormData] = useState({
@@ -59,9 +60,10 @@ export default function ContactPage() {
 
     setSubmitted(true);
 
-    const subject = encodeURIComponent(`Project Inquiry: ${selectedScope} — ${formData.name || "Inquiry"}`);
+    const intentSubject = intent === "role" ? "Role Opportunity" : "0-to-1 Project Brief";
+    const subject = encodeURIComponent(`${intentSubject}: ${selectedScope} — ${formData.name || "Inquiry"}`);
     const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\nScope: ${selectedScope}\nTimeline: ${selectedTimeline}\n\nProject Brief:\n${formData.message}`
+      `Intent: ${intent === "role" ? "Full-Time / Contract Role" : "0-to-1 Project Brief"}\nName: ${formData.name}\nEmail: ${formData.email}\nCompany: ${formData.company}\nScope: ${selectedScope}\nTimeline: ${selectedTimeline}\n\nOverview:\n${formData.message}`
     );
     window.location.href = `mailto:${realEmail}?subject=${subject}&body=${body}`;
   };
@@ -85,7 +87,7 @@ export default function ContactPage() {
           />
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-3xl">
-            Open for thoughtful product discussions, design systems architecture, and professional dialogue.
+            Open to remote Product Design roles and select 0-to-1 product collaborations. Tell me what you’re building or hiring for—I respond within 24 hours.
           </p>
         </div>
 
@@ -217,10 +219,47 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-8">
+                  {/* Clean Intent Selector */}
+                  <div>
+                    <label className="font-mono-code text-xs text-[#89919d] uppercase block mb-3">
+                      Select Conversation Intent:
+                    </label>
+                    <div className="inline-flex rounded-full border border-white/[0.12] bg-white/[0.03] p-1 font-mono-code text-xs">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          sound.playPop();
+                          setIntent("role");
+                        }}
+                        className={`rounded-full px-4 py-2 transition-all cursor-pointer ${
+                          intent === "role"
+                            ? "bg-[#a9ddf0] text-[#090b0f] font-semibold shadow-sm"
+                            : "text-[#89919d] hover:text-[#f2f1ec]"
+                        }`}
+                      >
+                        [ Full-Time / Contract Role ]
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          sound.playPop();
+                          setIntent("project");
+                        }}
+                        className={`rounded-full px-4 py-2 transition-all cursor-pointer ${
+                          intent === "project"
+                            ? "bg-[#a9ddf0] text-[#090b0f] font-semibold shadow-sm"
+                            : "text-[#89919d] hover:text-[#f2f1ec]"
+                        }`}
+                      >
+                        [ 0-to-1 Project Brief ]
+                      </button>
+                    </div>
+                  </div>
+
                   {/* Scope Selector */}
                   <div>
                     <label className="font-mono-code text-xs text-[#89919d] uppercase block mb-3">
-                      01 // Project Engagement Scope:
+                      01 // Engagement Domain &amp; Focus:
                     </label>
                     <div className="flex flex-wrap gap-2">
                       {SCOPES.map((sc) => (
@@ -278,7 +317,7 @@ export default function ContactPage() {
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="Your name"
+                        placeholder={intent === "role" ? "Your name or recruiter name" : "Your name"}
                         className="w-full rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-[#f2f1ec] placeholder-[#89919d]/40 focus:border-[#a9ddf0] focus:outline-none transition-colors"
                       />
                     </div>
@@ -296,25 +335,34 @@ export default function ContactPage() {
                         />
                       </div>
                       <div>
-                        <label className="text-[#89919d] uppercase block mb-1.5">Company / Project</label>
+                        <label className="text-[#89919d] uppercase block mb-1.5">
+                          {intent === "role" ? "Company / Organization *" : "Company / Venture Name"}
+                        </label>
                         <input
                           type="text"
+                          required={intent === "role"}
                           value={formData.company}
                           onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                          placeholder="Company or venture"
+                          placeholder={intent === "role" ? "Company name or design team" : "Venture or product name"}
                           className="w-full rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-[#f2f1ec] placeholder-[#89919d]/40 focus:border-[#a9ddf0] focus:outline-none transition-colors"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="text-[#89919d] uppercase block mb-1.5">Project Overview / Goals</label>
+                      <label className="text-[#89919d] uppercase block mb-1.5">
+                        {intent === "role" ? "Role Scope / Team Context *" : "Project Overview &amp; Goals *"}
+                      </label>
                       <textarea
                         rows={4}
                         required
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        placeholder="Tell me about what you are building, design goals, and project scope..."
+                        placeholder={
+                          intent === "role"
+                            ? "Tell me about the role, product scope, team size, and what you’re looking for in a Product Designer..."
+                            : "Tell me about what you are building, design goals, 0-to-1 timeline, and project scope..."
+                        }
                         className="w-full rounded-xl border border-white/[0.08] bg-[#090b0f] p-3.5 text-[#f2f1ec] placeholder-[#89919d]/40 focus:border-[#a9ddf0] focus:outline-none transition-colors resize-none"
                       />
                     </div>
@@ -327,7 +375,7 @@ export default function ContactPage() {
                         className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#f2f1ec] py-4 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors cursor-pointer shadow-lg"
                       >
                         <Send size={14} />
-                        <span>Send Project Inquiry</span>
+                        <span>{intent === "role" ? "Send Role Inquiry" : "Send Project Brief"}</span>
                       </button>
                     </MagneticButton>
                   </div>

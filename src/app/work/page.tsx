@@ -70,7 +70,10 @@ const ORDERED_PROJECTS: Project[] = ORDERED_SLUGS.map((slug) => {
   return p;
 });
 
+type SystemFilter = "all" | "shipped" | "concepts";
+
 export default function WorkArchivePage() {
+  const [systemFilter, setSystemFilter] = useState<SystemFilter>("all");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<"editorial" | "table">("editorial");
@@ -78,25 +81,46 @@ export default function WorkArchivePage() {
 
   const filteredProjects = useMemo(() => {
     return ORDERED_PROJECTS.filter((project) => {
+      // 1. Primary Monospace System Filter: All vs Shipped vs Concepts
+      const isConcept =
+        project.status?.toLowerCase().includes("concept") ||
+        project.category.toLowerCase().includes("concept") ||
+        project.category.toLowerCase().includes("digital space") ||
+        ["somewhere-hotel", "buybuddy", "stillwater", "will", "agrivillage"].includes(project.slug);
+
+      const isShipped =
+        project.status?.toLowerCase().includes("shipped") ||
+        project.status?.toLowerCase().includes("production") ||
+        project.category.toLowerCase().includes("shipped") ||
+        project.category.toLowerCase().includes("product") ||
+        ["medesy", "9jatrip", "paai", "greall-website", "spot", "profile", "quickeats", "raven-bank"].includes(project.slug);
+
+      if (systemFilter === "shipped" && !isShipped) return false;
+      if (systemFilter === "concepts" && !isConcept) return false;
+
+      // 2. Search Query Matching
       const q = searchQuery.toLowerCase().trim();
       const matchesSearch =
         !q ||
         project.title.toLowerCase().includes(q) ||
         project.headline.toLowerCase().includes(q) ||
+        project.summary.toLowerCase().includes(q) ||
         project.category.toLowerCase().includes(q) ||
         project.tags.some((t) => t.toLowerCase().includes(q)) ||
         project.deliverables.some((d) => d.toLowerCase().includes(q));
 
       if (!matchesSearch) return false;
 
-            if (selectedCategory === "All") return true;
+      // 3. Category Filter
+      if (selectedCategory === "All") return true;
       if (selectedCategory === "Healthcare & AI" || selectedCategory === "Healthcare & Conversational") {
         return (
           project.category.includes("Healthcare") ||
           project.category.includes("Conversational") ||
           project.category.includes("AI") ||
+          project.tags.includes("Conversational UX") ||
           project.tags.includes("Conversational UI") ||
-          project.tags.includes("Conversational AI") ||
+          project.tags.includes("Healthcare Triage") ||
           project.tags.includes("AI & Systems")
         );
       }
@@ -143,7 +167,7 @@ export default function WorkArchivePage() {
       }
       return true;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [systemFilter, selectedCategory, searchQuery]);
 
     const featuredList = useMemo(() => {
     return filteredProjects.filter((p) =>
@@ -211,6 +235,41 @@ export default function WorkArchivePage() {
           </div>
         </header>
 
+        {/* Monospace Primary Filter Pills: [ All ] [ Shipped Products ] [ Interactive Concepts ] */}
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-white/[0.08]">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 no-scrollbar font-mono-code text-xs">
+            <span className="text-[#89919d] mr-1 hidden sm:inline uppercase tracking-wider text-[11px]">System Filter:</span>
+            {[
+              { id: "all", label: "[ All ]" },
+              { id: "shipped", label: "[ Shipped Products ]" },
+              { id: "concepts", label: "[ Interactive Concepts ]" },
+            ].map((pill) => {
+              const isActive = systemFilter === pill.id;
+              return (
+                <button
+                  key={pill.id}
+                  type="button"
+                  onClick={() => {
+                    sound.playPop();
+                    setSystemFilter(pill.id as SystemFilter);
+                  }}
+                  className={`px-3.5 py-1.5 rounded-full border transition-all cursor-pointer font-mono-code text-xs ${
+                    isActive
+                      ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold shadow-[0_0_12px_rgba(169,221,240,0.2)]"
+                      : "border-white/[0.12] bg-white/[0.03] text-[#89919d] hover:border-white/30 hover:text-[#f2f1ec]"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="font-mono-code text-xs text-[#89919d]">
+            Showing <span className="text-[#a9ddf0] font-medium">{filteredProjects.length}</span> of {ORDERED_PROJECTS.length} Systems
+          </div>
+        </div>
+
         {/* Filter & Search Controls */}
         <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-16">
           {/* Categories with Directional Sliding Hover Tabs */}
@@ -251,6 +310,7 @@ export default function WorkArchivePage() {
               type="button"
               onClick={() => {
                 sound.playPop();
+                setSystemFilter("all");
                 setSelectedCategory("All");
                 setSearchQuery("");
               }}
@@ -343,24 +403,24 @@ export default function WorkArchivePage() {
                               {/* Eyebrow & Year */}
                               <div className="flex items-center justify-between border-b border-white/[0.08] pb-4 mb-5 font-mono-code text-xs">
                                 <span className="text-[#a9ddf0] font-semibold">
-                                  ({orderNumber}) &mdash; {p.category}
+                                  {p.category.startsWith("0") ? p.category : `(${orderNumber}) — ${p.category}`}
                                 </span>
                                 <span className="text-[#89919d]">{p.year}</span>
                               </div>
 
-                              {/* Title */}
-                              <h2 className="font-display text-3xl sm:text-4xl font-bold text-[#f2f1ec] group-hover:text-[#a9ddf0] transition-colors mb-3">
+                              {/* Title / Headline */}
+                              <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] group-hover:text-[#a9ddf0] transition-colors mb-3 leading-snug">
                                 <Link
                                   href={`/work/${p.slug}`}
                                   onClick={() => sound.playClick()}
                                 >
-                                  {p.title}
+                                  {p.headline || p.title}
                                 </Link>
                               </h2>
 
-                              {/* Headline */}
+                              {/* Description */}
                               <p className="text-base text-[#89919d] font-light leading-relaxed mb-6">
-                                {p.headline}
+                                {p.summary}
                               </p>
 
                               {/* System Specifications Ledger */}

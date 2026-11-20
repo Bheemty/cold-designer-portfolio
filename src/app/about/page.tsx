@@ -47,7 +47,7 @@ const TOOLKIT = [
       "End-to-End Product Discovery & Flow Mapping",
       "Conversational UX (WhatsApp Decision Trees)",
       "Information Architecture & User Journeys",
-      "Figma Design Systems & Token Governance",
+      "Design Systems & Token Architecture",
       "Responsive Web & Mobile App Ergonomics",
     ],
   },
@@ -110,9 +110,55 @@ export default function AboutPage() {
           />
 
           <p className="text-xl sm:text-2xl text-[#89919d] font-light leading-relaxed max-w-4xl">
-            UI/UX and Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Focused on creating structured, intuitive digital products across conversational healthcare gateways, regional transit platforms, and interactive web systems.
+            Product Designer operating under the independent imprint <strong className="text-[#f2f1ec] font-medium">Cold Designer</strong>. Backed by 3 years of cross-industry product design experience, hands-on product management instincts, and live front-end prototyping—shipping clear, disciplined digital products across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
+
+          <div className="mt-8 pt-6 border-t border-white/[0.08] font-mono-code text-xs text-[#89919d] flex flex-wrap items-center gap-2">
+            <span className="text-[#a9ddf0] font-semibold uppercase tracking-wider">Stack:</span>
+            <span className="text-[#f2f1ec]">Figma &middot; React &middot; Next.js &middot; Three.js &middot; GSAP &middot; Design Tokens</span>
+          </div>
         </header>
+
+        {/* 3-COLUMN "HOW I OPERATE" EDITORIAL STRIP */}
+        <ScrollReveal start="top 85%" y={20} duration={0.45} className="mb-20">
+          <div className="border-t border-b border-white/[0.08] py-12">
+            <div className="flex items-center gap-3 mb-8 font-mono-code text-xs">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" />
+              <span className="uppercase tracking-widest text-[#a9ddf0] font-semibold">
+                Operating Principles // How I Operate
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              <div className="space-y-3 font-mono-code text-xs">
+                <span className="text-[#a9ddf0] font-semibold tracking-wider block text-sm">
+                  01 — 0-to-1 Product Framing
+                </span>
+                <p className="text-sm font-sans font-light text-[#89919d] leading-relaxed">
+                  Unpacking messy requirements into defined user journeys, hypothesis-driven feature roadmaps, and measurable metrics before pushing pixels.
+                </p>
+              </div>
+
+              <div className="space-y-3 font-mono-code text-xs border-t md:border-t-0 md:border-l border-white/[0.08] pt-8 md:pt-0 md:pl-10">
+                <span className="text-[#a9ddf0] font-semibold tracking-wider block text-sm">
+                  02 — Systemized Craft
+                </span>
+                <p className="text-sm font-sans font-light text-[#89919d] leading-relaxed">
+                  Designing scalable token architectures, accessible components, and meticulous typography hierarchies that engineering teams can build without ambiguity.
+                </p>
+              </div>
+
+              <div className="space-y-3 font-mono-code text-xs border-t md:border-t-0 md:border-l border-white/[0.08] pt-8 md:pt-0 md:pl-10">
+                <span className="text-[#a9ddf0] font-semibold tracking-wider block text-sm">
+                  03 — Live Prototyping
+                </span>
+                <p className="text-sm font-sans font-light text-[#89919d] leading-relaxed">
+                  Bringing interactions to life directly in code (React/TypeScript/Next.js) to validate real touch points, transitions, and edge cases before engineering handover.
+                </p>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
 
         {/* 2-COLUMN EXHIBITION & ESSAY SPREAD */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24">
@@ -197,6 +243,10 @@ export default function AboutPage() {
                     <div className="flex justify-between">
                       <span>FOCUS:</span>
                       <span className="text-[#f2f1ec]">Digital Ergonomics &amp; Web Systems</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>STACK:</span>
+                      <span className="text-[#a9ddf0]">Figma · React · Next.js · Design Tokens</span>
                     </div>
                   </div>
                 </div>

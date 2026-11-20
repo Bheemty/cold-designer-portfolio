@@ -73,7 +73,7 @@ export default function CaseStudyQuickAccess({
     ...(project.discoveryInsights && project.discoveryInsights.length > 0
       ? [{ id: "section-discovery", label: "02 // Research & Discovery Insights" }]
       : []),
-    ...(project.designDecisions && project.designDecisions.length > 0
+    ...((project.designDecisions && project.designDecisions.length > 0) || project.keyTradeOff
       ? [{ id: "section-decisions", label: "03 // Strategic Decisions & Trade-Offs" }]
       : []),
     { id: "section-solution", label: "04 // Architectural Solution & Workflows" },

@@ -228,7 +228,7 @@ export default function FooterKokil() {
       <div className="contact-grid">
         <div>
           <div ref={headerRef}>
-            <p className="intro-label">(03) &mdash; Contact</p>
+            <p className="intro-label">(04) &mdash; Contact</p>
             <h2 className="contact-title">
               Let&rsquo;s build something <span>people understand.</span>
             </h2>

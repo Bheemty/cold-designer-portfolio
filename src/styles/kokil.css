@@ -2028,6 +2028,89 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   .nb-rings i::after { width: 2.6cqw; height: 2.6cqw; }
 }
 
+/* ── (03) ENDORSEMENTS SECTION ── */
+#endorsements {
+  position: relative;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(80px, 10vh, 140px) clamp(24px, 5vw, 64px) clamp(40px, 6vh, 80px);
+  z-index: 10;
+}
+#endorsements .intro-label {
+  margin-bottom: clamp(32px, 4vw, 56px);
+}
+.endorsements-inner {
+  width: 100%;
+}
+.endorsement-body {
+  position: relative;
+  width: 100%;
+}
+.endorsement-quote {
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(22px, 3.2vw, 44px);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: #FDFDFD;
+  margin: 0 0 clamp(36px, 5vw, 64px) 0;
+  max-width: 1200px;
+}
+.endorsement-quote .quote-mark {
+  color: #a9ddf0;
+  font-family: 'Newsreader', serif;
+  font-style: italic;
+  font-weight: 400;
+}
+.endorsement-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-top: clamp(24px, 3vw, 36px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.endorsement-author-block {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.endorsement-author-name {
+  font-family: 'Inter Tight', 'Poppins', sans-serif;
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 700;
+  color: #FDFDFD;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+.endorsement-author-role {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 13px;
+  color: #89919d;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.endorsement-context-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 16px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 12px;
+  color: #a9ddf0;
+}
+.endorsement-context-pill .context-indicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background-color: #a9ddf0;
+}
+
 /* ── CONTACT & FOOTER ── */
 #contact {
   position: relative;
@@ -2865,6 +2948,32 @@ html[data-theme="light"] .nb-tab.is-active {
 html[data-theme="light"] .nb-tab:hover:not(.is-active) {
   background: #d8d4ca;
   color: #11141b;
+}
+
+/* ── ENDORSEMENTS (LIGHT) ── */
+html[data-theme="light"] .endorsement-quote {
+  color: #11141b;
+}
+html[data-theme="light"] .endorsement-quote .quote-mark {
+  color: #027a9e;
+}
+html[data-theme="light"] .endorsement-meta {
+  border-top-color: rgba(18, 22, 30, 0.1);
+}
+html[data-theme="light"] .endorsement-author-name {
+  color: #11141b;
+}
+html[data-theme="light"] .endorsement-author-role {
+  color: #4d5462;
+}
+html[data-theme="light"] .endorsement-context-pill {
+  background: #FDFDFD;
+  border-color: rgba(18, 22, 30, 0.1);
+  color: #027a9e;
+  box-shadow: 0 1px 3px rgba(18, 22, 30, 0.04);
+}
+html[data-theme="light"] .endorsement-context-pill .context-indicator {
+  background-color: #027a9e;
 }
 
 /* ── CONTACT & FOOTER (LIGHT) ── */

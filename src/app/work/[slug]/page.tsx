@@ -112,7 +112,13 @@ export default async function CaseStudyPage({
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 rounded-full bg-[#f2f1ec] px-5 py-2.5 font-mono-code text-xs font-semibold text-[#090b0f] hover:bg-[#a9ddf0] transition-colors"
               >
-                <span>{project.slug === "9jatrip" ? "Visit Live Website" : "Visit Live Experience"}</span>
+                <span>
+                  {project.slug === "9jatrip"
+                    ? "Visit Live Website ↗"
+                    : ["somewhere-hotel", "buybuddy", "stillwater"].includes(project.slug)
+                    ? "Launch Live Demo ↗"
+                    : "Visit Live Experience ↗"}
+                </span>
                 <ExternalLink size={13} />
               </a>
             )}
@@ -126,8 +132,8 @@ export default async function CaseStudyPage({
               >
                 <span>
                   {project.prototypeUrl.includes("behance.net")
-                    ? "Examine on Behance"
-                    : "Explore Design Specs"}
+                    ? "Examine on Behance ↗"
+                    : "Launch Live Demo ↗"}
                 </span>
                 <ArrowUpRight size={13} />
               </a>
@@ -146,23 +152,25 @@ export default async function CaseStudyPage({
             )}
           </div>
 
-          {/* Project Metadata Matrix */}
+          {/* Monospace Metadata Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-12 pt-8 border-t border-white/[0.08] font-mono-code text-xs">
             <div>
-              <span className="text-[#89919d] uppercase block mb-1">CLIENT / CONTEXT</span>
-              <span className="text-[#f2f1ec] font-medium">{project.client}</span>
-            </div>
-            <div>
-              <span className="text-[#89919d] uppercase block mb-1">DESIGN ROLE</span>
+              <span className="text-[#89919d] uppercase block mb-1">ROLE</span>
               <span className="text-[#f2f1ec] font-medium">{project.role}</span>
             </div>
             <div>
-              <span className="text-[#89919d] uppercase block mb-1">ENGAGEMENT TYPE</span>
-              <span className="text-[#f2f1ec] font-medium">{project.type}</span>
+              <span className="text-[#89919d] uppercase block mb-1">SCOPE</span>
+              <span className="text-[#f2f1ec] font-medium">{project.scope || project.type}</span>
             </div>
             <div>
-              <span className="text-[#89919d] uppercase block mb-1">TIMELINE</span>
-              <span className="text-[#f2f1ec] font-medium">{project.timeline}</span>
+              <span className="text-[#89919d] uppercase block mb-1">STATUS</span>
+              <span className="text-[#a9ddf0] font-medium">
+                {project.status || (project.type === "Employment" ? "Shipped to Production" : "Live Interactive Concept")}
+              </span>
+            </div>
+            <div>
+              <span className="text-[#89919d] uppercase block mb-1">FOCUS</span>
+              <span className="text-[#f2f1ec] font-medium">{project.focus || project.category}</span>
             </div>
           </div>
 
@@ -242,6 +250,52 @@ export default async function CaseStudyPage({
             </div>
           </section>
         </ScrollReveal>
+
+        {/* ───────────────────────────────────────────────────────────── */}
+        {/* 30-SECOND EXECUTIVE BRIEF */}
+        {/* ───────────────────────────────────────────────────────────── */}
+        {project.executiveBrief && (
+          <ScrollReveal start="top 85%" y={20} duration={0.45}>
+            <section className="mb-20 rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-6 sm:p-10 shadow-2xl">
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] pb-4 mb-8 font-mono-code text-xs">
+                <span className="text-[#a9ddf0] uppercase tracking-widest font-semibold flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
+                  <span>30-Second Executive Brief</span>
+                </span>
+                <span className="text-[#89919d]">At-A-Glance Strategic Synthesis</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="space-y-3 font-mono-code text-xs">
+                  <span className="text-[#a9ddf0] font-semibold tracking-wider block">
+                    01 / THE FRICTION
+                  </span>
+                  <p className="text-sm font-sans font-light text-[#f2f1ec]/90 leading-relaxed">
+                    {project.executiveBrief.friction}
+                  </p>
+                </div>
+
+                <div className="space-y-3 font-mono-code text-xs border-t md:border-t-0 md:border-l border-white/[0.08] pt-6 md:pt-0 md:pl-8">
+                  <span className="text-[#a9ddf0] font-semibold tracking-wider block">
+                    02 / THE STRATEGIC BET
+                  </span>
+                  <p className="text-sm font-sans font-light text-[#f2f1ec]/90 leading-relaxed">
+                    {project.executiveBrief.strategicBet}
+                  </p>
+                </div>
+
+                <div className="space-y-3 font-mono-code text-xs border-t md:border-t-0 md:border-l border-white/[0.08] pt-6 md:pt-0 md:pl-8">
+                  <span className="text-[#a9ddf0] font-semibold tracking-wider block">
+                    03 / THE OUTCOME
+                  </span>
+                  <p className="text-sm font-sans font-light text-[#f2f1ec]/90 leading-relaxed">
+                    {project.executiveBrief.outcome}
+                  </p>
+                </div>
+              </div>
+            </section>
+          </ScrollReveal>
+        )}
 
         {/* ───────────────────────────────────────────────────────────── */}
         {/* 01 // STRATEGIC CONTEXT & PROBLEM SPACE */}
@@ -349,13 +403,13 @@ export default async function CaseStudyPage({
         {/* ───────────────────────────────────────────────────────────── */}
         {/* 03 // STRATEGIC DECISIONS & TRADE-OFFS */}
         {/* ───────────────────────────────────────────────────────────── */}
-        {project.designDecisions && project.designDecisions.length > 0 && (
+        {(project.keyTradeOff || (project.designDecisions && project.designDecisions.length > 0)) && (
           <ScrollReveal start="top 85%" y={20} duration={0.45}>
             <section id="section-decisions" className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 mb-20 border-t border-white/[0.08] pt-16 scroll-mt-28">
               <div className="md:col-span-4 font-mono-code text-xs text-[#89919d] uppercase tracking-wider">
                 <span>03 // STRATEGIC DECISIONS</span>
               </div>
-              <div className="md:col-span-8 space-y-6">
+              <div className="md:col-span-8 space-y-8">
                 <div>
                   <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#f2f1ec] mb-2">
                     Key Architectural Decisions &amp; Trade-Offs
@@ -365,34 +419,52 @@ export default async function CaseStudyPage({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-5 pt-2">
-                  {project.designDecisions.map((decision, idx) => (
-                    <div
-                      key={decision.title}
-                      className="rounded-xl border border-white/[0.08] bg-[#11141b] p-6 space-y-3"
-                    >
-                      <div className="flex items-center gap-2 font-mono-code text-xs text-[#a9ddf0]">
-                        <Compass size={13} />
-                        <span className="font-semibold">STRATEGIC DIRECTION 0{idx + 1}</span>
-                      </div>
-                      <h4 className="font-display text-xl font-bold text-[#f2f1ec]">
-                        {decision.title}
-                      </h4>
-                      <div className="space-y-2 text-sm text-[#89919d] font-light leading-relaxed">
-                        <p>
-                          <strong className="text-[#f2f1ec] font-medium">Design Rationale: </strong>
-                          {decision.rationale}
-                        </p>
-                        {decision.tradeOff && (
-                          <div className="mt-3 rounded-lg border border-white/[0.06] bg-black/30 p-3 font-mono-code text-xs text-[#89919d]">
-                            <span className="text-[#a9ddf0] font-semibold">Deliberate Trade-Off: </span>
-                            <span>{decision.tradeOff}</span>
-                          </div>
-                        )}
-                      </div>
+                {/* Reusable Key Trade-Off Editorial Callout */}
+                {project.keyTradeOff && (
+                  <div className="rounded-2xl border border-[#a9ddf0]/30 bg-[#a9ddf0]/[0.04] p-6 sm:p-8 space-y-4 shadow-xl">
+                    <div className="flex items-center gap-2.5 font-mono-code text-xs text-[#a9ddf0] uppercase tracking-wider font-semibold">
+                      <span className="h-2 w-2 rounded-full bg-[#a9ddf0] animate-pulse" />
+                      <span>Key Architectural Trade-Off // Deliberate Compromise</span>
                     </div>
-                  ))}
-                </div>
+                    <h3 className="font-display text-xl sm:text-2xl font-bold text-[#f2f1ec] tracking-tight">
+                      {project.keyTradeOff.title}
+                    </h3>
+                    <p className="text-sm sm:text-base text-[#89919d] font-light leading-relaxed">
+                      {project.keyTradeOff.rationale}
+                    </p>
+                  </div>
+                )}
+
+                {project.designDecisions && project.designDecisions.length > 0 && (
+                  <div className="grid grid-cols-1 gap-5 pt-2">
+                    {project.designDecisions.map((decision, idx) => (
+                      <div
+                        key={decision.title}
+                        className="rounded-xl border border-white/[0.08] bg-[#11141b] p-6 space-y-3"
+                      >
+                        <div className="flex items-center gap-2 font-mono-code text-xs text-[#a9ddf0]">
+                          <Compass size={13} />
+                          <span className="font-semibold">STRATEGIC DIRECTION 0{idx + 1}</span>
+                        </div>
+                        <h4 className="font-display text-xl font-bold text-[#f2f1ec]">
+                          {decision.title}
+                        </h4>
+                        <div className="space-y-2 text-sm text-[#89919d] font-light leading-relaxed">
+                          <p>
+                            <strong className="text-[#f2f1ec] font-medium">Design Rationale: </strong>
+                            {decision.rationale}
+                          </p>
+                          {decision.tradeOff && (
+                            <div className="mt-3 rounded-lg border border-white/[0.06] bg-black/30 p-3 font-mono-code text-xs text-[#89919d]">
+                              <span className="text-[#a9ddf0] font-semibold">Deliberate Trade-Off: </span>
+                              <span>{decision.tradeOff}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </section>
           </ScrollReveal>

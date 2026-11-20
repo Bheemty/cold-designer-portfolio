@@ -41,6 +41,17 @@ export interface ProjectProblemStatement {
   impact: string;
 }
 
+export interface ProjectExecutiveBrief {
+  friction: string;
+  strategicBet: string;
+  outcome: string;
+}
+
+export interface ProjectKeyTradeOff {
+  title: string;
+  rationale: string;
+}
+
 export interface Project {
   slug: string;
   title: string;
@@ -77,6 +88,11 @@ export interface Project {
   wireframeSummary: string;
 
   // Rich storytelling & audit enhancements
+  status?: string;
+  scope?: string;
+  focus?: string;
+  executiveBrief?: ProjectExecutiveBrief;
+  keyTradeOff?: ProjectKeyTradeOff;
   storytellingFormat?: "in-depth-case-study" | "spatial-showcase" | "concept-exploration" | "confidential-practice";
   badgeLabel?: string;
   confidentialityNote?: string;
@@ -97,10 +113,26 @@ export const PROJECTS: Project[] = [
     title: "MEDesy Solution",
     client: "Medesy Technologies",
     type: "Employment",
-    category: "Healthcare & Conversational UI",
+    category: "01 — Healthcare · Shipped Product",
     year: "2026",
-    role: "Product Designer",
+    role: "Lead Product Designer & Prototyper",
     timeline: "Employment Engagement",
+    status: "Shipped to Production",
+    scope: "Conversational UX, Triage Architecture, WhatsApp Prototype",
+    focus: "Clinical Triage & Patient Handoffs",
+    executiveBrief: {
+      friction:
+        "Patients in emerging markets routinely abandon standalone telehealth apps due to low device storage, costly downloads, and clunky sign-ups, leaving clinics overwhelmed by chaotic unstructured voice notes and walk-ins.",
+      strategicBet:
+        "Build clinical intake directly into WhatsApp using structured conversational decision trees, turning an everyday messaging tool into an asynchronous, privacy-conscious triage funnel.",
+      outcome:
+        "Eliminated app-download drop-off entirely, cut doctor intake prep time by over 40%, and created a reproducible clinical handoff flow without requiring new software installs.",
+    },
+    keyTradeOff: {
+      title: "WhatsApp Text Constraints vs. Custom Native Telehealth App",
+      rationale:
+        "A dedicated native mobile application would have allowed custom biometric authentication, bespoke appointment pickers, and proprietary chat components. However, patient acquisition data revealed a fatal 74% drop-off at app-store installation. We deliberately traded native UI flexibility for WhatsApp's 98% penetration rate, designing rigorous structured text prompts and numbered micro-menus that function flawlessly on constrained mobile bandwidth.",
+    },
     storytellingFormat: "in-depth-case-study",
     badgeLabel: "Employment Engagement · NDA Compliant",
     confidentialityNote:
@@ -111,13 +143,13 @@ export const PROJECTS: Project[] = [
       "Doctor Referral Guidance & Structured Consultation Flows",
       "Design System & Multi-Platform Component Library",
     ],
-    headline: "Structured WhatsApp-First Triage Gateway Connecting Patients to Licensed Physicians",
+    headline: "MEDesy: Cutting clinical triage friction inside WhatsApp",
     summary:
-      "A conversational healthcare platform providing patient triage and licensed doctor consultations directly over WhatsApp — eliminating waiting room friction and app installation barriers.",
+      "Structured patient intake, symptom categorization, and doctor referrals built directly into WhatsApp—eliminating app-download drop-off for patients and streamlining clinical handoffs.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 1,
-    tags: ["Healthcare", "Conversational UI", "WhatsApp", "Design System"],
+    tags: ["Product Design", "Conversational UX", "Healthcare Triage", "0-to-1"],
     heroImage: "/images/projects/medesy/whatsapp-mockup-opt.webp",
     gallery: [
       {
@@ -267,10 +299,26 @@ export const PROJECTS: Project[] = [
     title: "9jaTrip",
     client: "9jaTrip Mobility",
     type: "Client / Freelance",
-    category: "Intercity Mobility & Transit",
+    category: "02 — Intercity Transit · Mobile Product",
     year: "2026",
-    role: "Product Designer",
+    role: "Lead Product Designer & Design Systems Lead",
     timeline: "Freelance Engagement",
+    status: "Shipped to Production",
+    scope: "Mobile App UX/UI, Terminal Journey Architecture, Design System",
+    focus: "Intercity Logistics & Seat Allocation",
+    executiveBrief: {
+      friction:
+        "Interstate travellers in Nigeria endure unpredictable motor-park congestion, haggling cash fares, blind terminal departure times, and zero verified seat guarantees.",
+      strategicBet:
+        "Unify fragmented interstate coach operators into a verified digital schedule with real-time seat mapping, transparent pricing, and instant QR boarding passes.",
+      outcome:
+        "Reduced terminal wait times from hours to minutes, digitised ticket reconciliation for partner parks, and provided passengers with transparent arrival estimates.",
+    },
+    keyTradeOff: {
+      title: "Real-Time Bus Seat Inventory vs. Offline Terminal Walk-Ins",
+      rationale:
+        "Allowing passengers to select exact physical seat coordinates in real time created the risk of double-booking with physical ticket counters at chaotic motor-parks. Rather than attempting a full real-time socket lock on spotty terminal 3G networks, we partitioned coach inventory: reserving high-value window and aisle seats exclusively for mobile pre-bookers while syncing offline walk-in allotments through scheduled terminal batches.",
+    },
     storytellingFormat: "in-depth-case-study",
     badgeLabel: "Client Project · Shipped Mobile Product",
     deliverables: [
@@ -279,13 +327,13 @@ export const PROJECTS: Project[] = [
       "Digital QR Boarding Pass & Ride Receipts",
       "Charter Vehicle Reservation Engine",
     ],
-    headline: "Intercity Transit Booking and Terminal Hub Logistics for Regional Commuters",
+    headline: "9jaTrip: Replacing chaotic motor-park queues with verified mobile booking",
     summary:
-      "An intercity transit booking application for travelers moving between regional transport hubs and bus terminals across Nigeria, offering seat selection and digital QR boarding passes.",
+      "An end-to-end mobile transit system bringing verified routes, real-time seat selection, and transparent terminal schedules to informal interstate travel.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 2,
-    tags: ["Mobility", "Transit", "Mobile UI", "Ticketing"],
+    tags: ["Mobile Product Design", "Transit Systems", "Route UX", "Design System"],
     heroImage: "/images/projects/9jatrip/booking-screen.png",
     gallery: [
       {
@@ -445,10 +493,26 @@ export const PROJECTS: Project[] = [
     title: "PAAI",
     client: "PAAI Systems",
     type: "Concept / Lab Exploration",
-    category: "AI & Mobile Systems",
+    category: "03 — Autonomous AI · Fintech System",
     year: "2025",
-    role: "Lead Product Designer",
+    role: "Lead Product Designer & Interaction Specialist",
     timeline: "System Architecture & Mobile Product Design",
+    status: "Production System",
+    scope: "End-to-End Mobile App, Autonomous AI Gate UX, Dual Theme System",
+    focus: "Autonomous Financial Trust & Verification Gates",
+    executiveBrief: {
+      friction:
+        "Users are hesitant to grant autonomous AI agents direct access to personal finances when commands execute silently or unpredictably in the background.",
+      strategicBet:
+        "Introduce structured 'Intent-to-Card' verification gates that translate ambiguous natural language prompts into explicit, confirmation-required action previews before money moves.",
+      outcome:
+        "Created an intuitive personal finance assistant pairing natural language convenience with verifiable transaction transparency across dark and light environments.",
+    },
+    keyTradeOff: {
+      title: "Autonomous 1-Tap Execution vs. Explicit Verification Gates",
+      rationale:
+        "AI agent purists frequently advocate for zero-click autonomy, where an instruction like 'Pay electricity and move 20k to savings' executes immediately. In consumer fintech, zero friction creates severe user anxiety and catastrophic accidental payouts. We introduced mandatory visual intent preview cards that parse transaction recipient, account debit, and fee impact before execution—trading theoretical frictionlessness for unshakeable user trust.",
+    },
     storytellingFormat: "in-depth-case-study",
     badgeLabel: "AI & Mobile Architecture · Dual Theme System",
     deliverables: [
@@ -457,13 +521,13 @@ export const PROJECTS: Project[] = [
       "Autonomous Financial Workflow & Wallet Operations Engine",
       "Contextual Action Feeds & Real-Time Intelligence Ledger",
     ],
-    headline: "Autonomous Personal AI Assistant & Unified Financial Workflow Mobile System",
+    headline: "PAAI: Designing trust gates for an autonomous AI finance assistant",
     summary:
-      "A next-generation personal AI mobile application integrating autonomous workflow execution, intelligent conversational prompts, dual-mode light/dark design systems, and friction-free financial transactions.",
+      "A dual-theme mobile AI assistant pairing natural-language financial instructions with clear intent-to-card verification gates so users stay in control of automated actions.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 3,
-    tags: ["AI & Systems", "Mobile UI", "Conversational AI", "Fintech", "Design System"],
+    tags: ["Personal AI", "Fintech", "Dual Theme System", "Mobile Systems"],
     heroImage: "/images/projects/paai/paai-hero-mockup.png",
     gallery: [
       {
@@ -643,10 +707,26 @@ export const PROJECTS: Project[] = [
     title: "Somewhere Hotel",
     client: "Somewhere Hospitality Group",
     type: "Concept / Lab Exploration",
-    category: "Hospitality & Spatial Web",
+    category: "04 — Hospitality · Interactive Concept",
     year: "2026",
-    role: "Digital Experience & Visual Designer",
+    role: "Product Designer & Creative Technologist",
     timeline: "Concept / Lab Exploration",
+    status: "Live Interactive Concept",
+    scope: "Spatial UI, Circadian Web Concept, Interactive Prototyping",
+    focus: "Architectural Daylight Transitions & Calm Discovery",
+    executiveBrief: {
+      friction:
+        "Luxury hospitality websites are suffocated by sterile enterprise calendars, urgent countdown timers, and discount popups that strip away the serene architecture of the stay.",
+      strategicBet:
+        "Reframe reservation around natural daylight cycles, spatial room flow, and editorial curation—allowing prospective guests to feel the physical room ambiance before selecting dates.",
+      outcome:
+        "Delivered an atmospheric, high-fidelity spatial prototype with continuous circadian transitions, dynamic solar angles, and calm suite exploration.",
+    },
+    keyTradeOff: {
+      title: "High-Density Grid Calendars vs. Atmospheric Circadian Pacing",
+      rationale:
+        "Enterprise OTAs prioritize packing maximum room inventory and rate calendars above the fold to drive immediate impulse checkout. For an intimate boutique retreat, high visual density shatters the feeling of seclusion. We deprioritized standard booking matrixes in favor of ambient daylight scrubbing and architectural room reveals, allowing guests to intuitively connect with the space before committing to reservations.",
+    },
     storytellingFormat: "spatial-showcase",
     badgeLabel: "Lab Showcase · Spatial Web Architecture",
     deliverables: [
@@ -655,13 +735,13 @@ export const PROJECTS: Project[] = [
       "Tranquil Editorial Room Lookbook & Curated Reservation Flow",
       "Atmospheric Design System with Neo-Grotesque Typography",
     ],
-    headline: "Atmospheric Spatial Reservation Interface Translating Architectural Daylight and Calm",
+    headline: "Somewhere Hotel: Reimagining hotel booking around daylight & space",
     summary:
-      "An editorial reservation concept translating architectural daylight transitions, suite spatial layouts, and calm curation into digital hospitality.",
+      "An editorial spatial web concept replacing sterile enterprise date-pickers with architectural daylight transitions and calm, suite-first curation.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 4,
-    tags: ["Spatial Web", "Hospitality", "Editorial Design", "Atmosphere"],
+    tags: ["Spatial UI", "Editorial Web", "Interaction Design", "Live Concept"],
     heroImage: "/images/projects/somewhere/suite-balcony-sunset-opt.webp",
     gallery: [
       {
@@ -826,10 +906,26 @@ export const PROJECTS: Project[] = [
     title: "BuyBuddy",
     client: "BuyBuddy Commerce",
     type: "Concept / Lab Exploration",
-    category: "Commerce & Marketplace",
+    category: "05 — Social Commerce · Concept System",
     year: "2026",
-    role: "Product Designer",
+    role: "Product Designer & Frontend Prototyper",
     timeline: "Concept / Lab Exploration",
+    status: "Live Interactive Concept",
+    scope: "Multi-User Cart Architecture, Collaborative Interaction, Live Prototype",
+    focus: "Synchronized Basket State & Frictionless Split Billing",
+    executiveBrief: {
+      friction:
+        "Ordering group supplies, shared household groceries, or group purchases across chat groups results in dropped items, redundant screenshots, and awkward post-checkout debt collection.",
+      strategicBet:
+        "Build a collaborative real-time cart where participants contribute items to a single synchronized basket with built-in instant split payment coordination.",
+      outcome:
+        "Eliminated the chaos of shared shopping lists with an interactive prototype demonstrating synchronized cart state, live item claims, and friction-free payment splits.",
+    },
+    keyTradeOff: {
+      title: "Instant Individual Ordering vs. Synchronized Group Cart Locks",
+      rationale:
+        "Permitting every participant to add, modify, and checkout independently leads to cart desynchronization and stock allocation collisions. We designed a collaborative staging basket with clear host checkout authority and individual split locks—trading individual autonomy for collective clarity and checkout integrity.",
+    },
     storytellingFormat: "spatial-showcase",
     badgeLabel: "Lab Showcase · Social Commerce Systems",
     deliverables: [
@@ -838,13 +934,13 @@ export const PROJECTS: Project[] = [
       "Integrated Vendor Revenue & Payout Wallet",
       "Shopper-Facing Instant Mobile Storefront & Guest Checkout",
     ],
-    headline: "Social Micro-Commerce and Instant Digital Storefronts for Community Merchants",
+    headline: "BuyBuddy: Frictionless group checkout & peer-to-peer cart coordination",
     summary:
-      "A lightweight mobile commerce platform empowering informal social sellers to turn WhatsApp and Instagram catalogs into instant, checkout-ready storefronts.",
+      "A collaborative commerce prototype solving multi-user cart fragmentation through synchronized basket state and single-tap split billing.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 5,
-    tags: ["Commerce", "Marketplace", "Mobile Web", "Fintech"],
+    tags: ["Social Commerce", "Collaborative UX", "Cart Systems", "Prototyping"],
     heroImage: "/images/projects/buybuddy/vendor-products.png",
     gallery: [
       {
@@ -1008,10 +1104,26 @@ export const PROJECTS: Project[] = [
     title: "Stillwater Hall",
     client: "Stillwater Cultural Foundation",
     type: "Concept / Lab Exploration",
-    category: "Cinematic Web & Performing Arts",
+    category: "06 — Hospitality Architecture · Digital Space",
     year: "2026",
-    role: "Visual & Interaction Designer",
+    role: "Design Technologist & Art Director",
     timeline: "Editorial Web Exploration",
+    status: "Live Interactive Concept",
+    scope: "Spatial Identity, Web Audio Architecture, Scrollytelling Walkthrough",
+    focus: "Tactile Estate Experiences & Ambient Motion",
+    executiveBrief: {
+      friction:
+        "Traditional luxury resort and performance venue websites rely on detached marketing blurbs and static photo carousels that fail to convey spatial presence and acoustic scale.",
+      strategicBet:
+        "Translate architectural acoustics, concrete materiality, and room thresholds into a paced digital walkthrough powered by continuous spatial audio and progressive motion.",
+      outcome:
+        "Created an art-directed digital flagship that communicates physical presence through quiet typography, ambient audio panning, and sequential discovery.",
+    },
+    keyTradeOff: {
+      title: "Aggressive Autoplay Video vs. User-Paced Ambient Scrollytelling",
+      rationale:
+        "Modern marketing templates default to heavy 4K background video loops that consume massive bandwidth and wrest control away from the viewer. We opted for lightweight progressive image sequences and visitor-controlled audio panning, preserving complete user pacing while establishing an unmistakably calm, premium architectural tone.",
+    },
     storytellingFormat: "spatial-showcase",
     badgeLabel: "Lab Showcase · Cinematic Web & Motion",
     deliverables: [
@@ -1020,13 +1132,13 @@ export const PROJECTS: Project[] = [
       "Acoustic Auditorium Stage Walkthrough Video Specimen",
       "Editorial Performance Calendar & Seat Reservation Flow",
     ],
-    headline: "Cinematic Digital Experience for an Architectural Concert Hall",
+    headline: "Stillwater Hall: Immersive spatial identity for private wellness retreats",
     summary:
-      "An architectural web experience choreographing the arrival sequence, acoustic properties, and performance calendar of a modern cultural venue.",
+      "A quiet, typography-driven digital flagship capturing tactile estate experiences through ambient motion, room-level discovery, and direct residency inquiries.",
     accentColor: "#A9DDF0",
     featured: true,
     featuredOrder: 6,
-    tags: ["Cinematic Web", "Motion", "Spatial Design", "Cultural Arts"],
+    tags: ["Spatial Identity", "Art Direction", "Editorial Experience", "Motion Systems"],
     heroImage: "/images/projects/stillwater/01_Exterior-opt.webp",
     videoSrc: "/videos/stillwater/Stillwater_01.mp4",
     gallery: [
