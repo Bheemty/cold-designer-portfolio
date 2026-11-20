@@ -1184,6 +1184,20 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   text-transform: uppercase;
   color: #a9ddf0;
 }
+.work-title-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  width: fit-content;
+  max-width: 100%;
+}
+.work-title-link:hover .work-title {
+  color: #a9ddf0;
+}
+html[data-theme="light"] .work-title-link:hover .work-title {
+  color: #027a9e;
+}
 .work-title {
   font-family: 'Poppins', sans-serif;
   font-size: clamp(20px, 1.7vw, 28px);

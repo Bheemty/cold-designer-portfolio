@@ -155,6 +155,10 @@ export default function WorkAccordion() {
   }, []);
 
   function handlePanelClick(p: ProjectItem, e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    // If the click is already on or within an interactive link, let the link handle navigation
+    if (target.closest("a")) return;
+
     const isStacked = typeof window !== "undefined" && window.innerWidth <= 1024;
 
     // On mobile & tablet (stacked cards): all cards are already displayed open,
@@ -166,7 +170,7 @@ export default function WorkAccordion() {
     }
 
     // On desktop: if the panel is currently collapsed, clicking it expands it;
-    // if the panel is already expanded, clicking it navigates to the project case study.
+    // if the panel is already expanded, clicking anywhere on it navigates to the project case study.
     if (activeId !== p.id) {
       sound.playClick();
       setActiveId(p.id);
@@ -223,7 +227,14 @@ export default function WorkAccordion() {
 
                 <div className="acc-info">
                   <span className="work-eyebrow">{project.eyebrow}</span>
-                  <h3 className="work-title">{project.title}</h3>
+                  <Link
+                    href={project.href}
+                    className="work-title-link"
+                    onClick={() => sound.playClick()}
+                    aria-label={`Read ${project.title} case study`}
+                  >
+                    <h3 className="work-title">{project.title}</h3>
+                  </Link>
                   <p className="work-desc">{project.desc}</p>
                 </div>
 
@@ -239,10 +250,8 @@ export default function WorkAccordion() {
                     prefetch={true}
                     className="work-go cursor-pointer"
                     aria-label={`Read ${project.title} case study`}
-                    onClick={(e) => {
-                      e.stopPropagation();
+                    onClick={() => {
                       sound.playClick();
-                      router.push(project.href);
                     }}
                   >
                     <span>View Case Study</span>
@@ -276,7 +285,6 @@ export default function WorkAccordion() {
           aria-label="Explore All Work in full directory"
           onClick={() => {
             sound.playClick();
-            router.push("/work");
           }}
         >
           <span>Explore All Work</span>
