@@ -11,19 +11,19 @@
     --bg-card: #161a23;
     --bg-card-hover: #1d222e;
     --bg-elevated: #1f2533;
-    --accent: #a9ddf0;
-    --accent-rgb: 169, 221, 240;
-    --accent-glow: rgba(169, 221, 240, 0.22);
-    --accent-dim: rgba(169, 221, 240, 0.12);
-    --accent-text: #a9ddf0;
+    --accent: #38bdf8;
+    --accent-rgb: 56, 189, 248;
+    --accent-glow: rgba(56, 189, 248, 0.22);
+    --accent-dim: rgba(56, 189, 248, 0.12);
+    --accent-text: #38bdf8;
     --text-primary: #f2f1ec;
     --text-secondary: #89919d;
     --text-muted: #565d6b;
     --border-subtle: rgba(242, 241, 236, 0.08);
     --border-medium: rgba(242, 241, 236, 0.14);
     --border-strong: rgba(242, 241, 236, 0.24);
-    --border-bright: rgba(169, 221, 240, 0.3);
-    --border-accent: rgba(169, 221, 240, 0.3);
+    --border-bright: rgba(56, 189, 248, 0.3);
+    --border-accent: rgba(56, 189, 248, 0.3);
     --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.35);
     --shadow-elevated: 0 20px 48px rgba(0, 0, 0, 0.5);
     --btn-primary-bg: #FDFDFD;
@@ -57,11 +57,11 @@
     --bg-card: #FFFFFF;
     --bg-card-hover: #FDFDFD;
     --bg-elevated: #FFFFFF;
-    --accent: #016382;
-    --accent-rgb: 1, 99, 130;
-    --accent-glow: rgba(1, 99, 130, 0.16);
-    --accent-dim: rgba(1, 99, 130, 0.08);
-    --accent-text: #016382;
+    --accent: #2563eb;
+    --accent-rgb: 37, 99, 235;
+    --accent-glow: rgba(37, 99, 235, 0.16);
+    --accent-dim: rgba(37, 99, 235, 0.08);
+    --accent-text: #2563eb;
     --text-primary: #11141b;
     --text-secondary: #4d5462;
     --text-muted: #565d6b;
@@ -589,4 +589,69 @@ html[data-theme="light"] .bg-grid-lines {
   background-image: 
     linear-gradient(to right, rgba(18, 22, 30, 0.035) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(18, 22, 30, 0.035) 1px, transparent 1px);
+}
+
+/* ── ARCHITECTURAL HERO LINE-MASK REVEAL ── */
+.hero-line-mask {
+  display: block;
+  overflow: hidden;
+}
+.hero-line-inner {
+  display: inline-block;
+  will-change: transform, opacity;
+  animation: heroLineReveal 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.hero-line-inner--1 { animation-delay: 0.04s; }
+.hero-line-inner--2 { animation-delay: 0.12s; }
+.hero-line-inner--3 { animation-delay: 0.20s; }
+
+@keyframes heroLineReveal {
+  0% {
+    transform: translate3d(0, 105%, 0);
+    opacity: 0.05;
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-line-inner {
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
+
+/* ── KINETIC HERO TICKER GLIDE ── */
+.hero-ticker-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+}
+.hero-ticker-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: heroTickerGlider 42s linear infinite;
+  transition: animation-play-state 0.4s ease-out;
+}
+.hero-ticker-wrap:hover .hero-ticker-track {
+  animation-play-state: paused;
+}
+@keyframes heroTickerGlider {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-ticker-track {
+    animation: none !important;
+  }
 }

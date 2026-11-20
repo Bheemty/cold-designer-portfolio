@@ -189,8 +189,8 @@ export default function EndorsementsKokil() {
           {/* Eyebrow Header */}
           <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-white/[0.08] endorsement-divider mb-6 sm:mb-10">
             <div className="flex items-center gap-3">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" aria-hidden="true" />
-              <p className="intro-label font-mono-code text-xs uppercase tracking-widest text-[#a9ddf0] m-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent,#38bdf8)]" aria-hidden="true" />
+              <p className="intro-label font-mono-code text-xs uppercase tracking-widest text-[var(--accent,#38bdf8)] m-0">
                 (03) &mdash; Endorsements
               </p>
             </div>
@@ -232,8 +232,8 @@ export default function EndorsementsKokil() {
                   {current.affiliation}
                 </p>
                 <div className="pt-2">
-                  <div className="endorsement-context-pill inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-3.5 py-1.5 font-mono-code text-xs text-[#a9ddf0]">
-                    <span className="context-indicator h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" aria-hidden="true" />
+                  <div className="endorsement-context-pill inline-flex items-center gap-2 rounded-full border border-white/[0.12] bg-white/[0.03] px-3.5 py-1.5 font-mono-code text-xs text-[var(--accent,#38bdf8)]">
+                    <span className="context-indicator h-1.5 w-1.5 rounded-full bg-[var(--accent,#38bdf8)]" aria-hidden="true" />
                     <span>{current.context}</span>
                   </div>
                 </div>
@@ -261,7 +261,7 @@ export default function EndorsementsKokil() {
                         <span
                           className={`font-mono-code text-[11px] transition-colors ${
                             isCurrent
-                              ? "text-[#a9ddf0] font-semibold"
+                              ? "text-[var(--accent,#38bdf8)] font-semibold"
                               : "text-[#89919d]/70 group-hover:text-[#f2f1ec]"
                           }`}
                         >
@@ -273,7 +273,7 @@ export default function EndorsementsKokil() {
                             ref={(el) => {
                               fillRefs.current[idx] = el;
                             }}
-                            className="h-full w-full rounded-full bg-[#a9ddf0] endorsement-bar-fill origin-left transition-transform duration-75"
+                            className="h-full w-full rounded-full bg-[var(--accent,#38bdf8)] endorsement-bar-fill origin-left transition-transform duration-75"
                             style={{
                               transform: idx <= activeIndex ? "scaleX(1)" : "scaleX(0)",
                               opacity: idx <= activeIndex ? 1 : 0.25,
@@ -290,11 +290,11 @@ export default function EndorsementsKokil() {
                   <span className="endorsement-scroll-hint tracking-wide">
                     {activeIndex < total - 1 ? (
                       <>
-                        <span className="text-[#a9ddf0] font-medium">Scroll &darr;</span> for next endorsement
+                        <span className="text-[var(--accent,#38bdf8)] font-medium">Scroll &darr;</span> for next endorsement
                       </>
                     ) : (
                       <>
-                        <span className="text-[#a9ddf0] font-medium">Continue &darr;</span> into Contact
+                        <span className="text-[var(--accent,#38bdf8)] font-medium">Continue &darr;</span> into Contact
                       </>
                     )}
                   </span>
@@ -313,11 +313,11 @@ export default function EndorsementsKokil() {
                 }`}
                 style={{ willChange: "opacity, transform" }}
               >
-                <span className="quote-mark text-[#a9ddf0] font-serif italic mr-1" aria-hidden="true">
+                <span className="quote-mark text-[var(--accent,#38bdf8)] font-serif italic mr-1" aria-hidden="true">
                   &ldquo;
                 </span>
                 {current.quote}
-                <span className="quote-mark text-[#a9ddf0] font-serif italic ml-1" aria-hidden="true">
+                <span className="quote-mark text-[var(--accent,#38bdf8)] font-serif italic ml-1" aria-hidden="true">
                   &rdquo;
                 </span>
               </blockquote>
@@ -337,11 +337,11 @@ export default function EndorsementsKokil() {
                 }`}
                 style={{ willChange: "opacity, transform" }}
               >
-                <span className="quote-mark text-[#a9ddf0] font-serif italic mr-1" aria-hidden="true">
+                <span className="quote-mark text-[var(--accent,#38bdf8)] font-serif italic mr-1" aria-hidden="true">
                   &ldquo;
                 </span>
                 {current.quote}
-                <span className="quote-mark text-[#a9ddf0] font-serif italic ml-1" aria-hidden="true">
+                <span className="quote-mark text-[var(--accent,#38bdf8)] font-serif italic ml-1" aria-hidden="true">
                   &rdquo;
                 </span>
               </blockquote>
@@ -360,8 +360,8 @@ export default function EndorsementsKokil() {
                   {current.affiliation}
                 </p>
                 <div className="pt-1">
-                  <div className="endorsement-context-pill inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] px-2.5 py-1 font-mono-code text-[10px] text-[#a9ddf0]">
-                    <span className="context-indicator h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" aria-hidden="true" />
+                  <div className="endorsement-context-pill inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] px-2.5 py-1 font-mono-code text-[10px] text-[var(--accent,#38bdf8)]">
+                    <span className="context-indicator h-1.5 w-1.5 rounded-full bg-[var(--accent,#38bdf8)]" aria-hidden="true" />
                     <span>{current.context}</span>
                   </div>
                 </div>
@@ -378,11 +378,11 @@ export default function EndorsementsKokil() {
                 <span className="endorsement-scroll-hint text-[10px] text-[#89919d]">
                   {activeIndex < total - 1 ? (
                     <>
-                      <span className="text-[#a9ddf0] font-medium">Scroll &darr;</span> for next
+                      <span className="text-[var(--accent,#38bdf8)] font-medium">Scroll &darr;</span> for next
                     </>
                   ) : (
                     <>
-                      <span className="text-[#a9ddf0] font-medium">Continue &darr;</span> into Contact
+                      <span className="text-[var(--accent,#38bdf8)] font-medium">Continue &darr;</span> into Contact
                     </>
                   )}
                 </span>
@@ -411,7 +411,7 @@ export default function EndorsementsKokil() {
                           ref={(el) => {
                             mobileFillRefs.current[idx] = el;
                           }}
-                          className="h-full w-full rounded-full bg-[#a9ddf0] endorsement-bar-fill origin-left transition-transform duration-75"
+                          className="h-full w-full rounded-full bg-[var(--accent,#38bdf8)] endorsement-bar-fill origin-left transition-transform duration-75"
                           style={{
                             transform: idx <= activeIndex ? "scaleX(1)" : "scaleX(0)",
                             opacity: idx <= activeIndex ? 1 : 0.25,
