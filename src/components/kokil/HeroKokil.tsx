@@ -284,9 +284,6 @@ export default function HeroKokil() {
       pendingPointerX = e.clientX;
       pendingPointerY = e.clientY;
       startEyeLoop();
-      if (isDesktop && !hasCompletedRef.current && !isAutoSweeping) {
-        startAutoScratch();
-      }
     }
 
     const blinkInterval = setInterval(() => {
@@ -488,12 +485,13 @@ export default function HeroKokil() {
 
     triggerAutoScratchRef.current = !isDesktop ? scheduleAutoScratch : null;
 
-    // ── DESKTOP: MOUSE-DRIVEN PROGRESSIVE UNVEILING ──
+    // ── DESKTOP: MANUAL MOUSE-DIRECTED REVEALING ──
     let onDesktopPointerMove: ((e: PointerEvent) => void) | null = null;
     let onDesktopPointerDown: ((e: PointerEvent) => void) | null = null;
     let onDesktopPointerLeave: (() => void) | null = null;
 
     if (isDesktop) {
+      // On desktop, the mouse directly reveals each side where the cursor moves or drags
       onDesktopPointerMove = (e: PointerEvent) => {
         if (!isHeroVisible) return;
         pendingPointerX = e.clientX;
@@ -502,19 +500,12 @@ export default function HeroKokil() {
         if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
 
         addDotFromClientCoords(e.clientX, e.clientY);
-        // Once the user moves their mouse around on desktop, the whole unveiling starts!
-        if (!hasCompletedRef.current && !isAutoSweeping) {
-          startAutoScratch();
-        }
       };
 
       onDesktopPointerDown = (e: PointerEvent) => {
         if (!isHeroVisible) return;
         if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
         addDotFromClientCoords(e.clientX, e.clientY);
-        if (!hasCompletedRef.current && !isAutoSweeping) {
-          startAutoScratch();
-        }
       };
 
       onDesktopPointerLeave = () => {
