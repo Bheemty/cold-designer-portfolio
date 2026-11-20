@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useState } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { sound } from "@/lib/sounds";
 
@@ -75,7 +76,40 @@ const CONTACTS: ContactLink[] = [
 
 export default function FooterKokil() {
   const { theme, toggleTheme, mounted } = useTheme();
+  const [copied, setCopied] = useState(false);
+  const [watTime, setWatTime] = useState("");
   const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const formatWat = () => {
+      try {
+        const formatted = new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Africa/Lagos",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date());
+        setWatTime(formatted);
+      } catch {
+        setWatTime("17:45");
+      }
+    };
+    formatWat();
+    const timer = setInterval(formatWat, 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleCopyEmail = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await navigator.clipboard.writeText("abolarintaye20@gmail.com");
+      sound.playTick();
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = "mailto:abolarintaye20@gmail.com";
+    }
+  };
   const headerRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
@@ -268,14 +302,20 @@ export default function FooterKokil() {
 
           {/* Prominent, Intentional Contact Action */}
           <div ref={actionRef} className="contact-action-zone">
-            <a
-              href="mailto:abolarintaye20@gmail.com"
-              className="contact-direct-btn"
-              aria-label="Direct email to abolarintaye20@gmail.com"
+            <button
+              type="button"
+              onClick={handleCopyEmail}
+              className="contact-direct-btn w-full text-left cursor-pointer"
+              aria-label="Copy email abolarintaye20@gmail.com"
+              data-cursor-text="Copy Email"
             >
               <div className="contact-direct-content">
-                <span className="contact-direct-label">Direct Communication</span>
-                <span className="contact-direct-address">abolarintaye20@gmail.com</span>
+                <span className="contact-direct-label">
+                  {copied ? "Clipboard Updated ✓" : "Direct Communication (Click to Copy)"}
+                </span>
+                <span className="contact-direct-address">
+                  {copied ? "abolarintaye20@gmail.com (Copied ✓)" : "abolarintaye20@gmail.com"}
+                </span>
               </div>
               <span className="contact-arrow-badge" aria-hidden="true">
                 <svg
@@ -291,7 +331,7 @@ export default function FooterKokil() {
                   <path d="M7 17L17 7M17 7H7M17 7V17" />
                 </svg>
               </span>
-            </a>
+            </button>
 
             <div className="contact-sub-actions">
               <Link href="/contact" className="contact-form-link">
@@ -351,7 +391,13 @@ export default function FooterKokil() {
       </div>
 
       <div className="site-footer">
-        <span>&copy; 2026 Taye Abolarin (Cold Designer)</span>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 font-mono-code text-xs">
+          <span>&copy; 2026 Taye Abolarin (Cold Designer)</span>
+          <span className="inline-flex items-center gap-1.5 text-[#a9ddf0]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span>Available for Roles &middot; {watTime || "17:45"} WAT</span>
+          </span>
+        </div>
         <div className="footer-links">
           <Link href="/work">Work</Link>
           <Link href="/about">About</Link>

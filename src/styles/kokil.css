@@ -2039,37 +2039,35 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   padding: clamp(80px, 10vh, 140px) clamp(24px, 5vw, 64px) clamp(40px, 6vh, 80px);
   z-index: 10;
 }
-/* ── (03) ENDORSEMENTS STICKY SCROLL TRACK ── */
+/* ── (03) ENDORSEMENTS STICKY SCROLL TRACK (ALL BREAKPOINTS) ── */
 .endorsements-track {
   position: relative;
   width: 100%;
-  height: 450vh;
+  height: 450vh; /* Desktop (>= 1024px): 90vh per endorsement */
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .endorsements-track {
+    height: 375vh; /* Tablet (768px–1023px): 75vh per endorsement */
+  }
+}
+
+@media (max-width: 767px) {
+  .endorsements-track {
+    height: 325vh; /* Mobile (< 768px): 65vh per endorsement */
+  }
 }
 
 .endorsements-sticky {
   position: sticky;
   top: 0;
-  height: 100vh;
+  height: 100dvh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   contain: layout style;
-}
-
-@media (max-width: 767px) {
-  .endorsements-track {
-    height: auto !important;
-  }
-  .endorsements-sticky {
-    position: relative !important;
-    top: auto !important;
-    height: auto !important;
-    min-height: auto !important;
-    padding: clamp(64px, 8vh, 96px) 0;
-    overflow: visible;
-  }
 }
 
 .endorsement-divider {

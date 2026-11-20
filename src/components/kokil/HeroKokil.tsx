@@ -54,6 +54,26 @@ export default function HeroKokil() {
   const [isRevealed, setIsRevealed] = useState(false);
   const [hintHidden, setHintHidden] = useState(false);
   const hasCompletedRef = useRef(false);
+  const [watTime, setWatTime] = useState("");
+
+  useEffect(() => {
+    const formatWat = () => {
+      try {
+        const formatted = new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Africa/Lagos",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date());
+        setWatTime(formatted);
+      } catch {
+        setWatTime("17:45");
+      }
+    };
+    formatWat();
+    const timer = setInterval(formatWat, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Erased cells tracker for measuring genuine physical surface coverage
   const erasedCellsRef = useRef<Set<number>>(new Set());
@@ -694,7 +714,10 @@ export default function HeroKokil() {
           </div>
         </div>
         <div className="hero-strip" aria-hidden="true">
-          <span>Portfolio &rsquo;26</span>
+          <span className="inline-flex items-center gap-1.5 font-mono-code text-[11px]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
+          </span>
           <span className="skills">
             0-to-1 Product Strategy<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Live Prototypes<span className="dot">&middot;</span>Cross-Industry UX
           </span>
@@ -731,7 +754,10 @@ export default function HeroKokil() {
           </div>
         </div>
         <div className="hero-strip">
-          <span>Portfolio &rsquo;26</span>
+          <span className="inline-flex items-center gap-1.5 font-mono-code text-[11px]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
+          </span>
           <span className="skills">
             0-to-1 Product Strategy<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Live Prototypes<span className="dot">&middot;</span>Cross-Industry UX
           </span>

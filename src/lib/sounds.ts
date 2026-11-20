@@ -2,26 +2,33 @@
 
 class SoundEngine {
   private ctx: AudioContext | null = null;
-  private enabled: boolean = true; // Enabled by default for interactive lab, respects user preferences
+  // Default OFF so visitors are never surprised; user must explicitly opt in
+  private enabled: boolean = false;
 
   constructor() {
     if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("cold_sound_enabled");
-      if (stored !== null) {
-        this.enabled = stored === "true";
+      try {
+        const stored = localStorage.getItem("cold_sound_enabled");
+        if (stored !== null) {
+          this.enabled = stored === "true";
+        }
+      } catch {
+        this.enabled = false;
       }
     }
   }
 
   private initContext() {
     if (!this.ctx && typeof window !== "undefined") {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
       }
     }
     if (this.ctx && this.ctx.state === "suspended") {
-      this.ctx.resume();
+      this.ctx.resume().catch(() => {});
     }
   }
 
@@ -32,43 +39,58 @@ class SoundEngine {
   public setEnabled(val: boolean) {
     this.enabled = val;
     if (typeof window !== "undefined") {
-      localStorage.setItem("cold_sound_enabled", this.enabled ? "true" : "false");
+      try {
+        localStorage.setItem("cold_sound_enabled", this.enabled ? "true" : "false");
+        window.dispatchEvent(
+          new CustomEvent("cold:sfx_toggle", { detail: { enabled: this.enabled } })
+        );
+      } catch {}
     }
     if (this.enabled) {
       this.initContext();
+      this.playTick();
     }
   }
 
   public toggle(): boolean {
     this.setEnabled(!this.enabled);
-    if (this.enabled) {
-      this.playChime(640, 0.08);
-    }
     return this.enabled;
   }
 
-  public playClick() {
+  /**
+   * Ultra-subtle, crisp mechanical UI tick (<15ms, ultra-low volume).
+   * Synthesized entirely with Web Audio API oscillators—zero MP3/WAV assets.
+   */
+  public playTick() {
     if (!this.enabled) return;
     try {
       this.initContext();
       if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(1200, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.025);
 
-      gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.025);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(1800, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.012);
+
+      gain.gain.setValueAtTime(0.025, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.012);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.03);
+      osc.start(now);
+      osc.stop(now + 0.014);
     } catch {
       // AudioContext safe fail
     }
+  }
+
+  public playClick() {
+    if (!this.enabled) return;
+    this.playTick();
   }
 
   public playPop(freq = 420) {
@@ -76,20 +98,23 @@ class SoundEngine {
     try {
       this.initContext();
       if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(freq * 0.4, this.ctx.currentTime + 0.05);
 
-      gain.gain.setValueAtTime(0.06, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.05);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.4, now + 0.03);
+
+      gain.gain.setValueAtTime(0.035, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.03);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.05);
+      osc.start(now);
+      osc.stop(now + 0.035);
     } catch {
       // AudioContext safe fail
     }
@@ -100,44 +125,50 @@ class SoundEngine {
     try {
       this.initContext();
       if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(780, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(920, this.ctx.currentTime + 0.03);
 
-      gain.gain.setValueAtTime(0.015, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.03);
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(780, now);
+      osc.frequency.exponentialRampToValueAtTime(920, now + 0.02);
+
+      gain.gain.setValueAtTime(0.01, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.02);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.035);
+      osc.start(now);
+      osc.stop(now + 0.022);
     } catch {
       // AudioContext safe fail
     }
   }
 
-  public playChime(freq = 520, duration = 0.25) {
+  public playChime(freq = 520, duration = 0.18) {
     if (!this.enabled) return;
     try {
       this.initContext();
       if (!this.ctx) return;
+
+      const now = this.ctx.currentTime;
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(freq * 1.5, this.ctx.currentTime + duration);
 
-      gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(freq * 1.4, now + duration);
+
+      gain.gain.setValueAtTime(0.02, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
-      osc.start();
-      osc.stop(this.ctx.currentTime + duration + 0.05);
+      osc.start(now);
+      osc.stop(now + duration + 0.02);
     } catch {
       // AudioContext safe fail
     }

@@ -8,7 +8,7 @@ export default function CustomCursor() {
   const textRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    // Only enable custom cursor on fine pointer devices without reduced motion
+    // Strictly fine pointer devices (desktops/laptops with mouse/trackpad) without reduced motion
     const finePointer = window.matchMedia("(pointer: fine)").matches;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!finePointer || reducedMotion) return;
@@ -50,18 +50,32 @@ export default function CustomCursor() {
       ring.style.opacity = "1";
     };
 
-    // Lightweight pointerover listener for interactive elements
+    // Lightweight contextual precision detection for interactive elements
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
+      const explicitText = target.closest("[data-cursor-text]")?.getAttribute("data-cursor-text");
+      const workCard = target.closest(".acc-panel, [data-work-card], a[href^='/work/']");
+      const liveDemo = target.closest("a[href*='demo'], [data-live-demo], a[data-demo='true']");
+      const emailTarget = target.closest("a[href^='mailto:'], .kokil-nav-email, [data-copy-email]");
       const interactive = target.closest("a, button, [data-cursor-interactive], input, textarea");
-      const cursorTextAttr = target.closest("[data-cursor-text]")?.getAttribute("data-cursor-text");
 
-      if (cursorTextAttr) {
-        if (currentText !== cursorTextAttr) {
-          currentText = cursorTextAttr;
-          if (textEl) textEl.textContent = cursorTextAttr;
+      let resolvedText = "";
+      if (explicitText) {
+        resolvedText = explicitText;
+      } else if (emailTarget) {
+        resolvedText = "Copy Email";
+      } else if (liveDemo) {
+        resolvedText = "Launch Live ↗";
+      } else if (workCard) {
+        resolvedText = "Read Case Study ↗";
+      }
+
+      if (resolvedText) {
+        if (currentText !== resolvedText) {
+          currentText = resolvedText;
+          if (textEl) textEl.textContent = resolvedText;
           ring.classList.add("is-text");
           ring.classList.add("is-hovered");
         }
@@ -118,6 +132,7 @@ export default function CustomCursor() {
       if (distSq > 0.04 || mouseX !== lastRenderMouseX || mouseY !== lastRenderMouseY) {
         lastRenderMouseX = mouseX;
         lastRenderMouseY = mouseY;
+
         dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
 
         ringX += dx * 0.2;
@@ -168,13 +183,13 @@ export default function CustomCursor() {
       className="pointer-events-none fixed inset-0 z-50 overflow-hidden"
       aria-hidden="true"
     >
-      {/* Central precision dot (opacity controlled via style, GPU accelerated) */}
+      {/* Central precision dot */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 h-1.5 w-1.5 rounded-full bg-[#a9ddf0] opacity-0 transition-opacity duration-200 will-change-transform"
       />
 
-      {/* Outer fluid follower ring */}
+      {/* Outer fluid follower ring / pill */}
       <div
         ref={ringRef}
         className="cursor-ring fixed top-0 left-0 flex items-center justify-center rounded-full border border-[#a9ddf0]/40 opacity-0 transition-[border-color,background-color,transform-box] duration-150 will-change-transform"

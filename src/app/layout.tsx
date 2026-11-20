@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/layout/SmoothScroll";
 import CustomCursor from "@/components/layout/CustomCursor";
+import CommandPalette from "@/components/layout/CommandPalette";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import AskCold from "@/components/ask-cold/AskCold";
@@ -125,6 +126,7 @@ export default function RootLayout({
           <SmoothScroll>
             <ColdGlassFilterDefs />
             <CustomCursor />
+            <CommandPalette />
             <Navbar />
             <div className="flex-1">{children}</div>
             <Footer />

@@ -20,6 +20,8 @@ import { PROJECTS } from "@/data/projects";
 import ScrollReveal from "@/components/motion/ScrollReveal";
 import CaseStudyQuickAccess from "@/components/work/CaseStudyQuickAccess";
 import AutoPauseVideo from "@/components/ui/AutoPauseVideo";
+import CaseStudyProgressBar from "@/components/work/CaseStudyProgressBar";
+import CaseStudyDisclosure from "@/components/work/CaseStudyDisclosure";
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -61,6 +63,7 @@ export default async function CaseStudyPage({
 
   return (
     <main className="min-h-screen pt-32 sm:pt-40 pb-24 px-4 sm:px-10 bg-[#090b0f] text-[#f2f1ec]">
+      <CaseStudyProgressBar />
       <div className="mx-auto max-w-5xl">
         {/* Top Back Link */}
         <div className="mb-12">
@@ -369,7 +372,8 @@ export default async function CaseStudyPage({
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-4 pt-2">
+                <CaseStudyDisclosure title="Inspect Process & Research Notes" badge="Discovery Insights">
+                  <div className="grid grid-cols-1 gap-4 pt-2">
                   {project.discoveryInsights.map((insight, idx) => (
                     <div
                       key={insight.title}
@@ -395,7 +399,8 @@ export default async function CaseStudyPage({
                       </p>
                     </div>
                   ))}
-                </div>
+                  </div>
+                </CaseStudyDisclosure>
               </div>
             </section>
           </ScrollReveal>

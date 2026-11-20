@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Command, Volume2, VolumeX, Check, Copy } from "lucide-react";
 import { sound } from "@/lib/sounds";
 import { useTheme } from "@/context/ThemeContext";
 
@@ -27,6 +27,42 @@ export default function Navbar() {
   const { theme, toggleTheme, mounted } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [sfxEnabled, setSfxEnabled] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+
+  // Sync SFX state
+  useEffect(() => {
+    setSfxEnabled(sound.isEnabled());
+    const onToggle = (e: Event) => {
+      const customEvent = e as CustomEvent<{ enabled: boolean }>;
+      setSfxEnabled(customEvent.detail.enabled);
+    };
+    window.addEventListener("cold:sfx_toggle", onToggle);
+    return () => window.removeEventListener("cold:sfx_toggle", onToggle);
+  }, []);
+
+  const handleCopyEmail = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    try {
+      await navigator.clipboard.writeText("abolarintaye20@gmail.com");
+      sound.playTick();
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch {
+      window.location.href = "mailto:abolarintaye20@gmail.com";
+    }
+  };
+
+  const toggleSfx = () => {
+    const next = sound.toggle();
+    setSfxEnabled(next);
+  };
+
+  const openCommandPalette = () => {
+    sound.playTick();
+    if (isOpen) setIsOpen(false);
+    window.dispatchEvent(new CustomEvent("cold:open_palette"));
+  };
 
   // Track scroll position to enhance frosted glass density when content moves behind
   useEffect(() => {
@@ -63,7 +99,7 @@ export default function Navbar() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
-        sound.playClick();
+        sound.playTick();
         setIsOpen(false);
       }
     };
@@ -104,17 +140,17 @@ export default function Navbar() {
   }, [isOpen]);
 
   const toggleMenu = () => {
-    sound.playClick();
+    sound.playTick();
     setIsOpen((prev) => !prev);
   };
 
   const handleClose = () => {
-    sound.playClick();
+    sound.playTick();
     setIsOpen(false);
   };
 
   const handleNavClick = () => {
-    sound.playClick();
+    sound.playTick();
     setIsOpen(false);
   };
 
@@ -144,7 +180,7 @@ export default function Navbar() {
           aria-label="Taye Abolarin (Cold Designer) — Home"
           onClick={() => {
             if (isOpen) setIsOpen(false);
-            sound.playClick();
+            sound.playTick();
           }}
         >
           <Image
@@ -197,20 +233,57 @@ export default function Navbar() {
           </svg>
         </a>
 
-        {/* Desktop Email Pill (Visible only on Desktop >= 1024px) */}
-        <a
-          href="mailto:abolarintaye20@gmail.com"
-          className="kokil-nav-email"
+        {/* One-Click Copy Email Pill (Visible only on Desktop >= 1024px) */}
+        <button
+          type="button"
+          onClick={handleCopyEmail}
+          className="kokil-nav-email cursor-pointer flex items-center gap-1.5 transition-colors"
+          data-cursor-text="Copy Email"
+          title="Click to copy email address"
+          aria-label="Copy email: abolarintaye20@gmail.com"
         >
-          abolarintaye20@gmail.com
-        </a>
+          {copiedEmail ? (
+            <span className="text-[#a9ddf0] font-semibold font-mono-code flex items-center gap-1">
+              <Check size={12} className="text-[#a9ddf0]" />
+              Copied &check;
+            </span>
+          ) : (
+            <span>abolarintaye20@gmail.com</span>
+          )}
+        </button>
+
+        {/* Desktop ⌘K Command Palette Launcher */}
+        <button
+          type="button"
+          onClick={openCommandPalette}
+          className="hidden lg:inline-flex items-center gap-1 px-2.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] text-[#89919d] hover:text-[#a9ddf0] hover:border-[#a9ddf0]/30 font-mono-code text-[11px] transition-colors cursor-pointer"
+          title="Open Command Palette (Cmd+K / Ctrl+K)"
+          aria-label="Open Command Palette (Cmd+K / Ctrl+K)"
+        >
+          <Command size={12} className="text-[#a9ddf0]" />
+          <span className="font-semibold text-[#a9ddf0]">K</span>
+        </button>
+
+        {/* Desktop Tactile Micro-SFX Toggle */}
+        <button
+          type="button"
+          onClick={toggleSfx}
+          className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] text-[#89919d] hover:text-[#a9ddf0] hover:border-[#a9ddf0]/30 font-mono-code text-[11px] transition-colors cursor-pointer"
+          title={sfxEnabled ? "Micro-SFX is ON (Click to Mute)" : "Micro-SFX is OFF (Click to Enable)"}
+          aria-label={sfxEnabled ? "Micro-SFX is ON (Click to Mute)" : "Micro-SFX is OFF (Click to Enable)"}
+        >
+          {sfxEnabled ? <Volume2 size={12} className="text-[#a9ddf0]" /> : <VolumeX size={12} />}
+          <span className={sfxEnabled ? "text-[#a9ddf0] font-semibold" : "opacity-70"}>
+            SFX: {sfxEnabled ? "ON" : "OFF"}
+          </span>
+        </button>
 
         {/* Theme Toggle & Mobile Menu Controls */}
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => {
-              sound.playClick();
+              sound.playTick();
               toggleTheme();
             }}
             className="kokil-nav-theme-btn"
@@ -275,10 +348,35 @@ export default function Navbar() {
                   <span>Index // Navigation</span>
                 </div>
                 <div className="flex items-center gap-2">
+                  {/* Command Palette Trigger */}
+                  <button
+                    type="button"
+                    onClick={openCommandPalette}
+                    className="mobile-nav-theme-btn flex items-center gap-1"
+                    aria-label="Open Command Palette"
+                    title="Open Command Palette"
+                  >
+                    <Command size={12} className="text-[#a9ddf0]" />
+                    <span className="font-mono-code text-[11px] font-semibold text-[#a9ddf0]">K</span>
+                  </button>
+
+                  {/* Micro-SFX Toggle */}
+                  <button
+                    type="button"
+                    onClick={toggleSfx}
+                    className="mobile-nav-theme-btn"
+                    aria-label={sfxEnabled ? "SFX: ON" : "SFX: OFF"}
+                    title={sfxEnabled ? "SFX: ON" : "SFX: OFF"}
+                  >
+                    <span className="font-mono-code text-[10px]">
+                      {sfxEnabled ? "SFX: ON" : "SFX: OFF"}
+                    </span>
+                  </button>
+
                   <button
                     type="button"
                     onClick={() => {
-                      sound.playClick();
+                      sound.playTick();
                       toggleTheme();
                     }}
                     className="mobile-nav-theme-btn"
@@ -375,7 +473,7 @@ export default function Navbar() {
                 <a
                   href="/Taye%20Abolarin-Product%20Designer-Resume.pdf"
                   download="Taye Abolarin-Product Designer-Resume.pdf"
-                  onClick={() => sound.playClick()}
+                  onClick={() => sound.playTick()}
                   className="mobile-nav-resume-btn"
                   aria-label="Download Taye Abolarin Product Designer Resume PDF"
                 >
@@ -400,15 +498,18 @@ export default function Navbar() {
                   </svg>
                 </a>
 
-                {/* Direct Dialogue Email */}
-                <a
-                  href="mailto:abolarintaye20@gmail.com"
-                  onClick={() => sound.playClick()}
-                  className="mobile-nav-email-link"
+                {/* Direct Dialogue Email (Click to Copy) */}
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="mobile-nav-email-link w-full text-left cursor-pointer"
+                  data-cursor-text="Copy Email"
                 >
-                  <span>abolarintaye20@gmail.com</span>
-                  <span>Direct Dialogue &rarr;</span>
-                </a>
+                  <span>
+                    {copiedEmail ? "abolarintaye20@gmail.com (Copied ✓)" : "abolarintaye20@gmail.com"}
+                  </span>
+                  <span>{copiedEmail ? "Copied ✓" : "Copy Email →"}</span>
+                </button>
 
                 <div className="flex justify-between items-center text-[11px] font-mono-code text-[#89919d] pt-2">
                   <span>Lagos, NG &bull; WAT</span>
