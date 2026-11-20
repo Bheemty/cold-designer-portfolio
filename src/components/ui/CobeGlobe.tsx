@@ -41,7 +41,7 @@ export default function CobeGlobe({ className = "" }: CobeGlobeProps) {
       return;
     }
 
-    const dpr = Math.min(2, typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1);
+    const dpr = Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5);
     let currentWidth = container.offsetWidth || 320;
 
     // Palette calibrated to Cold Designer aesthetic and high contrast visibility
@@ -60,6 +60,8 @@ export default function CobeGlobe({ className = "" }: CobeGlobeProps) {
     let phi = 0;
     let rafId = 0;
     let globe: ReturnType<typeof createGlobe> | null = null;
+    let isVisible = true;
+    let isLoopRunning = false;
 
     try {
       globe = createGlobe(canvas, {
@@ -102,6 +104,11 @@ export default function CobeGlobe({ className = "" }: CobeGlobeProps) {
       // Render loop with inertia damping on drag release
       let hasRenderedFirstFrame = false;
       const render = () => {
+        if (!isVisible || document.hidden) {
+          isLoopRunning = false;
+          return;
+        }
+
         if (pointerInteracting.current === null) {
           // Smooth continuous auto-rotation
           phi += 0.003;
@@ -122,12 +129,53 @@ export default function CobeGlobe({ className = "" }: CobeGlobeProps) {
 
         rafId = requestAnimationFrame(render);
       };
-      rafId = requestAnimationFrame(render);
 
-      return () => {
+      const startLoop = () => {
+        if (!isLoopRunning && isVisible && !document.hidden) {
+          isLoopRunning = true;
+          rafId = requestAnimationFrame(render);
+        }
+      };
+
+      const stopLoop = () => {
         if (rafId) {
           cancelAnimationFrame(rafId);
+          rafId = 0;
         }
+        isLoopRunning = false;
+      };
+
+      // IntersectionObserver: automatically pauses WebGL render loop when scrolled offscreen
+      const intersectionObserver = new IntersectionObserver(
+        (entries) => {
+          const intersecting = entries[0]?.isIntersecting ?? false;
+          isVisible = intersecting;
+          if (intersecting) {
+            startLoop();
+          } else {
+            stopLoop();
+          }
+        },
+        { threshold: 0.05 }
+      );
+      intersectionObserver.observe(container);
+
+      // Visibilitychange: pauses WebGL render loop when user switches browser tabs
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          stopLoop();
+        } else if (isVisible) {
+          startLoop();
+        }
+      };
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
+      startLoop();
+
+      return () => {
+        stopLoop();
+        intersectionObserver.disconnect();
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
         resizeObserver.disconnect();
         if (globe) {
           globe.destroy();

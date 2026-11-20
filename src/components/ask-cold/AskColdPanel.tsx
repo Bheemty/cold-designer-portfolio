@@ -143,8 +143,8 @@ export default function AskColdPanel({
     handleViewport();
     window.addEventListener("resize", handleViewport, { passive: true });
     if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", handleViewport);
-      window.visualViewport.addEventListener("scroll", handleViewport);
+      window.visualViewport.addEventListener("resize", handleViewport, { passive: true });
+      window.visualViewport.addEventListener("scroll", handleViewport, { passive: true });
     }
 
     return () => {

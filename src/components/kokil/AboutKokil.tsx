@@ -78,7 +78,22 @@ export default function AboutKokil() {
       }
     };
 
+    let isNearViewport = true;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isNearViewport = entries[0]?.isIntersecting ?? false;
+        if (isNearViewport) {
+          update();
+        }
+      },
+      { rootMargin: "300px 0px 300px 0px" }
+    );
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
     const onScroll = () => {
+      if (!isNearViewport) return;
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(update);
@@ -106,6 +121,7 @@ export default function AboutKokil() {
     }
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", update);
       if (lenis?.off) {

@@ -19,6 +19,7 @@ import {
 import { PROJECTS } from "@/data/projects";
 import ScrollReveal from "@/components/motion/ScrollReveal";
 import CaseStudyQuickAccess from "@/components/work/CaseStudyQuickAccess";
+import AutoPauseVideo from "@/components/ui/AutoPauseVideo";
 
 export async function generateStaticParams() {
   return PROJECTS.map((project) => ({
@@ -195,7 +196,7 @@ export default async function CaseStudyPage({
           {project.videoSrc ? (
             <div className="mb-20 overflow-hidden rounded-2xl sm:rounded-3xl border border-white/[0.08] bg-[#11141b] p-4 sm:p-6 shadow-2xl">
               <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl sm:rounded-2xl bg-[#090b0f]">
-                <video
+                <AutoPauseVideo
                   src={project.videoSrc}
                   poster={project.heroImage}
                   controls
@@ -581,6 +582,8 @@ export default async function CaseStudyPage({
                         src={item.src}
                         alt={item.alt}
                         fill
+                        loading="lazy"
+                        decoding="async"
                         className="object-contain sm:object-cover transition-transform duration-700 group-hover:scale-[1.01]"
                         sizes="(max-width: 1200px) 100vw, 1200px"
                       />

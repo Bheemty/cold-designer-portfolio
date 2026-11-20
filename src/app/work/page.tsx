@@ -355,6 +355,7 @@ export default function WorkArchivePage() {
                           >
                             <Link
                               href={`/work/${p.slug}`}
+                              prefetch={true}
                               onClick={() => sound.playClick()}
                               className="block relative aspect-[16/10] w-full rounded-2xl overflow-hidden bg-[#090b0f] border border-white/[0.08] group-hover:border-[#a9ddf0]/40 transition-colors shadow-2xl"
                             >
@@ -365,6 +366,9 @@ export default function WorkArchivePage() {
                                   fill
                                   sizes="(max-width: 1024px) 100vw, 58vw"
                                   className="object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+                                  loading={idx < 2 ? "eager" : "lazy"}
+                                  decoding="async"
+                                  priority={idx === 0}
                                 />
                               ) : (
                                 <div className="w-full h-full flex flex-col items-center justify-center p-8 font-mono-code text-xs text-[#89919d] text-center">
@@ -587,6 +591,7 @@ export default function WorkArchivePage() {
                           <h3 className="font-display text-2xl font-bold text-[#f2f1ec] group-hover:text-[#a9ddf0] transition-colors mb-3">
                             <Link
                               href={`/work/${p.slug}`}
+                              prefetch={true}
                               onClick={() => sound.playClick()}
                             >
                               {p.title}
@@ -617,6 +622,7 @@ export default function WorkArchivePage() {
                           <div className="flex items-center gap-3">
                             <Link
                               href={`/work/${p.slug}`}
+                              prefetch={true}
                               onClick={() => sound.playClick()}
                               className="inline-flex items-center gap-2 text-[#f2f1ec] hover:text-[#a9ddf0] transition-colors font-semibold"
                             >

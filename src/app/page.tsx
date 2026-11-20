@@ -1,10 +1,13 @@
+import dynamic from "next/dynamic";
 import CursorGrid from "@/components/kokil/CursorGrid";
 import HeroKokil from "@/components/kokil/HeroKokil";
 import AboutKokil from "@/components/kokil/AboutKokil";
 import WorkAccordion from "@/components/kokil/WorkAccordion";
-import NotebookKokil from "@/components/kokil/NotebookKokil";
 import EndorsementsKokil from "@/components/kokil/EndorsementsKokil";
-import AssetPreloader from "@/components/kokil/AssetPreloader";
+
+// Lazy-load heavy below-the-fold 3D physical notebook and idle preloader to keep initial hydration ultralight
+const NotebookKokil = dynamic(() => import("@/components/kokil/NotebookKokil"));
+const AssetPreloader = dynamic(() => import("@/components/kokil/AssetPreloader"));
 
 export default function Home() {
   return (

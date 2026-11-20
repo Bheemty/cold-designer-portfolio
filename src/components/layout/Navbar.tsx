@@ -158,19 +158,20 @@ export default function Navbar() {
 
         {/* Desktop Pill Links (Visible only on Desktop >= 1024px) */}
         <div className="kokil-nav-links">
-          <Link href="/" className={pathname === "/" ? "active" : ""}>
+          <Link href="/" prefetch={true} className={pathname === "/" ? "active" : ""}>
             Home
           </Link>
           <Link
             href="/work"
+            prefetch={true}
             className={pathname.startsWith("/work") ? "active" : ""}
           >
             Work
           </Link>
-          <Link href="/about" className={pathname === "/about" ? "active" : ""}>
+          <Link href="/about" prefetch={true} className={pathname === "/about" ? "active" : ""}>
             About
           </Link>
-          <Link href="/lab" className={pathname === "/lab" ? "active" : ""}>
+          <Link href="/lab" prefetch={true} className={pathname === "/lab" ? "active" : ""}>
             Lab
           </Link>
         </div>
@@ -340,6 +341,7 @@ export default function Navbar() {
                     >
                       <Link
                         href={item.href}
+                        prefetch={true}
                         onClick={handleNavClick}
                         className={`mobile-nav-item-link ${isActive ? "active" : ""}`}
                       >

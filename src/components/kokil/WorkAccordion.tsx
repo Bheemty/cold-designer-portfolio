@@ -228,6 +228,7 @@ export default function WorkAccordion() {
 
                   <Link
                     href={project.href}
+                    prefetch={true}
                     className="work-go"
                     aria-label={`Read ${project.title} case study`}
                     onClick={(e) => e.stopPropagation()}
@@ -256,7 +257,7 @@ export default function WorkAccordion() {
 
       {/* Prominent "Explore All Work" CTA */}
       <div ref={ctaRef} className="work-closing-cta">
-        <Link href="/work" className="work-explore-btn" aria-label="Explore All Work in full directory">
+        <Link href="/work" prefetch={true} className="work-explore-btn" aria-label="Explore All Work in full directory">
           <span>Explore All Work</span>
           <span className="work-explore-arrow" aria-hidden="true">
             <svg

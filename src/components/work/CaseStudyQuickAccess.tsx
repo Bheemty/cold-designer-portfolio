@@ -37,9 +37,13 @@ export default function CaseStudyQuickAccess({
 
   // Monitor scroll position to surface the floating trigger on long case studies
   useEffect(() => {
+    let lastState = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      setShowFloatingTrigger(scrollY > 400);
+      const isPast = (window.scrollY || document.documentElement.scrollTop) > 400;
+      if (isPast !== lastState) {
+        lastState = isPast;
+        setShowFloatingTrigger(isPast);
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });

@@ -120,9 +120,33 @@ export default function HeroKokil() {
     }
 
     let isHeroVisible = true;
+    let eyeLoopRunning = false;
+    let eyeRaf = 0;
+
+    const startEyeLoop = () => {
+      if (!eyeLoopRunning && isHeroVisible && !document.hidden) {
+        eyeLoopRunning = true;
+        eyeRaf = requestAnimationFrame(renderEyes);
+      }
+    };
+
+    const stopEyeLoop = () => {
+      if (eyeRaf) {
+        cancelAnimationFrame(eyeRaf);
+        eyeRaf = 0;
+      }
+      eyeLoopRunning = false;
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        isHeroVisible = entries[0]?.isIntersecting ?? false;
+        const intersecting = entries[0]?.isIntersecting ?? false;
+        isHeroVisible = intersecting;
+        if (intersecting) {
+          startEyeLoop();
+        } else {
+          stopEyeLoop();
+        }
       },
       { threshold: 0.05 }
     );
@@ -162,7 +186,6 @@ export default function HeroKokil() {
 
     let pendingPointerX = -1000;
     let pendingPointerY = -1000;
-    let eyeRaf = 0;
 
     // Mobile tap-directed gaze offsets (relative to center -50%, -50%)
     const currentOx = [0, 0];
@@ -173,8 +196,8 @@ export default function HeroKokil() {
     let mobileRestTimer: number | null = null;
 
     function renderEyes() {
-      if (!isHeroVisible || eyeCenters.length === 0) {
-        eyeRaf = requestAnimationFrame(renderEyes);
+      if (!isHeroVisible || document.hidden || eyeCenters.length === 0) {
+        eyeLoopRunning = false;
         return;
       }
 
@@ -224,12 +247,22 @@ export default function HeroKokil() {
       eyeRaf = requestAnimationFrame(renderEyes);
     }
 
-    eyeRaf = requestAnimationFrame(renderEyes);
+    startEyeLoop();
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopEyeLoop();
+      } else if (isHeroVisible) {
+        startEyeLoop();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     function handleMouseMove(e: MouseEvent) {
       if (!isHeroVisible) return;
       pendingPointerX = e.clientX;
       pendingPointerY = e.clientY;
+      startEyeLoop();
     }
 
     const blinkInterval = setInterval(() => {
@@ -575,7 +608,8 @@ export default function HeroKokil() {
 
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(eyeRaf);
+      stopEyeLoop();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", updateEyeCenters);
       window.removeEventListener("cold-designer-theme-change", handleThemeChange);
       clearInterval(blinkInterval);

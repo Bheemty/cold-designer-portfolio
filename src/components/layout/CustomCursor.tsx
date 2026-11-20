@@ -87,40 +87,79 @@ export default function CustomCursor() {
     // Smooth lerp rendering loop (resting state optimization to free main-thread during scroll)
     let lastRenderMouseX = -999;
     let lastRenderMouseY = -999;
+    let isLoopRunning = false;
+
+    const startLoop = () => {
+      if (!isLoopRunning && !document.hidden && isVisible) {
+        isLoopRunning = true;
+        rafId = requestAnimationFrame(render);
+      }
+    };
+
+    const stopLoop = () => {
+      if (rafId) {
+        cancelAnimationFrame(rafId);
+        rafId = 0;
+      }
+      isLoopRunning = false;
+    };
 
     const render = () => {
-      if (isVisible) {
-        const dx = mouseX - ringX;
-        const dy = mouseY - ringY;
-        const distSq = dx * dx + dy * dy;
-
-        // Only commit DOM style mutations while the cursor or spring ring is in active motion
-        if (distSq > 0.04 || mouseX !== lastRenderMouseX || mouseY !== lastRenderMouseY) {
-          lastRenderMouseX = mouseX;
-          lastRenderMouseY = mouseY;
-          dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
-
-          ringX += dx * 0.2;
-          ringY += dy * 0.2;
-          ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-        }
+      if (!isVisible || document.hidden) {
+        isLoopRunning = false;
+        return;
       }
 
-      rafId = requestAnimationFrame(render);
+      const dx = mouseX - ringX;
+      const dy = mouseY - ringY;
+      const distSq = dx * dx + dy * dy;
+
+      // Only commit DOM style mutations while the cursor or spring ring is in active motion
+      if (distSq > 0.04 || mouseX !== lastRenderMouseX || mouseY !== lastRenderMouseY) {
+        lastRenderMouseX = mouseX;
+        lastRenderMouseY = mouseY;
+        dot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+
+        ringX += dx * 0.2;
+        ringY += dy * 0.2;
+        ring.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+
+        rafId = requestAnimationFrame(render);
+      } else {
+        // Rest state reached — pause rAF loop completely until next mousemove
+        isLoopRunning = false;
+      }
+    };
+
+    const handlePointerActivity = () => {
+      startLoop();
     };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
+    window.addEventListener("mousemove", handlePointerActivity, { passive: true });
     document.addEventListener("mouseleave", handleMouseLeave, { passive: true });
     document.addEventListener("mouseenter", handleMouseEnter, { passive: true });
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
-    rafId = requestAnimationFrame(render);
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopLoop();
+      } else {
+        startLoop();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    startLoop();
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousemove", handlePointerActivity);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
       document.removeEventListener("mouseover", handleMouseOver);
-      cancelAnimationFrame(rafId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      stopLoop();
     };
   }, []);
 

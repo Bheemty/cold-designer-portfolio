@@ -285,6 +285,14 @@ export default function CursorGrid({
       resizeTimer = setTimeout(rebuild, 150);
     };
 
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        running = false;
+        cancelAnimationFrame(raf);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     window.addEventListener("resize", handleResize, { passive: true });
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     window.addEventListener("click", handleClick, { passive: true });
@@ -294,6 +302,7 @@ export default function CursorGrid({
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("pointermove", handlePointerMove);
       window.removeEventListener("click", handleClick);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(raf);
       clearTimeout(resizeTimer);
     };

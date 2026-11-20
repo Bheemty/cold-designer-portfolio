@@ -135,9 +135,33 @@ export default function FooterKokil() {
     if (!footerEl) return;
 
     let isFooterVisible = false;
+    let isEyeLoopRunning = false;
+    let eyeRaf = 0;
+
+    const startEyeLoop = () => {
+      if (!isEyeLoopRunning && isFooterVisible && !document.hidden) {
+        isEyeLoopRunning = true;
+        eyeRaf = requestAnimationFrame(renderEyes);
+      }
+    };
+
+    const stopEyeLoop = () => {
+      if (eyeRaf) {
+        cancelAnimationFrame(eyeRaf);
+        eyeRaf = 0;
+      }
+      isEyeLoopRunning = false;
+    };
+
     const observer = new IntersectionObserver(
       (entries) => {
-        isFooterVisible = entries[0]?.isIntersecting ?? false;
+        const intersecting = entries[0]?.isIntersecting ?? false;
+        isFooterVisible = intersecting;
+        if (intersecting) {
+          startEyeLoop();
+        } else {
+          stopEyeLoop();
+        }
       },
       { threshold: 0.1 }
     );
@@ -163,11 +187,10 @@ export default function FooterKokil() {
 
     let pendingPointerX = -1000;
     let pendingPointerY = -1000;
-    let eyeRaf = 0;
 
     function renderEyes() {
-      if (!isFooterVisible || eyeCenters.length === 0) {
-        eyeRaf = requestAnimationFrame(renderEyes);
+      if (!isFooterVisible || document.hidden || eyeCenters.length === 0) {
+        isEyeLoopRunning = false;
         return;
       }
 
@@ -186,18 +209,26 @@ export default function FooterKokil() {
       eyeRaf = requestAnimationFrame(renderEyes);
     }
 
-    eyeRaf = requestAnimationFrame(renderEyes);
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopEyeLoop();
+      } else if (isFooterVisible) {
+        startEyeLoop();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     function handleMouseMove(e: MouseEvent) {
       if (!isFooterVisible) return;
       pendingPointerX = e.clientX;
       pendingPointerY = e.clientY;
+      startEyeLoop();
     }
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     const blinkInterval = setInterval(() => {
-      if (!isFooterVisible) return;
+      if (!isFooterVisible || document.hidden) return;
       eyeEls.forEach((eye) => eye.classList.add("blink"));
       setTimeout(() => {
         eyeEls.forEach((eye) => eye.classList.remove("blink"));
@@ -206,7 +237,8 @@ export default function FooterKokil() {
 
     return () => {
       observer.disconnect();
-      cancelAnimationFrame(eyeRaf);
+      stopEyeLoop();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", updateEyeCenters);
       window.removeEventListener("mousemove", handleMouseMove);
       clearInterval(blinkInterval);
