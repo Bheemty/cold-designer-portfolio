@@ -1,10 +1,13 @@
+import dynamic from "next/dynamic";
 import CursorGrid from "@/components/kokil/CursorGrid";
 import HeroKokil from "@/components/kokil/HeroKokil";
 import AboutKokil from "@/components/kokil/AboutKokil";
-import SelectedWorkRows from "@/components/home/SelectedWorkRows";
-import LabChapterBreak from "@/components/home/LabChapterBreak";
+import WorkAccordion from "@/components/kokil/WorkAccordion";
 import EndorsementsKokil from "@/components/kokil/EndorsementsKokil";
-import AssetPreloader from "@/components/kokil/AssetPreloader";
+
+// Lazy-load heavy below-the-fold 3D physical notebook and idle preloader to keep initial hydration ultralight
+const NotebookKokil = dynamic(() => import("@/components/kokil/NotebookKokil"));
+const AssetPreloader = dynamic(() => import("@/components/kokil/AssetPreloader"));
 
 export default function Home() {
   return (
@@ -12,7 +15,7 @@ export default function Home() {
       {/* Background Interactive Cursor Grid */}
       <CursorGrid
         cellSize={64}
-        color="#38bdf8"
+        color="#a9ddf0"
         radius={180}
         falloff="smooth"
         holdTime={320}
@@ -22,19 +25,19 @@ export default function Home() {
         fillOpacity={0.04}
       />
 
-      {/* Architectural Rub-to-Reveal Hero with Interactive Googly Eyes & Motion Choreography */}
+      {/* Signature Rub-to-Reveal Hero with Interactive Googly Eyes */}
       <HeroKokil />
 
       {/* Scroll-Reveal About Section with Word Unblur Token Engine */}
       <AboutKokil />
 
-      {/* (02) Selected Work: Full-Width Asymmetric Editorial Feature Rows */}
-      <SelectedWorkRows />
+      {/* Signature 5-Panel Horizontal Accordion Gallery */}
+      <WorkAccordion />
 
-      {/* (03) Contrast Chapter Break: Full-Bleed Dark COLD // R&D Lab Instrument Panel */}
-      <LabChapterBreak />
+      {/* Physical 3D Spiral Flippable Notebook */}
+      <NotebookKokil />
 
-      {/* (04) Endorsements Pull-Quote Sticky Scrollytelling Section */}
+      {/* (03) Endorsements Pull-Quote Section */}
       <EndorsementsKokil />
 
       {/* Background idle image pre-decoder for smooth scroll transitions */}

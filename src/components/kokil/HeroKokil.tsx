@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { sound } from "@/lib/sounds";
-import MagneticButton from "@/components/ui/MagneticButton";
 
 const HERO_REVEALED_KEY = "cold_designer_hero_revealed";
 
@@ -667,162 +666,102 @@ export default function HeroKokil() {
       {/* Base Layer: completely concealed initial state in both themes */}
       <div className="hero-base">
         <div className="hero-main">
-          <div className="hero-line-mask">
-            <p className="hero-hello hero-line-inner hero-line-inner--1">Hi, I&rsquo;m Taye &mdash; a</p>
-          </div>
+          <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
           <h1 className="hero-title">
-            <span className="line line-1 hero-line-mask">
-              <span className="hero-line-inner hero-line-inner--2 flex items-center">
-                Product
-                <span className="eyes-scene">
-                  <span className="eye">
-                    <span className="pupil" />
-                  </span>
-                  <span className="eye">
-                    <span className="pupil" />
-                  </span>
-                  <div className="eyes-labels" aria-hidden="false">
-                    <button
-                      type="button"
-                      className="hero-hide-btn"
-                      onClick={resetScratch}
-                      title="Re-hide hero"
-                      aria-label="Re-hide hero"
-                    >
-                      HIDE
-                    </button>
-                    <span
-                      className={`cursor-hint ${hintHidden ? "hide" : ""}`}
-                      id="cursorHint"
-                      aria-hidden={hintHidden}
-                    >
-                      COLOR ME
-                    </span>
-                  </div>
+            <span className="line line-1">
+              Product
+              <span className="eyes-scene">
+                <span className="eye">
+                  <span className="pupil" />
                 </span>
+                <span className="eye">
+                  <span className="pupil" />
+                </span>
+                <div className="eyes-labels" aria-hidden="false">
+                  <button
+                    type="button"
+                    className="hero-hide-btn"
+                    onClick={resetScratch}
+                    title="Re-hide hero"
+                    aria-label="Re-hide hero"
+                  >
+                    HIDE
+                  </button>
+                  <span
+                    className={`cursor-hint ${hintHidden ? "hide" : ""}`}
+                    id="cursorHint"
+                    aria-hidden={hintHidden}
+                  >
+                    COLOR ME
+                  </span>
+                </div>
               </span>
             </span>
-            <span className="line line-2 hero-line-mask">
-              <span className="hero-line-inner hero-line-inner--3">Designer</span>
-            </span>
+            <span className="line line-2">Designer</span>
           </h1>
         </div>
         <div className="hero-bottom">
           <p className="hero-desc">
             I take complex, messy workflows from 0-to-1 strategy to clear interfaces and live working prototypes—across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
-          <div className="hero-actions flex items-center gap-4">
-            <MagneticButton maxDistance={5} strength={0.2}>
-              <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true" onClick={() => sound.playClick()}>
-                Explore selected work <span aria-hidden="true">&darr;</span>
-              </a>
-            </MagneticButton>
-            <MagneticButton maxDistance={5} strength={0.2}>
-              <a href="#contact" className="hero-btn ghost" tabIndex={-1} aria-hidden="true" onClick={() => sound.playClick()}>
-                Get in touch
-              </a>
-            </MagneticButton>
+          <div className="hero-actions">
+            <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true">
+              Explore selected work <span aria-hidden="true">&darr;</span>
+            </a>
+            <a href="#contact" className="hero-btn ghost" tabIndex={-1} aria-hidden="true">
+              Get in touch
+            </a>
           </div>
         </div>
-        <div className="hero-ticker-wrap mt-8 pt-5 border-t border-[var(--ink-line)]" aria-hidden="true">
-          <div className="hero-ticker-track flex items-center gap-10">
-            <div className="flex items-center gap-8 font-mono-code text-[11px] uppercase tracking-widest text-[var(--ink-dim)]">
-              <span className="inline-flex items-center gap-1.5 text-[var(--accent,#38bdf8)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
-              </span>
-              <span>0-to-1 Product Strategy</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Disciplined Design Systems</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Live React / Next.js Prototypes</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Cross-Industry UX</span>
-            </div>
-            <div className="flex items-center gap-8 font-mono-code text-[11px] uppercase tracking-widest text-[var(--ink-dim)]" aria-hidden="true">
-              <span className="inline-flex items-center gap-1.5 text-[var(--accent,#38bdf8)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
-              </span>
-              <span>0-to-1 Product Strategy</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Disciplined Design Systems</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Live React / Next.js Prototypes</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Cross-Industry UX</span>
-            </div>
-          </div>
+        <div className="hero-strip" aria-hidden="true">
+          <span className="inline-flex items-center gap-1.5 font-mono-code text-[11px]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
+          </span>
+          <span className="skills">
+            0-to-1 Product Strategy<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Live Prototypes<span className="dot">&middot;</span>Cross-Industry UX
+          </span>
+          <span>Scroll &darr;</span>
         </div>
       </div>
 
       {/* Invert Layer: progressively revealed only within scratched areas */}
       <div className="hero-invert" id="heroInvert" aria-hidden="true">
         <div className="hero-main">
-          <div className="hero-line-mask">
-            <p className="hero-hello hero-line-inner hero-line-inner--1">Hi, I&rsquo;m Taye &mdash; a</p>
-          </div>
+          <p className="hero-hello">Hi, I&rsquo;m Taye &mdash; a</p>
           <h1 className="hero-title">
-            <span className="line line-1 hero-line-mask">
-              <span className="hero-line-inner hero-line-inner--2 flex items-center">
-                Product
-                <span className="eyes-spacer" aria-hidden="true">
-                  <span />
-                  <span />
-                </span>
+            <span className="line line-1">
+              Product
+              <span className="eyes-spacer" aria-hidden="true">
+                <span />
+                <span />
               </span>
             </span>
-            <span className="line line-2 hero-line-mask">
-              <span className="hero-line-inner hero-line-inner--3">Designer</span>
-            </span>
+            <span className="line line-2">Designer</span>
           </h1>
         </div>
         <div className="hero-bottom">
           <p className="hero-desc">
             I take complex, messy workflows from 0-to-1 strategy to clear interfaces and live working prototypes—across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
-          <div className="hero-actions flex items-center gap-4">
-            <MagneticButton maxDistance={5} strength={0.2}>
-              <a href="#work" className="hero-btn primary" onClick={() => sound.playClick()}>
-                Explore selected work <span aria-hidden="true">&darr;</span>
-              </a>
-            </MagneticButton>
-            <MagneticButton maxDistance={5} strength={0.2}>
-              <a href="#contact" className="hero-btn ghost" onClick={() => sound.playClick()}>
-                Get in touch
-              </a>
-            </MagneticButton>
+          <div className="hero-actions">
+            <a href="#work" className="hero-btn primary">
+              Explore selected work <span aria-hidden="true">&darr;</span>
+            </a>
+            <a href="#contact" className="hero-btn ghost">
+              Get in touch
+            </a>
           </div>
         </div>
-        <div className="hero-ticker-wrap mt-8 pt-5 border-t border-[var(--ink-line)]">
-          <div className="hero-ticker-track flex items-center gap-10">
-            <div className="flex items-center gap-8 font-mono-code text-[11px] uppercase tracking-widest text-[var(--ink-dim)]">
-              <span className="inline-flex items-center gap-1.5 text-[var(--accent,#38bdf8)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
-              </span>
-              <span>0-to-1 Product Strategy</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Disciplined Design Systems</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Live React / Next.js Prototypes</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Cross-Industry UX</span>
-            </div>
-            <div className="flex items-center gap-8 font-mono-code text-[11px] uppercase tracking-widest text-[var(--ink-dim)]" aria-hidden="true">
-              <span className="inline-flex items-center gap-1.5 text-[var(--accent,#38bdf8)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
-              </span>
-              <span>0-to-1 Product Strategy</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Disciplined Design Systems</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Live React / Next.js Prototypes</span>
-              <span className="opacity-40">&middot;</span>
-              <span>Cross-Industry UX</span>
-            </div>
-          </div>
+        <div className="hero-strip">
+          <span className="inline-flex items-center gap-1.5 font-mono-code text-[11px]">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+            <span>Available for Product Roles &middot; {watTime || "17:45"} WAT</span>
+          </span>
+          <span className="skills">
+            0-to-1 Product Strategy<span className="dot">&middot;</span>Design Systems<span className="dot">&middot;</span>Live Prototypes<span className="dot">&middot;</span>Cross-Industry UX
+          </span>
+          <span>Scroll &darr;</span>
         </div>
       </div>
 
