@@ -82,19 +82,19 @@ export default async function CaseStudyPage({
 
         {/* Case Study Hero */}
         <header className="border-b border-white/[0.08] pb-16 mb-16">
-          <div className="flex flex-wrap items-center gap-3 mb-6 font-mono-code text-xs">
-            <span className="case-study-glass-chip rounded-full bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/30 px-3.5 py-1 font-semibold shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.25)]">
+          <div className="flex sm:flex-wrap items-center overflow-x-auto sm:overflow-visible no-scrollbar pb-1 sm:pb-0 gap-3 mb-6 font-mono-code text-xs">
+            <span className="case-study-glass-chip rounded-full bg-[#a9ddf0]/10 text-[#a9ddf0] border border-[#a9ddf0]/30 px-3.5 py-1 font-semibold shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.25)] shrink-0 whitespace-nowrap">
               {project.category}
             </span>
-            <span className="case-study-glass-chip rounded-full bg-white/[0.04] border border-white/[0.10] px-3 py-1 text-[#89919d] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.08)]">
+            <span className="case-study-glass-chip rounded-full bg-white/[0.04] border border-white/[0.10] px-3 py-1 text-[#89919d] shadow-[inset_0_1px_1px_0_rgba(255,255,255,0.08)] shrink-0 whitespace-nowrap">
               {project.type}
             </span>
             {project.badgeLabel && (
-              <span className="case-study-glass-chip rounded-full bg-[#a9ddf0]/5 border border-[#a9ddf0]/20 px-3 py-1 text-[#a9ddf0] font-mono-code text-[11px]">
+              <span className="case-study-glass-chip rounded-full bg-[#a9ddf0]/5 border border-[#a9ddf0]/20 px-3 py-1 text-[#a9ddf0] font-mono-code text-[11px] shrink-0 whitespace-nowrap">
                 {project.badgeLabel}
               </span>
             )}
-            <span className="text-[#89919d]">{"// "}{project.year}</span>
+            <span className="text-[#89919d] shrink-0 whitespace-nowrap">{"// "}{project.year}</span>
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl font-bold tracking-tight text-[#f2f1ec] mb-6">
@@ -241,11 +241,11 @@ export default async function CaseStudyPage({
             <span className="font-mono-code text-xs text-[#89919d] uppercase tracking-wider block mb-4">
               Deliverables &amp; Artifacts:
             </span>
-            <div className="flex flex-wrap gap-2 font-mono-code text-xs">
+            <div className="flex sm:flex-wrap overflow-x-auto sm:overflow-visible no-scrollbar pb-1 sm:pb-0 gap-2 font-mono-code text-xs">
               {project.deliverables.map((item) => (
                 <span
                   key={item}
-                  className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-[#11141b] px-3.5 py-2 text-[#f2f1ec]"
+                  className="flex items-center gap-2 rounded-lg border border-white/[0.08] bg-[#11141b] px-3.5 py-2 text-[#f2f1ec] shrink-0 whitespace-nowrap"
                 >
                   <CheckCircle2 size={13} className="text-[#a9ddf0]" />
                   <span>{item}</span>

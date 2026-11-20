@@ -55,6 +55,7 @@ export default function EndorsementsKokil() {
 
   // References to the 5 individual progress fill bars for zero-jank GPU scaleX mutations
   const fillRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const mobileFillRefs = useRef<Array<HTMLDivElement | null>>([]);
 
   const [activeIndex, setActiveIndex] = useState(0);
   const [isCrossfading, setIsCrossfading] = useState(false);
@@ -81,20 +82,22 @@ export default function EndorsementsKokil() {
 
     // Update the 5 hairline fill bars directly on DOM for zero-re-render GPU compositing
     for (let s = 0; s < total; s++) {
-      const fillEl = fillRefs.current[s];
-      if (!fillEl) continue;
+      const targets = [fillRefs.current[s], mobileFillRefs.current[s]];
+      for (const fillEl of targets) {
+        if (!fillEl) continue;
 
-      if (s < newIndex) {
-        fillEl.style.transform = "scaleX(1)";
-        fillEl.style.opacity = "1";
-      } else if (s > newIndex) {
-        fillEl.style.transform = "scaleX(0)";
-        fillEl.style.opacity = "0.25";
-      } else {
-        // Active segment fills smoothly from 0% to 100% across its 0.20 span
-        const segmentProgress = Math.min(1, Math.max(0, (progress - newIndex * (1 / total)) * total));
-        fillEl.style.transform = `scaleX(${segmentProgress})`;
-        fillEl.style.opacity = "1";
+        if (s < newIndex) {
+          fillEl.style.transform = "scaleX(1)";
+          fillEl.style.opacity = "1";
+        } else if (s > newIndex) {
+          fillEl.style.transform = "scaleX(0)";
+          fillEl.style.opacity = "0.25";
+        } else {
+          // Active segment fills smoothly from 0% to 100% across its 0.20 span
+          const segmentProgress = Math.min(1, Math.max(0, (progress - newIndex * (1 / total)) * total));
+          fillEl.style.transform = `scaleX(${segmentProgress})`;
+          fillEl.style.opacity = "1";
+        }
       }
     }
 
@@ -184,7 +187,7 @@ export default function EndorsementsKokil() {
         <div className="w-full max-w-[1440px] mx-auto px-5 sm:px-8 lg:px-16 py-6 sm:py-10">
           
           {/* Eyebrow Header */}
-          <div className="flex items-center justify-between pb-5 sm:pb-6 border-b border-white/[0.08] endorsement-divider mb-6 sm:mb-10">
+          <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-white/[0.08] endorsement-divider mb-6 sm:mb-10">
             <div className="flex items-center gap-3">
               <span className="h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" aria-hidden="true" />
               <p className="intro-label font-mono-code text-xs uppercase tracking-widest text-[#a9ddf0] m-0">
@@ -192,17 +195,18 @@ export default function EndorsementsKokil() {
               </p>
             </div>
 
-            <div className="flex items-center gap-2 font-mono-code text-[11px] text-[#89919d]">
-              <span className="hidden sm:inline">[0-to-1 Feedback]</span>
-              <span className="text-[#a9ddf0]">Verified Collaboration</span>
+            {/* Quiet, ultra-subtle monospace caption on desktop/tablet, hidden on mobile for zero clutter */}
+            <div className="hidden sm:flex items-center gap-2 font-mono-code text-[11px] text-[#89919d]/60">
+              <span>[0-to-1 Feedback]</span>
+              <span>Verified Collaborations</span>
             </div>
           </div>
 
-          {/* DESKTOP LAYOUT (>= 1024px: 35% Left / 65% Right 2-Column Split) */}
-          <div className="hidden lg:grid lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* DESKTOP & TABLET LAYOUT (>= 768px: 2-Column Split) */}
+          <div className="hidden md:grid md:grid-cols-12 gap-8 lg:gap-16 items-start">
             
-            {/* ── DESKTOP LEFT COLUMN (Counter + Endorser + 5-Bar Stepper) ── */}
-            <div className="lg:col-span-4 flex flex-col justify-between h-full pr-8 border-r border-white/[0.08] endorsement-divider">
+            {/* ── LEFT COLUMN (Counter + Endorser + 5-Bar Stepper) ── */}
+            <div className="md:col-span-5 lg:col-span-4 flex flex-col justify-between h-full pr-6 lg:pr-8 border-r border-white/[0.08] endorsement-divider">
               
               {/* Top: Prominent Monospace Step Counter: 01 / 05 */}
               <div className="flex items-baseline gap-2.5 font-mono-code mb-8">
@@ -301,8 +305,8 @@ export default function EndorsementsKokil() {
               </div>
             </div>
 
-            {/* ── DESKTOP RIGHT COLUMN (The Pull-Quote) ── */}
-            <div className="lg:col-span-8 pl-4 lg:pl-8 flex items-center min-h-[300px]">
+            {/* ── RIGHT COLUMN (The Pull-Quote) ── */}
+            <div className="md:col-span-7 lg:col-span-8 pl-4 lg:pl-8 flex items-center min-h-[300px]">
               <blockquote
                 className={`endorsement-quote text-2xl md:text-3xl lg:text-4xl font-medium leading-[1.38] text-[#FDFDFD] m-0 transition-all duration-300 ease-out ${
                   isCrossfading ? "opacity-0 translate-y-2.5" : "opacity-100 translate-y-0"
@@ -321,29 +325,64 @@ export default function EndorsementsKokil() {
 
           </div>
 
-          {/* MOBILE & TABLET LAYOUT (< 1024px: Clean Vertical Stack) */}
-          <div className="flex lg:hidden flex-col justify-between space-y-6 sm:space-y-8">
+          {/* MOBILE LAYOUT (< 768px: Generously Spaced Vertical Stack) */}
+          {/* Order: Top Header -> Upper-Middle (Quote) -> Lower-Middle (Attribution) -> Bottom Progress Strip */}
+          <div className="flex md:hidden flex-col justify-between h-[calc(100dvh-120px)] max-h-[640px]">
             
-            {/* Top: Monospace Counter & 5-Segment Tappable Progress Stepper */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-baseline gap-2 font-mono-code">
-                  <span className="endorsement-step-num text-3xl sm:text-4xl font-bold tracking-tight text-[#f2f1ec]">
-                    0{activeIndex + 1}
-                  </span>
-                  <span className="endorsement-step-total text-lg sm:text-xl text-[#89919d]">
-                    / 0{total}
-                  </span>
-                </div>
+            {/* Upper-Middle: The Quote (Primary Focus, comfortably scaled for 375px screens) */}
+            <div className="flex-1 flex flex-col justify-center py-2">
+              <blockquote
+                className={`endorsement-quote text-base sm:text-lg font-medium leading-[1.45] text-[#FDFDFD] m-0 transition-all duration-300 ease-out ${
+                  isCrossfading ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
+                }`}
+                style={{ willChange: "opacity, transform" }}
+              >
+                <span className="quote-mark text-[#a9ddf0] font-serif italic mr-1" aria-hidden="true">
+                  &ldquo;
+                </span>
+                {current.quote}
+                <span className="quote-mark text-[#a9ddf0] font-serif italic ml-1" aria-hidden="true">
+                  &rdquo;
+                </span>
+              </blockquote>
 
-                <span className="endorsement-scroll-hint font-mono-code text-[11px] text-[#89919d]">
+              {/* Lower-Middle: Endorser Identity directly beneath quote */}
+              <div
+                className={`mt-4 pt-3 border-t border-white/[0.06] space-y-1 transition-all duration-200 ease-out ${
+                  isCrossfading ? "opacity-0 translate-y-1.5" : "opacity-100 translate-y-0"
+                }`}
+                style={{ willChange: "opacity, transform" }}
+              >
+                <h3 className="endorsement-author-name text-lg font-bold font-display text-[#FDFDFD] tracking-tight m-0">
+                  {current.endorser}
+                </h3>
+                <p className="endorsement-author-role text-xs font-mono-code text-[#89919d] tracking-wide m-0">
+                  {current.affiliation}
+                </p>
+                <div className="pt-1">
+                  <div className="endorsement-context-pill inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] px-2.5 py-1 font-mono-code text-[10px] text-[#a9ddf0]">
+                    <span className="context-indicator h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" aria-hidden="true" />
+                    <span>{current.context}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom: Progress & Navigation Bar Strip pushed cleanly to bottom */}
+            <div className="w-full pt-3 pb-1 border-t border-white/[0.08] space-y-2 shrink-0">
+              <div className="flex items-center justify-between font-mono-code">
+                <div className="flex items-baseline gap-1.5 text-xs">
+                  <span className="endorsement-step-num font-bold text-[#f2f1ec]">0{activeIndex + 1}</span>
+                  <span className="endorsement-step-total text-[#89919d]/70">/ 0{total}</span>
+                </div>
+                <span className="endorsement-scroll-hint text-[10px] text-[#89919d]">
                   {activeIndex < total - 1 ? (
                     <>
-                      <span className="text-[#a9ddf0] font-medium">Scroll &darr;</span> next
+                      <span className="text-[#a9ddf0] font-medium">Scroll &darr;</span> for next
                     </>
                   ) : (
                     <>
-                      <span className="text-[#a9ddf0] font-medium">Continue &darr;</span>
+                      <span className="text-[#a9ddf0] font-medium">Continue &darr;</span> into Contact
                     </>
                   )}
                 </span>
@@ -367,21 +406,10 @@ export default function EndorsementsKokil() {
                       onClick={() => handleJumpToStep(idx)}
                       className="group flex flex-col items-start gap-1 cursor-pointer text-left py-1"
                     >
-                      <span
-                        className={`font-mono-code text-[10px] transition-colors ${
-                          isCurrent
-                            ? "text-[#a9ddf0] font-semibold"
-                            : "text-[#89919d]/60"
-                        }`}
-                      >
-                        0{idx + 1}
-                      </span>
                       <div className="h-[2px] w-full rounded-full bg-white/[0.12] endorsement-bar-track overflow-hidden relative">
                         <div
                           ref={(el) => {
-                            if (window.innerWidth < 1024) {
-                              fillRefs.current[idx] = el;
-                            }
+                            mobileFillRefs.current[idx] = el;
                           }}
                           className="h-full w-full rounded-full bg-[#a9ddf0] endorsement-bar-fill origin-left transition-transform duration-75"
                           style={{
@@ -395,45 +423,6 @@ export default function EndorsementsKokil() {
                   );
                 })}
               </div>
-            </div>
-
-            {/* Middle: Endorser Identity */}
-            <div
-              className={`space-y-1.5 transition-all duration-200 ease-out ${
-                isCrossfading ? "opacity-0 translate-y-1.5" : "opacity-100 translate-y-0"
-              }`}
-              style={{ willChange: "opacity, transform" }}
-            >
-              <h3 className="endorsement-author-name text-xl sm:text-2xl font-bold font-display text-[#FDFDFD] tracking-tight m-0">
-                {current.endorser}
-              </h3>
-              <p className="endorsement-author-role text-xs sm:text-sm font-mono-code text-[#89919d] tracking-wide m-0">
-                {current.affiliation}
-              </p>
-              <div className="pt-1">
-                <div className="endorsement-context-pill inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.03] px-3 py-1 font-mono-code text-[11px] text-[#a9ddf0]">
-                  <span className="context-indicator h-1.5 w-1.5 rounded-full bg-[#a9ddf0]" aria-hidden="true" />
-                  <span>{current.context}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom: The Quote */}
-            <div className="min-h-[140px] sm:min-h-[180px] flex items-center">
-              <blockquote
-                className={`endorsement-quote text-base sm:text-xl font-medium leading-relaxed text-[#FDFDFD] m-0 transition-all duration-300 ease-out ${
-                  isCrossfading ? "opacity-0 translate-y-2" : "opacity-100 translate-y-0"
-                }`}
-                style={{ willChange: "opacity, transform" }}
-              >
-                <span className="quote-mark text-[#a9ddf0] font-serif italic mr-1" aria-hidden="true">
-                  &ldquo;
-                </span>
-                {current.quote}
-                <span className="quote-mark text-[#a9ddf0] font-serif italic ml-1" aria-hidden="true">
-                  &rdquo;
-                </span>
-              </blockquote>
             </div>
 
           </div>

@@ -708,7 +708,7 @@ export default function HeroKokil() {
             <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true">
               Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
-            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost" tabIndex={-1} aria-hidden="true">
+            <a href="#contact" className="hero-btn ghost" tabIndex={-1} aria-hidden="true">
               Get in touch
             </a>
           </div>
@@ -748,7 +748,7 @@ export default function HeroKokil() {
             <a href="#work" className="hero-btn primary">
               Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
-            <a href="mailto:abolarintaye20@gmail.com" className="hero-btn ghost">
+            <a href="#contact" className="hero-btn ghost">
               Get in touch
             </a>
           </div>

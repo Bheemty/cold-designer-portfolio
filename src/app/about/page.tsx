@@ -362,11 +362,11 @@ export default function AboutPage() {
                         {item.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-2 font-mono-code text-xs">
+                      <div className="flex sm:flex-wrap overflow-x-auto sm:overflow-visible no-scrollbar pb-1 sm:pb-0 gap-2 font-mono-code text-xs">
                         {item.tags.map((t) => (
                           <span
                             key={t}
-                            className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d]"
+                            className="rounded bg-white/[0.03] border border-white/[0.06] px-2.5 py-1 text-[#89919d] shrink-0 whitespace-nowrap"
                           >
                             {t}
                           </span>

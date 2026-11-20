@@ -54,6 +54,17 @@ export default function AskCold() {
 
     let lastLift = -1;
     const computeLift = () => {
+      // On mobile (< 768px), mobile footer clearance guarantees comfortable breathing room,
+      // so keep the launcher cleanly tucked at bottom: 16px without lifting into content
+      if (window.innerWidth < 768) {
+        if (lastLift !== 0) {
+          lastLift = 0;
+          document.documentElement.style.setProperty("--ask-cold-lift", "0px");
+        }
+        ticking = false;
+        return;
+      }
+
       const backToTop = document.querySelector(".footer-top") as HTMLElement | null;
       if (!backToTop) {
         if (lastLift !== 0) {

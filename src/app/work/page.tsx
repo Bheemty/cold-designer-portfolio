@@ -253,7 +253,7 @@ export default function WorkArchivePage() {
                     sound.playPop();
                     setSystemFilter(pill.id as SystemFilter);
                   }}
-                  className={`px-3.5 py-1.5 rounded-full border transition-all cursor-pointer font-mono-code text-xs ${
+                  className={`px-3.5 py-1.5 rounded-full border transition-all cursor-pointer font-mono-code text-xs shrink-0 whitespace-nowrap ${
                     isActive
                       ? "border-[#a9ddf0] bg-[#a9ddf0]/15 text-[#a9ddf0] font-semibold shadow-[0_0_12px_rgba(169,221,240,0.2)]"
                       : "border-white/[0.12] bg-white/[0.03] text-[#89919d] hover:border-white/30 hover:text-[#f2f1ec]"
@@ -444,11 +444,11 @@ export default function WorkArchivePage() {
                               </div>
 
                               {/* Deliverables Tags */}
-                              <div className="flex flex-wrap gap-2 mb-8 font-mono-code text-[11px]">
+                              <div className="flex sm:flex-wrap overflow-x-auto sm:overflow-visible no-scrollbar pb-1 sm:pb-0 gap-2 mb-8 font-mono-code text-[11px]">
                                 {p.tags.map((tag) => (
                                   <span
                                     key={tag}
-                                    className="rounded-full bg-white/[0.04] border border-white/[0.08] px-3 py-1 text-[#89919d]"
+                                    className="rounded-full bg-white/[0.04] border border-white/[0.08] px-3 py-1 text-[#89919d] shrink-0 whitespace-nowrap"
                                   >
                                     #{tag}
                                   </span>
