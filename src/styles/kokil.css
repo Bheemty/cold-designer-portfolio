@@ -2039,6 +2039,49 @@ html[data-hero-revealed="true"] #hero .cursor-hint {
   padding: clamp(80px, 10vh, 140px) clamp(24px, 5vw, 64px) clamp(40px, 6vh, 80px);
   z-index: 10;
 }
+/* ── (03) ENDORSEMENTS STICKY SCROLL TRACK ── */
+.endorsements-track {
+  position: relative;
+  width: 100%;
+  height: 450vh;
+}
+
+.endorsements-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  contain: layout style;
+}
+
+@media (max-width: 767px) {
+  .endorsements-track {
+    height: auto !important;
+  }
+  .endorsements-sticky {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: auto !important;
+    padding: clamp(64px, 8vh, 96px) 0;
+    overflow: visible;
+  }
+}
+
+.endorsement-divider {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.endorsement-bar-track {
+  background: rgba(255, 255, 255, 0.12);
+}
+.endorsement-bar-fill {
+  background: #a9ddf0;
+}
+
 #endorsements .intro-label {
   margin-bottom: clamp(32px, 4vw, 56px);
 }
@@ -2953,6 +2996,27 @@ html[data-theme="light"] .nb-tab:hover:not(.is-active) {
 }
 
 /* ── ENDORSEMENTS (LIGHT) ── */
+html[data-theme="light"] .endorsements-track {
+  background: transparent;
+}
+html[data-theme="light"] .endorsement-step-num {
+  color: #11141b;
+}
+html[data-theme="light"] .endorsement-step-total {
+  color: #64748b;
+}
+html[data-theme="light"] .endorsement-divider {
+  border-color: rgba(18, 22, 30, 0.1);
+}
+html[data-theme="light"] .endorsement-bar-track {
+  background: rgba(18, 22, 30, 0.12);
+}
+html[data-theme="light"] .endorsement-bar-fill {
+  background: #027a9e;
+}
+html[data-theme="light"] .endorsement-scroll-hint {
+  color: #64748b;
+}
 html[data-theme="light"] .endorsement-quote {
   color: #11141b;
 }

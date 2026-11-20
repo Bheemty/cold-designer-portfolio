@@ -11,7 +11,7 @@ const AssetPreloader = dynamic(() => import("@/components/kokil/AssetPreloader")
 
 export default function Home() {
   return (
-    <main className="relative flex min-h-screen flex-col bg-[#090b0f] text-[#FDFDFD] overflow-x-hidden">
+    <main className="relative flex min-h-screen flex-col bg-[#090b0f] text-[#FDFDFD] overflow-x-clip">
       {/* Background Interactive Cursor Grid */}
       <CursorGrid
         cellSize={64}
