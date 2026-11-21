@@ -149,8 +149,12 @@ export default function WorkAccordion() {
     };
   }, []);
 
-  // Instant hover response with zero artificial delay
+  // Instant hover response with zero artificial delay — desktop mouse only
   const handlePointerEnter = useCallback((id: string) => {
+    // Strictly fine pointer (mouse/trackpad) only — prevent mobile touch gestures from cancelling clicks
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
+      return;
+    }
     setActiveId(id);
   }, []);
 
@@ -217,13 +221,20 @@ export default function WorkAccordion() {
 
               {/* Expanded Card Body */}
               <div className="acc-body">
-                <div className="acc-media">
-                  <div
-                    className="acc-device"
-                    role="img"
-                    aria-label={`${project.title} preview mockup`}
-                  />
-                </div>
+                <Link
+                  href={project.href}
+                  className="acc-media-link"
+                  aria-label={`Read ${project.title} case study`}
+                  onClick={() => sound.playClick()}
+                >
+                  <div className="acc-media">
+                    <div
+                      className="acc-device"
+                      role="img"
+                      aria-label={`${project.title} preview mockup`}
+                    />
+                  </div>
+                </Link>
 
                 <div className="acc-info">
                   <span className="work-eyebrow">{project.eyebrow}</span>
