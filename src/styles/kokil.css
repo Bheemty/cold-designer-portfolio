@@ -625,14 +625,45 @@ html[data-theme="light"] .footer-theme-toggle:hover {
 .hero-base .hero-desc {
   color: transparent !important;
 }
+.hero-base .hero-bottom {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+}
+.hero-base .hero-actions {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+}
 .hero-base .hero-btn {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  background: transparent !important;
-  border-color: transparent !important;
-  color: transparent !important;
-  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative;
+  z-index: 10;
+  touch-action: manipulation;
+}
+.hero-base .hero-btn.primary {
+  background: #FDFDFD !important;
+  color: #090b0f !important;
+  border: 1px solid #FDFDFD !important;
+}
+.hero-base .hero-btn.primary:hover {
+  background: #a9ddf0 !important;
+  border-color: #a9ddf0 !important;
+  color: #090b0f !important;
+  transform: translateY(-2px);
+}
+.hero-base .hero-btn.ghost {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #FDFDFD !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+.hero-base .hero-btn.ghost:hover {
+  border-color: #a9ddf0 !important;
+  color: #a9ddf0 !important;
+  transform: translateY(-2px);
 }
 .hero-base .hero-strip {
   opacity: 0 !important;
@@ -651,13 +682,21 @@ html[data-theme="light"] .footer-theme-toggle:hover {
   --btn-fg: var(--hero-invert-btn-fg, #090b0f);
 }
 .hero-invert .hero-bottom {
-  pointer-events: auto;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
 }
 .hero-invert .hero-actions {
-  pointer-events: auto;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
 }
 .hero-invert .hero-btn {
-  pointer-events: auto;
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative;
+  z-index: 10;
+  touch-action: manipulation;
 }
 
 /* ── PERSISTENT REVEALED HERO (ACROSS NAVIGATION & SESSION) ── */
@@ -2889,6 +2928,21 @@ html[data-theme="light"] .hero-invert .hero-title {
 html[data-theme="light"] .hero-invert .hero-desc {
   color: #4d5462 !important;
 }
+html[data-theme="light"] .hero-base .hero-actions,
+html[data-theme="light"] .hero-invert .hero-actions {
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+}
+html[data-theme="light"] .hero-base .hero-btn,
+html[data-theme="light"] .hero-invert .hero-btn {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative;
+  z-index: 10;
+  touch-action: manipulation;
+}
+html[data-theme="light"] .hero-base .hero-btn.primary,
 html[data-theme="light"] .hero-invert .hero-btn.primary {
   background: #11141b !important;
   color: #FDFDFD !important;
@@ -2899,6 +2953,7 @@ html[data-theme="light"] .hero-invert .hero-btn.primary:hover {
   border-color: #016382 !important;
   color: #FDFDFD !important;
 }
+html[data-theme="light"] .hero-base .hero-btn.ghost,
 html[data-theme="light"] .hero-invert .hero-btn.ghost {
   color: #11141b !important;
   border: 1px solid rgba(18, 22, 30, 0.2) !important;

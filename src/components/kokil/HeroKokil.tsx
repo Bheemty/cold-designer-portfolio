@@ -121,6 +121,30 @@ export default function HeroKokil() {
     }
   }, []);
 
+  const scrollToSection = useCallback((id: string, e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      sound.playClick();
+    } catch {}
+
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement, opts?: { offset?: number }) => void } }).__lenis;
+    if (lenis && typeof lenis.scrollTo === "function") {
+      lenis.scrollTo(target, { offset: -30 });
+    } else {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    try {
+      window.history.pushState(null, "", '#' + id);
+    } catch {}
+  }, []);
+
   useEffect(() => {
     const heroEl = heroRef.current;
     const dotsGroup = dotsGroupRef.current;
@@ -497,14 +521,14 @@ export default function HeroKokil() {
         pendingPointerX = e.clientX;
         pendingPointerY = e.clientY;
 
-        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn, .hero-btn, .hero-actions")) return;
 
         addDotFromClientCoords(e.clientX, e.clientY);
       };
 
       onDesktopPointerDown = (e: PointerEvent) => {
         if (!isHeroVisible) return;
-        if ((e.target as HTMLElement)?.closest(".hero-hide-btn")) return;
+        if ((e.target as HTMLElement)?.closest(".hero-hide-btn, .hero-btn, .hero-actions")) return;
         addDotFromClientCoords(e.clientX, e.clientY);
       };
 
@@ -705,10 +729,18 @@ export default function HeroKokil() {
             I take complex, messy workflows from 0-to-1 strategy to clear interfaces and live working prototypes—across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
           <div className="hero-actions">
-            <a href="#work" className="hero-btn primary" tabIndex={-1} aria-hidden="true">
+            <a
+              href="#work"
+              className="hero-btn primary"
+              onClick={(e) => scrollToSection("work", e)}
+            >
               Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
-            <a href="#contact" className="hero-btn ghost" tabIndex={-1} aria-hidden="true">
+            <a
+              href="#contact"
+              className="hero-btn ghost"
+              onClick={(e) => scrollToSection("contact", e)}
+            >
               Get in touch
             </a>
           </div>
@@ -745,10 +777,18 @@ export default function HeroKokil() {
             I take complex, messy workflows from 0-to-1 strategy to clear interfaces and live working prototypes—across HealthTech, FinTech, Mobility, AI, and Commerce.
           </p>
           <div className="hero-actions">
-            <a href="#work" className="hero-btn primary">
+            <a
+              href="#work"
+              className="hero-btn primary"
+              onClick={(e) => scrollToSection("work", e)}
+            >
               Explore selected work <span aria-hidden="true">&darr;</span>
             </a>
-            <a href="#contact" className="hero-btn ghost">
+            <a
+              href="#contact"
+              className="hero-btn ghost"
+              onClick={(e) => scrollToSection("contact", e)}
+            >
               Get in touch
             </a>
           </div>
